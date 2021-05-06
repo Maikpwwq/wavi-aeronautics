@@ -5,10 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '../components/Button';
 import Typography from '../components/Typography';
 import ProductHeroLayout from './ProductHeroLayout';
-import MavicAir from '../../../public/static/img/Portada-DJI-Mavic-Air-2.jpg';
-
-const backgroundImage =
-  'https://images.unsplash.com/photo-1534854638093-bada1813ca19?auto=format&fit=crop&w=1400&q=80';
+import MavicAir from '../../../public/static/img/Portada-DJI-Mavic-Air-2.png';
 
 const styles = (theme) => ({
   background: {
@@ -37,7 +34,7 @@ function ProductHero(props) {
   return (
     <ProductHeroLayout backgroundClassName={classes.background} >
       {/* Increase the network loading priority of the background image. */}
-      <img style={{ display: 'none' }} src={backgroundImage} alt="increase priority" />
+      <img style={{ display: 'none' }} src={MavicAir} alt="increase priority" />
       <Typography color="inherit" align="center" variant="h2" marked="center">
         Necesitas un Dron
       </Typography>

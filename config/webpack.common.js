@@ -50,6 +50,29 @@ module.exports = {
       {
         type: "asset",
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        use: [{
+          loader: 'file-loader',
+          options: {
+            publicPath: '/wavi-aeronautics/'
+          },
+        }],
+        parser: {
+          dataUrlCondition: {
+            maxSize: 4 * 1024 // 4kb
+          }
+        }
+      },
+      {
+        test: /\.(woff(2)?|ttf|eot)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'fonts/'
+            }
+          }
+        ]
       },
       {
         test: /\.md$/,

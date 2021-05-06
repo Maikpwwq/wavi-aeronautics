@@ -10,7 +10,7 @@ import Snackbar from '../components/Snackbar';
 import Button from '../components/Button';
 
 import productCTAImageDots from "../../../public/static/themes/productCTAImageDots.png";
-import PostalOfertas from "../../../public/static/img/Toma-Aerea-Ciudad.jpg"
+import PostalOfertas from "../../../public/static/img/Toma-Aerea-Ciudad.png"
 
 const styles = (theme) => ({
   root: {

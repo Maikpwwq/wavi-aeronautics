@@ -10,7 +10,7 @@ import productCurvyLines from "../../../public/static/themes/productCurvyLines.p
 import productHowItWorks1 from "../../../public/static/themes/productHowItWorks1.svg";
 import productHowItWorks2 from "../../../public/static/themes/productHowItWorks2.svg";
 import productHowItWorks3 from "../../../public/static/themes/productHowItWorks3.svg";
-
+ 
 const styles = (theme) => ({
   root: {
     display: 'flex',
