@@ -1,3 +1,4 @@
+import React from "react";
 import { BrowserRouter as Router, Switch, Route, Redirect, Link} from "react-router-dom";
 
 import "./App.css";
@@ -24,6 +25,7 @@ function App() {
             <Route path="/terms/" component={Terms}/>
             <Route path="/privacy/" component={Privacy}/>
             <Route path="/forgot-password/" component={ForgotPassword}/>
+            <Redirect to="/"></Redirect>
           </Switch>    
         </div>
       </Router>

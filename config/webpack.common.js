@@ -1,14 +1,26 @@
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
+const webpack = require("webpack");
+require('dotenv').config();
+
+const ASSET_PATH = process.env.ASSET_PATH || '';
 
 /** @type {import('webpack').Configuration} */
 module.exports = {
-  entry: "./src/index.js",
+  name: "client",
+  target: "web",
+  entry: [
+    "./src/index.js"
+  ],
   output: {
     path: path.resolve(__dirname, "../dist"),
     filename: "[name].[contenthash].js",
-    publicPath: "",
+    publicPath: ASSET_PATH,
+  },
+  resolve: {
+    extensions: [".js", ".jsx", ".css"],
+    modules: ['node_modules'],
   },
   module: {
     rules: [
@@ -18,8 +30,22 @@ module.exports = {
         exclude: /node_modules/,        
       },
       {
-        use: ["style-loader", "css-loader", "sass-loader"],
-        test: /\.(css|scss|sass)$/,
+        // Loads the javacript into html template provided.
+        // Entry point is set below in HtmlWebPackPlugin in Plugins
+        test: /\.html$/,
+        use: [
+          {
+            loader: 'html-loader',
+          },
+        ],
+      },
+      {
+        test: /\.styl$/,
+        use: [
+          'style-loader',        
+          'css-loader',          
+          'stylus-loader'
+        ]
       },
       {
         type: "asset",
@@ -30,14 +56,18 @@ module.exports = {
         loader: 'raw-loader',
       },
     ],
-  },
-  resolve: {
-    extensions: [".js", ".json", ".jsx"],
-  },
+  },  
   plugins: [
+    // Esto nos permite utilizar de forma segura env vars en nuestro código
+    new webpack.DefinePlugin({
+      'process.env.ASSET_PATH': JSON.stringify(ASSET_PATH),
+    }),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      template: "./public/index.html",
+      appMountId: 'root',
+      template: path.resolve(__dirname, '../public/index.html'),
+      filename: 'index.html',
+      hash: true,
     }),
   ],
 };

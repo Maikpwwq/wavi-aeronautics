@@ -9,7 +9,7 @@ import TextField from '../components/TextField';
 import Snackbar from '../components/Snackbar';
 import Button from '../components/Button';
 
-const productCTAImageDots = "../../../public/static/themes/productCTAImageDots.png";
+import productCTAImageDots from "../../../public/static/themes/productCTAImageDots.png";
 import PostalOfertas from "../../../public/static/img/Toma-Aerea-Ciudad.jpg"
 
 const styles = (theme) => ({

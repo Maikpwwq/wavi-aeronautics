@@ -13,6 +13,14 @@ const devConfig = {
     hot: true,
   },
   target: "web",
+  module: {
+    rules: [      
+      {
+        use: ["style-loader", "css-loader", "sass-loader"],
+        test: /\.(css|scss|sass)$/,
+      },
+    ]
+  },
   plugins: [new HotModuleReplacementPlugin(), new ReactRefreshWebpackPlugin()],
   devtool: "eval-source-map",
 };

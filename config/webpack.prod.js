@@ -17,7 +17,6 @@ const prodConfig = {
   optimization: {
     splitChunks: {
       chunks: "all",
-      name: false,
     },
   },
   plugins: [new MiniCssExtractPlugin()],
