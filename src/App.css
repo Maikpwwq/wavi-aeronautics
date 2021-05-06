@@ -1,0 +1,24 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.app {
+  font-family: sans-serif;
+  font-size: 1rem;
+  height: 100vh;
+}
+
+.navlink a{
+  font-size: 21px; 
+  text-decoration: none;
+}
+.navlink a:link{
+  color: white;    
+}
+.navlink a:visited{
+  color: white;    
+}
+.navlink a:hover{
+  color: white;    
+}
