@@ -4,7 +4,7 @@ const path = require("path");
 const webpack = require("webpack");
 require('dotenv').config();
 
-const ASSET_PATH = process.env.ASSET_PATH || '';
+const ASSET_PATH = process.env.ASSET_PATH || '/wavi-aeronautics/';
 
 /** @type {import('webpack').Configuration} */
 module.exports = {
@@ -48,32 +48,18 @@ module.exports = {
         ]
       },
       {
-        type: "asset",
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        use: [{
-          loader: 'file-loader',
-          options: {
-            publicPath: '/wavi-aeronautics/'
-          },
-        }],
-        parser: {
-          dataUrlCondition: {
-            maxSize: 4 * 1024 // 4kb
-          }
-        }
+        type: "asset/resource",
+        test: /\.png$/i,
+        // generator: {
+        //   filename: {
+        //     publicPath: 'wavi-aeronautics/[hash][ext]',
+        //   },
+        // },
       },
       {
-        test: /\.(woff(2)?|ttf|eot)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: 'fonts/'
-            }
-          }
-        ]
-      },
+        type: "asset",
+        test: /\.(svg|jpg|jpeg|gif)$/i,
+      },     
       {
         test: /\.md$/,
         loader: 'raw-loader',
