@@ -13,6 +13,11 @@ import { email, required } from '../modules/form/validation';
 import RFTextField from '../modules/form/RFTextField';
 import FormButton from '../modules/form/FormButton';
 import FormFeedback from '../modules/form/FormFeedback';
+// import { getApp } from "firebase/app";
+import { EmailAuthProvider, signInWithCredential } from "firebase/auth" // getAuth
+// import { useFirebaseAuth } from "use-firebase-auth"
+// const auth = getAuth();
+// const app = getApp();
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -29,7 +34,12 @@ const useStyles = makeStyles((theme) => ({
 
 function SignIn() {
   const classes = useStyles();
+
+  // const { user, loading, error, signInWithProvider } = useFirebaseAuth();
+
   const [sent, setSent] = React.useState(false);
+  const [userEmail, setEmail] = React.useState('');
+  const [userPassword, setPassword] = React.useState('');
 
   const validate = (values) => {
     const errors = required(['email', 'password'], values);
@@ -46,6 +56,31 @@ function SignIn() {
 
   const handleSubmit = () => {
     setSent(true);
+    setEmail(document.getElementByID('emailText').value);
+    setPassword(document.getElementByID('passwordText').value); 
+    // auth.signInWithEmailAndPassword   
+    let credential = EmailAuthProvider.credential(
+      userEmail, userPassword
+    );
+    signInWithCredential(credential)
+    // Auth.updateCurrentUser.linkWithCredential(credential)
+    .then((usercred) => {
+      // Al iniciar sesion almacena una instancia del usuario
+      var user = usercred.user;
+      console.log("Anonymous account successfully upgraded", user);
+      // console.log("Firebase App", app);
+    }).catch((err) => {
+      // Manejar los Errores aqui.
+      console.log("Error upgrading anonymous account", err);
+      // console.log(user, loading, error, signInWithProvider)
+      var errorCode = err.code;
+      var errorMessage = err.message;
+      if (errorCode === 'auth/wrong-password') {
+        alert('Wrong password.');
+      } else {
+        alert(errorMessage);
+      }      
+    });  
   };
 
   return (
@@ -77,6 +112,7 @@ function SignIn() {
                 label="Email"
                 margin="normal"
                 name="email"
+                id="emailText"
                 required
                 size="large"
               />
@@ -87,6 +123,7 @@ function SignIn() {
                 disabled={submitting || sent}
                 required
                 name="password"
+                id="passwordText"
                 autoComplete="current-password"
                 label="Password"
                 type="password"
@@ -108,7 +145,7 @@ function SignIn() {
                 color="secondary"
                 fullWidth
               >
-                <NavLink to="/">
+                <NavLink to="/paper-base/">
                   {submitting || sent ? 'En progreso…' : 'Iniciar sesión'}
                 </NavLink>                
               </FormButton>

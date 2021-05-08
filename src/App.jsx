@@ -12,6 +12,9 @@ import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import ForgotPassword from "./pages/ForgotPassword";
 
+import PaperBase from "./modules/users/Paperbase";
+
+
 function App() {
   
   return (
@@ -25,6 +28,7 @@ function App() {
             <Route path="/terms/" component={Terms}/>
             <Route path="/privacy/" component={Privacy}/>
             <Route path="/forgot-password/" component={ForgotPassword}/>
+            <Route path="/paper-base/" component={PaperBase}/>
             <Redirect to="/"></Redirect>
           </Switch>    
         </div>

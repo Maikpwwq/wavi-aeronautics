@@ -127,7 +127,7 @@ function SignUp() {
                 color="secondary"
                 fullWidth
               >
-                <NavLink to="/">
+                <NavLink to="/paper-base/">
                   {submitting || sent ? 'En progreso…' : 'Registrarse'}
                 </NavLink> 
                 

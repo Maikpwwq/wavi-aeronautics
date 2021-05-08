@@ -4,18 +4,27 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@google-cloud/common": "^3.6.0",
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
     "core-js": "^3.11.0",
     "dotenv": "^9.0.0",
     "final-form": "^4.20.2",
+    "firebase": "^9.0.0-beta.1",
+    "firebase-admin": "^9.7.0",
     "markdown-to-jsx": "^7.1.2",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-final-form": "^6.5.3",
     "react-router-dom": "^5.2.0",
+    "use-firebase-auth": "^2.1.4",
     "validator": "^13.6.0"
+  },
+  "peerDependencies": {
+    "@firebase/app": "0.x",
+    "@firebase/util": "0.x",
+    "stylus": "0.52.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.17",
@@ -47,7 +56,8 @@
   "scripts": {
     "build": "webpack --config config/webpack.prod.js",
     "start": "webpack serve --config config/webpack.dev.js",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "firebase": "firebase deploy --only hosting:wavi-aeronautics-drones"
   },
   "bugs": {
     "url": "https://github.com/Maikpwwq/wavi-aeronautics/issues"
