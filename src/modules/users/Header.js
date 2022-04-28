@@ -1,25 +1,28 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import AppBar from '@mui/material/AppBar';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import HelpIcon from '@mui/icons-material/Help';
-import Hidden from '@mui/material/Hidden';
-import IconButton from '@mui/material/IconButton';
-import Link from '@mui/material/Link';
-import MenuIcon from '@mui/icons-material/Menu';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
-import Toolbar from '@mui/material/Toolbar';
-import Tooltip from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
-import { withStyles } from '@mui/styles';
+import React from "react";
+import { NavLink } from "react-router-dom";
+import PropTypes from "prop-types";
+import AppBar from "@mui/material/AppBar";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import HelpIcon from "@mui/icons-material/Help";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import Hidden from "@mui/material/Hidden";
+import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
+import MenuIcon from "@mui/icons-material/Menu";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import { withStyles } from "@mui/styles";
 
 import AvatarUser from "../../../public/static/img/l3mik3l.png";
+import WaviPixelLogo from "../../../public/static/img/WaviPixelLogo.png";
 
-const lightColor = 'rgba(255, 255, 255, 0.7)';
+const lightColor = "rgba(255, 255, 255, 0.7)";
 
 const styles = (theme) => ({
   secondaryBar: {
@@ -32,9 +35,9 @@ const styles = (theme) => ({
     padding: 4,
   },
   link: {
-    textDecoration: 'none',
+    textDecoration: "none",
     color: lightColor,
-    '&:hover': {
+    "&:hover": {
       color: theme.palette.common.white,
     },
   },
@@ -63,16 +66,39 @@ function Header(props) {
                 </IconButton>
               </Grid>
             </Hidden>
-            <Grid item xs />
             <Grid item>
-              <Link className={classes.link} href="#" variant="body2">
-                Documentación
+              <Link
+                variant="h6"
+                underline="none"
+                color="inherit"
+                className={classes.title}
+                to="/"
+              >
+                <NavLink to="/">
+                  <img
+                    className={classes.image}
+                    src={WaviPixelLogo}
+                    alt="logo Wavi Aeronautics"
+                    height="48"
+                    width="48"
+                  />
+                  {"Wavi Aeronautics"}
+                </NavLink>
               </Link>
             </Grid>
+
+            <Grid item xs />
             <Grid item>
               <Tooltip title="Alertas • No hay alertas">
                 <IconButton color="inherit">
                   <NotificationsIcon />
+                </IconButton>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="Ayuda">
+                <IconButton color="inherit">
+                  <HelpIcon />
                 </IconButton>
               </Tooltip>
             </Grid>
@@ -99,14 +125,25 @@ function Header(props) {
               </Typography>
             </Grid>
             <Grid item>
-              <Button className={classes.button} variant="outlined" color="inherit" size="small">
-                Configuración
+              <Button
+                className={classes.button}
+                variant="outlined"
+                color="inherit"
+                size="small"
+              >
+                Ordenes
               </Button>
             </Grid>
             <Grid item>
-              <Tooltip title="Ayuda">
+              <Link className={classes.link} href="#" variant="body2">
+                Favoritos
+              </Link>
+            </Grid>
+            <Grid item>0 Productos COP$ ....</Grid>
+            <Grid item>
+              <Tooltip title="Carrito">
                 <IconButton color="inherit">
-                  <HelpIcon />
+                  <ShoppingCartIcon fontSize="large" />
                 </IconButton>
               </Tooltip>
             </Grid>

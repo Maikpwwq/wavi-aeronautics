@@ -19,42 +19,28 @@ const Products = () => {
     let productos = [];
     productData.forEach((DOC) => {
       productos.push(DOC.data());
-      //   console.log(DOC.data());
     });
     if (productos.length > 0) {
       setStoreProducts(productos);
     }
-    // return productData;
   };
 
   useEffect(() => {
-    productosFromFirestore(); //const productData =
-    // productData.then((docSnap) => {
-    //     if (docSnap) {
-    //       let productos = [];
-    //       docSnap.forEach((DOC) => {
-    //         productos.push(DOC.data());
-    //       });
-    //       if (productos.length > 0) {
-    //         setStoreProducts(productos);
-    //       }
-    //     } else {
-    //       console.log("No hay productos en esta categoria!");
-    //     }
-    //   });
+    productosFromFirestore();
   }, []);
-
-  //   console.log(storeProducts);
 
   return (
     <>
-      <h3>Productos</h3>
+      <h3>Productos:</h3>
+      <br />
       <div>
         {storeProducts.length == 0 ? (
           <p>Cargando productos!</p>
         ) : (
           <div>
             <p>Descubre los mejores kits de Dron FPV listos para vuelo.</p>
+            <br />
+            <br />
             <Grid container spacing={2}>
               {storeProducts.map((product, k) => {
                 console.log(product);

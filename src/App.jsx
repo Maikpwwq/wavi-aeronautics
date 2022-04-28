@@ -11,6 +11,7 @@ import SignUp from "./pages/SignUp";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import ForgotPassword from "./pages/ForgotPassword";
+import ProductDetail from "./modules/users/views/ProductDetail";
 
 import PaperBase from "./modules/users/Paperbase";
 
@@ -25,6 +26,7 @@ function App() {
         <Route path="/privacy/" element={<Privacy />} />
         <Route path="/forgot-password/" element={<ForgotPassword />} />
         <Route path="/paper-base/" element={<PaperBase />} />
+        <Route path="/producto/" element={<ProductDetail />} />
         <Route path="*" element={<Navigate to="/"></Navigate>} />
       </Routes>
     </div>

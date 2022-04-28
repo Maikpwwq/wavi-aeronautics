@@ -175,7 +175,7 @@ function Paperbase(props) {
     <ThemeProvider theme={theme}>
       <div className={classes.root}>
         <CssBaseline />
-        <nav className={classes.drawer}>
+        {/* <nav className={classes.drawer}>
           <Hidden smUp implementation="js">
             <Navigator
               PaperProps={{ style: { width: drawerWidth } }}
@@ -187,7 +187,7 @@ function Paperbase(props) {
           <Hidden xsDown implementation="css">
             <Navigator PaperProps={{ style: { width: drawerWidth } }} />
           </Hidden>
-        </nav>
+        </nav> */}
         <div className={classes.app}>
           <Header onDrawerToggle={handleDrawerToggle} />
           <main className={classes.main}>
