@@ -1,8 +1,9 @@
 import React from 'react';
+import { NavLink, useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import Container from '@material-ui/core/Container';
+import { withStyles } from '@mui/styles';
+import ButtonBase from '@mui/material/ButtonBase';
+import Container from '@mui/material/Container';
 import Typography from '../components/Typography';
 
 import DJI1 from '../../../public/static/img/DJI-1.png';
@@ -95,6 +96,11 @@ const styles = (theme) => ({
 
 function ProductCategories(props) {
   const { classes } = props;
+  const navigate = useNavigate();
+
+  const handleImageClick = () => {
+    navigate('/paper-base/')
+  }
 
   const images = [
     {
@@ -152,6 +158,7 @@ function ProductCategories(props) {
       <div className={classes.images}>
         {images.map((image) => (
           <ButtonBase
+            onClick={handleImageClick}
             key={image.title}
             className={classes.imageWrapper}
             style={{

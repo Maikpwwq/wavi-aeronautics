@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Container from '@material-ui/core/Container';
-import Box from '@material-ui/core/Box';
-import { withStyles } from '@material-ui/core/styles';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import { withStyles } from '@mui/styles';
 import Paper from '../components/Paper';
 const appCurvyLines = "../../../public/static/themes/appCurvyLines.png";
 

@@ -1,29 +1,32 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Hidden from '@material-ui/core/Hidden';
-import Container from '@material-ui/core/Container';
-import Typography from '../components/Typography';
-import TextField from '../components/TextField';
-import Snackbar from '../components/Snackbar';
-import Button from '../components/Button';
+import React from "react";
+import { firestore } from "../../firebase/firebaseClient";
+import { collection, doc, setDoc } from "firebase/firestore";
+import { v4 as uuidv4 } from "uuid";
+import PropTypes from "prop-types";
+import { withStyles } from "@mui/styles";
+import Grid from "@mui/material/Grid";
+import Hidden from "@mui/material/Hidden";
+import Container from "@mui/material/Container";
+import Typography from "../components/Typography";
+import TextField from "../components/TextField";
+import Snackbar from "../components/Snackbar";
+import Button from "../components/Button";
 
 import productCTAImageDots from "../../../public/static/themes/productCTAImageDots.png";
-import PostalOfertas from "../../../public/static/img/Toma-Aerea-Ciudad.png"
+import PostalOfertas from "../../../public/static/img/Toma-Aerea-Ciudad.png";
 
 const styles = (theme) => ({
   root: {
     marginTop: theme.spacing(10),
     marginBottom: 0,
-    display: 'flex',
+    display: "flex",
   },
   cardWrapper: {
     zIndex: 1,
   },
   card: {
-    display: 'flex',
-    justifyContent: 'center',
+    display: "flex",
+    justifyContent: "center",
     backgroundColor: theme.palette.warning.main,
     padding: theme.spacing(8, 3),
   },
@@ -31,47 +34,57 @@ const styles = (theme) => ({
     maxWidth: 400,
   },
   textField: {
-    width: '100%',
+    width: "100%",
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(2),
   },
   button: {
-    width: '100%',
+    width: "100%",
   },
   imagesWrapper: {
-    position: 'relative',
+    position: "relative",
   },
   imageDots: {
-    position: 'absolute',
+    position: "absolute",
     top: -67,
     left: -67,
     right: 0,
     bottom: 0,
-    width: '100%',
+    width: "100%",
     background: `url(${productCTAImageDots})`,
   },
   image: {
-    position: 'absolute',
+    position: "absolute",
     top: -28,
     left: -28,
     right: 0,
     bottom: 0,
-    width: '100%',
+    width: "100%",
     maxWidth: 600,
   },
 });
 
 function ProductCTA(props) {
   const { classes } = props;
+  const _firestore = firestore;
+  const suscribeRef = collection(_firestore, "suscritos");
   const [open, setOpen] = React.useState(false);
+  const [suscribeMail, setSuscribeMail] = React.useState(null);
+
+  const userSuscribe = async (updateInfo, userID) => {
+    await setDoc(doc(suscribeRef, userID), updateInfo, { merge: true });
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     setOpen(true);
+    const suscriptionId = uuidv4();
+    userSuscribe(suscribeMail, suscriptionId);
   };
 
   const handleClose = () => {
     setOpen(false);
+
   };
 
   return (
@@ -86,8 +99,18 @@ function ProductCTA(props) {
               <Typography variant="h5">
                 Descubre nuestras actualizaciones primero.
               </Typography>
-              <TextField noBorder className={classes.textField} placeholder="Tu email" />
-              <Button type="submit" color="primary" variant="contained" className={classes.button}>
+              <TextField
+                noBorder
+                className={classes.textField}
+                placeholder="Tu email"
+                onChange={(e) => setSuscribeMail({ correo: e.target.value })}
+              />
+              <Button
+                type="submit"
+                color="primary"
+                variant="contained"
+                className={classes.button}
+              >
                 Suscribirme!
               </Button>
             </form>

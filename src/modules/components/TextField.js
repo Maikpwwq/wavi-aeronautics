@@ -1,9 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import MuiTextField from '@material-ui/core/TextField';
-import { capitalize } from '@material-ui/core/utils';
+import { withStyles } from '@mui/styles';
+import MuiTextField from '@mui/material/TextField';
+import { capitalize } from '@mui/material/utils';
 
 const styles = (theme) => ({
   root: {

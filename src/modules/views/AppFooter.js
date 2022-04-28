@@ -1,9 +1,9 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
-import Container from '@material-ui/core/Container';
+import { makeStyles } from '@mui/styles';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
+import Container from '@mui/material/Container';
 import Typography from '../components/Typography';
 import TextField from '../components/TextField';
 import appFooterFacebook from "../../../public/static/themes/appFooterFacebook.png";
@@ -87,7 +87,7 @@ export default function AppFooter() {
             <Grid
               container
               direction="column"
-              justify="flex-end"
+              justifyContent="flex-end"
               className={classes.iconsWrapper}
               spacing={2}
             >

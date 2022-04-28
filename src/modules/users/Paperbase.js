@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { createMuiTheme, ThemeProvider, withStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Hidden from '@material-ui/core/Hidden';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
+import { ThemeProvider, withStyles } from '@mui/styles';
+import { createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import Hidden from '@mui/material/Hidden';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
 import Navigator from './Navigator';
 import Content from './Content';
+import Products from './views/Products';
 import Header from './Header';
 
 function Copyright() {
@@ -22,7 +24,7 @@ function Copyright() {
   );
 }
 
-let theme = createMuiTheme({
+let theme = createTheme({
   palette: {
     primary: {
       light: '#63ccff',
@@ -189,7 +191,8 @@ function Paperbase(props) {
         <div className={classes.app}>
           <Header onDrawerToggle={handleDrawerToggle} />
           <main className={classes.main}>
-            <Content />
+            <Products />
+            {/* <Content /> */}
           </main>
           <footer className={classes.footer}>
             <Copyright />

@@ -1,9 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import MuiPaper from '@material-ui/core/Paper';
-import { capitalize } from '@material-ui/core/utils';
-import { withStyles } from '@material-ui/core/styles';
+import MuiPaper from '@mui/material/Paper';
+import { capitalize } from '@mui/material/utils';
+import { withStyles } from '@mui/styles';
 
 const styles = (theme) => ({
   backgroundLight: {

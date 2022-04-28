@@ -4,27 +4,31 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
     "@google-cloud/common": "^3.6.0",
-    "@material-ui/core": "^4.11.4",
-    "@material-ui/icons": "^4.11.2",
+    "@mui/icons-material": "^5.6.2",
+    "@mui/material": "^5.6.3",
+    "@mui/styles": "^5.6.2",
     "core-js": "^3.11.0",
-    "dotenv": "^9.0.0",
+    "dotenv": "^16.0.0",
     "final-form": "^4.20.2",
-    "firebase": "^9.0.0-beta.1",
-    "firebase-admin": "^9.7.0",
+    "firebase": "^9.6.11",
+    "firebase-admin": "^10.1.0",
     "markdown-to-jsx": "^7.1.2",
+    "node-polyfill-webpack-plugin": "^1.1.4",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-final-form": "^6.5.3",
-    "react-router-dom": "^5.2.0",
-    "use-firebase-auth": "^2.1.4",
+    "react-router-dom": "^6.3.0",
+    "uuid": "^8.3.2",
     "validator": "^13.6.0"
   },
   "peerDependencies": {
     "@firebase/app": "0.x",
     "@firebase/util": "0.x",
-    "stylus": "0.52.4"
+    "stylus": "^0.57.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.17",
@@ -32,10 +36,11 @@
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/preset-env": "^7.12.17",
     "@babel/preset-react": "^7.12.13",
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.5",
     "babel-loader": "^8.2.2",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^5.0.2",
+    "dotenv-webpack": "^7.1.0",
     "file-loader": "^6.2.0",
     "gh-pages": "^3.1.0",
     "html-loader": "^2.1.2",
@@ -50,7 +55,7 @@
     "url-loader": "^4.1.1",
     "webpack": "^5.23.0",
     "webpack-cli": "^4.5.0",
-    "webpack-dev-server": "^3.11.2",
+    "webpack-dev-server": "^4.8.1",
     "webpack-merge": "^5.7.3"
   },
   "scripts": {
@@ -85,5 +90,16 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "browser": {
+    "fs": false,
+    "tls": false,
+    "net": false,
+    "dns": false,
+    "http2": false,
+    "worker_threads": false,
+    "child_process": false,
+    "request": false,
+    "fast-crc32c": false
   }
 }

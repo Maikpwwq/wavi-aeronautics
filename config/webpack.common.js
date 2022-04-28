@@ -1,10 +1,16 @@
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 const webpack = require("webpack");
-require('dotenv').config();
+const Dotenv = require('dotenv-webpack')
+// require('dotenv').config().parsed;
+// const envKeys = Object.keys(process.env).reduce((prev, next) => {
+//   prev[`process.env.${next}`] = JSON.stringify(process.env[next])
+//   return prev
+// }, {})
 
-const ASSET_PATH = process.env.ASSET_PATH || '/wavi-aeronautics/'; 
+const ASSET_PATH = process.env.ASSET_PATH || ''; 
 // prod  const ASSET_PATH = process.env.ASSET_PATH || '/wavi-aeronautics/';
 
 /** @type {import('webpack').Configuration} */
@@ -22,6 +28,17 @@ module.exports = {
   resolve: {
     extensions: [".js", ".jsx", ".css"],
     modules: ['node_modules'],
+    fallback: {
+      fs: false,
+      tls: false,
+      net: false,
+      dns: false,
+      http2: false,
+      worker_threads: false,
+      child_process: false,
+      request: false,
+      fast_crc32c: false,
+    }
   },
   module: {
     rules: [
@@ -68,10 +85,13 @@ module.exports = {
     ],
   },  
   plugins: [
+    new NodePolyfillPlugin(),
     // Esto nos permite utilizar de forma segura env vars en nuestro código
     new webpack.DefinePlugin({
       'process.env.ASSET_PATH': JSON.stringify(ASSET_PATH),
     }),
+    //new webpack.DefinePlugin(envKeys),
+    new Dotenv(),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       appMountId: 'root',

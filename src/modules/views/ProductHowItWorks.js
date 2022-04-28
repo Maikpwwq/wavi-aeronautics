@@ -1,34 +1,34 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Container from '@material-ui/core/Container';
-import Button from '../components/Button';
-import Typography from '../components/Typography';
+import React from "react";
+import { NavLink } from "react-router-dom";
+import PropTypes from "prop-types";
+import { withStyles } from "@mui/styles";
+import Grid from "@mui/material/Grid";
+import Container from "@mui/material/Container";
+import Button from "../components/Button";
+import Typography from "../components/Typography";
 import productCurvyLines from "../../../public/static/themes/productCurvyLines.png";
 import productHowItWorks1 from "../../../public/static/themes/productHowItWorks1.svg";
 import productHowItWorks2 from "../../../public/static/themes/productHowItWorks2.svg";
 import productHowItWorks3 from "../../../public/static/themes/productHowItWorks3.svg";
- 
+
 const styles = (theme) => ({
   root: {
-    display: 'flex',
+    display: "flex",
     backgroundColor: theme.palette.secondary.light,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   container: {
     marginTop: theme.spacing(10),
     marginBottom: theme.spacing(15),
-    position: 'relative',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    position: "relative",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   item: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
     padding: theme.spacing(0, 5),
   },
   title: {
@@ -46,12 +46,13 @@ const styles = (theme) => ({
     marginBottom: theme.spacing(4),
   },
   curvyLines: {
-    pointerEvents: 'none',
-    position: 'absolute',
+    pointerEvents: "none",
+    position: "absolute",
     top: -180,
     opacity: 0.7,
   },
   button: {
+    paddingTop: "1.5em",
     marginTop: theme.spacing(8),
   },
 });
@@ -61,13 +62,21 @@ function ProductHowItWorks(props) {
 
   return (
     <section className={classes.root}>
-      <Container className={classes.container}>
+      <Container
+        className={classes.container}
+        style={{ "text-align": "center" }}
+      >
         <img
           src={productCurvyLines}
           className={classes.curvyLines}
           alt="curvy lines"
         />
-        <Typography variant="h4" marked="center" className={classes.title} component="h2">
+        <Typography
+          variant="h4"
+          marked="center"
+          className={classes.title}
+          component="h2"
+        >
           Te ofrecemos
         </Typography>
         <div>
@@ -81,7 +90,7 @@ function ProductHowItWorks(props) {
                   className={classes.image}
                 />
                 <Typography variant="h5" align="center">
-                  {'Actualizaciones de las últimas tendencias del mercado.'}
+                  {"Actualizaciones de las últimas tendencias del mercado."}
                 </Typography>
               </div>
             </Grid>
@@ -94,7 +103,9 @@ function ProductHowItWorks(props) {
                   className={classes.image}
                 />
                 <Typography variant="h5" align="center">
-                  {'Mejorar el tiempo que inviertes en realizar tus actividades.'}                  
+                  {
+                    "Mejorar el tiempo que inviertes en realizar tus actividades."
+                  }
                 </Typography>
               </div>
             </Grid>
@@ -107,7 +118,9 @@ function ProductHowItWorks(props) {
                   className={classes.image}
                 />
                 <Typography variant="h5" align="center">
-                  {'Mantenimiento técnico preventivo y correctivo para tus quipos.'}                  
+                  {
+                    "Mantenimiento técnico preventivo y correctivo para tus quipos."
+                  }
                 </Typography>
               </div>
             </Grid>
@@ -117,13 +130,11 @@ function ProductHowItWorks(props) {
           color="secondary"
           size="large"
           variant="contained"
-          className={classes.button, "navlink"}
+          className={classes.button && "navlink"}
           component="a"
           // href="/sign-up/"
         >
-          <NavLink to="/sign-up/">
-            {'Comenzar'}
-          </NavLink>          
+          <NavLink to="/sign-up/">{"Comenzar"}</NavLink>
         </Button>
       </Container>
     </section>

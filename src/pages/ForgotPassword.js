@@ -3,7 +3,7 @@ import withRoot from '../modules/withRoot';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Field, Form, FormSpy } from 'react-final-form';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import Typography from '../modules/components/Typography';
 import AppFooter from '../modules/views/AppFooter';
 import AppAppBar from '../modules/views/AppAppBar';

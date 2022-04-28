@@ -1,16 +1,21 @@
-import * as firebase from 'firebase/app';
 import React from "react";
 import ReactDOM from "react-dom";
-//import { FirebaseAuthProvider } from "use-firebase-auth";
-import "firebase/auth";
+import { BrowserRouter as Router } from 'react-router-dom'
+import { createBrowserHistory } from 'history'
 
 import App from "./App";
 
+// Create a browser
+let history = createBrowserHistory()
+history.listen((location, action) => {
+    // this is called whenever new locations come in
+    // the action is POP, PUSH, or REPLACE
+    console.log(location, action)
+})
+
 ReactDOM.render(
-    <App />,
+  <Router history={history}>
+    <App />
+  </Router>,
   document.getElementById("root")
 );
-
-{/* <FirebaseAuthProvider firebase={firebase}>
-    <App />
-  </FirebaseAuthProvider>,  */}

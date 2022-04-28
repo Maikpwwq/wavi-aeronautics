@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { withStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import { withStyles } from '@mui/styles';
+import Container from '@mui/material/Container';
 import productHeroWonder from "../../../public/static/themes/productHeroWonder.png";
 import productHeroArrowDown from "../../../public/static/themes/productHeroArrowDown.png";
 
@@ -56,7 +56,7 @@ function ProductHeroLayout(props) {
 
   return (
     <section className={classes.root}>
-      <Container className={classes.container}>
+      <Container className={classes.container} style={{ "text-align": "center" }}>
         <img
           src={productHeroWonder}
           alt="wonder"

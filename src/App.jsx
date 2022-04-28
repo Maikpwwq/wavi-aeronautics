@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Redirect, Link} from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import "./App.css";
 import "./App.scss";
@@ -14,25 +14,19 @@ import ForgotPassword from "./pages/ForgotPassword";
 
 import PaperBase from "./modules/users/Paperbase";
 
-
 function App() {
-  
   return (
-    <div className="app">  
-      <Router>                                       
-        <div>
-          <Switch>
-            <Route exact path="/" component={Home} />          
-            <Route path="/sign-in/" component={SignIn}/>
-            <Route path="/sign-up/" component={SignUp}/>
-            <Route path="/terms/" component={Terms}/>
-            <Route path="/privacy/" component={Privacy}/>
-            <Route path="/forgot-password/" component={ForgotPassword}/>
-            <Route path="/paper-base/" component={PaperBase}/>
-            <Redirect to="/"></Redirect>
-          </Switch>    
-        </div>
-      </Router>
+    <div className="app">
+      <Routes>
+        <Route index element={<Home />} />
+        <Route path="/sign-in/" element={<SignIn />} />
+        <Route path="/sign-up/" element={<SignUp />} />
+        <Route path="/terms/" element={<Terms />} />
+        <Route path="/privacy/" element={<Privacy />} />
+        <Route path="/forgot-password/" element={<ForgotPassword />} />
+        <Route path="/paper-base/" element={<PaperBase />} />
+        <Route path="*" element={<Navigate to="/"></Navigate>} />
+      </Routes>
     </div>
   );
 }
