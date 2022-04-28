@@ -2,6 +2,7 @@ import withRoot from "../modules/withRoot";
 // --- Post bootstrap -----
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { collection, doc, setDoc } from "firebase/firestore";
 import { makeStyles } from "@mui/styles";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
@@ -14,7 +15,7 @@ import { email, required } from "../modules/form/validation";
 import RFTextField from "../modules/form/RFTextField";
 import FormButton from "../modules/form/FormButton";
 import FormFeedback from "../modules/form/FormFeedback";
-import { auth } from "../firebase/firebaseClient";
+import { auth, firestore } from "../firebase/firebaseClient";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const useStyles = makeStyles((theme) => ({
@@ -33,9 +34,13 @@ const useStyles = makeStyles((theme) => ({
 function SignUp() {
   const navigate = useNavigate();
   const classes = useStyles();
+  const _firestore = firestore;
+  const usersRef = collection(_firestore, "users");
   const [userSignupInfo, setSignupInfo] = React.useState({
     userEmail: null,
     userPassword: null,
+    userFirstName: null,
+    userLastName: null,
   });
   const [sent, setSent] = React.useState(false);
 
@@ -60,8 +65,13 @@ function SignUp() {
       ...userSignupInfo,
       userEmail: document.getElementById("emailText").value,
       userPassword: document.getElementById("passwordText").value,
+      userFirstName: document.getElementById("firstName").value,
+      userLastName: document.getElementById("lastName").value,
     });
-    console.log(userSignupInfo.userEmail, userSignupInfo.userPassword);
+  };
+
+  const userToFirestore = async (updateInfo, userID) => {
+    await setDoc(doc(usersRef, userID), updateInfo, { merge: true });
   };
 
   const handleSubmit = (e) => {
@@ -78,15 +88,19 @@ function SignUp() {
       )
         .then((userCredential) => {
           var user = userCredential.user;
-          console.log("Anonymous account successfully upgraded", user);
+          const displayName =
+            userSignupInfo.userFirstName + " " + userSignupInfo.userLastName;
           const data = {
             userMail: user.email,
             userJoined: user.metadata.creationTime,
             userId: user.uid,
-            // userName: user.displayName,
+            userName: displayName,
           };
+          const usedId = user.uid;
+          userToFirestore(data, usedId);
           setSent(true);
-          navigate('/paper-base/')
+          alert("Se ha registrado el usuario", displayName);
+          navigate("/paper-base/");
         })
         .catch((err) => {
           console.log("Error upgrading anonymous account", err);
@@ -107,8 +121,9 @@ function SignUp() {
             Registrarse
           </Typography>
           <Typography variant="body2" align="center">
+            "¿Ya tienes una cuenta?"
             <Link href="/sign-in/" underline="always">
-              <NavLink to="/sign-in/">{"¿Ya tienes una cuenta?"}</NavLink>
+              <NavLink to="/sign-in/">{"Iniciar sesión aquí"}</NavLink>
             </Link>
           </Typography>
         </React.Fragment>
@@ -134,6 +149,7 @@ function SignUp() {
                     fullWidth
                     label="Nombres"
                     name="firstName"
+                    id="firstName"
                     required
                   />
                 </Grid>
@@ -144,6 +160,7 @@ function SignUp() {
                     fullWidth
                     label="Apellidos"
                     name="lastName"
+                    id="lastName"
                     required
                   />
                 </Grid>

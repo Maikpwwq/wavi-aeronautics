@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { auth } from "../../firebase/firebaseClient";
+import { signOut } from "firebase/auth";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { withStyles } from "@mui/styles";
@@ -44,6 +46,26 @@ const styles = (theme) => ({
 
 function AppAppBar(props) {
   const { classes } = props;
+  const user = auth.currentUser || {};
+  const [userAuth, setUserAuth] = useState(true);
+
+  useEffect(() => {
+    if (user) {
+      setUserAuth(false);
+    }
+    console.log(user, userAuth);
+  }, []);
+
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(() => {
+        alert("Cerro su sesión de manera exitosa!");
+        setUserAuth(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div>
@@ -84,23 +106,39 @@ function AppAppBar(props) {
           >
             <NavLink to="/paper-base/">{"Tienda"}</NavLink>
           </Link>
-          <Link
-            color="inherit"
-            variant="h6"
-            underline="none"
-            className={classes.rightLink}
-            to="/sign-in/"
-          >
-            <NavLink to="/sign-in/">{"Iniciar sesión"}</NavLink>
-          </Link>
-          <Link
-            variant="h6"
-            underline="none"
-            className={clsx(classes.rightLink, classes.linkSecondary)}
-            to="/sign-up/"
-          >
-            <NavLink to="/sign-up/">{"Registrarse"}</NavLink>
-          </Link>
+          {userAuth ? (
+            <>
+              <Link
+                color="inherit"
+                variant="h6"
+                underline="none"
+                className={classes.rightLink}
+                to="/sign-in/"
+              >
+                <NavLink to="/sign-in/">{"Iniciar sesión"}</NavLink>
+              </Link>
+              <Link
+                variant="h6"
+                underline="none"
+                className={clsx(classes.rightLink, classes.linkSecondary)}
+                to="/sign-up/"
+              >
+                <NavLink to="/sign-up/">{"Registrarse"}</NavLink>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                variant="h6"
+                underline="none"
+                className={clsx(classes.rightLink, classes.linkSecondary)}
+              >
+                <NavLink onClick={handleSignOut} to="/">
+                  {"Cerrar Sesión"}
+                </NavLink>
+              </Link>
+            </>
+          )}
         </div>
       </AppBar>
       <div className={classes.placeholder} />

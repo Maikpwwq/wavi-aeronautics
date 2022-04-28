@@ -79,9 +79,8 @@ function SignIn() {
         .then((usercred) => {
           // Al iniciar sesion almacena una instancia del usuario
           var user = usercred.user;
-          console.log("Anonymous account successfully upgraded", user);
-          // console.log("Firebase App", app);
           setSent(true);
+          alert("Se ha iniciado una nueva sesión");
           navigate("/paper-base/");
         })
         .catch((err) => {
@@ -110,7 +109,7 @@ function SignIn() {
           <Typography variant="body2" align="center">
             {"¿No eres miembro aun? "}
             <Link href="/sign-up/" align="center" underline="always">
-              <NavLink to="/sign-up/">{"Iniciar sesión aquí"}</NavLink>
+              <NavLink to="/sign-up/">{"Registrarse"}</NavLink>
             </Link>
           </Typography>
         </React.Fragment>

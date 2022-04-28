@@ -45,10 +45,9 @@ const Products = () => {
               {storeProducts.map((product, k) => {
                 console.log(product);
                 return (
-                  <Grid item sm={12} xs={12} md={5} lg={4} xl={3}>
+                  <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
                     <ProductCard
                       className="d-flex mb-2"
-                      key={k}
                       products={product}
                     ></ProductCard>
                   </Grid>
