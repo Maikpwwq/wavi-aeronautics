@@ -29,12 +29,12 @@ const styles = (theme) => ({
   inputSizeSmall: {
     fontSize: 14,
     padding: theme.spacing(1),
-    width: `calc(100% - ${theme.spacing(2)}px)`,
+    width: `calc(100% - ${theme.spacing(2)})`,
   },
   inputSizeMedium: {
     fontSize: 16,
     padding: theme.spacing(2),
-    width: `calc(100% - ${theme.spacing(4)}px)`,
+    width: `calc(100% - ${theme.spacing(4)})`,
   },
   inputSizeLarge: {
     fontSize: 18,

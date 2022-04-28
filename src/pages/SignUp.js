@@ -20,14 +20,14 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const useStyles = makeStyles((theme) => ({
   form: {
-    marginTop: theme.spacing(6),
+    paddingTop: theme.spacing(6),
   },
   button: {
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(2),
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(2),
   },
   feedback: {
-    marginTop: theme.spacing(2),
+    paddingTop: theme.spacing(2),
   },
 }));
 

@@ -28,6 +28,9 @@ const styles = (theme) => ({
   secondaryBar: {
     zIndex: 0,
   },
+  productTabs: {
+    overflow: "scroll !important",
+  },
   menuButton: {
     marginLeft: -theme.spacing(1),
   },
@@ -157,7 +160,7 @@ function Header(props) {
         position="static"
         elevation={0}
       >
-        <Tabs value={0} textColor="inherit">
+        <Tabs value={0} textColor="inherit" className={classes.productTabs}>
           <Tab textColor="inherit" label="Drones" />
           <Tab textColor="inherit" label="Accesorios" />
           <Tab textColor="inherit" label="Software" />

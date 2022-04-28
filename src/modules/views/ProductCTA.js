@@ -35,8 +35,8 @@ const styles = (theme) => ({
   },
   textField: {
     width: "100%",
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(2),
+    margin: `${theme.spacing(3)} 0 ${theme.spacing(2)} 0 !important`,
+    backgroundColor: theme.palette.common.white,
   },
   button: {
     width: "100%",

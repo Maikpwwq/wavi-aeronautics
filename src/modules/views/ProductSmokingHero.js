@@ -8,21 +8,21 @@ import producBuoy from "../../../public/static/themes/producBuoy.svg";
 
 const styles = (theme) => ({
   root: {
-    display: 'flex',
+    display: 'flex !important',
     flexDirection: 'column',
     alignItems: 'center',
-    marginTop: theme.spacing(9),
-    marginBottom: theme.spacing(9),
+    paddingTop: theme.spacing(9),
+    paddingBottom: theme.spacing(9),
   },
   button: {
-    border: '4px solid currentColor',
+    border: '4px solid currentColor !important',
     borderRadius: 0,
     height: 'auto',
     padding: theme.spacing(2, 5),
   },
   link: {
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(3),
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
   },
   buoy: {
     width: 60,

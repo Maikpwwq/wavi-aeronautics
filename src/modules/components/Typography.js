@@ -9,21 +9,21 @@ const styles = (theme) => ({
     height: 4,
     width: 73,
     display: "block",
-    margin: `${theme.spacing(1)}px auto 0`,
+    margin: `${theme.spacing(1)} auto 0`,
     backgroundColor: theme.palette.secondary.main,
   },
   markedH3Center: {
     height: 4,
     width: 55,
     display: "block",
-    margin: `${theme.spacing(1)}px auto 0`,
+    margin: `${theme.spacing(1)} auto 0`,
     backgroundColor: theme.palette.secondary.main,
   },
   markedH4Center: {
     height: 4,
     width: 55,
     display: "block",
-    margin: `${theme.spacing(1)}px auto 0`,
+    margin: `${theme.spacing(1)} auto 0`,
     backgroundColor: theme.palette.secondary.main,
   },
   markedH6Left: {
@@ -40,11 +40,11 @@ const variantMapping = {
   h2: "h1",
   h3: "h1",
   h4: "h1",
-  h5: "h3",
+  h5: "h3", 
   h6: "h2",
   subtitle1: "h3",
 };
-
+ 
 function Typography(props) {
   const { children, classes, marked = false, variant, ...other } = props;
 

@@ -18,7 +18,7 @@ const styles = (theme) => ({
   },
   container: {
     marginTop: theme.spacing(15),
-    marginBottom: theme.spacing(30),
+    marginBottom: theme.spacing(20),
     display: 'flex',
     position: 'relative',
   },
@@ -26,14 +26,14 @@ const styles = (theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: theme.spacing(0, 5),
+    padding: `${theme.spacing(0, 5)} !important`,
   },
   image: {
     height: 55,
   },
   title: {
-    marginTop: theme.spacing(5),
-    marginBottom: theme.spacing(5),
+    marginTop: `${theme.spacing(5)} !important`,
+    marginBottom: `${theme.spacing(5)} !important`,
   },
   curvyLines: {
     pointerEvents: 'none',

@@ -18,8 +18,8 @@ const styles = (theme) => ({
     overflow: "hidden",
   },
   container: {
-    marginTop: theme.spacing(10),
-    marginBottom: theme.spacing(15),
+    paddingTop: theme.spacing(10),
+    paddingBottom: theme.spacing(15),
     position: "relative",
     display: "flex",
     flexDirection: "column",
@@ -32,7 +32,7 @@ const styles = (theme) => ({
     padding: theme.spacing(0, 5),
   },
   title: {
-    marginBottom: theme.spacing(14),
+    paddingBottom: theme.spacing(8),
   },
   number: {
     fontSize: 24,
@@ -51,10 +51,12 @@ const styles = (theme) => ({
     top: -180,
     opacity: 0.7,
   },
-  button: {
-    paddingTop: "1.5em",
-    marginTop: theme.spacing(8),
+  beneficios: {
+    marginBottom: `${theme.spacing(8)} !important`,
   },
+  button: {
+    
+  }
 });
 
 function ProductHowItWorks(props) {
@@ -79,7 +81,7 @@ function ProductHowItWorks(props) {
         >
           Te ofrecemos
         </Typography>
-        <div>
+        <div className={classes.beneficios} >
           <Grid container spacing={5}>
             <Grid item xs={12} md={4}>
               <div className={classes.item}>
@@ -131,7 +133,7 @@ function ProductHowItWorks(props) {
           size="large"
           variant="contained"
           className={classes.button && "navlink"}
-          component="a"
+          component="btn"
           // href="/sign-up/"
         >
           <NavLink to="/sign-up/">{"Comenzar"}</NavLink>

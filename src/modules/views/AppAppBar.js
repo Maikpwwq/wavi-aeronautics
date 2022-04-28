@@ -33,6 +33,7 @@ const styles = (theme) => ({
     display: "flex",
     justifyContent: "space-evenly",
     alignItems: "center",
+    maxWidth: "360px",
   },
   rightLink: {
     fontSize: 16,
@@ -47,20 +48,20 @@ const styles = (theme) => ({
 function AppAppBar(props) {
   const { classes } = props;
   const user = auth.currentUser || {};
-  const [userAuth, setUserAuth] = useState(true);
+  // const [userAuth, setUserAuth] = useState(true);
 
-  useEffect(() => {
-    if (user) {
-      setUserAuth(false);
-    }
-    console.log(user, userAuth);
-  }, []);
+  // useEffect(() => {
+  //   if (user) {
+  //     setUserAuth(false);
+  //   }
+  //   console.log(user, userAuth);
+  // }, []);
 
   const handleSignOut = () => {
     signOut(auth)
       .then(() => {
         alert("Cerro su sesión de manera exitosa!");
-        setUserAuth(true);
+        // setUserAuth(true);
       })
       .catch((error) => {
         console.log(error);
@@ -72,7 +73,7 @@ function AppAppBar(props) {
       <AppBar
         position="fixed"
         className="main-bar navlink"
-        style={{ "flex-direction": "row" }}
+        style={{ "flex-direction": "row", "justify-content": "space-around" }}
       >
         <Toolbar className={classes.toolbar}>
           <div className={classes.left}>
@@ -106,7 +107,7 @@ function AppAppBar(props) {
           >
             <NavLink to="/paper-base/">{"Tienda"}</NavLink>
           </Link>
-          {userAuth ? (
+          {user !== {} ? (
             <>
               <Link
                 color="inherit"
