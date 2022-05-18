@@ -8,7 +8,7 @@ const Products = () => {
   const _firestore = firestore;
   const _storage = storage;
   // const productsRef = collection(_firestore, "productos/dron/kit_fpv_dron")
-  const productsRef = collection(_firestore, "productos");
+  const productsRef = collection(_firestore, "productos"); 
   const productsDoc = doc(productsRef, "dron");
   const productsCollection = collection(productsDoc, "kit_fpv_dron");
 
@@ -43,12 +43,14 @@ const Products = () => {
             <br />
             <Grid container spacing={2}>
               {storeProducts.map((product, k) => {
-                console.log(product);
+                // console.log(product, k);
+                // productID
                 return (
                   <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
                     <ProductCard
                       className="d-flex mb-2"
                       products={product}
+                      productID={k}
                     ></ProductCard>
                   </Grid>
                 );

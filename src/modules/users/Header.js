@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import ShoppingCart from "./views/ShoppingCart";
+
 import PropTypes from "prop-types";
+
 import AppBar from "@mui/material/AppBar";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -51,6 +54,11 @@ const styles = (theme) => ({
 
 function Header(props) {
   const { classes, onDrawerToggle } = props;
+  const [showingCart, setShowingCart] = useState(false);
+
+  const handleShowCart = () => {
+    setShowingCart(!showingCart)
+  };
 
   return (
     <React.Fragment>
@@ -145,12 +153,17 @@ function Header(props) {
             <Grid item>0 Productos COP$ ....</Grid>
             <Grid item>
               <Tooltip title="Carrito">
-                <IconButton color="inherit">
+                <IconButton color="inherit" onClick={handleShowCart}>
                   <ShoppingCartIcon fontSize="large" />
                 </IconButton>
               </Tooltip>
             </Grid>
           </Grid>
+          <ShoppingCart
+            className=""
+            visible={showingCart}
+          />
+          {/* hidden */}
         </Toolbar>
       </AppBar>
       <AppBar

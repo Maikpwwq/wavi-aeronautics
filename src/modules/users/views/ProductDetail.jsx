@@ -18,7 +18,8 @@ const ProductDetail = () => {
     <>
       <Box className="" >
         <Card>
-          <CardActionArea>
+          {/* <CardActionArea>
+          </CardActionArea> */}
             <CardHeader title={titulo} subheader={precio}></CardHeader>
             <CardContent>
               <p>{descripcion}</p>
@@ -31,8 +32,6 @@ const ProductDetail = () => {
                 </img>
               ))}
             </CardMedia>
-            
-          </CardActionArea>
         </Card>
       </Box>
     </>

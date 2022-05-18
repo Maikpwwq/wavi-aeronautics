@@ -35,6 +35,7 @@ function SignUp() {
   const navigate = useNavigate();
   const classes = useStyles();
   const _firestore = firestore;
+  const shoppingsRef = collection(_firestore, "shoppingCart");
   const usersRef = collection(_firestore, "users");
   const [userSignupInfo, setSignupInfo] = React.useState({
     userEmail: null,
@@ -74,6 +75,10 @@ function SignUp() {
     await setDoc(doc(usersRef, userID), updateInfo, { merge: true });
   };
 
+  const shoppingsToFirestore = async (updateInfo, userRef) => {
+    await setDoc(doc(shoppingsRef, userRef), updateInfo, { merge: true });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     readInputs();
@@ -98,6 +103,8 @@ function SignUp() {
           };
           const usedId = user.uid;
           userToFirestore(data, usedId);
+          // Instancia un carrito de compras vacio
+          shoppingsToFirestore({ productos: [] }, usedId);
           setSent(true);
           alert("Se ha registrado el usuario", displayName);
           navigate("/paper-base/");

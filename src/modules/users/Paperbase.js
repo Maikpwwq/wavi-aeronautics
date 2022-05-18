@@ -158,6 +158,7 @@ const styles = {
     flex: 1,
     padding: innerTheme.spacing(6, 4),
     background: "#eaeff1",
+    zIndex: -1,
   },
   footer: {
     padding: innerTheme.spacing(2),
