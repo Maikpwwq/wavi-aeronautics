@@ -11,17 +11,27 @@ const Products = () => {
   const productsRef = collection(_firestore, "productos"); 
   const productsDoc = doc(productsRef, "dron");
   const productsCollection = collection(productsDoc, "kit_fpv_dron");
+  const productsCollectionRC = collection(productsDoc, "RC");
 
   const [storeProducts, setStoreProducts] = useState([]);
+  const [storeProductsRC, setStoreProductsRC] = useState([]);
 
   const productosFromFirestore = async () => {
     const productData = await getDocs(productsCollection);
+    const productDataRC = await getDocs(productsCollectionRC);
     let productos = [];
+    let productosRC = [];
     productData.forEach((DOC) => {
       productos.push(DOC.data());
     });
+    productDataRC.forEach((DOC) => {
+      productosRC.push(DOC.data());
+    });
     if (productos.length > 0) {
       setStoreProducts(productos);
+    }
+    if (productosRC.length > 0) {
+      setStoreProductsRC(productosRC);
     }
   };
 
@@ -43,6 +53,31 @@ const Products = () => {
             <br />
             <Grid container spacing={2}>
               {storeProducts.map((product, k) => {
+                // console.log(product, k);
+                // productID
+                return (
+                  <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
+                    <ProductCard
+                      className="d-flex mb-2"
+                      products={product}
+                      productID={k}
+                    ></ProductCard>
+                  </Grid>
+                );
+              })}
+            </Grid>
+            <br />
+            <br />
+            <h3>Drones a control remoto BNF/PNP/RTF. </h3>
+            <br />
+            <br />
+            <p>Bind aNd Fly: Esta versión es la que viene con todo menos con el transmisor./</p>
+            <p>Plug aNd Play: Esta es la versión incluye todo menos el transmisor, el receptor, batería y cargador./</p>
+            <p>Ready To Fly: Esta es la versión completa, puede funcionar desde el momento que lo recibes.</p>
+            <br />
+            <br />
+            <Grid container spacing={2}>
+              {storeProductsRC.map((product, k) => {
                 // console.log(product, k);
                 // productID
                 return (

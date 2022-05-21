@@ -13,7 +13,7 @@ import appFooterTwitter from "../../../public/static/themes/appFooterTwitter.png
 function Copyright() {
   return (
     <React.Fragment>
-      <Link color="inherit" href="https://material-ui.com/">
+      <Link color="inherit" href="https://maikpwwq.github.io/wavi-aeronautics/">
         Wavi Aeronautics
       </Link>{' '}
       {'© '}      
@@ -59,22 +59,22 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(0.5),
     paddingBottom: theme.spacing(0.5),
   },
-  language: {
-    marginTop: theme.spacing(1),
-    width: 150,
-  },
+  // language: {
+  //   marginTop: theme.spacing(1),
+  //   width: 150,
+  // },
 }));
 
-const LANGUAGES = [
-  {
-    code: 'en-US',
-    name: 'English',
-  },
-  {
-    code: 'fr-FR',
-    name: 'Français',
-  },
-];
+// const LANGUAGES = [
+//   {
+//     code: 'en-US',
+//     name: 'English',
+//   },
+//   {
+//     code: 'fr-FR',
+//     name: 'Français',
+//   },
+// ];
 
 export default function AppFooter() {
   const classes = useStyles();
@@ -125,7 +125,7 @@ export default function AppFooter() {
               </li>
             </ul>
           </Grid>
-          <Grid item xs={6} sm={8} md={4}>
+          {/* <Grid item xs={6} sm={8} md={4}>
             <Typography variant="h6" marked="left" gutterBottom>
               Lenguaje
             </Typography>
@@ -142,7 +142,7 @@ export default function AppFooter() {
                 </option>
               ))}
             </TextField>
-          </Grid>
+          </Grid> */}
           <Grid item>
             <Typography variant="caption">
               {'Icons made by '}

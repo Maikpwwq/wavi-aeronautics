@@ -29,7 +29,7 @@ const lightColor = "rgba(255, 255, 255, 0.7)";
 
 const styles = (theme) => ({
   secondaryBar: {
-    zIndex: 0,
+    zIndex: 1, // Ver listado carrito de compras
   },
   productTabs: {
     overflow: "scroll !important",
@@ -92,6 +92,7 @@ function Header(props) {
                     alt="logo Wavi Aeronautics"
                     height="48"
                     width="48"
+                    style={{borderRadius: "50%"}}
                   />
                   {"Wavi Aeronautics"}
                 </NavLink>

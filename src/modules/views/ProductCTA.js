@@ -38,8 +38,10 @@ const styles = (theme) => ({
     margin: `${theme.spacing(3)} 0 ${theme.spacing(2)} 0 !important`,
     backgroundColor: theme.palette.common.white,
   },
-  button: {
+  button: { 
     width: "100%",
+    margin: `${theme.spacing(1, 0)} !important`,
+    padding: `${theme.spacing(2, 0)} !important`,
   },
   imagesWrapper: {
     position: "relative",

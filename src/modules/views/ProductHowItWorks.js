@@ -137,7 +137,7 @@ function ProductHowItWorks(props) {
           // href="/sign-up/"
         >
           <NavLink to="/sign-up/">{"Comenzar"}</NavLink>
-        </Button>
+        </Button> 
       </Container>
     </section>
   );

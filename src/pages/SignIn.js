@@ -107,7 +107,7 @@ function SignIn() {
             {"Iniciar sesión"}
           </Typography>
           <Typography variant="body2" align="center">
-            {"¿No eres miembro aun? "}
+            {"¿No eres miembro aun?, "}
             <Link href="/sign-up/" align="center" underline="always">
               <NavLink to="/sign-up/">{"Registrarse"}</NavLink>
             </Link>

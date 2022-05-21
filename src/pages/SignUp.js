@@ -128,9 +128,9 @@ function SignUp() {
             Registrarse
           </Typography>
           <Typography variant="body2" align="center">
-            "¿Ya tienes una cuenta?"
+            ¿Ya tienes una cuenta?,
             <Link href="/sign-in/" underline="always">
-              <NavLink to="/sign-in/">{"Iniciar sesión aquí"}</NavLink>
+              <NavLink to="/sign-in/">{" Iniciar sesión aquí"}</NavLink>
             </Link>
           </Typography>
         </React.Fragment>
