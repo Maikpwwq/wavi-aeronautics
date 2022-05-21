@@ -62,10 +62,7 @@ function ProductHowItWorks(props) {
 
   return (
     <section className={classes.root}>
-      <Container
-        className={classes.container}
-        style={{ "text-align": "center" }}
-      >
+      <Container className={classes.container} style={{ textAlign: "center" }}>
         <img
           src={productCurvyLines}
           className={classes.curvyLines}

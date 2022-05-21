@@ -73,7 +73,7 @@ function AppAppBar(props) {
       <AppBar
         position="fixed"
         className="main-bar navlink"
-        style={{ "flex-direction": "row", }}
+        style={{ flexDirection: "row" }}
       >
         <Toolbar className={classes.toolbar}>
           <div className={classes.left}>
@@ -91,7 +91,7 @@ function AppAppBar(props) {
                   alt="logo Wavi Aeronautics"
                   height="48"
                   width="48"
-                  style={{borderRadius: "50%"}}
+                  style={{ borderRadius: "50%" }}
                 />
                 {"Wavi Aeronautics"}
               </NavLink>

@@ -57,10 +57,7 @@ function ProductHeroLayout(props) {
 
   return (
     <section className={classes.root}>
-      <Container
-        className={classes.container}
-        style={{ "text-align": "center" }}
-      >
+      <Container className={classes.container} style={{ textAlign: "center" }}>
         <img src={productHeroWonder} alt="wonder" width="147" height="80" />
         {children}
         <div className={classes.backdrop} />
