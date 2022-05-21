@@ -54,9 +54,7 @@ const styles = (theme) => ({
   beneficios: {
     marginBottom: `${theme.spacing(8)} !important`,
   },
-  button: {
-    
-  }
+  button: {},
 });
 
 function ProductHowItWorks(props) {
@@ -81,7 +79,7 @@ function ProductHowItWorks(props) {
         >
           Te ofrecemos
         </Typography>
-        <div className={classes.beneficios} >
+        <div className={classes.beneficios}>
           <Grid container spacing={5}>
             <Grid item xs={12} md={4}>
               <div className={classes.item}>
@@ -137,7 +135,7 @@ function ProductHowItWorks(props) {
           // href="/sign-up/"
         >
           <NavLink to="/sign-up/">{"Comenzar"}</NavLink>
-        </Button> 
+        </Button>
       </Container>
     </section>
   );

@@ -8,7 +8,7 @@ const Products = () => {
   const _firestore = firestore;
   const _storage = storage;
   // const productsRef = collection(_firestore, "productos/dron/kit_fpv_dron")
-  const productsRef = collection(_firestore, "productos"); 
+  const productsRef = collection(_firestore, "productos");
   const productsDoc = doc(productsRef, "dron");
   const productsCollection = collection(productsDoc, "kit_fpv_dron");
   const productsCollectionRC = collection(productsDoc, "RC");
@@ -71,9 +71,18 @@ const Products = () => {
             <h3>Drones a control remoto BNF/PNP/RTF. </h3>
             <br />
             <br />
-            <p>Bind aNd Fly: Esta versión es la que viene con todo menos con el transmisor./</p>
-            <p>Plug aNd Play: Esta es la versión incluye todo menos el transmisor, el receptor, batería y cargador./</p>
-            <p>Ready To Fly: Esta es la versión completa, puede funcionar desde el momento que lo recibes.</p>
+            <p>
+              Bind aNd Fly: Esta versión es la que viene con todo menos con el
+              transmisor./
+            </p>
+            <p>
+              Plug aNd Play: Esta es la versión incluye todo menos el
+              transmisor, el receptor, batería y cargador./
+            </p>
+            <p>
+              Ready To Fly: Esta es la versión completa, puede funcionar desde
+              el momento que lo recibes.
+            </p>
             <br />
             <br />
             <Grid container spacing={2}>

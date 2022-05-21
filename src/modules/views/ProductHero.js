@@ -5,7 +5,9 @@ import { withStyles } from "@mui/styles";
 import Button from "../components/Button";
 import Typography from "../components/Typography";
 import ProductHeroLayout from "./ProductHeroLayout";
-import MavicAir from "../../../public/static/img/Portada-DJI-Mavic-Air-2.png";
+// import MavicAir from "../../../public/static/img/Portada-DJI-Mavic-Air-2.png";
+const MavicAir =
+    "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FPortada-DJI-Mavic-Air-2.png?alt=media&token=c74ad4fe-459b-47e2-8542-fca74408f429";
 
 const styles = (theme) => ({
   background: {
@@ -33,11 +35,11 @@ const styles = (theme) => ({
 
 function ProductHero(props) {
   const { classes } = props;
-
-  return (
+  
+    return (
     <ProductHeroLayout backgroundClassName={classes.background}>
       {/* Increase the network loading priority of the background image. */}
-      <img style={{ display: "none" }} src={MavicAir} alt="increase priority" />
+      <img style={{ display: "none" }} src={{MavicAir}} alt="increase priority" />
       <Typography color="inherit" align="center" variant="h2" marked="center">
         Necesitas un Dron
       </Typography>

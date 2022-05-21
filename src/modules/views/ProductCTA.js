@@ -13,7 +13,7 @@ import Snackbar from "../components/Snackbar";
 import Button from "../components/Button";
 
 import productCTAImageDots from "../../../public/static/themes/productCTAImageDots.png";
-import PostalOfertas from "../../../public/static/img/Toma-Aerea-Ciudad.png";
+// import PostalOfertas from "../../../public/static/img/Toma-Aerea-Ciudad.png";
 
 const styles = (theme) => ({
   root: {
@@ -88,6 +88,8 @@ function ProductCTA(props) {
     setOpen(false);
 
   };
+
+  const PostalOfertas = "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FToma-Aerea-Ciudad.png?alt=media&token=d16460b1-8e78-4f85-977f-afff44385b09"
 
   return (
     <Container className={classes.root} component="section">
