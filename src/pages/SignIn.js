@@ -81,7 +81,7 @@ function SignIn() {
           var user = usercred.user;
           setSent(true);
           alert("Se ha iniciado una nueva sesión");
-          navigate("/paper-base/");
+          navigate("/tienda-base/");
         })
         .catch((err) => {
           // Manejar los Errores aqui.

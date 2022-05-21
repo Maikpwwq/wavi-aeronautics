@@ -8,7 +8,9 @@ import { NavLink } from "react-router-dom";
 import Link from "@mui/material/Link";
 import AppBar from "../components/AppBar";
 import Toolbar, { styles as toolbarStyles } from "../components/Toolbar";
-import WaviPixelLogo from "../../../public/static/img/WaviPixelLogo.png";
+// import WaviPixelLogo from "../../../public/static/img/WaviPixelLogo.png";
+const WaviPixelLogo =
+  "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FWaviPixelLogo.png?alt=media&token=7edcec69-8b24-4b95-b970-6b9acfddbdeb";
 
 const styles = (theme) => ({
   title: {
@@ -77,25 +79,25 @@ function AppAppBar(props) {
       >
         <Toolbar className={classes.toolbar}>
           <div className={classes.left}>
-            <Link
+            <NavLink
+              to="/"
               variant="h6"
               underline="none"
               color="inherit"
               className={classes.title}
-              to="/"
+              style={{ alignItems: "center", display: "flex", fontSize: "2rem" }}
+              activeClassName="active"
             >
-              <NavLink to="/" style={{ alignItems: "center", display: "flex" }}>
-                <img
-                  className={classes.image}
-                  src={WaviPixelLogo}
-                  alt="logo Wavi Aeronautics"
-                  height="48"
-                  width="48"
-                  style={{ borderRadius: "50%" }}
-                />
-                {"Wavi Aeronautics"}
-              </NavLink>
-            </Link>
+              <img
+                className={classes.image}
+                src={WaviPixelLogo}
+                alt="logo Wavi Aeronautics"
+                height="48"
+                width="48"
+                style={{ borderRadius: "50%" }}
+              />
+              {"Wavi Aeronautics"}
+            </NavLink>
           </div>
         </Toolbar>
         <div className={classes.right} sm={12} xs={12}>
@@ -104,9 +106,9 @@ function AppAppBar(props) {
             variant="h6"
             underline="none"
             className={classes.rightLink}
-            to="/paper-base/"
+            to="/tienda-base/"
           >
-            <NavLink to="/paper-base/">{"Tienda"}</NavLink>
+            <NavLink to="/tienda-base/">{"Tienda"}</NavLink>
           </Link>
           {user !== {} ? (
             <>

@@ -73,11 +73,11 @@ const Products = () => {
             <br />
             <p>
               Bind aNd Fly: Esta versión es la que viene con todo menos con el
-              transmisor./
+              transmisor y el radio control./
             </p>
             <p>
               Plug aNd Play: Esta es la versión incluye todo menos el
-              transmisor, el receptor, batería y cargador./
+              transmisor, el radio control, el receptor, batería y cargador./
             </p>
             <p>
               Ready To Fly: Esta es la versión completa, puede funcionar desde

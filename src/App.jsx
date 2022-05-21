@@ -25,7 +25,7 @@ function App() {
         <Route path="/terms/" element={<Terms />} />
         <Route path="/privacy/" element={<Privacy />} />
         <Route path="/forgot-password/" element={<ForgotPassword />} />
-        <Route path="/paper-base/" element={<PaperBase />} />
+        <Route path="/tienda-base/" element={<PaperBase />} />
         <Route path="/producto/" element={<ProductDetail />} />
         <Route path="*" element={<Navigate to="/"></Navigate>} />
       </Routes>

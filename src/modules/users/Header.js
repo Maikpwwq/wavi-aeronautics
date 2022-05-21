@@ -23,11 +23,17 @@ import Typography from "@mui/material/Typography";
 import { withStyles } from "@mui/styles";
 
 import AvatarUser from "../../../public/static/img/l3mik3l.png";
-import WaviPixelLogo from "../../../public/static/img/WaviPixelLogo.png";
+// import WaviPixelLogo from "../../../public/static/img/WaviPixelLogo.png";
+const WaviPixelLogo =
+  "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FWaviPixelLogo.png?alt=media&token=7edcec69-8b24-4b95-b970-6b9acfddbdeb";
 
 const lightColor = "rgba(255, 255, 255, 0.7)";
 
 const styles = (theme) => ({
+  title: {
+    fontSize: 24,
+    flex: 1,
+  },
   secondaryBar: {
     zIndex: 1, // Ver listado carrito de compras
   },
@@ -57,7 +63,7 @@ function Header(props) {
   const [showingCart, setShowingCart] = useState(false);
 
   const handleShowCart = () => {
-    setShowingCart(!showingCart)
+    setShowingCart(!showingCart);
   };
 
   return (
@@ -78,25 +84,30 @@ function Header(props) {
               </Grid>
             </Hidden>
             <Grid item>
-              <Link
-                variant="h6"
+              <NavLink
+                to="/"
+                variant="h2"
                 underline="none"
                 color="inherit"
-                className={classes.title}
-                to="/"
+                className={classes.title && classes.link}
+                style={{
+                  alignItems: "center",
+                  display: "flex",
+                  minWidth: "430px",
+                  fontSize: "2rem"
+                }}
+                activeClassName="active"
               >
-                <NavLink to="/">
-                  <img
-                    className={classes.image}
-                    src={WaviPixelLogo}
-                    alt="logo Wavi Aeronautics"
-                    height="48"
-                    width="48"
-                    style={{borderRadius: "50%"}}
-                  />
-                  {"Wavi Aeronautics"}
-                </NavLink>
-              </Link>
+                <img
+                  className={classes.image}
+                  src={WaviPixelLogo}
+                  alt="logo Wavi Aeronautics"
+                  height="48"
+                  width="48"
+                  style={{ borderRadius: "50%", margin: "0 auto" }}
+                />
+                {"Wavi Aeronautics"}
+              </NavLink>
             </Grid>
 
             <Grid item xs />
@@ -160,10 +171,7 @@ function Header(props) {
               </Tooltip>
             </Grid>
           </Grid>
-          <ShoppingCart
-            className=""
-            visible={showingCart}
-          />
+          <ShoppingCart className="" visible={showingCart} />
           {/* hidden */}
         </Toolbar>
       </AppBar>

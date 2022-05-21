@@ -107,7 +107,7 @@ function SignUp() {
           shoppingsToFirestore({ productos: [] }, usedId);
           setSent(true);
           alert("Se ha registrado el usuario", displayName);
-          navigate("/paper-base/");
+          navigate("/tienda-base/");
         })
         .catch((err) => {
           console.log("Error upgrading anonymous account", err);
