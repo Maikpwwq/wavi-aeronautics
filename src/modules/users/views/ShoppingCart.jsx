@@ -15,7 +15,7 @@ const ShoppingCart = (props) => {
   const user = auth.currentUser || {};
   const userID = user.uid || null;
   const { visible } = props;
-  console.log(visible)
+  console.log(visible);
   const _firestore = firestore;
   const productsRef = collection(_firestore, "shoppingCart");
   const [storeProducts, setStoreProducts] = useState({
@@ -35,7 +35,9 @@ const ShoppingCart = (props) => {
   };
 
   useEffect(() => {
-    productosFromFirestore();
+    if (userID) {
+      productosFromFirestore();
+    }
   }, []);
 
   return (

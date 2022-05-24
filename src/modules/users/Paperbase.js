@@ -7,8 +7,9 @@ import Hidden from "@mui/material/Hidden";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import Navigator from "./Navigator";
-import Content from "./Content";
-import Products from "./views/Products";
+// import Content from "./Content";
+// import Products from "./views/Products";
+import Rutas from "./Rutas";
 import Header from "./Header";
 
 function Copyright() {
@@ -194,7 +195,8 @@ function Paperbase(props) {
         <div className={classes.app}>
           <Header onDrawerToggle={handleDrawerToggle} />
           <main className={classes.main}>
-            <Products />
+            {/* <Products /> */}
+            <Rutas />
             {/* <Content /> */}
           </main>
           <footer className={classes.footer}>

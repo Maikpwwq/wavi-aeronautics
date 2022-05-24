@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import ShoppingCart from "./views/ShoppingCart";
 
 import PropTypes from "prop-types";
@@ -60,10 +60,26 @@ const styles = (theme) => ({
 
 function Header(props) {
   const { classes, onDrawerToggle } = props;
+  const navigate = useNavigate();
   const [showingCart, setShowingCart] = useState(false);
+  const [value, setValue] = React.useState(0);
 
   const handleShowCart = () => {
     setShowingCart(!showingCart);
+  };
+
+  const handleChange = (event, newValue) => {
+    console.log(event, newValue);
+    setValue(newValue);
+    if (newValue === 0) {
+      navigate("/tienda-base/");
+    } else if (newValue === 1) {
+      navigate("radio-control");
+    } else if (newValue === 2) {
+      navigate("accesorios");
+    } else if (newValue === 3) {
+      navigate("software");
+    }
   };
 
   return (
@@ -93,8 +109,7 @@ function Header(props) {
                 style={{
                   alignItems: "center",
                   display: "flex",
-                  minWidth: "430px",
-                  fontSize: "2rem"
+                  fontSize: "2rem",
                 }}
                 activeClassName="active"
               >
@@ -104,7 +119,10 @@ function Header(props) {
                   alt="logo Wavi Aeronautics"
                   height="48"
                   width="48"
-                  style={{ borderRadius: "50%", margin: "0 auto" }}
+                  style={{
+                    borderRadius: "50%",
+                    marginRight: "30px",
+                  }}
                 />
                 {"Wavi Aeronautics"}
               </NavLink>
@@ -182,11 +200,16 @@ function Header(props) {
         position="static"
         elevation={0}
       >
-        <Tabs value={0} textColor="inherit" className={classes.productTabs}>
-          <Tab textColor="inherit" label="Drones" />
-          <Tab textColor="inherit" label="Accesorios" />
-          <Tab textColor="inherit" label="Software" />
-          <Tab textColor="inherit" label="Radio Control" />
+        <Tabs
+          onChange={handleChange}
+          value={value}
+          textColor="inherit"
+          className={classes.productTabs}
+        >
+          <Tab textColor="inherit" label="Drones" value={0} />
+          <Tab textColor="inherit" label="Radio Control" value={1} />
+          <Tab textColor="inherit" label="Accesorios" value={2} />
+          <Tab textColor="inherit" label="Software" value={3} />
         </Tabs>
       </AppBar>
     </React.Fragment>
