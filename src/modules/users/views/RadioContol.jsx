@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { firestore, storage } from "../../../firebase/firebaseClient";
 import { collection, doc, getDocs } from "firebase/firestore";
 import ProductCard from "../components/ProductCard";
+import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const RadioContol = () => {
   const _firestore = firestore;
@@ -164,15 +166,15 @@ const RadioContol = () => {
 
   return (
     <>
-      <h3>Productos:</h3>
+      <h3>Dispositivos de Contol Remoto.</h3>
+      <br />
       <br />
       {storeProductsRC.length == 0 ? (
-        <p>Cargando productos!</p>
+        <Box sx={{ display: "flex" }}>
+          <CircularProgress />
+        </Box>
       ) : (
         <div>
-          <p>Dispositivos de Contol Remoto.</p>
-          <br />
-          <br />
           <Grid container spacing={2}>
             {storeProductsRC.map((product, k) => {
               // console.log(product, k);
@@ -190,13 +192,15 @@ const RadioContol = () => {
           </Grid>
         </div>
       )}
+      <h3>Baterias para drone.</h3>
+      <br />
+      <br />
       {storeProductsBaterias.length == 0 ? (
-        <p>Cargando productos!</p>
+        <Box sx={{ display: "flex" }}>
+          <CircularProgress />
+        </Box>
       ) : (
         <div>
-          <p>Baterias para drone.</p>
-          <br />
-          <br />
           <Grid container spacing={2}>
             {storeProductsBaterias.map((product, k) => {
               // console.log(product, k);

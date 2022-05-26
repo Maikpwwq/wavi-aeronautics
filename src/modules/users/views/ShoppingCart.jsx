@@ -76,6 +76,7 @@ const ShoppingCart = (props) => {
                 <ListShoppingCart
                   className="d-flex mb-2"
                   products={product}
+                  visible={visible}
                   productID={k}
                 ></ListShoppingCart>
               </Grid>

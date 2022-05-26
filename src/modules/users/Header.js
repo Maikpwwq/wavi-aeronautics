@@ -205,6 +205,7 @@ function Header(props) {
           value={value}
           textColor="inherit"
           className={classes.productTabs}
+          style={{ overflow: "scroll" }}
         >
           <Tab textColor="inherit" label="Drones" value={0} />
           <Tab textColor="inherit" label="Radio Control" value={1} />

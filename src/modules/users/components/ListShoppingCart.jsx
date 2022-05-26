@@ -13,21 +13,24 @@ import CardActions from "@mui/material/CardActions";
 import { CardActionArea } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import CancelIcon from "@mui/icons-material/Cancel";
+import MercadoPago from "../views/MercadoPago";
 
 const styles = {
   // footer: {
   //   padding: innerTheme.spacing(2),
   //   background: "#eaeff1",
   // },
-}
+};
 
 const ListShoppingCart = (props) => {
   const user = auth.currentUser || {};
   const userID = user.uid || null;
   const _firestore = firestore;
   const navigate = useNavigate();
-  const { products } = props;
-  const shoppingsRef = collection(_firestore, "productos/dron/kit_fpv_dron");
+  const { products, visible } = props;
+  const storeKitRef = collection(_firestore, "productos/dron/kit_fpv_dron");
+  const storeRCRef = collection(_firestore, "productos/dron/RC");
+
   // const shoppingsRef = collection(_firestore, "productos");
   const [shoppingCart, setShoppingCart] = useState({
     productos: [],
@@ -40,15 +43,23 @@ const ListShoppingCart = (props) => {
 
   const shoppingsFromFirestore = async () => {
     // console.log(shoppingsRef, userID);
-    const productData = await getDocs(shoppingsRef);
+    const collectionsWavi = new Array(storeRCRef, storeKitRef);
+    let productData = [];
+    for (let product of collectionsWavi) {
+      let colectionData = await getDocs(product);
+      colectionData.forEach((DOC) => {
+        productData.push(DOC.data());
+      });
+    }
     let cardProductos = [];
     // comparar productos por ids
     productData.forEach((DOC) => {
-      let iD = DOC.data().productID;
+      // console.log(DOC);
+      let iD = DOC.productID;
       for (let codigo of products) {
         console.log(iD, codigo);
         if (iD === codigo) {
-          cardProductos.push(DOC.data());
+          cardProductos.push(DOC);
         }
       }
     });
@@ -61,12 +72,12 @@ const ListShoppingCart = (props) => {
   };
 
   useEffect(() => {
-    if (userID) {
+    if (userID && visible) {
       shoppingsFromFirestore();
       //console.log(shoppingCart);
     }
     //console.log(userID);
-  }, []);
+  }, [visible]);
 
   const shoppingsToFirestore = async (updateInfo, userRef) => {
     await setDoc(doc(shoppingsRef, userRef), updateInfo, { merge: true });
@@ -123,6 +134,7 @@ const ListShoppingCart = (props) => {
           </Card>
         </Box>
       ))}
+      <MercadoPago />
     </>
   );
 };

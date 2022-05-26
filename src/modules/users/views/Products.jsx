@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { firestore, storage } from "../../../firebase/firebaseClient";
 import { collection, doc, getDocs } from "firebase/firestore";
+import Box from "@mui/material/Box";
 import ProductCard from "../components/ProductCard";
 import Grid from "@mui/material/Grid";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Products = () => {
   const _firestore = firestore;
@@ -45,7 +47,10 @@ const Products = () => {
       <br />
       <div>
         {storeProducts.length == 0 ? (
-          <p>Cargando productos!</p>
+          // <p>Cargando productos!</p>
+          <Box sx={{ display: "flex" }}>
+            <CircularProgress />
+          </Box>
         ) : (
           <div>
             <p>Descubre los mejores kits de Dron FPV listos para vuelo.</p>

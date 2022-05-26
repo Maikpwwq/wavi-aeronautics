@@ -27,7 +27,7 @@ const ProductCard = (props) => {
 
   const handleClick = (e) => {
     e.preventDefault();
-    navigate("/producto/", { state: { product: products } });
+    navigate("producto", { state: { product: products } });
   };
 
   const shoppingsFromFirestore = async () => {
