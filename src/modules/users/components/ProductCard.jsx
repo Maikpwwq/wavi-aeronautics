@@ -122,7 +122,7 @@ const ProductCard = (props) => {
           </CardActionArea>
           <CardHeader
             title={titulo}
-            subheader={precio}
+            subheader={`$ ${precio}`}
             action={
               <IconButton color="inherit" onClick={handleAddCard}>
                 <AddShoppingCartIcon fontSize="large" />

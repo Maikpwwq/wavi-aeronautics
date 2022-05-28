@@ -34,6 +34,8 @@ const ListShoppingCart = (props) => {
   // const shoppingsRef = collection(_firestore, "productos");
   const [shoppingCart, setShoppingCart] = useState({
     productos: [],
+    suma: 0,
+    items: 0,
   });
 
   const handleClick = (e) => {
@@ -57,7 +59,7 @@ const ListShoppingCart = (props) => {
       // console.log(DOC);
       let iD = DOC.productID;
       for (let codigo of products) {
-        console.log(iD, codigo);
+        // console.log(iD, codigo);
         if (iD === codigo) {
           cardProductos.push(DOC);
         }
@@ -66,14 +68,32 @@ const ListShoppingCart = (props) => {
     console.log(cardProductos);
     // cardProductos != {} &&
     if (cardProductos.length > 0) {
-      setShoppingCart({ ...shoppingCart, productos: cardProductos });
+      setShoppingCart({
+        ...shoppingCart,
+        productos: cardProductos,
+        items: cardProductos.length,
+      });
       console.log(shoppingCart);
     }
+  };
+
+  const calculateCartAmount = () => {
+    let acomulateSum = 0;
+    shoppingCart.productos.map((product, k) => {
+      acomulateSum += parseInt(product.precio);
+      console.log(acomulateSum, product.precio)
+    });
+    setShoppingCart({ ...shoppingCart, suma: acomulateSum });
   };
 
   useEffect(() => {
     if (userID && visible) {
       shoppingsFromFirestore();
+      calculateCartAmount();
+      if (shoppingCart.items > 0) {
+        localStorage.setItem("cartSum", shoppingCart.suma);
+        localStorage.setItem("cartProducts", shoppingCart.items);
+      }
       //console.log(shoppingCart);
     }
     //console.log(userID);
@@ -111,30 +131,32 @@ const ListShoppingCart = (props) => {
 
   return (
     <>
-      {shoppingCart.productos.map(({ titulo, precio, imagenes }) => (
-        <Box className="" maxWidth="sm" style={{ height: "100%" }}>
-          <Card style={{ height: "100%", display: "flex" }}>
-            <CardActionArea onClick={handleClick}>
-              <CardMedia
-                component="img"
-                height="80"
-                image={imagenes[0]}
-                alt={titulo}
-              ></CardMedia>
-            </CardActionArea>
-            <CardHeader
-              title={titulo}
-              subheader={precio}
-              action={
-                <IconButton color="inherit" onClick={handleCancel}>
-                  <CancelIcon fontSize="large" />
-                </IconButton>
-              }
-            ></CardHeader>
-          </Card>
-        </Box>
-      ))}
-      <MercadoPago />
+      <Box className="" maxWidth="sm" style={{ height: "100%" }}>
+        {shoppingCart.productos.map(
+          ({ titulo, precio, imagenes, productID }) => (
+            <Card style={{ height: "100%", display: "flex" }} key={productID}>
+              <CardActionArea onClick={handleClick}>
+                <CardMedia
+                  component="img"
+                  height="80"
+                  image={imagenes[0]}
+                  alt={titulo}
+                ></CardMedia>
+              </CardActionArea>
+              <CardHeader
+                title={titulo}
+                subheader={precio}
+                action={
+                  <IconButton color="inherit" onClick={handleCancel}>
+                    <CancelIcon fontSize="large" />
+                  </IconButton>
+                }
+              ></CardHeader>
+            </Card>
+          )
+        )}
+        <MercadoPago />
+      </Box>
     </>
   );
 };

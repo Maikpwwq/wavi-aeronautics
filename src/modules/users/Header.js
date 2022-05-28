@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 import ShoppingCart from "./views/ShoppingCart";
 
@@ -61,12 +61,27 @@ const styles = (theme) => ({
 function Header(props) {
   const { classes, onDrawerToggle } = props;
   const navigate = useNavigate();
+  const shoppingCartSuma = localStorage.getItem("cartSum");
+  const shoppingCartItems = localStorage.getItem("cartProducts");
   const [showingCart, setShowingCart] = useState(false);
   const [value, setValue] = React.useState(0);
+  const [shoppingCart, setShoppingCart] = useState({
+    suma: 0,
+    items: 0,
+  });
 
   const handleShowCart = () => {
     setShowingCart(!showingCart);
   };
+
+  useEffect(() => {
+    if (shoppingCartItems > 0)
+      setShoppingCart({
+        ...shoppingCart,
+        suma: shoppingCartSuma,
+        items: shoppingCartItems,
+      });
+  }, [shoppingCartItems]);
 
   const handleChange = (event, newValue) => {
     console.log(event, newValue);
@@ -87,7 +102,7 @@ function Header(props) {
       <AppBar color="primary" position="sticky" elevation={0}>
         <Toolbar>
           <Grid container spacing={1} alignItems="center">
-            <Hidden smUp>
+            {/* <Hidden smUp>
               <Grid item>
                 <IconButton
                   color="inherit"
@@ -98,7 +113,7 @@ function Header(props) {
                   <MenuIcon />
                 </IconButton>
               </Grid>
-            </Hidden>
+            </Hidden> */}
             <Grid item>
               <NavLink
                 to="/"
@@ -180,7 +195,9 @@ function Header(props) {
                 Favoritos
               </Link>
             </Grid>
-            <Grid item>0 Productos COP$ ....</Grid>
+            <Grid item>
+              {shoppingCart.items} Productos. $ {shoppingCart.suma} COP
+            </Grid>
             <Grid item>
               <Tooltip title="Carrito">
                 <IconButton color="inherit" onClick={handleShowCart}>

@@ -41,12 +41,12 @@ const ProductDetail = () => {
 
   return (
     <>
-      <Container maxWidth="lg">
+      <Container fixed >
         <Box sx={{ pt: 8, pb: 6 }}>
           <Card>
-            {/* fixed <CardActionArea>
+            {/* maxWidth="lg" <CardActionArea>
           </CardActionArea> */}
-            <CardHeader title={titulo} subheader={precio}></CardHeader>
+            <CardHeader title={titulo} subheader={`$ ${precio}`}></CardHeader>
 
             <CardContent>
               <Box sx={{ display: "flex", flexDirection: "row" }}>
