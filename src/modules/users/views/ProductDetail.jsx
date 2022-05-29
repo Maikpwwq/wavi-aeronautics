@@ -14,15 +14,27 @@ import MobileStepper from "@mui/material/MobileStepper";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import SwipeableViews from "react-swipeable-views";
-import Typography from '../../components/Typography';
+import Typography from "../../components/Typography";
 import { autoPlay } from "react-swipeable-views-utils";
 import { withStyles } from "@mui/styles";
 
 const styles = (theme) => ({
   onSmallCol: {
-    [theme.breakpoints.down('md')]: {
-      flexDirection: 'column !important',
+    margin: `${theme.spacing(2)} ${theme.spacing(4)}`,
+    [theme.breakpoints.down("md")]: {
+      flexDirection: "column !important",
     },
+  },
+  infoProduct: {
+    marginLeft: `${theme.spacing(4)}`,
+  },
+  detailProduct: {
+    margin: `${theme.spacing(2)} ${theme.spacing(4)}`,
+  },
+  moreImgs: {
+    flexWrap: "wrap !important",
+    display: "flex !important",
+    margin: `${theme.spacing(2)} ${theme.spacing(4)}`,
   },
 });
 
@@ -57,8 +69,11 @@ const ProductDetail = (props) => {
           <Card>
             {/* maxWidth="lg" <CardActionArea>
           </CardActionArea> */}
-            <CardHeader title={titulo} subheader={precio}></CardHeader>
-
+            <CardHeader
+              title={titulo}
+              subheader={precio}
+              className={classes.detailProduct}
+            ></CardHeader>
             <CardContent>
               <Box
                 className={classes.onSmallCol}
@@ -120,17 +135,19 @@ const ProductDetail = (props) => {
                     }
                   />
                 </Box>
-
-                <p>{descripcion}</p>
+                <Box className={classes.infoProduct}>
+                  <Typography variant="body1">{descripcion}</Typography>
+                </Box>
               </Box>
-              
-              <Typography variant="h3">Especificaciones: </Typography>
-              <Typography variant="body1" className="ps-2 pe-2">{especificaciones}</Typography>
-              <br />
-              <Typography variant="h3">Incluye: </Typography>
-              <Typography variant="body1" className="ps-2 pe-2">{incluye}</Typography>
+              <Box className={classes.detailProduct}>
+                <Typography variant="h3">Especificaciones: </Typography>
+                <Typography variant="body1">{especificaciones}</Typography>
+                <br />
+                <Typography variant="h3">Incluye: </Typography>
+                <Typography variant="body1">{incluye}</Typography>
+              </Box>
             </CardContent>
-            <CardMedia component="div">
+            <CardMedia component="div" className={classes.moreImgs}>
               {imagenes.map((image) => (
                 <Box
                   component="img"

@@ -13,24 +13,12 @@ import appFooterLinkedin from "../../../public/static/themes/appFooterLinkedin.p
 const appFooterFacebook =
   "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2Ficonos%2FappFooterFacebook.png?alt=media&token=b54b1ff2-c2b3-4d57-a7fa-c2e0e06d150e";
 // const appFooterLinkedin =
-  "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2Ficonos%2FappFooterLinkedin.png?alt=media&token=d1475fcd-9ae1-4c3c-84f5-ee38d76c2da6";
-
-function Copyright() {
-  return (
-    <React.Fragment>
-      <Link color="inherit" href="https://maikpwwq.github.io/wavi-aeronautics/">
-        Wavi Aeronautics
-      </Link>{" "}
-      {"© "}
-      {new Date().getFullYear()}
-    </React.Fragment>
-  );
-}
+("https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2Ficonos%2FappFooterLinkedin.png?alt=media&token=d1475fcd-9ae1-4c3c-84f5-ee38d76c2da6");
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
-    backgroundColor: theme.palette.secondary.light,
+    backgroundColor: theme.palette.primary.dark,
   },
   container: {
     marginTop: theme.spacing(8),
@@ -64,6 +52,9 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(0.5),
     paddingBottom: theme.spacing(0.5),
   },
+  textWhite: {
+    color: theme.palette.secondary.light,
+  },
   // language: {
   //   marginTop: theme.spacing(1),
   //   width: 150,
@@ -83,6 +74,20 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AppFooter() {
   const classes = useStyles();
+
+  function Copyright() {
+    return (
+      <React.Fragment>
+        <Link
+          href="https://maikpwwq.github.io/wavi-aeronautics/"
+          style={{ color: "#fff5f8" }}
+        >
+          Wavi Aeronautics {"© "}
+          {new Date().getFullYear()}
+        </Link>
+      </React.Fragment>
+    );
+  }
 
   return (
     <Typography component="footer" className={classes.root}>
@@ -121,19 +126,24 @@ export default function AppFooter() {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
-            <Typography variant="h6" marked="left" gutterBottom>
+            <Typography
+              className={classes.textWhite}
+              variant="h6"
+              marked="left"
+              gutterBottom
+            >
               Legal
             </Typography>
             <ul className={classes.list}>
               <li className={classes.listItem}>
-                <Link href="/terms/">
-                  <NavLink to="/terms/">{"Terminos"}</NavLink>
-                </Link>
+                <NavLink to="/terms/" className={classes.textWhite}>
+                  {"Terminos"}
+                </NavLink>
               </li>
               <li className={classes.listItem}>
-                <Link href="/privacy/">
-                  <NavLink to="/privacy/">{"Privacidad"}</NavLink>
-                </Link>
+                <NavLink to="/privacy/" className={classes.textWhite}>
+                  {"Privacidad"}
+                </NavLink>
               </li>
             </ul>
           </Grid>

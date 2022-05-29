@@ -89,6 +89,7 @@ const ListShoppingCart = (props) => {
   };
 
   useEffect(() => {
+    console.log(userID, visible);
     if (userID && visible) {
       shoppingsFromFirestore();
       calculateCartAmount();
@@ -100,7 +101,7 @@ const ListShoppingCart = (props) => {
       }
       //console.log(shoppingCart);
     }
-  }, [shoppingCart.items]); // visible
+  }, []); // visible
 
   const shoppingsToFirestore = async (updateInfo, userRef) => {
     await setDoc(doc(shoppingsRef, userRef), updateInfo, { merge: true });
