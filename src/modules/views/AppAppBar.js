@@ -63,7 +63,7 @@ function AppAppBar(props) {
     signOut(auth)
       .then(() => {
         alert("Cerro su sesión de manera exitosa!");
-        // setUserAuth(true);
+        setUserAuth(false);
       })
       .catch((error) => {
         console.log(error);

@@ -136,6 +136,7 @@ const ProductDetail = (props) => {
                   />
                 </Box>
                 <Box className={classes.infoProduct}>
+                  <Typography variant="h3">Descripción: </Typography>
                   <Typography variant="body1">{descripcion}</Typography>
                 </Box>
               </Box>
