@@ -73,15 +73,17 @@ const ListShoppingCart = (props) => {
         productos: cardProductos,
         items: cardProductos.length,
       });
-      console.log(shoppingCart);
+      //console.log(shoppingCart);
     }
   };
 
   const calculateCartAmount = () => {
     let acomulateSum = 0;
     shoppingCart.productos.map((product, k) => {
-      acomulateSum += parseInt(product.precio);
       console.log(acomulateSum, product.precio)
+      if ( product.precio !== "Agotado" ) {
+        acomulateSum += parseInt(product.precio);
+      }
     });
     setShoppingCart({ ...shoppingCart, suma: acomulateSum });
   };
@@ -91,13 +93,14 @@ const ListShoppingCart = (props) => {
       shoppingsFromFirestore();
       calculateCartAmount();
       if (shoppingCart.items > 0) {
-        localStorage.setItem("cartSum", shoppingCart.suma);
         localStorage.setItem("cartProducts", shoppingCart.items);
+      }
+      if (shoppingCart.suma > 0) {
+        localStorage.setItem("cartSum", shoppingCart.suma);
       }
       //console.log(shoppingCart);
     }
-    //console.log(userID);
-  }, [visible]);
+  }, [shoppingCart.items]); // visible
 
   const shoppingsToFirestore = async (updateInfo, userRef) => {
     await setDoc(doc(shoppingsRef, userRef), updateInfo, { merge: true });
@@ -138,7 +141,7 @@ const ListShoppingCart = (props) => {
               <CardActionArea onClick={handleClick}>
                 <CardMedia
                   component="img"
-                  height="80"
+                  height="120"
                   image={imagenes[0]}
                   alt={titulo}
                 ></CardMedia>
@@ -155,7 +158,7 @@ const ListShoppingCart = (props) => {
             </Card>
           )
         )}
-        <MercadoPago />
+        <MercadoPago visible={visible}/>
       </Box>
     </>
   );

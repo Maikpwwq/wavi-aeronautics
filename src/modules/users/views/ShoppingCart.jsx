@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { firestore, auth } from "../../../firebase/firebaseClient";
 import { collection, doc, getDoc } from "firebase/firestore";
 import ListShoppingCart from "../components/ListShoppingCart";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
 import { withStyles } from "@mui/styles";
 
@@ -30,8 +32,8 @@ const ShoppingCart = (props) => {
     productos.push(productData.data().productos);
     if (productos.length > 0) {
       setStoreProducts({ ...storeProducts, productos: productos });
-      // console.log(storeProducts, productos);
     }
+    console.log(productos);
   };
 
   useEffect(() => {
@@ -42,10 +44,10 @@ const ShoppingCart = (props) => {
 
   return (
     <>
-      {storeProducts.length == 0 ? (
-        <div>
-          <p>Cargando Carrito Compras!</p>
-        </div>
+      {storeProducts.productos.length == 0 ? (
+        <Box sx={{ display: "flex" }}>
+          <CircularProgress />
+        </Box>
       ) : (
         <div
           style={{
@@ -56,7 +58,7 @@ const ShoppingCart = (props) => {
         >
           {/* <Grid container spacing={2}> */}
           {storeProducts.productos.map((product, k) => {
-            // console.log(product, k);
+            console.log(product);
             return (
               <Grid
                 item

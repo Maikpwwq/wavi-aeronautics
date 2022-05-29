@@ -8,6 +8,7 @@ import ProductHero from '../modules/views/ProductHero';
 import ProductValues from '../modules/views/ProductValues';
 import ProductHowItWorks from '../modules/views/ProductHowItWorks';
 import ProductCTA from '../modules/views/ProductCTA';
+import ProductMarcas from '../modules/views/ProductMarcas';
 import AppAppBar from '../modules/views/AppAppBar';
 
 function Index() {
@@ -19,6 +20,7 @@ function Index() {
       <ProductCategories />
       <ProductHowItWorks />
       <ProductCTA />
+      <ProductMarcas />
       <ProductSmokingHero />
       <AppFooter />
     </React.Fragment>

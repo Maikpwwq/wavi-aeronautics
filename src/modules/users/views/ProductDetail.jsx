@@ -14,13 +14,24 @@ import MobileStepper from "@mui/material/MobileStepper";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import SwipeableViews from "react-swipeable-views";
+import Typography from '../../components/Typography';
 import { autoPlay } from "react-swipeable-views-utils";
+import { withStyles } from "@mui/styles";
+
+const styles = (theme) => ({
+  onSmallCol: {
+    [theme.breakpoints.down('md')]: {
+      flexDirection: 'column !important',
+    },
+  },
+});
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
-const ProductDetail = () => {
+const ProductDetail = (props) => {
   const { state } = useLocation() || {};
   const { product } = state || "";
+  const { classes } = props;
   const theme = useTheme();
   const { titulo, precio, descripcion, especificaciones, incluye, imagenes } =
     product;
@@ -41,15 +52,18 @@ const ProductDetail = () => {
 
   return (
     <>
-      <Container fixed >
+      <Container fixed>
         <Box sx={{ pt: 8, pb: 6 }}>
           <Card>
             {/* maxWidth="lg" <CardActionArea>
           </CardActionArea> */}
-            <CardHeader title={titulo} subheader={`$ ${precio}`}></CardHeader>
+            <CardHeader title={titulo} subheader={precio}></CardHeader>
 
             <CardContent>
-              <Box sx={{ display: "flex", flexDirection: "row" }}>
+              <Box
+                className={classes.onSmallCol}
+                sx={{ display: "flex", flexDirection: "row" }}
+              >
                 <Box sx={{ maxWidth: 400, flexGrow: 1 }}>
                   <AutoPlaySwipeableViews
                     axis={theme.direction === "rtl" ? "x-reverse" : "x"}
@@ -109,13 +123,27 @@ const ProductDetail = () => {
 
                 <p>{descripcion}</p>
               </Box>
-              <p>Especificaciones: {especificaciones}</p>
+              
+              <Typography variant="h3">Especificaciones: </Typography>
+              <Typography variant="body1" className="ps-2 pe-2">{especificaciones}</Typography>
               <br />
-              <p>Incluye: {incluye}</p>
+              <Typography variant="h3">Incluye: </Typography>
+              <Typography variant="body1" className="ps-2 pe-2">{incluye}</Typography>
             </CardContent>
             <CardMedia component="div">
               {imagenes.map((image) => (
-                <img src={image} alt={titulo} height="400"></img>
+                <Box
+                  component="img"
+                  src={image}
+                  alt={titulo}
+                  sx={{
+                    height: 330,
+                    display: "block",
+                    maxWidth: 330,
+                    overflow: "hidden",
+                    width: "100%",
+                  }}
+                ></Box>
               ))}
             </CardMedia>
           </Card>
@@ -125,4 +153,4 @@ const ProductDetail = () => {
   );
 };
 
-export default ProductDetail;
+export default withStyles(styles)(ProductDetail);

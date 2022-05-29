@@ -128,7 +128,7 @@ function ProductHowItWorks(props) {
           size="large"
           variant="contained"
           className={classes.button && "navlink"}
-          component="btn"
+          component="button"
           // href="/sign-up/"
         >
           <NavLink to="/sign-up/">{"Comenzar"}</NavLink>

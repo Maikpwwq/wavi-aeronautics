@@ -30,9 +30,26 @@ const Products = () => {
       productosRC.push(DOC.data());
     });
     if (productos.length > 0) {
+      productos.map((product, index, array) => {
+        if (product.precio !== "Agotado") {
+          array[index].precio = parseInt(product.precio).toLocaleString(
+            "es-CO",
+            { style: "currency", currency: "COP" }
+          );
+        }
+      });
       setStoreProducts(productos);
+      //console.log(storeProducts)
     }
     if (productosRC.length > 0) {
+      productosRC.map((product, index, array) => {
+        if (product.precio !== "Agotado") {
+          array[index].precio = parseInt(product.precio).toLocaleString(
+            "es-CO",
+            { style: "currency", currency: "COP" }
+          );
+        }
+      });
       setStoreProductsRC(productosRC);
     }
   };
@@ -47,7 +64,6 @@ const Products = () => {
       <br />
       <div>
         {storeProducts.length == 0 ? (
-          // <p>Cargando productos!</p>
           <Box sx={{ display: "flex" }}>
             <CircularProgress />
           </Box>
@@ -58,8 +74,6 @@ const Products = () => {
             <br />
             <Grid container spacing={2}>
               {storeProducts.map((product, k) => {
-                // console.log(product, k);
-                // productID
                 return (
                   <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
                     <ProductCard
@@ -92,8 +106,6 @@ const Products = () => {
             <br />
             <Grid container spacing={2}>
               {storeProductsRC.map((product, k) => {
-                // console.log(product, k);
-                // productID
                 return (
                   <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
                     <ProductCard

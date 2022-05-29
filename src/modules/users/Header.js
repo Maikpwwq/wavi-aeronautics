@@ -78,16 +78,23 @@ function Header(props) {
     if (shoppingCartItems > 0)
       setShoppingCart({
         ...shoppingCart,
-        suma: shoppingCartSuma,
         items: shoppingCartItems,
       });
   }, [shoppingCartItems]);
 
+  useEffect(() => {
+    if (shoppingCartSuma > 0)
+      setShoppingCart({
+        ...shoppingCart,
+        suma: shoppingCartSuma,
+      });
+  }, [shoppingCartSuma]);
+
   const handleChange = (event, newValue) => {
-    console.log(event, newValue);
+    // console.log(event, newValue);
     setValue(newValue);
     if (newValue === 0) {
-      navigate("/tienda-base/");
+      navigate("drones");
     } else if (newValue === 1) {
       navigate("radio-control");
     } else if (newValue === 2) {

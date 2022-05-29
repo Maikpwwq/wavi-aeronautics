@@ -11,6 +11,7 @@ function Rutas() {
     <>
       <Routes>
         <Route index element={<Products />} />
+        <Route path="drones" element={<Products />} />
         <Route path="radio-control" element={<RadioContol />} />
         <Route path="accesorios" element={<RadioContol />} />
         <Route path="software" element={<RadioContol />} />

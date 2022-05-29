@@ -4,12 +4,13 @@ import { useMercadopago } from "react-sdk-mercadopago";
 var mercadopago = require("mercadopago");
 import { useNavigate } from "react-router-dom";
 
-const MercadoPago = () => {
+const MercadoPago = (props) => {
   const navigate = useNavigate();
+  const { visible } = props;
   const accessToken = process.env.MERCADOPAGOS_ACCESS_TOKEN;
   const publicKey = process.env.MERCADOPAGOS_PUBLIC_KEY;
   const mercadopagoSDK = useMercadopago.v2(publicKey, {
-    locale: "es-AR",
+    locale: "es-CO",
   });
   const [checkoutPro, setCheckoutPro] = useState({
     url: "",
@@ -73,35 +74,37 @@ const MercadoPago = () => {
   };
 
   useEffect(() => {
-    getPreference()
-      .then((res) => {
-        console.log(res.init_point);
-        setCheckoutPro({ ...checkoutPro, url: res.init_point });
-        if (mercadopagoSDK) {
-          mercadopagoSDK.checkout({
-            preference: {
-              id: res.id,
-            },
-            render: {
-              container: ".cho-container",
-              label: "Pagar con Mercado Pago",
-              type: "wallet",
-            },
-            //   theme: {
-            //     elementsColor: '#c0392b'.
-            //     headerColor: '#c0392b',
-            // }
-          });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [mercadopagoSDK]);
+    if (visible) {
+      getPreference()
+        .then((res) => {
+          console.log(res.init_point);
+          setCheckoutPro({ ...checkoutPro, url: res.init_point });
+          if (mercadopagoSDK) {
+            mercadopagoSDK.checkout({
+              preference: {
+                id: res.id,
+              },
+              render: {
+                container: ".cho-container",
+                label: "Pagar con Mercado Pago",
+                type: "wallet",
+              },
+              //   theme: {
+              //     elementsColor: '#c0392b'.
+              //     headerColor: '#c0392b',
+              // }
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [mercadopagoSDK, visible]);
 
   return (
     <>
-      <div class="cho-container" />
+      <div className="cho-container" />
     </>
   );
 };

@@ -6,15 +6,6 @@ import ButtonBase from "@mui/material/ButtonBase";
 import Container from "@mui/material/Container";
 import Typography from "../components/Typography";
 
-// import DJI1 from '../../../public/static/img/DJI-1.png';
-// import DJI2 from '../../../public/static/img/DJI-2.png';
-// import DJI3 from '../../../public/static/img/DJI-3.png';
-// import DJI4 from '../../../public/static/img/DJI-4.png';
-// import DJI5 from '../../../public/static/img/DJI-5.png';
-// import DJI6 from '../../../public/static/img/DJI-6.png';
-// import DJI7 from '../../../public/static/img/DJI-7.png';
-// import DJI8 from '../../../public/static/img/DJI-8.png';
-// import DJI9 from '../../../public/static/img/DJI-9.png';
 const DJI1 =
   "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FDJI-1.png?alt=media&token=f4f153a2-45fd-415d-884c-6964d3bb582b";
 const DJI2 =

@@ -50,14 +50,14 @@ const styles = (theme) => ({
 function AppAppBar(props) {
   const { classes } = props;
   const user = auth.currentUser || {};
-  // const [userAuth, setUserAuth] = useState(true);
+  const [userAuth, setUserAuth] = useState(false);
 
-  // useEffect(() => {
-  //   if (user) {
-  //     setUserAuth(false);
-  //   }
-  //   console.log(user, userAuth);
-  // }, []);
+  useEffect(() => {
+    if (user && user !== {}) {
+      setUserAuth(true);
+    }
+    console.log(user, userAuth);
+  }, [user]);
 
   const handleSignOut = () => {
     signOut(auth)
@@ -85,7 +85,11 @@ function AppAppBar(props) {
               underline="none"
               color="inherit"
               className={classes.title}
-              style={{ alignItems: "center", display: "flex", fontSize: "2rem" }}
+              style={{
+                alignItems: "center",
+                display: "flex",
+                fontSize: "2rem",
+              }}
               activeClassName="active"
             >
               <img
@@ -110,7 +114,19 @@ function AppAppBar(props) {
           >
             <NavLink to="/tienda-base/">{"Tienda"}</NavLink>
           </Link>
-          {user !== {} ? (
+          {userAuth ? (
+            <>
+              <Link
+                variant="h6"
+                underline="none"
+                className={clsx(classes.rightLink, classes.linkSecondary)}
+              >
+                <NavLink onClick={handleSignOut} to="/">
+                  {"Cerrar Sesión"}
+                </NavLink>
+              </Link>
+            </>
+          ) : (
             <>
               <Link
                 color="inherit"
@@ -128,18 +144,6 @@ function AppAppBar(props) {
                 to="/sign-up/"
               >
                 <NavLink to="/sign-up/">{"Registrarse"}</NavLink>
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link
-                variant="h6"
-                underline="none"
-                className={clsx(classes.rightLink, classes.linkSecondary)}
-              >
-                <NavLink onClick={handleSignOut} to="/">
-                  {"Cerrar Sesión"}
-                </NavLink>
               </Link>
             </>
           )}

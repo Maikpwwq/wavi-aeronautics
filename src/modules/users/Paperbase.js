@@ -192,7 +192,7 @@ function Paperbase(props) {
             <Navigator PaperProps={{ style: { width: drawerWidth } }} />
           </Hidden>
         </nav> */}
-        <div className={classes.app}>
+        <div className={classes.app} style={{ overflowX: 'auto' }}>
           <Header onDrawerToggle={handleDrawerToggle} />
           <main className={classes.main}>
             {/* <Products /> */}
