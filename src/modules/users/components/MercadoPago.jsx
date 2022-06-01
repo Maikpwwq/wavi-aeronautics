@@ -78,6 +78,8 @@ const MercadoPago = (props) => {
     return response.json();
   };
 
+  console.log(products);
+
   const handleCheckout = () => {
     if (usedID && visible && products) {
       console.log(products);
@@ -140,15 +142,21 @@ const MercadoPago = (props) => {
 
   return (
     <>
-      <Button
-        variant="contained"
-        color="primary"
-        className={classes.checkout}
-        onClick={handleCheckout}
-      >
-        Caja
-      </Button>
-      <div className="cho-container" />
+      {products && products.lenght > 0 ? (
+        <>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.checkout}
+            onClick={handleCheckout}
+          >
+            Caja
+          </Button>
+          <span className="cho-container" />
+        </>
+      ) : (
+        <></>
+      )}
     </>
   );
 };

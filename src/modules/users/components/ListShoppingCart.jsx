@@ -162,7 +162,11 @@ const ListShoppingCart = (props) => {
             </Card>
           )
         )}
-        <MercadoPago visible={visible} products={shoppingCart.productos}/>
+        {shoppingCart.productos ? (
+          <MercadoPago visible={visible} products={shoppingCart.productos} />
+        ) : (
+          <></>
+        )}
       </Box>
     </>
   );
