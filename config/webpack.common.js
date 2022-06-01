@@ -5,8 +5,8 @@ const path = require("path");
 const webpack = require("webpack");
 const Dotenv = require('dotenv-webpack')
 
-const ASSET_PATH = process.env.ASSET_PATH || ''; 
-// prod  const ASSET_PATH = process.env.ASSET_PATH || '/wavi-aeronautics/';
+// prod  const ASSET_PATH = process.env.ASSET_PATH || ''; 
+const ASSET_PATH = process.env.ASSET_PATH || '/wavi-aeronautics/';
 
 /** @type {import('webpack').Configuration} */
 module.exports = {
