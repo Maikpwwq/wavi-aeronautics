@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
 import { withStyles } from "@mui/styles";
+import MercadoPago from "../components/MercadoPago";
 
 const styles = {
   cartList: {
@@ -49,7 +50,9 @@ const ShoppingCart = (props) => {
           <CircularProgress />
         </Box>
       ) : (
-        <div
+        <Grid
+          container
+          spacing={2}
           style={{
             position: "relative",
             left: "-500px",
@@ -84,8 +87,10 @@ const ShoppingCart = (props) => {
               </Grid>
             );
           })}
-          {/* </Grid> */}
-        </div>
+          <Grid item>
+            <MercadoPago visible={visible} products={storeProducts.productos} />
+          </Grid>
+        </Grid>
       )}
     </>
   );

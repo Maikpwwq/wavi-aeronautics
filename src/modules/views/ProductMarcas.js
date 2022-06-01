@@ -106,7 +106,7 @@ function ProductMarcas(props) {
         <div className={classes.marcas}>
           <Grid container spacing={5} className={classes.logos}>
             {marcas.map((marca, i) => {
-              console.log(marca);
+              // console.log(marca);
               return (
                 <Grid item xs={12} md={3} key={i}>
                   <Box

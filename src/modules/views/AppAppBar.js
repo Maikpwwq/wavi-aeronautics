@@ -50,11 +50,13 @@ const styles = (theme) => ({
 function AppAppBar(props) {
   const { classes } = props;
   const user = auth.currentUser || {};
+  const userID = user.uid || null;
   const [userAuth, setUserAuth] = useState(false);
-
+  console.log(user);
   useEffect(() => {
-    if (user && user !== {}) {
+    if (user && userID ) {
       setUserAuth(true);
+      console.log(user, userAuth);
     }
     console.log(user, userAuth);
   }, [user]);
@@ -62,8 +64,9 @@ function AppAppBar(props) {
   const handleSignOut = () => {
     signOut(auth)
       .then(() => {
-        alert("Cerro su sesión de manera exitosa!");
         setUserAuth(false);
+        alert("Cerro su sesión de manera exitosa!");
+        console.log(auth.currentUser);
       })
       .catch((error) => {
         console.log(error);
@@ -137,14 +140,14 @@ function AppAppBar(props) {
               >
                 <NavLink to="/sign-in/">{"Iniciar sesión"}</NavLink>
               </Link>
-              <Link
+              {/* <Link
                 variant="h6"
                 underline="none"
                 className={clsx(classes.rightLink, classes.linkSecondary)}
                 to="/sign-up/"
               >
                 <NavLink to="/sign-up/">{"Registrarse"}</NavLink>
-              </Link>
+              </Link> */}
             </>
           )}
         </div>

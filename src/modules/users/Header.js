@@ -74,6 +74,7 @@ function Header(props) {
     setShowingCart(!showingCart);
   };
 
+  // Asignar data almacenada en el localStorage
   useEffect(() => {
     if (shoppingCartItems > 0)
       setShoppingCart({

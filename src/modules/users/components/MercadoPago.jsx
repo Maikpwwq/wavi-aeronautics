@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useMercadopago } from "react-sdk-mercadopago";
+import { auth } from "../../../firebase/firebaseClient";
 // import mercadopago from "mercadopago";
 var mercadopago = require("mercadopago");
 import { useNavigate } from "react-router-dom";
 
 const MercadoPago = (props) => {
   const navigate = useNavigate();
-  const { visible } = props;
+  const user = auth.currentUser || {};
+  const userID = user.uid || null;
+  const { visible, products } = props;
   const accessToken = process.env.MERCADOPAGOS_ACCESS_TOKEN;
   const publicKey = process.env.MERCADOPAGOS_PUBLIC_KEY;
   const mercadopagoSDK = useMercadopago.v2(publicKey, {
@@ -43,9 +46,11 @@ const MercadoPago = (props) => {
   //       console.log(response);
   //     })
   //     .catch(function (error) {
-  //       console.log(error);
+  //       cerror);
   //     });
   // };
+
+  console.log(products);
 
   const getPreference = async () => {
     let consult = {
@@ -74,7 +79,7 @@ const MercadoPago = (props) => {
   };
 
   useEffect(() => {
-    if (visible) {
+    if ( userID && visible) {
       getPreference()
         .then((res) => {
           console.log(res.init_point);
@@ -100,7 +105,7 @@ const MercadoPago = (props) => {
           console.log(err);
         });
     }
-  }, [mercadopagoSDK, visible]);
+  }, [mercadopagoSDK, visible, userID]);
 
   return (
     <>

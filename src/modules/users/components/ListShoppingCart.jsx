@@ -13,7 +13,7 @@ import CardActions from "@mui/material/CardActions";
 import { CardActionArea } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import CancelIcon from "@mui/icons-material/Cancel";
-import MercadoPago from "../views/MercadoPago";
+// import MercadoPago from "../views/MercadoPago";
 
 const styles = {
   // footer: {
@@ -159,7 +159,7 @@ const ListShoppingCart = (props) => {
             </Card>
           )
         )}
-        <MercadoPago visible={visible}/>
+        {/* <MercadoPago visible={visible}/> */}
       </Box>
     </>
   );
