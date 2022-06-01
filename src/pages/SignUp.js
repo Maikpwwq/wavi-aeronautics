@@ -105,6 +105,7 @@ function SignUp() {
           userToFirestore(data, usedId);
           // Instancia un carrito de compras vacio
           shoppingsToFirestore({ productos: [] }, usedId);
+          localStorage.setItem("cartID", usedId);
           setSent(true);
           alert("Se ha registrado el usuario", displayName);
           navigate("/tienda-base/");

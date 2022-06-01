@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { firestore, storage } from "../../../firebase/firebaseClient";
+import { v4 as uuidv4 } from "uuid";
+import { firestore, storage, auth } from "../../../firebase/firebaseClient";
 import { collection, doc, getDocs } from "firebase/firestore";
 import Box from "@mui/material/Box";
 import ProductCard from "../components/ProductCard";
@@ -7,8 +8,12 @@ import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const Products = () => {
+  const user = auth.currentUser || {};
+  const userID = user.uid || null;
+  const shoppingCartID = localStorage.getItem("cartID") || null;
   const _firestore = firestore;
   const _storage = storage;
+  const shoppingsRef = collection(_firestore, "shoppingCart");
   // const productsRef = collection(_firestore, "productos/dron/kit_fpv_dron")
   const productsRef = collection(_firestore, "productos");
   const productsDoc = doc(productsRef, "dron");
@@ -17,6 +22,10 @@ const Products = () => {
 
   const [storeProducts, setStoreProducts] = useState([]);
   const [storeProductsRC, setStoreProductsRC] = useState([]);
+
+  const shoppingsToFirestore = async (updateInfo, userRef) => {
+    await setDoc(doc(shoppingsRef, userRef), updateInfo, { merge: true });
+  };
 
   const productosFromFirestore = async () => {
     const productData = await getDocs(productsCollection);
@@ -54,9 +63,19 @@ const Products = () => {
     }
   };
 
+  const newShoppingCart = () => {
+    const shoppingsId = uuidv4();
+    shoppingsToFirestore({ productos: [] }, shoppingsId);
+    localStorage.setItem("cartID", shoppingsId);
+  };
+
   useEffect(() => {
-    productosFromFirestore();
-  }, []);
+    console.log("shoppingCartID", shoppingCartID)
+    if (!userID && !shoppingCartID){
+      newShoppingCart();
+    }
+    productosFromFirestore(); // Lectura del catalogo de productos desde firestore
+  }, [shoppingCartID]);
 
   return (
     <>

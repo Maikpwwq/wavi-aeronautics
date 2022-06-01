@@ -16,6 +16,8 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 const ProductCard = (props) => {
   const user = auth.currentUser || {};
   const userID = user.uid || null;
+  const shoppingCartID = localStorage.getItem("cartID");
+  const usedID = userID ? userID : shoppingCartID;
   const _firestore = firestore;
   const navigate = useNavigate();
   const { products } = props;
@@ -33,7 +35,7 @@ const ProductCard = (props) => {
   const shoppingsFromFirestore = async () => {
     let cardProductos = {};
     // console.log(shoppingsRef, userID);
-    const productData = await getDoc(doc(shoppingsRef, userID));
+    const productData = await getDoc(doc(shoppingsRef, usedID));
     //console.log(productData.data());
     for (var index in productData.data()) {
       // console.log(productData.data()[index]); //.Status == "Valid"
@@ -73,10 +75,11 @@ const ProductCard = (props) => {
   }
 
   useEffect(() => {
-    if (userID) {
+    console.log(usedID);
+    if (usedID) {
       readData();
     }
-  }, []);
+  }, [usedID]);
 
   const shoppingsToFirestore = async (updateInfo, userRef) => {
     await setDoc(doc(shoppingsRef, userRef), updateInfo); // , { merge: true }
@@ -84,7 +87,7 @@ const ProductCard = (props) => {
 
   const handleAddCard = (e) => {
     e.preventDefault();
-    if (userID) {
+    if (usedID) {
       let cardProductos = [];
       readData();
       // console.log(shoppingCart);
@@ -103,7 +106,7 @@ const ProductCard = (props) => {
       // console.log(userID, productID);
       // console.log(shoppingCart);
       // console.log(cardProductos);
-      shoppingsToFirestore({ productos: cardProductos }, userID);
+      shoppingsToFirestore({ productos: cardProductos }, usedID);
       readData();
     } else {
       navigate("/sign-in/");

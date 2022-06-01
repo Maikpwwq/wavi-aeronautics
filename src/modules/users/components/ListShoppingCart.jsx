@@ -25,6 +25,8 @@ const styles = {
 const ListShoppingCart = (props) => {
   const user = auth.currentUser || {};
   const userID = user.uid || null;
+  const shoppingCartID = localStorage.getItem("cartID");
+  const usedID = userID ? userID : shoppingCartID;
   const _firestore = firestore;
   const navigate = useNavigate();
   const { products, visible } = props;
@@ -89,8 +91,8 @@ const ListShoppingCart = (props) => {
   };
 
   useEffect(() => {
-    console.log(userID, visible);
-    if (userID && visible) {
+    console.log(usedID, visible);
+    if (usedID && visible) {
       shoppingsFromFirestore();
       calculateCartAmount();
       if (shoppingCart.items > 0) {
@@ -101,7 +103,7 @@ const ListShoppingCart = (props) => {
       }
       //console.log(shoppingCart);
     }
-  }, []); // visible
+  }, [usedID]); // visible
 
   const shoppingsToFirestore = async (updateInfo, userRef) => {
     await setDoc(doc(shoppingsRef, userRef), updateInfo, { merge: true });
@@ -109,7 +111,7 @@ const ListShoppingCart = (props) => {
 
   const handleCancel = (e) => {
     e.preventDefault();
-    if (userID) {
+    if (usedID) {
       let cardProductos = [];
       console.log(shoppingCart);
       shoppingCart.productos.map((product, n) => {

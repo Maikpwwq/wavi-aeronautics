@@ -17,20 +17,22 @@ const styles = {
 const ShoppingCart = (props) => {
   const user = auth.currentUser || {};
   const userID = user.uid || null;
+  const shoppingCartID = localStorage.getItem("cartID");
+  const usedID = userID ? userID : shoppingCartID;
   const { visible } = props;
   console.log(visible);
   const _firestore = firestore;
-  const productsRef = collection(_firestore, "shoppingCart");
+  const shoppingsRef = collection(_firestore, "shoppingCart");
   const [storeProducts, setStoreProducts] = useState({
     productos: [],
   });
 
   const productosFromFirestore = async () => {
-    const productsDoc = doc(productsRef, userID);
-    const productData = await getDoc(productsDoc);
+    const productsDoc = doc(shoppingsRef, usedID);
+    const shoppingsData = await getDoc(productsDoc);
     let productos = [];
     // console.log(productData.data().productos);
-    productos.push(productData.data().productos);
+    productos.push(shoppingsData.data().productos);
     if (productos.length > 0) {
       setStoreProducts({ ...storeProducts, productos: productos });
     }
@@ -38,10 +40,10 @@ const ShoppingCart = (props) => {
   };
 
   useEffect(() => {
-    if (userID) {
+    if (usedID) {
       productosFromFirestore();
     }
-  }, []);
+  }, [usedID]);
 
   return (
     <>
