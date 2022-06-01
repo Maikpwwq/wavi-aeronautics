@@ -13,7 +13,7 @@ import CardActions from "@mui/material/CardActions";
 import { CardActionArea } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import CancelIcon from "@mui/icons-material/Cancel";
-// import MercadoPago from "../views/MercadoPago";
+import MercadoPago from "./MercadoPago";
 
 const styles = {
   // footer: {
@@ -29,7 +29,7 @@ const ListShoppingCart = (props) => {
   const usedID = userID ? userID : shoppingCartID;
   const _firestore = firestore;
   const navigate = useNavigate();
-  const { products, visible } = props;
+  const { products, visible, updated } = props;
   const storeKitRef = collection(_firestore, "productos/dron/kit_fpv_dron");
   const storeRCRef = collection(_firestore, "productos/dron/RC");
 
@@ -67,6 +67,7 @@ const ListShoppingCart = (props) => {
         }
       }
     });
+    // localStorage.setItem("cartUpdated", "firestore");
     console.log(cardProductos);
     // cardProductos != {} &&
     if (cardProductos.length > 0) {
@@ -75,35 +76,35 @@ const ListShoppingCart = (props) => {
         productos: cardProductos,
         items: cardProductos.length,
       });
-      //console.log(shoppingCart);
+      console.log(shoppingCart);
+      localStorage.setItem("cartUpdated", "items");
+      localStorage.setItem("cartProducts", cardProductos.length);
     }
   };
 
   const calculateCartAmount = () => {
     let acomulateSum = 0;
+    console.log(acomulateSum);
     shoppingCart.productos.map((product, k) => {
-      console.log(acomulateSum, product.precio)
-      if ( product.precio !== "Agotado" ) {
+      console.log(acomulateSum, product.precio);
+      if (product.precio !== "Agotado") {
         acomulateSum += parseInt(product.precio);
       }
     });
     setShoppingCart({ ...shoppingCart, suma: acomulateSum });
+    localStorage.setItem("cartSum", acomulateSum);
+    localStorage.setItem("cartUpdated", "suma");
+    // localStorage.removeItem("cartUpdated");
   };
 
   useEffect(() => {
-    console.log(usedID, visible);
-    if (usedID && visible) {
+    if (usedID) {
+      console.log(usedID, visible);
       shoppingsFromFirestore();
       calculateCartAmount();
-      if (shoppingCart.items > 0) {
-        localStorage.setItem("cartProducts", shoppingCart.items);
-      }
-      if (shoppingCart.suma > 0) {
-        localStorage.setItem("cartSum", shoppingCart.suma);
-      }
-      //console.log(shoppingCart);
+      localStorage.setItem("cartUpdated", "productos");
     }
-  }, [usedID]); // visible
+  }, [updated, visible]);
 
   const shoppingsToFirestore = async (updateInfo, userRef) => {
     await setDoc(doc(shoppingsRef, userRef), updateInfo, { merge: true });
@@ -161,7 +162,7 @@ const ListShoppingCart = (props) => {
             </Card>
           )
         )}
-        {/* <MercadoPago visible={visible}/> */}
+        <MercadoPago visible={visible} products={shoppingCart.productos}/>
       </Box>
     </>
   );

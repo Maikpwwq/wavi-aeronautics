@@ -61,8 +61,10 @@ const styles = (theme) => ({
 function Header(props) {
   const { classes, onDrawerToggle } = props;
   const navigate = useNavigate();
+  const shoppingCartID = localStorage.getItem("cartID");
   const shoppingCartSuma = localStorage.getItem("cartSum");
   const shoppingCartItems = localStorage.getItem("cartProducts");
+  const shoppingUpdatedItems = localStorage.getItem("cartUpdated");
   const [showingCart, setShowingCart] = useState(false);
   const [value, setValue] = React.useState(0);
   const [shoppingCart, setShoppingCart] = useState({
@@ -72,23 +74,28 @@ function Header(props) {
 
   const handleShowCart = () => {
     setShowingCart(!showingCart);
+    localStorage.setItem("cartUpdated", "show");
   };
 
   // Asignar data almacenada en el localStorage
   useEffect(() => {
-    if (shoppingCartItems > 0)
+    if (shoppingCartItems > 0) {
+      // localStorage.setItem("cartUpdated", "items");
       setShoppingCart({
         ...shoppingCart,
         items: shoppingCartItems,
       });
+    }
   }, [shoppingCartItems]);
 
   useEffect(() => {
-    if (shoppingCartSuma > 0)
+    if (shoppingCartSuma > 0) {
+      // localStorage.setItem("cartUpdated", "suma");
       setShoppingCart({
         ...shoppingCart,
         suma: shoppingCartSuma,
       });
+    }
   }, [shoppingCartSuma]);
 
   const handleChange = (event, newValue) => {
@@ -214,7 +221,12 @@ function Header(props) {
               </Tooltip>
             </Grid>
           </Grid>
-          <ShoppingCart className="" visible={showingCart} />
+
+          <ShoppingCart
+            className=""
+            visible={showingCart}
+            updated={shoppingUpdatedItems}
+          />
           {/* hidden */}
         </Toolbar>
       </AppBar>

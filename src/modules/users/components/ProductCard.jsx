@@ -17,6 +17,7 @@ const ProductCard = (props) => {
   const user = auth.currentUser || {};
   const userID = user.uid || null;
   const shoppingCartID = localStorage.getItem("cartID");
+  const shoppingUpdatedItems = localStorage.getItem("cartUpdated");
   const usedID = userID ? userID : shoppingCartID;
   const _firestore = firestore;
   const navigate = useNavigate();
@@ -75,11 +76,12 @@ const ProductCard = (props) => {
   }
 
   useEffect(() => {
-    console.log(usedID);
+    // console.log(usedID);
     if (usedID) {
       readData();
+      localStorage.setItem("cartUpdated", "firestore");
     }
-  }, [usedID]);
+  }, [usedID, shoppingUpdatedItems]);
 
   const shoppingsToFirestore = async (updateInfo, userRef) => {
     await setDoc(doc(shoppingsRef, userRef), updateInfo); // , { merge: true }
@@ -108,9 +110,8 @@ const ProductCard = (props) => {
       // console.log(cardProductos);
       shoppingsToFirestore({ productos: cardProductos }, usedID);
       readData();
-    } else {
-      navigate("/sign-in/");
-    }
+      localStorage.setItem("cartUpdated", "agregar");
+    } 
   };
 
   return (

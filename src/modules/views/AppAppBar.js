@@ -65,6 +65,7 @@ function AppAppBar(props) {
     signOut(auth)
       .then(() => {
         setUserAuth(false);
+        localStorage.clear();
         alert("Cerro su sesión de manera exitosa!");
         console.log(auth.currentUser);
       })

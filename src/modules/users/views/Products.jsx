@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { firestore, storage, auth } from "../../../firebase/firebaseClient";
-import { collection, doc, getDocs } from "firebase/firestore";
+import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import Box from "@mui/material/Box";
 import ProductCard from "../components/ProductCard";
 import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const Products = () => {
-  const user = auth.currentUser || {};
-  const userID = user.uid || null;
+  // const user = auth.currentUser || {};
+  // const userID = user.uid || null;
   const shoppingCartID = localStorage.getItem("cartID") || null;
   const _firestore = firestore;
   const _storage = storage;
@@ -67,11 +67,13 @@ const Products = () => {
     const shoppingsId = uuidv4();
     shoppingsToFirestore({ productos: [] }, shoppingsId);
     localStorage.setItem("cartID", shoppingsId);
+    localStorage.setItem("cartUpdated", "id");
   };
 
   useEffect(() => {
+    localStorage.setItem("cartUpdated", "tienda"); 
     console.log("shoppingCartID", shoppingCartID)
-    if (!userID && !shoppingCartID){
+    if (!shoppingCartID){
       newShoppingCart();
     }
     productosFromFirestore(); // Lectura del catalogo de productos desde firestore

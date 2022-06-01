@@ -6,7 +6,6 @@ import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
 import { withStyles } from "@mui/styles";
-import MercadoPago from "../components/MercadoPago";
 
 const styles = {
   cartList: {
@@ -19,8 +18,7 @@ const ShoppingCart = (props) => {
   const userID = user.uid || null;
   const shoppingCartID = localStorage.getItem("cartID");
   const usedID = userID ? userID : shoppingCartID;
-  const { visible } = props;
-  console.log(visible);
+  const { visible, updated } = props;
   const _firestore = firestore;
   const shoppingsRef = collection(_firestore, "shoppingCart");
   const [storeProducts, setStoreProducts] = useState({
@@ -36,18 +34,21 @@ const ShoppingCart = (props) => {
     if (productos.length > 0) {
       setStoreProducts({ ...storeProducts, productos: productos });
     }
-    console.log(productos);
+    localStorage.setItem("cartUpdated", "firestore");
+    // console.log(productos);
+    // console.log(shoppingsData.data().productos);
   };
 
   useEffect(() => {
+    // console.log(usedID);
     if (usedID) {
       productosFromFirestore();
     }
-  }, [usedID]);
+  }, [updated, visible]);
 
   return (
     <>
-      {storeProducts.productos.length == 0 ? (
+      {storeProducts.productos == [] ? (
         <Box sx={{ display: "flex" }}>
           <CircularProgress />
         </Box>
@@ -61,9 +62,8 @@ const ShoppingCart = (props) => {
             visibility: visible ? "visible" : "hidden",
           }}
         >
-          {/* <Grid container spacing={2}> */}
           {storeProducts.productos.map((product, k) => {
-            console.log(product);
+            // console.log(product);
             return (
               <Grid
                 item
@@ -84,14 +84,12 @@ const ShoppingCart = (props) => {
                   className="d-flex mb-2"
                   products={product}
                   visible={visible}
+                  updated={updated}
                   productID={k}
                 ></ListShoppingCart>
               </Grid>
             );
           })}
-          <Grid item>
-            <MercadoPago visible={visible} products={storeProducts.productos} />
-          </Grid>
         </Grid>
       )}
     </>
