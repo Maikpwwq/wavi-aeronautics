@@ -4,6 +4,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 // importar las paginas
 import Products from "./views/Products";
 import RadioContol from "./views/RadioContol";
+import Accesorios from "./views/Accesorios";
+import Software from "./views/Software";
 import ProductDetail from "./views/ProductDetail";
 
 function Rutas() {
@@ -13,8 +15,8 @@ function Rutas() {
         <Route index element={<Products />} />
         <Route path="drones" element={<Products />} />
         <Route path="radio-control" element={<RadioContol />} />
-        <Route path="accesorios" element={<RadioContol />} />
-        <Route path="software" element={<RadioContol />} />
+        <Route path="accesorios" element={<Accesorios />} />
+        <Route path="software" element={<Software />} />
         <Route path="producto" element={<ProductDetail />} />
         <Route path="*" element={<Navigate to="/"></Navigate>} />
       </Routes>

@@ -8,96 +8,91 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "../../components/Typography";
 import ShopConditions from "../components/ShopConditions";
 
-const RadioContol = () => {
+const Accesorios = () => {
   const shoppingCartID = localStorage.getItem("cartID") || null;
-  const productosRadioControl = sessionStorage.getItem("Productos_RC") || null;
+  const productosBaterias = sessionStorage.getItem("Productos_Baterias") || null;
   const _firestore = firestore;
   const _storage = storage;
   const productsRef = collection(_firestore, "productos");
   const productsDoc = doc(productsRef, "radio_control");
 
-  const collectionBetafpvCR = collection(
+  const collectionBetafpvBaterias = collection(
     productsDoc,
-    "betafpv/control-remoto/lite-radio2"
+    "betafpv/baterias/2PCS-2s-300mAh"
   );
-  const collectionEachineCR = collection(
+  const collectionEachineBaterias = collection(
     productsDoc,
-    "eachine/control-remoto/liteRadio-2.4G"
+    "eachine/baterias/E520S-1200mAh"
   );
-  const collectionFlywooCR = collection(
+  const collectionEachineBaterias2 = collection(
     productsDoc,
-    "flywoo/control-remoto/LiteRadio-V3-ELRS"
+    "eachine/baterias/E58-500mAh"
   );
-  const collectionFlywooCR2 = collection(
+  const collectionEmaxUsaBaterias = collection(
     productsDoc,
-    "flywoo/control-remoto/LiteRadio-V3-TBS"
+    "emax-usa/baterias/1S-300mAh"
   );
-  const collectionGeprcCR = collection(
+  const collectionEmaxUsaBaterias2 = collection(
     productsDoc,
-    "geprc/control-remoto/tinyRadio-GR8"
+    "emax-usa/baterias/1S-450mAh"
   );
-  const collectionIflightCR = collection(
+  const collectionEmaxUsaBaterias3 = collection(
     productsDoc,
-    "iflight-rc/control-remoto/iF8-E"
+    "emax-usa/baterias/2PCS-2S-300mAh"
   );
-  const collectionRadioMasterCR = collection(
+  const collectionFlywooBaterias = collection(
     productsDoc,
-    "radio-master/control-remoto/T8-Lite"
+    "flywoo/baterias/4PCS-1S-450mAh"
   );
-  const collectionRadioMasterCR2 = collection(
+  const collectionFlywooBaterias2 = collection(
     productsDoc,
-    "radio-master/control-remoto/T8-Pro"
+    "flywoo/baterias/4PCS-1S-750mAh"
   );
-  const collectionRadioMasterCR3 = collection(
+  const collectionGeprcBaterias = collection(
     productsDoc,
-    "radio-master/control-remoto/tx12"
+    "geprc/baterias/4S-650a850mAh"
   );
-  const collectionRadioMasterCR4 = collection(
+  const collectionIflightBaterias = collection(
     productsDoc,
-    "radio-master/control-remoto/tx16s"
+    "iflight-rc/baterias/3S-450mAh"
   );
-  const collectionTBSCR = collection(
+  const collectionUruavBaterias = collection(
     productsDoc,
-    "team-blacksheep/control-remoto/ethix-mambo"
-  );
-  const collectionTBSCR2 = collection(
-    productsDoc,
-    "team-blacksheep/control-remoto/tango2pro"
+    "uruav/baterias/1S-250mAh"
   );
 
-  const [storeProductsRC, setStoreProductsRC] = useState([]);
+  const [storeProductsBaterias, setStoreProductsBaterias] = useState([]);
 
-  const productsFromFirestore = async () => {
-    const collectionRC = new Array(
-      collectionBetafpvCR,
-      collectionEachineCR,
-      collectionFlywooCR,
-      collectionFlywooCR2,
-      collectionGeprcCR,
-      collectionIflightCR,
-      collectionRadioMasterCR,
-      collectionRadioMasterCR2,
-      collectionRadioMasterCR3,
-      collectionRadioMasterCR4,
-      collectionTBSCR,
-      collectionTBSCR2
+  const productosFromFirestore = async () => {
+    const collectionBaterias = new Array(
+      collectionBetafpvBaterias,
+      collectionEachineBaterias,
+      collectionEachineBaterias2,
+      collectionEmaxUsaBaterias,
+      collectionEmaxUsaBaterias2,
+      collectionEmaxUsaBaterias3,
+      collectionFlywooBaterias,
+      collectionFlywooBaterias2,
+      collectionGeprcBaterias,
+      collectionIflightBaterias,
+      collectionUruavBaterias
     );
-    let productosRC = [];
-    for (let product of collectionRC) {
-      // console.log(product, collectionRC);
-      let productDataRC = await getDocs(product);
-      productDataRC.forEach((DOC) => {
-        productosRC.push(DOC.data());
+    let productosBaterias = [];
+    for (let product of collectionBaterias) {
+      // console.log(product, collectionBaterias)
+      let productDataBaterias = await getDocs(product);
+      productDataBaterias.forEach((DOC) => {
+        productosBaterias.push(DOC.data());
       });
     }
-    return productosRC;
+    return productosBaterias;
   };
 
   const productosToSessionStore = () => {
     let productData;
     let productos = [];
-    if (!productosRadioControl ) {
-      console.log(productosDrones);
+    if (!productosBaterias ) {
+      console.log(productosBaterias);
       productData = productsFromFirestore();
       productData.then((response) => {
         console.log(response);
@@ -105,7 +100,7 @@ const RadioContol = () => {
         parsePrices(productos);
       });
     } else {
-      productos = JSON.parse(productosRadioControl);
+      productos = JSON.parse(productosBaterias);
       parsePrices(productos);
     }
   }
@@ -113,7 +108,7 @@ const RadioContol = () => {
   const parsePrices = (productos) => {
     console.log(productos);
     if (productos && productos.length > 0) {
-      sessionStorage.setItem("Productos_RC", JSON.stringify(productos));
+      sessionStorage.setItem("Productos_Baterias", JSON.stringify(productos));
       productos.map((product, index, array) => {
         console.log(product.precio);
         if (
@@ -126,7 +121,7 @@ const RadioContol = () => {
           );
         }
       });
-      setStoreProductsRC(productos);
+      setStoreProductsBaterias(productos);
       //console.log(storeProducts)
     }
   }
@@ -138,22 +133,22 @@ const RadioContol = () => {
   return (
     <>
       <Box sx={{ display: "flex" }}>
-        <Typography variant="h3">Dispositivos de Contol Remoto.</Typography>
+        <Typography variant="h3">Baterias para drone.</Typography>
         <br />
         <br />
-        {storeProductsRC.length == 0 ? (
+        {storeProductsBaterias.length == 0 ? (
           <Box sx={{ display: "flex" }}>
             <CircularProgress />
           </Box>
         ) : (
           <>
             <Typography variant="body1">
-              Controles remotos para volar Drones de RadioContol.
+              Baterias para cada necesidad en potencia y tiempo de vuelo.
             </Typography>
             <br />
             <br />
             <Grid container spacing={2}>
-              {storeProductsRC.map((product, k) => {
+              {storeProductsBaterias.map((product, k) => {
                 // console.log(product, k);
                 // productID
                 return (
@@ -175,4 +170,4 @@ const RadioContol = () => {
   );
 };
 
-export default RadioContol;
+export default Accesorios;

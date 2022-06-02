@@ -7,6 +7,7 @@ import ProductCard from "../components/ProductCard";
 import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "../../components/Typography";
+import ShopConditions from "../components/ShopConditions";
 
 const Products = () => {
   // const user = auth.currentUser || {};
@@ -121,92 +122,70 @@ const Products = () => {
 
   return (
     <>
-      <h3>Productos:</h3>
-      <br />
-      <div>
-        {storeProducts.length == 0 ? (
-          <Box sx={{ display: "flex" }}>
-            <CircularProgress />
-          </Box>
-        ) : (
-          <div>
-            <p>Descubre los mejores kits de Dron FPV listos para vuelo.</p>
-            <br />
-            <br />
-            <Grid container spacing={2}>
-              {storeProducts.map((product, k) => {
-                return (
-                  <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
-                    <ProductCard
-                      className="d-flex mb-2"
-                      products={product}
-                      productID={k}
-                    ></ProductCard>
-                  </Grid>
-                );
-              })}
-            </Grid>
-            <br />
-            <br />
-            <h3>Drones a control remoto BNF/PNP/RTF. </h3>
-            <br />
-            <br />
-            <p>
-              Bind aNd Fly: Esta versión es la que viene con todo menos con el
-              transmisor y el radio control./
-            </p>
-            <p>
-              Plug aNd Play: Esta es la versión incluye todo menos el
-              transmisor, el radio control, el receptor, batería y cargador./
-            </p>
-            <p>
-              Ready To Fly: Esta es la versión completa, puede funcionar desde
-              el momento que lo recibes.
-            </p>
-            <br />
-            <br />
-            <Grid container spacing={2}>
-              {storeProductsRC.map((product, k) => {
-                return (
-                  <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
-                    <ProductCard
-                      className="d-flex mb-2"
-                      products={product}
-                      productID={k}
-                    ></ProductCard>
-                  </Grid>
-                );
-              })}
-            </Grid>
-          </div>
-        )}
-      </div>
-      <Box maxWidth="md">
-        <Typography variant="body1" marked="left" gutterBottom>
-          « Envío Internacional. Productos, precios, stock y tiempos de entrega
-          sujetos a cambios, como resultado de la actualización automática
-          realizada diariamente. »<br></br>
-          <br></br>
-          Nuestros proveedores nos ofrecen una garantía de 30 días la cual
-          extendemos a nuestros clientes, esta cubre daños por defectos del
-          material o errores en la fabricación. No cubre mala manipulación por
-          parte del usuario.<br></br>
-          <br></br>
-          En caso de que ya no desee el producto recibido, puede realizar la
-          devolución del mismo en un periodo no mayor a 5 días, a partir de su
-          entrega. Para ello, deberá pagar el costo del retorno hacia USA. Este
-          varia de acuerdo al tamaño y peso del producto.<br></br>
-          <br></br>
-          ------------------------------------------------------------------
-          <br></br>
-          ---------------------- TIEMPOS DE ENVIÓ --------------------------
-          <br></br>
-          ----------------------- DE 10 A 15 DÍAS --------------------------
-          <br></br>
-          -------------------- A CIUDADES PRINCIPALES ----------------------
-          <br></br>
-          ------------------------------------------------------------------
-        </Typography>
+      <Box sx={{ display: "flex" }}>
+        <Typography variant="h3">Kits de Dron FPV:</Typography>
+        <br />
+        <>
+          {storeProducts.length == 0 ? (
+            <Box sx={{ display: "flex" }}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            <>
+              <Typography variant="body1">Descubre los mejores kits de Dron FPV listos para vuelo.</Typography>
+              <br />
+              <br />
+              <Grid container spacing={2}>
+                {storeProducts.map((product, k) => {
+                  return (
+                    <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
+                      <ProductCard
+                        className="d-flex mb-2"
+                        products={product}
+                        productID={k}
+                      ></ProductCard>
+                    </Grid>
+                  );
+                })}
+              </Grid>
+              <br />
+              <br />
+              <Typography variant="h3">
+                Drones a control remoto BNF/PNP/RTF.{" "}
+              </Typography>
+              <br />
+              <br />
+              <Typography variant="body1">
+                Bind aNd Fly: Esta versión es la que viene con todo menos con el
+                transmisor y el radio control./
+              </Typography>
+              <Typography variant="body1">
+                Plug aNd Play: Esta es la versión incluye todo menos el
+                transmisor, el radio control, el receptor, batería y cargador./
+              </Typography>
+              <Typography variant="body1">
+                Ready To Fly: Esta es la versión completa, puede funcionar desde
+                el momento que lo recibes.
+              </Typography>
+              <br />
+              <br />
+              <Grid container spacing={2}>
+                {storeProductsRC.map((product, k) => {
+                  return (
+                    <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
+                      <ProductCard
+                        className="d-flex mb-2"
+                        products={product}
+                        productID={k}
+                      ></ProductCard>
+                    </Grid>
+                  );
+                })}
+              </Grid>
+              <ShopConditions />
+            </>
+          )}
+        </>
       </Box>
     </>
   );

@@ -198,10 +198,10 @@ function Header(props) {
           <Grid container alignItems="center" spacing={1}>
             <Grid item xs>
               <Typography color="inherit" variant="h5" component="h1">
-                Tienda
-              </Typography>
-              <Typography color="inherit" variant="body1">
-                Envios gratis a toda Colombia!
+                Tienda{' '}
+                <Typography color="inherit" variant="body1">
+                  Envios gratis a toda Colombia!
+                </Typography>
               </Typography>
             </Grid>
             <Grid item>
