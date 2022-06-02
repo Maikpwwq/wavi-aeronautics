@@ -29,12 +29,14 @@ const ShoppingCart = (props) => {
     const productsDoc = doc(shoppingsRef, usedID);
     const shoppingsData = await getDoc(productsDoc);
     let productos = [];
-    // console.log(productData.data().productos);
-    productos.push(shoppingsData.data().productos);
-    if (productos.length > 0) {
-      setStoreProducts({ ...storeProducts, productos: productos });
+    if (shoppingsData.data()) {
+      // console.log(productData.data().productos);
+      productos.push(shoppingsData.data().productos);
+      if (productos.length > 0) {
+        setStoreProducts({ ...storeProducts, productos: productos });
+      }
+      localStorage.setItem("cartUpdated", "firestore");
     }
-    localStorage.setItem("cartUpdated", "firestore");
     // console.log(productos);
     // console.log(shoppingsData.data().productos);
   };

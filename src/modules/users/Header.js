@@ -63,19 +63,19 @@ function Header(props) {
   const navigate = useNavigate();
   const shoppingCartID = localStorage.getItem("cartID");
   const shoppingCartSuma =
-    localStorage.getItem("cartSum") !== 0
-      ? localStorage.getItem("cartSum")
+    sessionStorage.getItem("cartSum") !== 0
+      ? sessionStorage.getItem("cartSum")
       : null;
   const shoppingCartItems =
-    localStorage.getItem("cartProducts") !== 0
-      ? localStorage.getItem("cartProducts")
+    sessionStorage.getItem("cartProducts") !== 0
+      ? sessionStorage.getItem("cartProducts")
       : null;
   const shoppingUpdatedItems = localStorage.getItem("cartUpdated");
   const [showingCart, setShowingCart] = useState(false);
   const [value, setValue] = React.useState(0);
   const [shoppingCart, setShoppingCart] = useState({
-    suma: 0,
-    items: 0,
+    suma: shoppingCartSuma > 0 ? shoppingCartSuma : 0,
+    items: shoppingCartItems > 0 ? shoppingCartItems : 0,
   });
 
   const handleShowCart = () => {
@@ -198,7 +198,7 @@ function Header(props) {
           <Grid container alignItems="center" spacing={1}>
             <Grid item xs>
               <Typography color="inherit" variant="h5" component="h1">
-                Tienda{' '}
+                Tienda{" "}
                 <Typography color="inherit" variant="body1">
                   Envios gratis a toda Colombia!
                 </Typography>

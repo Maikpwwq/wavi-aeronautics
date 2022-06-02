@@ -122,8 +122,9 @@ const Products = () => {
 
   return (
     <>
-      <Box sx={{ display: "flex" }}>
-        <Typography variant="h3">Kits de Dron FPV:</Typography>
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <Typography variant="h5">Kits de Dron FPV:</Typography>
+        <br />
         <br />
         <>
           {storeProducts.length == 0 ? (
@@ -150,18 +151,18 @@ const Products = () => {
               </Grid>
               <br />
               <br />
-              <Typography variant="h3">
+              <Typography variant="h5">
                 Drones a control remoto BNF/PNP/RTF.{" "}
               </Typography>
               <br />
               <br />
               <Typography variant="body1">
                 Bind aNd Fly: Esta versión es la que viene con todo menos con el
-                transmisor y el radio control./
+                transmisor y el radio control.
               </Typography>
               <Typography variant="body1">
                 Plug aNd Play: Esta es la versión incluye todo menos el
-                transmisor, el radio control, el receptor, batería y cargador./
+                transmisor, el radio control, el receptor, batería y cargador.
               </Typography>
               <Typography variant="body1">
                 Ready To Fly: Esta es la versión completa, puede funcionar desde

@@ -63,7 +63,7 @@ const Accesorios = () => {
 
   const [storeProductsBaterias, setStoreProductsBaterias] = useState([]);
 
-  const productosFromFirestore = async () => {
+  const productsFromFirestore = async () => {
     const collectionBaterias = new Array(
       collectionBetafpvBaterias,
       collectionEachineBaterias,
@@ -132,8 +132,8 @@ const Accesorios = () => {
 
   return (
     <>
-      <Box sx={{ display: "flex" }}>
-        <Typography variant="h3">Baterias para drone.</Typography>
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <Typography variant="h5">Baterias para drone.</Typography>
         <br />
         <br />
         {storeProductsBaterias.length == 0 ? (

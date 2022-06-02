@@ -110,53 +110,25 @@ const MercadoPago = (props) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (usedID && visible && products) {
-  //     console.log(products);
-  //     getPreference(products)
-  //       .then((res) => {
-  //         console.log(res.init_point);
-  //         setCheckoutPro({ ...checkoutPro, url: res.init_point });
-  //         if (mercadopagoSDK) {
-  //           mercadopagoSDK.checkout({
-  //             preference: {
-  //               id: res.id,
-  //             },
-  //             render: {
-  //               container: ".cho-container",
-  //               label: "Pagar con Mercado Pago",
-  //               type: "wallet",
-  //             },
-  //             //   theme: {
-  //             //     elementsColor: '#c0392b'.
-  //             //     headerColor: '#c0392b',
-  //             // }
-  //           });
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }
-  // }, [products]);
-
   return (
     <>
-      {products && products.lenght > 0 ? (
-        <>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.checkout}
-            onClick={handleCheckout}
-          >
-            Caja
-          </Button>
-          <span className="cho-container" />
-        </>
-      ) : (
-        <></>
-      )}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          visibility: products.lenght > 0 ? "visible" : "hidden",
+        }}
+      >
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.checkout}
+          onClick={handleCheckout}
+        >
+          Caja
+        </Button>
+        <span className="cho-container" />
+      </Box>
     </>
   );
 };

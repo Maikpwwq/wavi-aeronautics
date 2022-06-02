@@ -97,7 +97,7 @@ const RadioContol = () => {
     let productData;
     let productos = [];
     if (!productosRadioControl ) {
-      console.log(productosDrones);
+      console.log(productosRadioControl);
       productData = productsFromFirestore();
       productData.then((response) => {
         console.log(response);
@@ -137,8 +137,8 @@ const RadioContol = () => {
 
   return (
     <>
-      <Box sx={{ display: "flex" }}>
-        <Typography variant="h3">Dispositivos de Contol Remoto.</Typography>
+      <Box sx={{ display: "flex", flexDirection: "column"  }}>
+        <Typography variant="h5">Dispositivos de Contol Remoto.</Typography>
         <br />
         <br />
         {storeProductsRC.length == 0 ? (

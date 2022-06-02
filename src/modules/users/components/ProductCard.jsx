@@ -109,8 +109,8 @@ const ProductCard = (props) => {
       // console.log(shoppingCart);
       // console.log(cardProductos);
       shoppingsToFirestore({ productos: cardProductos }, usedID);
-      readData();
       localStorage.setItem("cartUpdated", "agregar");
+      readData();
     } 
   };
 

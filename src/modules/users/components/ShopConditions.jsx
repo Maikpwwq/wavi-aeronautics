@@ -7,7 +7,7 @@ const ShopConditions = (props) => {
       <Box maxWidth="md">
         <br />
         <br />
-        <Typography variant="h3">Condiciones de la compra. </Typography>
+        <Typography variant="h5">Condiciones de la compra. </Typography>
         <br />
         <br />
         <Typography variant="body1" marked="left" gutterBottom>

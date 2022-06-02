@@ -27,6 +27,14 @@ const ListShoppingCart = (props) => {
   const userID = user.uid || null;
   const shoppingCartID = localStorage.getItem("cartID");
   const AllProducts = sessionStorage.getItem("Todos los productos") || null;
+  const shoppingCartItems =
+    sessionStorage.getItem("cartProducts") !== 0
+      ? sessionStorage.getItem("cartProducts")
+      : null;
+  const shoppingCartSuma =
+    sessionStorage.getItem("cartSum") !== 0
+      ? sessionStorage.getItem("cartSum")
+      : null;
   const usedID = userID ? userID : shoppingCartID;
   const _firestore = firestore;
   const navigate = useNavigate();
@@ -56,6 +64,7 @@ const ListShoppingCart = (props) => {
         productData.push(DOC.data());
       });
     }
+    localStorage.setItem("cartUpdated", "productos");
     return productData;
   };
 
@@ -68,15 +77,19 @@ const ListShoppingCart = (props) => {
       productData.then((response) => {
         compareProductsIDs(response);
         console.log(response);
-        sessionStorage.setItem("Todos los productos", JSON.stringify(response));
         localStorage.setItem("cartUpdated", "firestore");
-        calculateCartAmount();
-      })
+        sessionStorage.setItem("Todos los productos", JSON.stringify(response));
+      });
     } else {
       productData = JSON.parse(AllProducts);
       compareProductsIDs(productData);
       localStorage.setItem("cartUpdated", "sessionStorage");
-      calculateCartAmount();
+      if (shoppingCartSuma > 0) {
+        sessionStorage.setItem("cartSum", shoppingCartSuma);
+      }
+      if (shoppingCartItems > 0) {
+        sessionStorage.setItem("cartProducts", shoppingCartItems);
+      } 
     }
   };
 
@@ -85,6 +98,7 @@ const ListShoppingCart = (props) => {
     // comparar productos por ids
     if (productData && productData.length > 0) {
       console.log(productData);
+      let counter = 0;
       productData.map((DOC) => {
         // console.log(DOC);
         let iD = DOC.productID;
@@ -92,12 +106,11 @@ const ListShoppingCart = (props) => {
           console.log(iD, codigo);
           if (iD === codigo) {
             cardProductos.push(DOC);
+            counter++;
           }
         }
       });
-      // localStorage.setItem("cartUpdated", "firestore");
-      // cardProductos != {} &&
-      if (cardProductos.length > 0) {
+      if ( cardProductos !== [] && cardProductos.length > 0) {
         console.log(cardProductos);
         setShoppingCart({
           ...shoppingCart,
@@ -106,7 +119,8 @@ const ListShoppingCart = (props) => {
         });
         console.log(shoppingCart);
         localStorage.setItem("cartUpdated", "filterItems");
-        localStorage.setItem("cartProducts", cardProductos.length);
+        sessionStorage.setItem("cartProducts", cardProductos.length);
+        calculateCartAmount();
       }
     }
   };
@@ -116,23 +130,28 @@ const ListShoppingCart = (props) => {
     console.log(acomulateSum);
     shoppingCart.productos.map((product, k) => {
       console.log(acomulateSum, product.precio);
-      if (product.precio !== "Agotado") {
+      if (
+        typeof parseInt(product.precio) === "number" &&
+        product.precio !== "Agotado"
+      ) {
         acomulateSum += parseInt(product.precio);
       }
     });
-    setShoppingCart({ ...shoppingCart, suma: acomulateSum });
-    localStorage.setItem("cartSum", acomulateSum);
-    localStorage.setItem("cartUpdated", "suma");
-    // localStorage.removeItem("cartUpdated");
+    if (acomulateSum > 0) {
+      console.log(acomulateSum);
+      setShoppingCart({ ...shoppingCart, suma: acomulateSum });
+      localStorage.setItem("cartUpdated", "suma");
+      sessionStorage.setItem("cartSum", acomulateSum);
+      // localStorage.removeItem("cartUpdated");
+    }
   };
 
   useEffect(() => {
     if (usedID) {
       console.log(usedID, visible);
       shoppingsFromFirestore();
-      localStorage.setItem("cartUpdated", "productos");
     }
-  }, [updated, visible]);
+  }, [updated]);
 
   const shoppingsToFirestore = async (updateInfo, userRef) => {
     await setDoc(doc(shoppingsRef, userRef), updateInfo, { merge: true });
@@ -190,11 +209,7 @@ const ListShoppingCart = (props) => {
             </Card>
           )
         )}
-        {shoppingCart.productos.length > 0 ? (
-          <MercadoPago visible={visible} products={shoppingCart.productos} />
-        ) : (
-          <></>
-        )}
+        <MercadoPago visible={visible} products={shoppingCart.productos} />
       </Box>
     </>
   );
