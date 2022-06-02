@@ -157,7 +157,7 @@ const styles = {
   },
   main: {
     flex: 1,
-    padding: innerTheme.spacing(6, 2),
+    padding: innerTheme.spacing(2, 2),
     background: "#eaeff1",
     // zIndex: -1,
   },

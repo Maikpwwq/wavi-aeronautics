@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { firestore, storage, auth } from "../../../firebase/firebaseClient";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import { useTheme } from "@mui/material/styles";
+import { withStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
 import ProductCard from "../components/ProductCard";
 import Grid from "@mui/material/Grid";
@@ -9,9 +11,23 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "../../components/Typography";
 import ShopConditions from "../components/ShopConditions";
 
-const Products = () => {
+const styles = (theme) => ({
+  presentationProducts: {
+    margin: `${theme.spacing(4)} ${theme.spacing(4)}`,
+  },
+  spacingTexts: {
+    margin: `${theme.spacing(4)} ${theme.spacing(0)} !important`,
+  },
+  endingTexts: {
+    marginBottom: `${theme.spacing(2)} !important`,
+  },
+});
+
+const Products = (props) => {
   // const user = auth.currentUser || {};
   // const userID = user.uid || null;
+  const { classes } = props;
+  const theme = useTheme();
   const shoppingCartID = localStorage.getItem("cartID") || null;
   const productosDrones = sessionStorage.getItem("Productos_Drones") || null;
   const productosDronesRC =
@@ -122,8 +138,13 @@ const Products = () => {
 
   return (
     <>
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <Typography variant="h5">Kits de Dron FPV:</Typography>
+      <Box
+        sx={{ display: "flex", flexDirection: "column" }}
+        className={classes.presentationProducts}
+      >
+        <Typography variant="h5" className={classes.spacingTexts}>
+          Kits de Dron FPV:
+        </Typography>
         <br />
         <br />
         <>
@@ -133,7 +154,9 @@ const Products = () => {
             </Box>
           ) : (
             <>
-              <Typography variant="body1">Descubre los mejores kits de Dron FPV listos para vuelo.</Typography>
+              <Typography variant="body1" className={classes.endingTexts}>
+                Descubre los mejores kits de Dron FPV listos para vuelo.
+              </Typography>
               <br />
               <br />
               <Grid container spacing={2}>
@@ -151,7 +174,7 @@ const Products = () => {
               </Grid>
               <br />
               <br />
-              <Typography variant="h5">
+              <Typography variant="h5" className={classes.spacingTexts}>
                 Drones a control remoto BNF/PNP/RTF.{" "}
               </Typography>
               <br />
@@ -164,7 +187,7 @@ const Products = () => {
                 Plug aNd Play: Esta es la versión incluye todo menos el
                 transmisor, el radio control, el receptor, batería y cargador.
               </Typography>
-              <Typography variant="body1">
+              <Typography variant="body1" className={classes.endingTexts}>
                 Ready To Fly: Esta es la versión completa, puede funcionar desde
                 el momento que lo recibes.
               </Typography>
@@ -192,4 +215,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default withStyles(styles)(Products);

@@ -7,15 +7,22 @@ import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "../../components/Typography";
 import ShopConditions from "../components/ShopConditions";
+import { withStyles } from "@mui/styles";
 
-const RadioContol = () => {
+const styles = (theme) => ({
+  presentationProducts: {
+    margin: `${theme.spacing(4)} ${theme.spacing(4)}`,
+  },
+});
+
+const RadioContol = (props) => {
   const shoppingCartID = localStorage.getItem("cartID") || null;
   const productosRadioControl = sessionStorage.getItem("Productos_RC") || null;
   const _firestore = firestore;
   const _storage = storage;
   const productsRef = collection(_firestore, "productos");
   const productsDoc = doc(productsRef, "radio_control");
-
+  const { classes } = props;
   const collectionBetafpvCR = collection(
     productsDoc,
     "betafpv/control-remoto/lite-radio2"
@@ -96,7 +103,7 @@ const RadioContol = () => {
   const productosToSessionStore = () => {
     let productData;
     let productos = [];
-    if (!productosRadioControl ) {
+    if (!productosRadioControl) {
       console.log(productosRadioControl);
       productData = productsFromFirestore();
       productData.then((response) => {
@@ -108,7 +115,7 @@ const RadioContol = () => {
       productos = JSON.parse(productosRadioControl);
       parsePrices(productos);
     }
-  }
+  };
 
   const parsePrices = (productos) => {
     console.log(productos);
@@ -129,7 +136,7 @@ const RadioContol = () => {
       setStoreProductsRC(productos);
       //console.log(storeProducts)
     }
-  }
+  };
 
   useEffect(() => {
     productosToSessionStore();
@@ -137,7 +144,10 @@ const RadioContol = () => {
 
   return (
     <>
-      <Box sx={{ display: "flex", flexDirection: "column"  }}>
+      <Box
+        sx={{ display: "flex", flexDirection: "column" }}
+        className={classes.presentationProducts}
+      >
         <Typography variant="h5">Dispositivos de Contol Remoto.</Typography>
         <br />
         <br />
@@ -175,4 +185,4 @@ const RadioContol = () => {
   );
 };
 
-export default RadioContol;
+export default withStyles(styles)(RadioContol);

@@ -6,7 +6,7 @@ const webpack = require("webpack");
 const Dotenv = require('dotenv-webpack')
 
 const ASSET_PATH = process.env.ASSET_PATH || ''; 
-// prod  const ASSET_PATH = process.env.ASSET_PATH || '/wavi-aeronautics/';
+// prod  const ASSET_PATH = process.env.ASSET_PATH || '/wavi-aeronautics/'; // usar con script deploy gh-pages
 
 /** @type {import('webpack').Configuration} */
 module.exports = {

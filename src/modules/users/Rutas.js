@@ -14,11 +14,14 @@ function Rutas() {
       <Routes>
         <Route index element={<Products />} />
         <Route path="drones" element={<Products />} />
+        <Route path="drones/producto" element={<ProductDetail />} />
         <Route path="radio-control" element={<RadioContol />} />
+        <Route path="radio-control/producto" element={<ProductDetail />} />
         <Route path="accesorios" element={<Accesorios />} />
+        <Route path="accesorios/producto" element={<ProductDetail />} />
         <Route path="software" element={<Software />} />
         <Route path="producto" element={<ProductDetail />} />
-        <Route path="*" element={<Navigate to="/"></Navigate>} />
+        <Route path="*" element={<Navigate to="/tienda-base/"></Navigate>} />
       </Routes>
     </>
   );

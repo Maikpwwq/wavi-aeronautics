@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { withStyles } from "@mui/styles";
 import { useMercadopago } from "react-sdk-mercadopago";
@@ -21,6 +22,7 @@ const MercadoPago = (props) => {
   const shoppingCartID = localStorage.getItem("cartID");
   const usedID = userID ? userID : shoppingCartID;
   const { visible, products, classes } = props;
+  const visibility = products.length > 0 && visible ? true : false;
   const accessToken = process.env.MERCADOPAGOS_ACCESS_TOKEN;
   const publicKey = process.env.MERCADOPAGOS_PUBLIC_KEY;
   const mercadopagoSDK = useMercadopago.v2(publicKey, {
@@ -110,13 +112,15 @@ const MercadoPago = (props) => {
     }
   };
 
+  useEffect(() => {}, []);
+
   return (
     <>
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
-          visibility: products.lenght > 0 ? "visible" : "hidden",
+          visibility: visibility ? "visible" : "hidden",
         }}
       >
         <Button

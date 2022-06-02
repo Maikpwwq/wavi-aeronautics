@@ -10,7 +10,7 @@ const ShopConditions = (props) => {
         <Typography variant="h5">Condiciones de la compra. </Typography>
         <br />
         <br />
-        <Typography variant="body1" marked="left" gutterBottom>
+        <Typography variant="body1" marked="center" gutterBottom>
           « Envío Internacional. Productos, precios, stock y tiempos de entrega
           sujetos a cambios, como resultado de la actualización automática
           realizada diariamente.»<br></br>

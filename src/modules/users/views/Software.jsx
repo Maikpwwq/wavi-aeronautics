@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "../../components/Typography";
+import { withStyles } from "@mui/styles";
 
-const Accesorios = () => {
+const styles = (theme) => ({
+  presentationProducts: {
+    margin: `${theme.spacing(4)} ${theme.spacing(4)}`,
+  },
+});
 
-  useEffect(() => {
-    
-  }, []);
+const Accesorios = (props) => {
+  const { classes } = props;
+  useEffect(() => {}, []);
 
   return (
     <>
-      <Box sx={{ display: "flex" }}>
-        <Typography variant="h3">Simulador para vuelo de Drones.</Typography>
+      <Box
+        sx={{ display: "flex", flexDirection: "column" }}
+        className={classes.presentationProducts}
+      >
+        <Typography variant="h5">Simulador para vuelo de Drones.</Typography>
         <br />
         <br />
         Velocidrone!
@@ -20,4 +28,4 @@ const Accesorios = () => {
   );
 };
 
-export default Accesorios;
+export default withStyles(styles)(Accesorios);

@@ -7,15 +7,23 @@ import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "../../components/Typography";
 import ShopConditions from "../components/ShopConditions";
+import { withStyles } from "@mui/styles";
 
-const Accesorios = () => {
+const styles = (theme) => ({
+  presentationProducts: {
+    margin: `${theme.spacing(4)} ${theme.spacing(4)}`,
+  },
+});
+
+const Accesorios = (props) => {
   const shoppingCartID = localStorage.getItem("cartID") || null;
-  const productosBaterias = sessionStorage.getItem("Productos_Baterias") || null;
+  const productosBaterias =
+    sessionStorage.getItem("Productos_Baterias") || null;
   const _firestore = firestore;
   const _storage = storage;
   const productsRef = collection(_firestore, "productos");
   const productsDoc = doc(productsRef, "radio_control");
-
+  const { classes } = props;
   const collectionBetafpvBaterias = collection(
     productsDoc,
     "betafpv/baterias/2PCS-2s-300mAh"
@@ -91,7 +99,7 @@ const Accesorios = () => {
   const productosToSessionStore = () => {
     let productData;
     let productos = [];
-    if (!productosBaterias ) {
+    if (!productosBaterias) {
       console.log(productosBaterias);
       productData = productsFromFirestore();
       productData.then((response) => {
@@ -103,7 +111,7 @@ const Accesorios = () => {
       productos = JSON.parse(productosBaterias);
       parsePrices(productos);
     }
-  }
+  };
 
   const parsePrices = (productos) => {
     console.log(productos);
@@ -124,7 +132,7 @@ const Accesorios = () => {
       setStoreProductsBaterias(productos);
       //console.log(storeProducts)
     }
-  }
+  };
 
   useEffect(() => {
     productosToSessionStore();
@@ -132,7 +140,10 @@ const Accesorios = () => {
 
   return (
     <>
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
+      <Box
+        sx={{ display: "flex", flexDirection: "column" }}
+        className={classes.presentationProducts}
+      >
         <Typography variant="h5">Baterias para drone.</Typography>
         <br />
         <br />
@@ -170,4 +181,4 @@ const Accesorios = () => {
   );
 };
 
-export default Accesorios;
+export default withStyles(styles)(Accesorios);
