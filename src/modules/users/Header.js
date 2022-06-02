@@ -62,8 +62,14 @@ function Header(props) {
   const { classes, onDrawerToggle } = props;
   const navigate = useNavigate();
   const shoppingCartID = localStorage.getItem("cartID");
-  const shoppingCartSuma = localStorage.getItem("cartSum");
-  const shoppingCartItems = localStorage.getItem("cartProducts");
+  const shoppingCartSuma =
+    localStorage.getItem("cartSum") !== 0
+      ? localStorage.getItem("cartSum")
+      : null;
+  const shoppingCartItems =
+    localStorage.getItem("cartProducts") !== 0
+      ? localStorage.getItem("cartProducts")
+      : null;
   const shoppingUpdatedItems = localStorage.getItem("cartUpdated");
   const [showingCart, setShowingCart] = useState(false);
   const [value, setValue] = React.useState(0);
@@ -193,6 +199,9 @@ function Header(props) {
             <Grid item xs>
               <Typography color="inherit" variant="h5" component="h1">
                 Tienda
+              </Typography>
+              <Typography color="inherit" variant="body1">
+                Envios gratis a toda Colombia!
               </Typography>
             </Grid>
             <Grid item>

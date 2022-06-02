@@ -57,8 +57,7 @@ const ShoppingCart = (props) => {
           container
           spacing={2}
           style={{
-            position: "relative",
-            left: "-500px",
+            position: "absolute",
             visibility: visible ? "visible" : "hidden",
           }}
         >
@@ -78,6 +77,7 @@ const ShoppingCart = (props) => {
                   position: "absolute",
                   minWidth: "500px",
                   top: "80px",
+                  right: "80px",
                 }}
               >
                 <ListShoppingCart

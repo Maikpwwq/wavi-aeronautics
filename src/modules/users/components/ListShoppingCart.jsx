@@ -26,6 +26,7 @@ const ListShoppingCart = (props) => {
   const user = auth.currentUser || {};
   const userID = user.uid || null;
   const shoppingCartID = localStorage.getItem("cartID");
+  const AllProducts = sessionStorage.getItem("Todos los productos") || null;
   const usedID = userID ? userID : shoppingCartID;
   const _firestore = firestore;
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ const ListShoppingCart = (props) => {
     navigate("/producto/", { state: { product: products } });
   };
 
-  const shoppingsFromFirestore = async () => {
+  const productsFromFirestore = async () => {
     // console.log(shoppingsRef, userID);
     const collectionsWavi = new Array(storeRCRef, storeKitRef);
     let productData = [];
@@ -55,30 +56,58 @@ const ListShoppingCart = (props) => {
         productData.push(DOC.data());
       });
     }
+    return productData;
+  };
+
+  const shoppingsFromFirestore = () => {
+    let productData;
+    if (!AllProducts) {
+      console.log(AllProducts);
+      productData = productsFromFirestore();
+      console.log(productData);
+      productData.then((response) => {
+        compareProductsIDs(response);
+        console.log(response);
+        sessionStorage.setItem("Todos los productos", JSON.stringify(response));
+        localStorage.setItem("cartUpdated", "firestore");
+        calculateCartAmount();
+      })
+    } else {
+      productData = JSON.parse(AllProducts);
+      compareProductsIDs(productData);
+      localStorage.setItem("cartUpdated", "sessionStorage");
+      calculateCartAmount();
+    }
+  };
+
+  const compareProductsIDs = (productData) => {
     let cardProductos = [];
     // comparar productos por ids
-    productData.forEach((DOC) => {
-      // console.log(DOC);
-      let iD = DOC.productID;
-      for (let codigo of products) {
-        // console.log(iD, codigo);
-        if (iD === codigo) {
-          cardProductos.push(DOC);
+    if (productData && productData.length > 0) {
+      console.log(productData);
+      productData.map((DOC) => {
+        // console.log(DOC);
+        let iD = DOC.productID;
+        for (let codigo of products) {
+          console.log(iD, codigo);
+          if (iD === codigo) {
+            cardProductos.push(DOC);
+          }
         }
-      }
-    });
-    // localStorage.setItem("cartUpdated", "firestore");
-    console.log(cardProductos);
-    // cardProductos != {} &&
-    if (cardProductos.length > 0) {
-      setShoppingCart({
-        ...shoppingCart,
-        productos: cardProductos,
-        items: cardProductos.length,
       });
-      console.log(shoppingCart);
-      localStorage.setItem("cartUpdated", "items");
-      localStorage.setItem("cartProducts", cardProductos.length);
+      // localStorage.setItem("cartUpdated", "firestore");
+      // cardProductos != {} &&
+      if (cardProductos.length > 0) {
+        console.log(cardProductos);
+        setShoppingCart({
+          ...shoppingCart,
+          productos: cardProductos,
+          items: cardProductos.length,
+        });
+        console.log(shoppingCart);
+        localStorage.setItem("cartUpdated", "filterItems");
+        localStorage.setItem("cartProducts", cardProductos.length);
+      }
     }
   };
 
@@ -101,7 +130,6 @@ const ListShoppingCart = (props) => {
     if (usedID) {
       console.log(usedID, visible);
       shoppingsFromFirestore();
-      calculateCartAmount();
       localStorage.setItem("cartUpdated", "productos");
     }
   }, [updated, visible]);
@@ -162,7 +190,7 @@ const ListShoppingCart = (props) => {
             </Card>
           )
         )}
-        {shoppingCart.productos ? (
+        {shoppingCart.productos.length > 0 ? (
           <MercadoPago visible={visible} products={shoppingCart.productos} />
         ) : (
           <></>
