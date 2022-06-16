@@ -23,7 +23,7 @@ const ProductCard = (props) => {
   const navigate = useNavigate();
   const { products } = props;
   const { titulo, precio, imagenes, productID } = products;
-  console.log(products);
+  // console.log(products);
   const shoppingsRef = collection(_firestore, "shoppingCart");
   const [shoppingCart, setShoppingCart] = useState({
     productos: [],
@@ -31,7 +31,7 @@ const ProductCard = (props) => {
 
   const handleClick = (e) => {
     e.preventDefault(); 
-    navigate("producto", { state: { product: products } });
+    navigate("producto/", { state: { product: products } });
   };
 
   const shoppingsFromFirestore = async () => {

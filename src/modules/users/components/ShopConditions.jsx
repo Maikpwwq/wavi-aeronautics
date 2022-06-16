@@ -1,13 +1,31 @@
+
+import { withStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
 import Typography from "../../components/Typography";
 
+const styles = (theme) => ({
+  container: {
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
+    position: "relative",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  title: {
+    paddingBottom: theme.spacing(8),
+  },
+});
+
 const ShopConditions = (props) => {
+  const { classes } = props;
   return (
     <>
-      <Box maxWidth="md">
+      <Box maxWidth="md" className={classes.container} style={{ textAlign: "center" }}>
         <br />
         <br />
-        <Typography variant="h5">Condiciones de la compra. </Typography>
+        <Typography variant="h4" className={classes.title}>
+          Condiciones de la compra. </Typography>
         <br />
         <br />
         <Typography variant="body1" marked="center" gutterBottom>
@@ -40,4 +58,6 @@ const ShopConditions = (props) => {
   );
 };
 
-export default ShopConditions;
+
+
+export default withStyles(styles)(ShopConditions);

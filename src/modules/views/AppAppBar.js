@@ -94,7 +94,7 @@ function AppAppBar(props) {
                 display: "flex",
                 fontSize: "2rem",
               }}
-              activeClassName="active"
+              // activeClassName="active"
             >
               <img
                 className={classes.image}
@@ -109,38 +109,40 @@ function AppAppBar(props) {
           </div>
         </Toolbar>
         <div className={classes.right} sm={12} xs={12}>
-          <Link
+          <NavLink
             color="inherit"
             variant="h6"
             underline="none"
             className={classes.rightLink}
             to="/tienda-base/"
           >
-            <NavLink to="/tienda-base/">{"Tienda"}</NavLink>
-          </Link>
+            {"Tienda"}
+          </NavLink>
           {userAuth ? (
             <>
-              <Link
+              <NavLink
                 variant="h6"
                 underline="none"
                 className={clsx(classes.rightLink, classes.linkSecondary)}
+                onClick={handleSignOut} 
+                to="/"
               >
-                <NavLink onClick={handleSignOut} to="/">
+                
                   {"Cerrar Sesión"}
-                </NavLink>
-              </Link>
+                
+              </NavLink>
             </>
           ) : (
             <>
-              <Link
+              <NavLink
                 color="inherit"
                 variant="h6"
                 underline="none"
                 className={classes.rightLink}
                 to="/sign-in/"
               >
-                <NavLink to="/sign-in/">{"Iniciar sesión"}</NavLink>
-              </Link>
+                {"Iniciar sesión"}
+              </NavLink>
               {/* <Link
                 variant="h6"
                 underline="none"

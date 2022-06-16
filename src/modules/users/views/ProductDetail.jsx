@@ -20,21 +20,21 @@ import { withStyles } from "@mui/styles";
 
 const styles = (theme) => ({
   onSmallCol: {
-    margin: `${theme.spacing(2)} ${theme.spacing(4)}`,
+    margin: `${theme.spacing(2)} ${theme.spacing(0)}`,
     [theme.breakpoints.down("md")]: {
       flexDirection: "column !important",
     },
   },
   infoProduct: {
-    marginLeft: `${theme.spacing(4)}`,
+    marginLeft: `${theme.spacing(2)}`,
   },
   detailProduct: {
-    margin: `${theme.spacing(2)} ${theme.spacing(4)}`,
+    margin: `${theme.spacing(2)} ${theme.spacing(2)}`,
   },
   moreImgs: {
     flexWrap: "wrap !important",
     display: "flex !important",
-    margin: `${theme.spacing(2)} ${theme.spacing(4)}`,
+    margin: `${theme.spacing(2)} ${theme.spacing(2)}`,
   },
 });
 
@@ -136,15 +136,15 @@ const ProductDetail = (props) => {
                   />
                 </Box>
                 <Box className={classes.infoProduct}>
-                  <Typography variant="h3">Descripción: </Typography>
+                  <Typography variant="h5">Descripción: </Typography>
                   <Typography variant="body1">{descripcion}</Typography>
                 </Box>
-              </Box>
+              </Box> 
               <Box className={classes.detailProduct}>
-                <Typography variant="h3">Especificaciones: </Typography>
+                <Typography variant="h5">Especificaciones: </Typography>
                 <Typography variant="body1">{especificaciones}</Typography>
                 <br />
-                <Typography variant="h3">Incluye: </Typography>
+                <Typography variant="h5">Incluye: </Typography>
                 <Typography variant="body1">{incluye}</Typography>
               </Box>
             </CardContent>

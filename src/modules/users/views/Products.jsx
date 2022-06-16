@@ -9,14 +9,13 @@ import ProductCard from "../components/ProductCard";
 import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "../../components/Typography";
-import ShopConditions from "../components/ShopConditions";
 
 const styles = (theme) => ({
   presentationProducts: {
-    margin: `${theme.spacing(4)} ${theme.spacing(4)}`,
+    margin: `${theme.spacing(4)} ${theme.spacing(2)}`,
   },
   spacingTexts: {
-    margin: `${theme.spacing(4)} ${theme.spacing(0)} !important`,
+    margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`,
   },
   endingTexts: {
     marginBottom: `${theme.spacing(2)} !important`,
@@ -139,14 +138,18 @@ const Products = (props) => {
   return (
     <>
       <Box
-        sx={{ display: "flex", flexDirection: "column" }}
-        className={classes.presentationProducts}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          mt: 2,
+          mb: 2,
+          ps: 2,
+          pe: 2,
+        }}
       >
         <Typography variant="h5" className={classes.spacingTexts}>
           Kits de Dron FPV:
         </Typography>
-        <br />
-        <br />
         <>
           {storeProducts.length == 0 ? (
             <Box sx={{ display: "flex" }}>
@@ -157,8 +160,6 @@ const Products = (props) => {
               <Typography variant="body1" className={classes.endingTexts}>
                 Descubre los mejores kits de Dron FPV listos para vuelo.
               </Typography>
-              <br />
-              <br />
               <Grid container spacing={2}>
                 {storeProducts.map((product, k) => {
                   return (
@@ -177,8 +178,6 @@ const Products = (props) => {
               <Typography variant="h5" className={classes.spacingTexts}>
                 Drones a control remoto BNF/PNP/RTF.{" "}
               </Typography>
-              <br />
-              <br />
               <Typography variant="body1">
                 Bind aNd Fly: Esta versión es la que viene con todo menos con el
                 transmisor y el radio control.
@@ -191,8 +190,6 @@ const Products = (props) => {
                 Ready To Fly: Esta es la versión completa, puede funcionar desde
                 el momento que lo recibes.
               </Typography>
-              <br />
-              <br />
               <Grid container spacing={2}>
                 {storeProductsRC.map((product, k) => {
                   return (
@@ -206,7 +203,6 @@ const Products = (props) => {
                   );
                 })}
               </Grid>
-              <ShopConditions />
             </>
           )}
         </>

@@ -6,12 +6,17 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "../../components/Typography";
-import ShopConditions from "../components/ShopConditions";
 import { withStyles } from "@mui/styles";
 
 const styles = (theme) => ({
   presentationProducts: {
-    margin: `${theme.spacing(4)} ${theme.spacing(4)}`,
+    margin: `${theme.spacing(4)} ${theme.spacing(2)}`,
+  },
+  spacingTexts: {
+    margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`,
+  },
+  endingTexts: {
+    marginBottom: `${theme.spacing(2)} !important`,
   },
 });
 
@@ -141,23 +146,27 @@ const Accesorios = (props) => {
   return (
     <>
       <Box
-        sx={{ display: "flex", flexDirection: "column" }}
-        className={classes.presentationProducts}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          mt: 2,
+          mb: 2,
+          ps: 2,
+          pe: 2,
+        }}
       >
-        <Typography variant="h5">Baterias para drone.</Typography>
-        <br />
-        <br />
+        <Typography variant="h5" className={classes.spacingTexts}>
+          Baterias para drone.
+        </Typography>
         {storeProductsBaterias.length == 0 ? (
           <Box sx={{ display: "flex" }}>
             <CircularProgress />
           </Box>
         ) : (
           <>
-            <Typography variant="body1">
+            <Typography variant="body1" className={classes.endingTexts}>
               Baterias para cada necesidad en potencia y tiempo de vuelo.
             </Typography>
-            <br />
-            <br />
             <Grid container spacing={2}>
               {storeProductsBaterias.map((product, k) => {
                 // console.log(product, k);
@@ -175,7 +184,6 @@ const Accesorios = (props) => {
             </Grid>
           </>
         )}
-        <ShopConditions />
       </Box>
     </>
   );

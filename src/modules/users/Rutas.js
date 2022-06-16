@@ -7,6 +7,8 @@ import RadioContol from "./views/RadioContol";
 import Accesorios from "./views/Accesorios";
 import Software from "./views/Software";
 import ProductDetail from "./views/ProductDetail";
+import ShoppingCart from "./views/ShoppingCart";
+import DetallesEnvio from "./views/DetallesEnvio";
 
 function Rutas() {
   return (
@@ -21,6 +23,10 @@ function Rutas() {
         <Route path="accesorios/producto" element={<ProductDetail />} />
         <Route path="software" element={<Software />} />
         <Route path="producto" element={<ProductDetail />} />
+        <Route path="ver-carrito" element={<ShoppingCart />} />
+        <Route path="ver-carrito/*" element={<ShoppingCart />} />
+        <Route path="detalles-envio" element={<DetallesEnvio />} />
+        <Route path="detalles-envio/*" element={<DetallesEnvio />} />
         <Route path="*" element={<Navigate to="/tienda-base/"></Navigate>} />
       </Routes>
     </>

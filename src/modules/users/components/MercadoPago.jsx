@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import { withStyles } from "@mui/styles";
+import { useNavigate } from "react-router-dom";
 import { useMercadopago } from "react-sdk-mercadopago";
-import { auth } from "../../../firebase/firebaseClient";
 // import mercadopago from "mercadopago";
 var mercadopago = require("mercadopago");
-import { useNavigate } from "react-router-dom";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "../../components/Typography";
+import { withStyles } from "@mui/styles";
+import { auth } from "../../../firebase/firebaseClient";
 
 const styles = (theme) => ({
   checkout: {
     padding: theme.spacing(2),
     marginRight: theme.spacing(1),
+  },
+  pagoBtn: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "start",
+    left: "100px",
+    position: "relative",
   },
 });
 
@@ -21,7 +29,7 @@ const MercadoPago = (props) => {
   const userID = user.uid || null;
   const shoppingCartID = localStorage.getItem("cartID");
   const usedID = userID ? userID : shoppingCartID;
-  const { visible, products, classes } = props;
+  const { visible, products, classes, userInfo, shippingInfo } = props;
   const visibility = products.length > 0 && visible ? true : false;
   const accessToken = process.env.MERCADOPAGOS_ACCESS_TOKEN;
   const publicKey = process.env.MERCADOPAGOS_PUBLIC_KEY;
@@ -31,6 +39,7 @@ const MercadoPago = (props) => {
   const [checkoutPro, setCheckoutPro] = useState({
     url: "",
   });
+  const [showResume, setShowResume] = useState(false);
   // v1/checkout/preferences
   // v1/payments/
   // process.env.MERCADOPAGOS_URL
@@ -65,8 +74,28 @@ const MercadoPago = (props) => {
       };
       return array;
     });
+    const pagador = {
+      name: userInfo?.userName,
+      email: userInfo?.userMail,
+      phone: { number: userInfo?.userPhone },
+      address: {
+        zip_code: shippingInfo?.shippingPostalCode,
+        street_number: shippingInfo?.shippingDirection,
+      },
+    };
+    const metodoEnvio = {
+      mode: "custom",
+      free_shipping: true,
+      receiver_address: {
+        zip_code: shippingInfo?.shippingPostalCode,
+        street_number: shippingInfo?.shippingDirection,
+        city_name: shippingInfo?.shippingCiudad,
+      },
+    };
     let consult = {
       items: productos,
+      payer: pagador,
+      shipments: metodoEnvio,
     };
     const response = await fetch(
       `https://api.mercadopago.com/checkout/preferences?access_token=${accessToken}`,
@@ -118,10 +147,9 @@ const MercadoPago = (props) => {
     <>
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
           visibility: visibility ? "visible" : "hidden",
         }}
+        className={classes.pagoBtn}
       >
         <Button
           variant="contained"
@@ -129,8 +157,36 @@ const MercadoPago = (props) => {
           className={classes.checkout}
           onClick={handleCheckout}
         >
-          Caja
+          Confirmar Orden
         </Button>
+        {showResume && (
+          <Box style={{ display: "flex", flexDirection: "column" }}>
+            <Typography variant="h4" className="">
+              Resumen detalles de envio
+            </Typography>
+            <Typography variant="h5" className="">
+              Información personal:
+            </Typography>
+            {userInfo.userName}
+            {userInfo.userMail}
+            {userInfo.userPhone}
+            <Typography variant="h5" className="">
+              Detalles de envío:
+            </Typography>
+            {shippingInfo.shippingPostalCode}
+            {shippingInfo.shippingDirection}
+            {shippingInfo.shippingCiudad}
+            <Typography variant="h5" className="">
+              Resumen productos:
+            </Typography>
+            <Box style={{ display: "flex", flexDirection: "column" }}>
+              {products.map((producto) => {
+                let { titulo, precio } = producto;
+                return [titulo, precio];
+              })}
+            </Box>
+          </Box>
+        )}
         <span className="cho-container" />
       </Box>
     </>

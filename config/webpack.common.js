@@ -33,6 +33,7 @@ module.exports = {
       child_process: false,
       request: false,
       fast_crc32c: false,
+      browser: false,
     }
   },
   module: {
@@ -77,6 +78,10 @@ module.exports = {
         test: /\.md$/,
         loader: 'raw-loader',
       },
+      // {
+      //   test: /\.json$/,
+      //   loader: 'json-loader'
+      // }
     ],
   },  
   plugins: [

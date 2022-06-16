@@ -38,7 +38,7 @@ const styles = (theme) => ({
     zIndex: 1, // Ver listado carrito de compras
   },
   productTabs: {
-    overflow: "scroll !important",
+    overflowX: "scroll !important",
   },
   menuButton: {
     marginLeft: -theme.spacing(1),
@@ -80,6 +80,7 @@ function Header(props) {
 
   const handleShowCart = () => {
     setShowingCart(!showingCart);
+    console.log(showingCart)
     localStorage.setItem("cartUpdated", "show");
   };
 
@@ -147,7 +148,7 @@ function Header(props) {
                   display: "flex",
                   fontSize: "2rem",
                 }}
-                activeClassName="active"
+                // activeClassName="active"
               >
                 <img
                   className={classes.image}
@@ -165,7 +166,7 @@ function Header(props) {
             </Grid>
 
             <Grid item xs />
-            <Grid item>
+            {/* <Grid item>
               <Tooltip title="Alertas • No hay alertas">
                 <IconButton color="inherit">
                   <NotificationsIcon />
@@ -183,7 +184,7 @@ function Header(props) {
               <IconButton color="inherit" className={classes.iconButtonAvatar}>
                 <Avatar src={AvatarUser} alt="My Avatar" />
               </IconButton>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Toolbar>
       </AppBar>
@@ -204,7 +205,7 @@ function Header(props) {
                 </Typography>
               </Typography>
             </Grid>
-            <Grid item>
+            {/* <Grid item>
               <Button
                 className={classes.button}
                 variant="outlined"
@@ -218,9 +219,10 @@ function Header(props) {
               <Link className={classes.link} href="#" variant="body2">
                 Favoritos
               </Link>
-            </Grid>
+            </Grid> */}
             <Grid item>
-              {shoppingCart.items} Productos. $ {shoppingCart.suma} COP
+              {shoppingCart.items} Productos.
+              <br />$ {shoppingCart.suma} COP
             </Grid>
             <Grid item>
               <Tooltip title="Carrito">
@@ -251,7 +253,7 @@ function Header(props) {
           value={value}
           textColor="inherit"
           className={classes.productTabs}
-          style={{ overflow: "scroll" }}
+          style={{ overflowX: "scroll" }}
         >
           <Tab textColor="inherit" label="Drones" value={0} />
           <Tab textColor="inherit" label="Radio Control" value={1} />

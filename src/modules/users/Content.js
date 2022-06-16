@@ -52,7 +52,7 @@ function Content(props) {
                 fullWidth
                 placeholder="Buscar por email, número telefonico o, ID de usuario"
                 InputProps={{
-                  disableUnderline: true,
+                  // disableUnderline: true,
                   className: classes.searchInput,
                 }}
               />

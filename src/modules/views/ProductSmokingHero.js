@@ -44,7 +44,7 @@ function ProductSmokingHero(props) {
         </Typography>
       </Button>
       <Typography variant="subtitle1" className={classes.link}>
-        Estamos aquí para ayudarte. ¡Ponte en contacto!
+      ¡Escríbenos aquí!
       </Typography>
       <a
         href="https://api.whatsapp.com/send?phone=573196138057"
@@ -52,7 +52,7 @@ function ProductSmokingHero(props) {
         rel="noopener noreferrer"
         className={classes.whatsApp}
       >
-        <WhatsAppIcon fontSize="large" alt="WhatsAppChat" />
+        <WhatsAppIcon fontSize="large" alt="WhatsAppChat" style={{ color: "#4fcc5d"}}/>
       </a>
       {/* <Link to={{  pathname: "https://api.whatsapp.com/send?phone=573196138057" }} target="_blank" /> */}
     </Container>

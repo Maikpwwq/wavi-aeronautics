@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { ThemeProvider, withStyles } from "@mui/styles";
 import { createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import Box from "@mui/material/Box";
+
 import Hidden from "@mui/material/Hidden";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
@@ -11,6 +13,8 @@ import Navigator from "./Navigator";
 // import Products from "./views/Products";
 import Rutas from "./Rutas";
 import Header from "./Header";
+import ShopMarcas from "./components/ShopMarcas";
+import ShopConditions from "./components/ShopConditions";
 
 function Copyright() {
   return (
@@ -161,6 +165,14 @@ const styles = {
     background: "#eaeff1",
     // zIndex: -1,
   },
+  shopMore: {
+    padding: innerTheme.spacing(2),
+    background: "#eaeff1",
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
   footer: {
     padding: innerTheme.spacing(2),
     background: "#eaeff1",
@@ -192,13 +204,17 @@ function Paperbase(props) {
             <Navigator PaperProps={{ style: { width: drawerWidth } }} />
           </Hidden>
         </nav> */}
-        <div className={classes.app} style={{ overflowX: 'auto' }}>
+        <div className={classes.app} style={{ overflowX: "auto" }}>
           <Header onDrawerToggle={handleDrawerToggle} />
           <main className={classes.main}>
             {/* <Products /> */}
             <Rutas />
             {/* <Content /> */}
           </main>
+          <Box className={classes.shopMore}>
+            <ShopConditions />
+          </Box>
+          <ShopMarcas />
           <footer className={classes.footer}>
             <Copyright />
           </footer>

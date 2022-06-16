@@ -49,7 +49,7 @@ function ProductHero(props) {
         variant="h5"
         className={classes.h5}
       >
-        Somos fabricantes y distribuidores de Technología VToL. Solicita alguno
+        Somos fabricantes y distribuidores de Technología VToL (despegue y aterrizaje vertical). Solicita alguno
         de nuestros servicios.
       </Typography>
       <Button
