@@ -18,7 +18,7 @@ const styles = (theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "start",
-    left: "100px",
+    top: "24px",
     position: "relative",
   },
 });

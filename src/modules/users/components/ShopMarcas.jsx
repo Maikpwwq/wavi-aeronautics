@@ -83,7 +83,7 @@ function ShopMarcas(props) {
     Tbs,
   ];
 
-  return (
+  return ( 
     <section className={classes.root}>
       <Container className={classes.container} style={{ textAlign: "center" }}>
         <img

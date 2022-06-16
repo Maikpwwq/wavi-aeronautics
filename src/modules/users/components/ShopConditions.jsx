@@ -24,7 +24,7 @@ const ShopConditions = (props) => {
       <Box maxWidth="md" className={classes.container} style={{ textAlign: "center" }}>
         <br />
         <br />
-        <Typography variant="h4" className={classes.title}>
+        <Typography variant="h4" className={classes.title} marked="center">
           Condiciones de la compra. </Typography>
         <br />
         <br />

@@ -113,8 +113,10 @@ function Header(props) {
     } else if (newValue === 1) {
       navigate("radio-control");
     } else if (newValue === 2) {
-      navigate("accesorios");
+      navigate("trasmisor-receptor");
     } else if (newValue === 3) {
+      navigate("accesorios");
+    } else if (newValue === 4) {
       navigate("software");
     }
   };
@@ -257,8 +259,9 @@ function Header(props) {
         >
           <Tab textColor="inherit" label="Drones" value={0} />
           <Tab textColor="inherit" label="Radio Control" value={1} />
-          <Tab textColor="inherit" label="Accesorios" value={2} />
-          <Tab textColor="inherit" label="Software" value={3} />
+          <Tab textColor="inherit" label="Transmisión/Recepción" value={2} />
+          <Tab textColor="inherit" label="Accesorios" value={3} />
+          <Tab textColor="inherit" label="Software" value={4} />
         </Tabs>
       </AppBar>
     </React.Fragment>
