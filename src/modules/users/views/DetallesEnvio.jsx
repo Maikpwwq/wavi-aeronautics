@@ -9,6 +9,11 @@ import Container from "@mui/material/Container";
 import FormGroup from "@mui/material/FormGroup";
 import FormLabel from "@mui/material/FormLabel";
 import TextField from "@mui/material/TextField";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableBody from "@mui/material/TableBody";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
 
 const styles = (theme) => ({
   root: {
@@ -41,7 +46,7 @@ const styles = (theme) => ({
     padding: "20px 0",
   },
   title: {
-    paddingBottom: theme.spacing(8),
+    paddingBottom: theme.spacing(4),
   },
 });
 
@@ -51,6 +56,7 @@ const DetallesEnvio = (props) => {
   const { productsCart } = state || "";
   console.log(productsCart);
   const visible = true;
+  const [showResume, setShowResume] = useState(false);
   const [userInfo, setUserInfo] = useState({
     userName: "",
     userMail: "",
@@ -184,15 +190,81 @@ const DetallesEnvio = (props) => {
                 />
               </Box>
             </FormGroup>
-            {productsCart && (
+          </Box>
+          {productsCart && (
+            <Box
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                // visibility: showResume ? "visible" : "hidden",
+              }}
+            >
+              <Typography variant="h4" className={classes.title} marked="center">
+                Resumen detalles de envio
+              </Typography>
+              <Typography variant="h5" className="">
+                Información personal:
+              </Typography>
+              <Typography variant="body1" className="">
+                Nombre: {userInfo.userName} <br />
+                Correo: {userInfo.userMail} <br />
+                Celular: {userInfo.userPhone} <br />
+              </Typography>
+              <Typography variant="h5" className="">
+                Detalles de envío:
+              </Typography>
+              <Typography variant="body1" className="">
+                CodigoPostal: {shippingInfo.shippingPostalCode} <br />
+                Dirección: {shippingInfo.shippingDirection} <br />
+                Ciudad: {shippingInfo.shippingCiudad} <br />
+              </Typography>
+              <Typography variant="h5" className="">
+                Resumen productos:
+              </Typography>
+              <Box style={{ display: "flex", flexDirection: "column" }}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell></TableCell>
+                      <TableCell>Titulo</TableCell>
+                      <TableCell>Precio</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {productsCart.map((producto, index) => {
+                      let { titulo, precio, imagenes } = producto;
+                      return (
+                        <TableRow key={index}>
+                          <TableCell>
+                            <Box
+                              component="img"
+                              src={imagenes[0]}
+                              alt={titulo}
+                              sx={{
+                                height: 100,
+                                display: "block",
+                                maxWidth: 100,
+                                overflow: "hidden",
+                                width: "auto",
+                              }}
+                            ></Box>
+                          </TableCell>
+                          <TableCell>{titulo}</TableCell>
+                          <TableCell>{precio}</TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </Box>
               <MercadoPago
                 visible={visible}
                 products={productsCart}
                 shippingInfo={shippingInfo}
                 userInfo={userInfo}
               />
-            )}
-          </Box>
+            </Box>
+          )}
         </Container>
       </section>
     </>

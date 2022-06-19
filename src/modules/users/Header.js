@@ -239,6 +239,7 @@ function Header(props) {
             className=""
             visible={showingCart}
             updated={shoppingUpdatedItems}
+            setShowingCart={setShowingCart}
           />
           {/* hidden */}
         </Toolbar>

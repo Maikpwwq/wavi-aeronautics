@@ -3,6 +3,9 @@ import { useLocation } from "react-router-dom";
 import { firestore, auth } from "../../../firebase/firebaseClient";
 import { collection, doc, getDoc } from "firebase/firestore";
 import ListShoppingCart from "../components/ListShoppingCart";
+
+import PropTypes from "prop-types";
+
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
@@ -24,11 +27,11 @@ const styles = (theme) => ({
 const ShoppingCart = (props) => {
   const user = auth.currentUser || {};
   const userID = user.uid || null;
-  const { visible, updated, classes } = props || {};
-  console.log("props", visible, updated);
+  const { visible, updated, classes, setShowingCart } = props || {};
+  // console.log("props", visible, updated);
   const { state } = useLocation() || {};
   const { makeVisible, makeUpdated } = state || "";
-  console.log("state", makeVisible, makeUpdated);
+  // console.log("state", makeVisible, makeUpdated);
   const visibleSettings = makeVisible || visible;
   const updatedSettings = makeUpdated || updated;
   console.log("settings", visibleSettings, updatedSettings);
@@ -104,6 +107,7 @@ const ShoppingCart = (props) => {
                   visible={visibleSettings}
                   updated={updatedSettings}
                   productID={k}
+                  setShowingCart={setShowingCart}
                 ></ListShoppingCart>
               </Grid>
             );
@@ -112,6 +116,13 @@ const ShoppingCart = (props) => {
       )}
     </>
   );
+};
+
+ShoppingCart.propTypes = {
+  classes: PropTypes.object.isRequired,
+  setShowingCart: PropTypes.func.isRequired,
+  visible: PropTypes.bool, 
+  updated: PropTypes.string,
 };
 
 export default withStyles(styles)(ShoppingCart);

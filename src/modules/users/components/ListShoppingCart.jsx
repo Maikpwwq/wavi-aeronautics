@@ -3,6 +3,9 @@ import { withStyles } from "@mui/styles";
 import { useNavigate } from "react-router-dom";
 import { firestore, auth } from "../../../firebase/firebaseClient";
 import { collection, doc, setDoc, getDocs } from "firebase/firestore";
+
+import PropTypes from "prop-types";
+
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -32,7 +35,7 @@ const ListShoppingCart = (props) => {
   const usedID = userID ? userID : shoppingCartID;
   const _firestore = firestore;
   const navigate = useNavigate();
-  const { products, visible, updated, classes } = props;
+  const { products, visible, updated, classes, setShowingCart } = props;
   const storeKitRef = collection(_firestore, "productos/dron/kit_fpv_dron");
   const storeRCRef = collection(_firestore, "productos/dron/RC");
 
@@ -43,8 +46,6 @@ const ListShoppingCart = (props) => {
     items: 0,
   });
   console.log(visible)
-  const [visibility, setVisibility] = useState(visible);
-
   // const handleClick = (e) => {
   //   e.preventDefault();
   //   navigate("/tienda-base/producto/", { state: { product: products } });
@@ -182,27 +183,26 @@ const ListShoppingCart = (props) => {
   const handleCheckout = () => {
     const productsCart = shoppingCart.productos;
     console.log(productsCart);
+    localStorage.setItem("cartUpdated", "detalles-envio");
+    setShowingCart(false)
     navigate("/tienda-base/detalles-envio/", {
       state: { productsCart: productsCart },
     });
-    localStorage.setItem("cartUpdated", "detalles-envio");
-    setVisibility(false);
   };
 
   const handleShoppingCart = () => {
+    localStorage.setItem("cartUpdated", "ver-carrito");
+    setShowingCart(false)
     navigate("/tienda-base/ver-carrito/", {
       state: {
         makeVisible: visible,
         makeUpdated: updated,
       },
-    }); //
-    localStorage.setItem("cartUpdated", "ver-carrito");
-    setVisibility(false);
+    });
   };
 
   return (
     <>
-      {/* {visibility && ( */}
         <Box className="" maxWidth="sm" style={{ height: "100%" }}>
           {shoppingCart.productos.map(
             ({ titulo, precio, imagenes, productID }) => (
@@ -230,17 +230,24 @@ const ListShoppingCart = (props) => {
           <Button variant="contained" color="primary" onClick={handleCheckout}>
             Finalizar compra
           </Button>
-          {/* <Button
+          <Button
             variant="contained"
             color="secondary"
             onClick={handleShoppingCart}
           >
             Ver carrito
-          </Button> */}
+          </Button>
         </Box>
-      {/* )} */}
     </>
   );
+};
+
+ListShoppingCart.propTypes = {
+  classes: PropTypes.object.isRequired,
+  setShowingCart: PropTypes.func.isRequired,
+  products: PropTypes.object,
+  visible: PropTypes.bool, 
+  updated: PropTypes.string,
 };
 
 export default withStyles(styles)(ListShoppingCart);

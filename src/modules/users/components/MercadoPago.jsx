@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { auth } from "../../../firebase/firebaseClient";
 import { useNavigate } from "react-router-dom";
 import { useMercadopago } from "react-sdk-mercadopago";
 // import mercadopago from "mercadopago";
@@ -7,7 +8,6 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "../../components/Typography";
 import { withStyles } from "@mui/styles";
-import { auth } from "../../../firebase/firebaseClient";
 
 const styles = (theme) => ({
   checkout: {
@@ -17,7 +17,7 @@ const styles = (theme) => ({
   pagoBtn: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "start",
+    alignItems: "center",
     top: "24px",
     position: "relative",
   },
@@ -39,7 +39,6 @@ const MercadoPago = (props) => {
   const [checkoutPro, setCheckoutPro] = useState({
     url: "",
   });
-  const [showResume, setShowResume] = useState(false);
   // v1/checkout/preferences
   // v1/payments/
   // process.env.MERCADOPAGOS_URL
@@ -97,6 +96,7 @@ const MercadoPago = (props) => {
       payer: pagador,
       shipments: metodoEnvio,
     };
+    console.log(consult)
     const response = await fetch(
       `https://api.mercadopago.com/checkout/preferences?access_token=${accessToken}`,
       {
@@ -109,15 +109,14 @@ const MercadoPago = (props) => {
     return response.json();
   };
 
-  console.log(products);
-
   const handleCheckout = () => {
     if (usedID && visible && products) {
-      console.log(products);
+      // console.log(products);
       getPreference(products)
         .then((res) => {
-          console.log(res.init_point);
+          // console.log(res.init_point);
           setCheckoutPro({ ...checkoutPro, url: res.init_point });
+          // setShowResume(true);
           if (mercadopagoSDK) {
             mercadopagoSDK.checkout({
               preference: {
@@ -159,34 +158,6 @@ const MercadoPago = (props) => {
         >
           Confirmar Orden
         </Button>
-        {showResume && (
-          <Box style={{ display: "flex", flexDirection: "column" }}>
-            <Typography variant="h4" className="">
-              Resumen detalles de envio
-            </Typography>
-            <Typography variant="h5" className="">
-              Información personal:
-            </Typography>
-            {userInfo.userName}
-            {userInfo.userMail}
-            {userInfo.userPhone}
-            <Typography variant="h5" className="">
-              Detalles de envío:
-            </Typography>
-            {shippingInfo.shippingPostalCode}
-            {shippingInfo.shippingDirection}
-            {shippingInfo.shippingCiudad}
-            <Typography variant="h5" className="">
-              Resumen productos:
-            </Typography>
-            <Box style={{ display: "flex", flexDirection: "column" }}>
-              {products.map((producto) => {
-                let { titulo, precio } = producto;
-                return [titulo, precio];
-              })}
-            </Box>
-          </Box>
-        )}
         <span className="cho-container" />
       </Box>
     </>
