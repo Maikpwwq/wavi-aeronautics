@@ -3,6 +3,7 @@ import ReactMarkdown from 'markdown-to-jsx';
 import { withStyles } from '@mui/styles';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
+// import remarkGfm from 'remark-gfm';
 
 const styles = (theme) => ({
   listItem: {
@@ -31,7 +32,7 @@ const options = {
 };
 
 function Markdown(props) {
-  return <ReactMarkdown options={options} {...props} />;
+  return <ReactMarkdown {...props} />; // options={options} remarkPlugins={[remarkGfm]} 
 }
 
 export default Markdown;

@@ -11,13 +11,15 @@ import SignUp from "./pages/SignUp";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import ForgotPassword from "./pages/ForgotPassword";
+import { StyledEngineProvider } from '@mui/material/styles';
 // import ProductDetail from "./modules/users/views/ProductDetail";
 
 import PaperBase from "./modules/users/Paperbase";
 
 function App() {
   return (
-    <div className="app">
+    <div className="app"> 
+    {/* StyledEngineProvider injectFirst */}
       <Routes>
         <Route index element={<Home />} />
         <Route path="/sign-in/" element={<SignIn />} />

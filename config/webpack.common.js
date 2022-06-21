@@ -1,27 +1,40 @@
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const TerserPlugin = require('terser-webpack-plugin');
+const nodeExternals = require('webpack-node-externals');
 const path = require("path");
-const webpack = require("webpack");
 const Dotenv = require('dotenv-webpack')
-
-const ASSET_PATH = process.env.ASSET_PATH || ''; 
-// prod  const ASSET_PATH = process.env.ASSET_PATH || '/wavi-aeronautics/'; // usar con script deploy gh-pages
+require('dotenv').config({
+  path: path.resolve(__dirname, '../.env'),
+});
+const { REACT_APP_ENV, ASSET_PATH } = process.env;
+const isDev = REACT_APP_ENV === 'development';
+const entry = ['../src/index.js'];
+if (isDev) {
+  entry.push(
+    'react-refresh/runtime',
+    'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=2000&reload=true'
+  );
+}
 
 /** @type {import('webpack').Configuration} */
 module.exports = {
   name: "client",
   target: "web",
-  entry: [
-    "./src/index.js"
-  ],
+  entry,
   output: {
-    path: path.resolve(__dirname, "../dist"),
-    filename: "[name].[contenthash].js",
-    publicPath: ASSET_PATH,
+    path: path.resolve(__dirname, "ssr/public"),
+    filename: isDev ? 'assets/app.js' : 'assets/app-[hash].js', // "[name].[contenthash].js",
+    publicPath: ASSET_PATH || "",
+    assetModuleFilename: 'assets/[name][ext]',
   },
+  externalsPresets: { node: true }, // in order to ignore built-in modules like path, fs, etc.
+  externals: [nodeExternals()], // in order to ignore all modules in node_modules folder
   resolve: {
     extensions: [".js", ".jsx", ".css"],
+    alias: {
+      'react-dom': '@hot-loader/react-dom',
+    },
     modules: ['node_modules'],
     fallback: {
       fs: false,
@@ -38,29 +51,24 @@ module.exports = {
   },
   module: {
     rules: [
-      {
-        use: "babel-loader",
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,        
-      },
-      {
-        // Loads the javacript into html template provided.
-        // Entry point is set below in HtmlWebPackPlugin in Plugins
-        test: /\.html$/,
-        use: [
-          {
-            loader: 'html-loader',
-          },
-        ],
-      },
-      {
-        test: /\.styl$/,
-        use: [
-          'style-loader',        
-          'css-loader',          
-          'stylus-loader'
-        ]
-      },
+      // {
+      //   // Loads the javacript into html template provided.
+      //   // Entry point is set below in HtmlWebPackPlugin in Plugins
+      //   test: /\.html$/,
+      //   use: [
+      //     {
+      //       loader: 'html-loader',
+      //     },
+      //   ],
+      // },
+      // {
+      //   test: /\.styl$/,
+      //   use: [
+      //     'style-loader',        
+      //     'css-loader',          
+      //     'stylus-loader'
+      //   ]
+      // },
       {
         type: "asset/resource",
         test: /\.png$/i,
@@ -84,19 +92,36 @@ module.exports = {
       // }
     ],
   },  
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
+    splitChunks: {
+      chunks: 'async',
+      cacheGroups: {
+        vendors: {
+          name: 'vendors',
+          chunks: 'all',
+          reuseExistingChunk: true,
+          priority: 1,
+          filename: isDev
+            ? 'assets/vendor.js'
+            : 'assets/vendor-[contenthash].js',
+          enforce: true,
+          test: /[\\/]node_modules[\\/]/,
+        },
+      },
+    },
+  },
   plugins: [
     new NodePolyfillPlugin(),
-    // Esto nos permite utilizar de forma segura env vars en nuestro código
-    new webpack.DefinePlugin({
-      'process.env.ASSET_PATH': JSON.stringify(ASSET_PATH),
-    }),
     new Dotenv(),
     new CleanWebpackPlugin(),
-    new HtmlWebpackPlugin({
-      appMountId: 'root',
-      template: path.resolve(__dirname, '../public/index.html'),
-      filename: 'index.html',
-      hash: true,
-    }),
+    // Ahora nuestro punto de montaje lo realizara en forma automatica Webpack en modo SSR
+    // new HtmlWebpackPlugin({
+    //   appMountId: 'root',
+    //   template: path.resolve(__dirname, '../public/index.html'),
+    //   filename: 'index.html',
+    //   hash: true,
+    // }),
   ],
 };

@@ -230,13 +230,13 @@ const ListShoppingCart = (props) => {
           <Button variant="contained" color="primary" onClick={handleCheckout}>
             Finalizar compra
           </Button>
-          <Button
+          {/* <Button
             variant="contained"
             color="secondary"
             onClick={handleShoppingCart}
           >
             Ver carrito
-          </Button>
+          </Button> */}
         </Box>
     </>
   );
