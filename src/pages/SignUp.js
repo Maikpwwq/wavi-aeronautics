@@ -3,6 +3,12 @@ import withRoot from "../modules/withRoot";
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { collection, doc, setDoc } from "firebase/firestore";
+
+import 'sessionstorage-polyfill'
+import 'localstorage-polyfill'
+global.sessionstorage
+global.localStorage
+
 import { makeStyles } from "@mui/styles";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";

@@ -5,10 +5,10 @@ import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import Typography from '../components/Typography';
 
-import productValues1 from "../../../public/static/themes/productValues1.svg";
-import productValues2 from "../../../public/static/themes/productValues2.svg";
-import productValues3 from "../../../public/static/themes/productValues3.svg";
-import productCurvyLines from "../../../public/static/themes/productCurvyLines.png";
+import productValues1 from "../../../publicAssets/static/themes/productValues1.svg";
+import productValues2 from "../../../publicAssets/static/themes/productValues2.svg";
+import productValues3 from "../../../publicAssets/static/themes/productValues3.svg";
+import productCurvyLines from "../../../publicAssets/static/themes/productCurvyLines.png";
 
 const styles = (theme) => ({
   root: {

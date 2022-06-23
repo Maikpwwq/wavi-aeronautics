@@ -4,6 +4,12 @@ import { firestore, storage, auth } from "../../../firebase/firebaseClient";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { useTheme } from "@mui/material/styles";
 import { withStyles } from "@mui/styles";
+
+import 'sessionstorage-polyfill'
+import 'localstorage-polyfill'
+global.sessionstorage
+global.localStorage
+
 import Box from "@mui/material/Box";
 import ProductCard from "../components/ProductCard";
 import Grid from "@mui/material/Grid";

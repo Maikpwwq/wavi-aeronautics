@@ -9,10 +9,10 @@ require('dotenv').config({
 });
 const { REACT_APP_ENV, ASSET_PATH } = process.env;
 const isDev = REACT_APP_ENV === 'development';
-const entry = ['../src/index.js'];
+const entry = ['./src/index.js'];
 if (isDev) {
   entry.push(
-    'react-refresh/runtime',
+    // 'react-refresh/runtime',
     'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=2000&reload=true'
   );
 }
@@ -32,22 +32,19 @@ module.exports = {
   externals: [nodeExternals()], // in order to ignore all modules in node_modules folder
   resolve: {
     extensions: [".js", ".jsx", ".css"],
-    alias: {
-      'react-dom': '@hot-loader/react-dom',
-    },
     modules: ['node_modules'],
-    fallback: {
-      fs: false,
-      tls: false,
-      net: false,
-      dns: false,
-      http2: false,
-      worker_threads: false,
-      child_process: false,
-      request: false,
-      fast_crc32c: false,
-      browser: false,
-    }
+    // fallback: {
+    //   fs: false,
+    //   tls: false,
+    //   net: false,
+    //   dns: false,
+    //   http2: false,
+    //   worker_threads: false,
+    //   child_process: false,
+    //   request: false,
+    //   fast_crc32c: false,
+    //   browser: false,
+    // }
   },
   module: {
     rules: [
@@ -119,7 +116,7 @@ module.exports = {
     // Ahora nuestro punto de montaje lo realizara en forma automatica Webpack en modo SSR
     // new HtmlWebpackPlugin({
     //   appMountId: 'root',
-    //   template: path.resolve(__dirname, '../public/index.html'),
+    //   template: path.resolve(__dirname, '../publicAssets/index.html'),
     //   filename: 'index.html',
     //   hash: true,
     // }),

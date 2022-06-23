@@ -23,7 +23,7 @@ const RadioMaster =
 const Tbs =
   "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/marcas%2FTBS.webp?alt=media&token=529dc8dd-b142-458c-bb44-e365a75fb4f3";
 
-import productCurvyLines from "../../../../public/static/themes/productCurvyLines.png";
+import productCurvyLines from "../../../../publicAssets/static/themes/productCurvyLines.png";
 
 const styles = (theme) => ({
   root: {

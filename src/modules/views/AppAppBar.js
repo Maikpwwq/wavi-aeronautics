@@ -8,7 +8,7 @@ import { NavLink } from "react-router-dom";
 import Link from "@mui/material/Link";
 import AppBar from "../components/AppBar";
 import Toolbar, { styles as toolbarStyles } from "../components/Toolbar";
-// import WaviPixelLogo from "../../../public/static/img/WaviPixelLogo.png";
+// import WaviPixelLogo from "../../../publicAssets/static/img/WaviPixelLogo.png";
 const WaviPixelLogo =
   "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FWaviPixelLogo.png?alt=media&token=7edcec69-8b24-4b95-b970-6b9acfddbdeb";
 

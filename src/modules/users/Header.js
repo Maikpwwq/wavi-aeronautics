@@ -4,6 +4,11 @@ import ShoppingCart from "./views/ShoppingCart";
 
 import PropTypes from "prop-types";
 
+import 'sessionstorage-polyfill'
+import 'localstorage-polyfill'
+global.sessionstorage
+global.localStorage
+
 import AppBar from "@mui/material/AppBar";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -22,8 +27,8 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { withStyles } from "@mui/styles";
 
-import AvatarUser from "../../../public/static/img/l3mik3l.png";
-// import WaviPixelLogo from "../../../public/static/img/WaviPixelLogo.png";
+import AvatarUser from "../../../publicAssets/static/img/l3mik3l.png";
+// import WaviPixelLogo from "../../../publicAssets/static/img/WaviPixelLogo.png";
 const WaviPixelLogo =
   "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FWaviPixelLogo.png?alt=media&token=7edcec69-8b24-4b95-b970-6b9acfddbdeb";
 

@@ -18,14 +18,27 @@ const devConfig = {
     hot: true,
     client: false,
   },
+  resolve: {
+    alias: {
+      'react-dom': '@hot-loader/react-dom',
+    },
+  },
+  devtool: 'inline-source-map', // "eval-source-map",
+  // optimization: {
+  //   runtimeChunk: 'single',
+  // },
   target: "web",
   module: {
     rules: [
       {
-        use: "babel-loader",
+        use: { 
+          loader: "babel-loader",
+          // options: {
+          //   plugins: require.resolve('react-refresh/babel')
+          // },
+        },
         test: /\.(js|jsx)$/,
-        exclude: /node_modules/,     
-        plugins: require.resolve('react-refresh/babel')   
+        exclude: /(node_modules)/,
       },
       {
         use: [ MiniCssExtractPlugin.loader, "css-loader", "sass-loader"], // "style-loader",
@@ -35,25 +48,21 @@ const devConfig = {
   },
   plugins: [
     new HotModuleReplacementPlugin(),
-    new ReactRefreshWebpackPlugin({
-      overlay: {
-        // { entry?, module?, sockIntegration?, sockHost?, sockPath?, sockPort?, sockProtocol?, useURLPolyfill? }
-        sockIntegration: "whm",
-        // webpack-dev-server: wds;
-        // webpack-hot-middleware: whm;
-        // webpack-plugin-serve: wps;
-      },
-    }),
+    // new ReactRefreshWebpackPlugin({
+    //   overlay: {
+    //     // { entry?, module?, sockIntegration?, sockHost?, sockPath?, sockPort?, sockProtocol?, useURLPolyfill? }
+    //     sockIntegration: "whm",
+    //     // webpack-dev-server: wds;
+    //     // webpack-hot-middleware: whm;
+    //     // webpack-plugin-serve: wps;
+    //   },
+    // }),
     new MiniCssExtractPlugin({filename:'assets/app.css'}),
     new ESLintPlugin({
       extensions: ['js', 'jsx'],
       exclude: './node_modules/',
     })
   ],
-  devtool: 'inline-source-map', // "eval-source-map",
-  // optimization: {
-  //   runtimeChunk: 'single',
-  // },
 };
 
 module.exports = merge(common, devConfig);

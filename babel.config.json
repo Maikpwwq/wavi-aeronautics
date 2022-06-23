@@ -3,7 +3,7 @@
     [
       "@babel/preset-env",
       {
-        "corejs": 3.11,
+        "corejs": 3.22,
         "useBuiltIns": "usage"
       }
     ],
@@ -14,6 +14,13 @@
       }
     ]
   ],
+  // "env": {
+  //   "development": {
+  //     "plugins": [
+  //       "react-refresh/babel"
+  //     ]
+  //   }
+  // },
   "plugins": [
     "@babel/plugin-proposal-class-properties",
     "@babel/plugin-syntax-dynamic-import"

@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { firestore, storage } from "../../../firebase/firebaseClient";
 import { collection, doc, getDocs } from "firebase/firestore";
+
+import 'sessionstorage-polyfill'
+import 'localstorage-polyfill'
+global.sessionstorage
+global.localStorage
+
 import ProductCard from "../components/ProductCard";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";

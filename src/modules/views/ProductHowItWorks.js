@@ -6,10 +6,10 @@ import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import Button from "../components/Button";
 import Typography from "../components/Typography";
-import productCurvyLines from "../../../public/static/themes/productCurvyLines.png";
-import productHowItWorks1 from "../../../public/static/themes/productHowItWorks1.svg";
-import productHowItWorks2 from "../../../public/static/themes/productHowItWorks2.svg";
-import productHowItWorks3 from "../../../public/static/themes/productHowItWorks3.svg";
+import productCurvyLines from "../../../publicAssets/static/themes/productCurvyLines.png";
+import productHowItWorks1 from "../../../publicAssets/static/themes/productHowItWorks1.svg";
+import productHowItWorks2 from "../../../publicAssets/static/themes/productHowItWorks2.svg";
+import productHowItWorks3 from "../../../publicAssets/static/themes/productHowItWorks3.svg";
 
 const styles = (theme) => ({
   root: {

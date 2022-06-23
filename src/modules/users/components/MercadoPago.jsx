@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from "react";
+import 'sessionstorage-polyfill'
+import 'localstorage-polyfill'
+global.sessionstorage
+global.localStorage
 import { auth } from "../../../firebase/firebaseClient";
 import { useNavigate } from "react-router-dom";
 import { useMercadopago } from "react-sdk-mercadopago";

@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 import clsx from "clsx";
 import { withStyles } from "@mui/styles";
 import Container from "@mui/material/Container";
-import productHeroWonder from "../../../public/static/themes/productHeroWonder.png";
-import productHeroArrowDown from "../../../public/static/themes/productHeroArrowDown.png";
+import productHeroWonder from "../../../publicAssets/static/themes/productHeroWonder.png";
+import productHeroArrowDown from "../../../publicAssets/static/themes/productHeroArrowDown.png";
 import Typography from "../components/Typography";
 
 const styles = (theme) => ({

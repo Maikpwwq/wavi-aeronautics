@@ -5,7 +5,7 @@ import { withStyles } from "@mui/styles";
 import Button from "../components/Button";
 import Typography from "../components/Typography";
 import ProductHeroLayout from "./ProductHeroLayout";
-// import MavicAir from "../../../public/static/img/Portada-DJI-Mavic-Air-2.png";
+// import MavicAir from "../../../publicAssets/static/img/Portada-DJI-Mavic-Air-2.png";
 const MavicAir =
     "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FPortada-DJI-Mavic-Air-2.png?alt=media&token=c74ad4fe-459b-47e2-8542-fca74408f429";
 

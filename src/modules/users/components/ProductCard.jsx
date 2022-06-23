@@ -2,6 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { firestore, auth } from "../../../firebase/firebaseClient";
 import { collection, doc, setDoc, getDoc } from "firebase/firestore";
+
+import 'sessionstorage-polyfill'
+import 'localstorage-polyfill'
+global.sessionstorage
+global.localStorage
+
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";

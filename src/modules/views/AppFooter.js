@@ -6,9 +6,9 @@ import Link from "@mui/material/Link";
 import Container from "@mui/material/Container";
 import Typography from "../components/Typography";
 import TextField from "../components/TextField";
-// import appFooterFacebook from "../../../public/static/themes/appFooterFacebook.png";
-// import appFooterTwitter from "../../../public/static/themes/appFooterTwitter.png";
-import appFooterLinkedin from "../../../public/static/themes/appFooterLinkedin.png";
+// import appFooterFacebook from "../../../publicAssets/static/themes/appFooterFacebook.png";
+// import appFooterTwitter from "../../../publicAssets/static/themes/appFooterTwitter.png";
+import appFooterLinkedin from "../../../publicAssets/static/themes/appFooterLinkedin.png";
 
 const appFooterFacebook =
   "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2Ficonos%2FappFooterFacebook.png?alt=media&token=b54b1ff2-c2b3-4d57-a7fa-c2e0e06d150e";

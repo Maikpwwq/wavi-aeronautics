@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import webpack from 'webpack';
 import helmet from 'helmet';
+import cors from 'cors';
 import * as path from "path";
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
@@ -17,9 +18,11 @@ dotenv.config({
 const { REACT_APP_ENV, REACT_APP_PORT } = process.env;
 
 const app = express();
+app.use(cors());
+app.use(express.static("public"));
 
 if (REACT_APP_ENV === 'development') {
-  console.log('Development config');
+  // console.log('Development config', webpackConfig);
   // const { publicPath } = webpackConfig.output;
   const compiler = webpack(webpackConfig);
   const serverConfig = { serverSideRender: true }; // Dev middleware  publicPath: publicPath

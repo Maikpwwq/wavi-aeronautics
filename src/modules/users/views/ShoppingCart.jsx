@@ -6,6 +6,11 @@ import ListShoppingCart from "../components/ListShoppingCart";
 
 import PropTypes from "prop-types";
 
+import 'sessionstorage-polyfill'
+import 'localstorage-polyfill'
+global.sessionstorage
+global.localStorage
+
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";

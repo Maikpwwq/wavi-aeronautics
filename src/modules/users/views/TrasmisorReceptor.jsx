@@ -2,6 +2,12 @@ import React, { useState, useEffect } from "react";
 import { firestore, storage } from "../../../firebase/firebaseClient";
 import { collection, doc, getDocs } from "firebase/firestore";
 import ProductCard from "../components/ProductCard";
+
+import 'sessionstorage-polyfill'
+import 'localstorage-polyfill'
+global.sessionstorage
+global.localStorage
+
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";

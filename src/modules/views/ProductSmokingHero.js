@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import { withStyles } from "@mui/styles";
 import Typography from "../components/Typography";
-// import producBuoy from "../../../public/static/themes/producBuoy.svg";
+// import producBuoy from "../../../publicAssets/static/themes/producBuoy.svg";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 
 const styles = (theme) => ({

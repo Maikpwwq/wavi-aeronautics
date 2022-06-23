@@ -6,6 +6,11 @@ import { collection, doc, setDoc, getDocs } from "firebase/firestore";
 
 import PropTypes from "prop-types";
 
+import 'sessionstorage-polyfill'
+import 'localstorage-polyfill'
+global.sessionstorage
+global.localStorage
+
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";

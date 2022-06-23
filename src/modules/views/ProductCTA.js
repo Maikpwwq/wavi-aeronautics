@@ -12,8 +12,8 @@ import TextField from "../components/TextField";
 import Snackbar from "../components/Snackbar";
 import Button from "../components/Button";
 
-import productCTAImageDots from "../../../public/static/themes/productCTAImageDots.png";
-// import PostalOfertas from "../../../public/static/img/Toma-Aerea-Ciudad.png";
+import productCTAImageDots from "../../../publicAssets/static/themes/productCTAImageDots.png";
+// import PostalOfertas from "../../../publicAssets/static/img/Toma-Aerea-Ciudad.png";
 
 const styles = (theme) => ({
   root: {
