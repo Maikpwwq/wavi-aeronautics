@@ -59,6 +59,7 @@
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
     "babel-loader": "^8.2.5",
     "clean-webpack-plugin": "^4.0.0",
+    "compression-webpack-plugin": "^10.0.0",
     "css-loader": "^6.7.1",
     "dotenv-webpack": "^7.1.0",
     "eslint": "^8.18.0",
@@ -93,11 +94,10 @@
     "test": "mocha --recursive test",
     "build": "webpack --config config/webpack.prod.js",
     "start": "webpack serve --config config/webpack.dev.js",
-    "build:prod": "node ./ssr/index",
     "serve": "babel-node ssr/index.js",
     "start:dev": "nodemon --watch ssr --exec npm run serve --trace-warnings",
-    "start:devv": "NODE_OPTIONS='--experimental-specifier-resolution=node' nodemon --watch ssr ssr/index --exact babel-node --trace-warnings",
-    "deploy": "gh-pages -d dist",
+    "start:prod": "node ssr/index",
+    "deploy": "gh-pages -d ssr/public",
     "firebase": "firebase deploy --only hosting:wavi-aeronautics-drones"
   },
   "bugs": {

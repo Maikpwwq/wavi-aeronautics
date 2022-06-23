@@ -23,8 +23,8 @@ module.exports = {
   target: "web",
   entry,
   output: {
-    path: path.resolve(__dirname, "ssr/public"),
-    filename: isDev ? 'assets/app.js' : 'assets/app-[hash].js', // "[name].[contenthash].js",
+    path: path.resolve(__dirname, "../ssr/public"),
+    filename: isDev ? 'assets/app.js' : 'assets/app.[chunkhash].js', // "[name].[contenthash].js",
     publicPath: ASSET_PATH || "",
     assetModuleFilename: 'assets/[name][ext]',
   },

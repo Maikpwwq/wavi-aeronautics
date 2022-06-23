@@ -3,6 +3,7 @@ const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { merge } = require("webpack-merge");
+const path = require('path')
 const common = require("./webpack.common");
 
 /** @type {import('webpack').Configuration} */
@@ -32,14 +33,15 @@ const prodConfig = {
     },
   },
   plugins: [
-    new MiniCssExtractPlugin({filename:'assets/app-[hash].css'}),
+    // [hash] is now [fullhash] - [chunkhash] or [contenthash]
+    new MiniCssExtractPlugin({filename:'assets/app.[chunkhash].css'}), 
     new CompressionWebpackPlugin({
       test: /\.js$|\.css$/,
-      filename: '[path].gz',
+      filename: '[path][base].gz',
     }),
     new WebpackManifestPlugin(),
     new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: path.resolve(__dirname, 'ssr/public'),
+      cleanOnceBeforeBuildPatterns: path.resolve(__dirname, '../ssr/public'),
     }),
   ],
 };
