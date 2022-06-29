@@ -3,10 +3,12 @@ import { firestore } from "../../firebase/firebaseClient";
 import { collection, doc, setDoc } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
-import { withStyles } from "@mui/styles";
-import Grid from "@mui/material/Grid";
-import Hidden from "@mui/material/Hidden";
+import withRoot from "../withRoot";
+import theme from "../theme";
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
 import Typography from "../components/Typography";
 import TextField from "../components/TextField";
 import Snackbar from "../components/Snackbar";
@@ -30,15 +32,12 @@ const styles = (theme) => ({
     backgroundColor: theme.palette.warning.main,
     padding: theme.spacing(8, 3),
   },
-  cardContent: {
-    maxWidth: 400,
-  },
   textField: {
     width: "100%",
     margin: `${theme.spacing(3)} 0 ${theme.spacing(2)} 0 !important`,
     backgroundColor: theme.palette.common.white,
   },
-  button: { 
+  button: {
     width: "100%",
     margin: `${theme.spacing(1, 0)} !important`,
     padding: `${theme.spacing(2, 0)} !important`,
@@ -66,8 +65,13 @@ const styles = (theme) => ({
   },
 });
 
+const Form = styled("form")({
+  maxWidth: 400,
+});
+
 function ProductCTA(props) {
-  const { classes } = props;
+  // const { classes } = props;
+  const classes = styles(theme);
   const _firestore = firestore;
   const suscribeRef = collection(_firestore, "suscritos");
   const [open, setOpen] = React.useState(false);
@@ -86,17 +90,17 @@ function ProductCTA(props) {
 
   const handleClose = () => {
     setOpen(false);
-
   };
 
-  const PostalOfertas = "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FToma-Aerea-Ciudad.png?alt=media&token=d16460b1-8e78-4f85-977f-afff44385b09"
+  const PostalOfertas =
+    "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FToma-Aerea-Ciudad.png?alt=media&token=d16460b1-8e78-4f85-977f-afff44385b09";
 
   return (
-    <Container className={classes.root} component="section">
+    <Container sx={classes.root} component="section">
       <Grid container>
-        <Grid item xs={12} md={6} className={classes.cardWrapper}>
-          <div className={classes.card}>
-            <form onSubmit={handleSubmit} className={classes.cardContent}>
+        <Grid item xs={12} md={6} sx={classes.cardWrapper}>
+          <Box sx={classes.card}>
+            <Form onSubmit={handleSubmit} sx={classes.cardContent}>
               <Typography variant="h2" component="h2" gutterBottom>
                 Recibe nuestras ofertas
               </Typography>
@@ -105,7 +109,7 @@ function ProductCTA(props) {
               </Typography>
               <TextField
                 noBorder
-                className={classes.textField}
+                sx={classes.textField}
                 placeholder="Tu email"
                 onChange={(e) => setSuscribeMail({ correo: e.target.value })}
               />
@@ -113,22 +117,23 @@ function ProductCTA(props) {
                 type="submit"
                 color="primary"
                 variant="contained"
-                className={classes.button}
+                sx={classes.button}
               >
                 Suscribirme!
               </Button>
-            </form>
-          </div>
+            </Form>
+          </Box>
         </Grid>
-        <Grid item xs={12} md={6} className={classes.imagesWrapper}>
-          <Hidden smDown>
-            <div className={classes.imageDots} />
-            <img
+        <Grid item xs={12} md={6} sx={classes.imagesWrapper}>
+          <Box sx={{ display: { xs: 'none', md: 'block'} }}>
+            <Box sx={classes.imageDots} />
+            <Box
+              component="img"
               src={PostalOfertas}
               alt="Tomas aéreas rápidas y confiables"
-              className={classes.image}
+              sx={classes.image}
             />
-          </Hidden>
+          </Box>
         </Grid>
       </Grid>
       <Snackbar
@@ -141,7 +146,7 @@ function ProductCTA(props) {
 }
 
 ProductCTA.propTypes = {
-  classes: PropTypes.object.isRequired,
+  //classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ProductCTA);
+export default withRoot(ProductCTA);

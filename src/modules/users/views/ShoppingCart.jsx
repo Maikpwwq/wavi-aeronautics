@@ -14,10 +14,13 @@ global.localStorage
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
-import { withStyles } from "@mui/styles";
+import withRoot from "../../withRoot";
+import theme from "../../theme";
+import { styled } from "@mui/material/styles";
 
 const styles = (theme) => ({
   cartList: {
+    position: "absolute",
     top: "85px !important",
     minWidth: "480px",
     right: "133px",
@@ -32,7 +35,8 @@ const styles = (theme) => ({
 const ShoppingCart = (props) => {
   const user = auth.currentUser || {};
   const userID = user.uid || null;
-  const { visible, updated, classes, setShowingCart } = props || {};
+  const { visible, updated, setShowingCart } = props || {};
+  const classes = styles(theme);
   // console.log("props", visible, updated);
   const { state } = useLocation() || {};
   const { makeVisible, makeUpdated } = state || "";
@@ -103,8 +107,7 @@ const ShoppingCart = (props) => {
                 md={5}
                 lg={4}
                 xl={3}
-                className={classes.cartList}
-                style={{ position: "absolute" }}
+                sx={classes.cartList}
               >
                 <ListShoppingCart
                   className="d-flex mb-2"
@@ -124,10 +127,10 @@ const ShoppingCart = (props) => {
 };
 
 ShoppingCart.propTypes = {
-  classes: PropTypes.object.isRequired,
+  // classes: PropTypes.object.isRequired,
   setShowingCart: PropTypes.func.isRequired,
   visible: PropTypes.bool, 
   updated: PropTypes.string,
 };
 
-export default withStyles(styles)(ShoppingCart);
+export default withRoot(ShoppingCart);

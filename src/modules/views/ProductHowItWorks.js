@@ -1,7 +1,9 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import PropTypes from "prop-types";
-import { withStyles } from "@mui/styles";
+import withRoot from "../withRoot";
+import theme from "../theme";
+import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import Button from "../components/Button";
@@ -58,71 +60,76 @@ const styles = (theme) => ({
 });
 
 function ProductHowItWorks(props) {
-  const { classes } = props;
+  //const { classes } = props;
+  const classes = styles(theme);
 
   return (
-    <section className={classes.root}>
-      <Container className={classes.container} style={{ textAlign: "center" }}>
-        <img
+    <Box sx={classes.root}>
+      <Container sx={classes.container} style={{ textAlign: "center" }}>
+        <Box
+          component="img"
           src={productCurvyLines}
-          className={classes.curvyLines}
+          sx={classes.curvyLines}
           alt="curvy lines"
         />
         <Typography
           variant="h4"
           marked="center"
-          className={classes.title}
+          sx={classes.title}
           component="h2"
         >
           Te ofrecemos
         </Typography>
-        <div className={classes.beneficios}>
+        <Box sx={classes.beneficios}>
           <Grid container spacing={5}>
             <Grid item xs={12} md={4}>
-              <div className={classes.item}>
-                <div className={classes.number}>1.</div>
-                <img
+              <Box sx={classes.item}>
+                <Box sx={classes.number}>1.</Box>
+                <Box
+                  component="img"
                   src={productHowItWorks1}
-                  alt="suitcase"
-                  className={classes.image}
+                  alt="tendencias"
+                  sx={classes.image}
                 />
                 <Typography variant="h5" align="center">
                   {"Actualizaciones de las últimas tendencias del mercado."}
                 </Typography>
-              </div>
+              </Box>
             </Grid>
             <Grid item xs={12} md={4}>
-              <div className={classes.item}>
-                <div className={classes.number}>2.</div>
-                <img
+              <Box sx={classes.item}>
+                <Box sx={classes.number}>2.</Box>
+                <Box
+                  component="img"
                   src={productHowItWorks2}
-                  alt="graph"
-                  className={classes.image}
+                  alt="actividades"
+                  sx={classes.image}
                 />
                 <Typography variant="h5" align="center">
                   {
                     "Mejorar el tiempo que inviertes en realizar tus actividades."
                   }
                 </Typography>
-              </div>
+              </Box>
             </Grid>
             <Grid item xs={12} md={4}>
-              <div className={classes.item}>
-                <div className={classes.number}>3.</div>
-                <img
+              <Box sx={classes.item}>
+                <Box sx={classes.number}>3.</Box>
+                <Box
+                  component="img"
                   src={productHowItWorks3}
-                  alt="clock"
-                  className={classes.image}
+                  alt="equipos"
+                  sx={classes.image}
                 />
                 <Typography variant="h5" align="center">
                   {
-                    "Mantenimiento técnico preventivo y correctivo para tus quipos."
+                    "Mantenimiento técnico preventivo y correctivo para tus equipos."
                   }
                 </Typography>
-              </div>
+              </Box>
             </Grid>
           </Grid>
-        </div>
+        </Box>
         <Button
           color="secondary"
           size="large"
@@ -134,12 +141,12 @@ function ProductHowItWorks(props) {
           <NavLink to="/sign-up/">{"Comenzar"}</NavLink>
         </Button>
       </Container>
-    </section>
+    </Box>
   );
 }
 
 ProductHowItWorks.propTypes = {
-  classes: PropTypes.object.isRequired,
+  // classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ProductHowItWorks);
+export default withRoot(ProductHowItWorks);

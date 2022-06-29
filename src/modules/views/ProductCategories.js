@@ -1,7 +1,9 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import { withStyles } from "@mui/styles";
+import withRoot from "../withRoot";
+import theme from "../theme";
+import Box from "@mui/material/Box";
 import ButtonBase from "@mui/material/ButtonBase";
 import Container from "@mui/material/Container";
 import Typography from "../components/Typography";
@@ -104,7 +106,8 @@ const styles = (theme) => ({
 });
 
 function ProductCategories(props) {
-  const { classes } = props;
+  // const { classes } = props;
+  const classes = styles(theme);
   const navigate = useNavigate();
 
   const handleImageClick = () => {
@@ -160,47 +163,47 @@ function ProductCategories(props) {
   ];
 
   return (
-    <Container className={classes.root} component="section">
+    <Container sx={classes.root} component="section">
       <Typography variant="h4" marked="center" align="center" component="h2">
         Para todas las tareas y todas las edades
       </Typography>
-      <div className={classes.images}>
+      <Box sx={classes.images}>
         {images.map((image) => (
           <ButtonBase
             onClick={handleImageClick}
             key={image.title}
-            className={classes.imageWrapper}
+            sx={classes.imageWrapper}
             style={{
               width: image.width,
             }}
           >
-            <div
-              className={classes.imageSrc}
+            <Box
+              sx={classes.imageSrc}
               style={{
                 backgroundImage: `url(${image.url})`,
               }}
             />
-            <div className={classes.imageBackdrop} />
-            <div className={classes.imageButton}>
+            <Box sx={classes.imageBackdrop} />
+            <Box sx={classes.imageButton}>
               <Typography
                 component="h3"
                 variant="h6"
                 color="inherit"
-                className={classes.imageTitle}
+                sx={classes.imageTitle}
               >
                 {image.title}
-                <div className={classes.imageMarked} />
+                <Box sx={classes.imageMarked} />
               </Typography>
-            </div>
+            </Box>
           </ButtonBase>
         ))}
-      </div>
+      </Box>
     </Container>
   );
 }
 
 ProductCategories.propTypes = {
-  classes: PropTypes.object.isRequired,
+  // classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ProductCategories);
+export default withRoot(ProductCategories);

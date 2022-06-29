@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { withStyles } from "@mui/styles";
+import withRoot from "../../withRoot";
+import theme from "../../theme";
+import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { firestore, auth } from "../../../firebase/firebaseClient";
 import { collection, doc, setDoc, getDocs } from "firebase/firestore";
 
 import PropTypes from "prop-types";
 
-import 'sessionstorage-polyfill'
-import 'localstorage-polyfill'
-global.sessionstorage
-global.localStorage
+import "sessionstorage-polyfill";
+import "localstorage-polyfill";
+global.sessionstorage;
+global.localStorage;
 
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -40,7 +42,8 @@ const ListShoppingCart = (props) => {
   const usedID = userID ? userID : shoppingCartID;
   const _firestore = firestore;
   const navigate = useNavigate();
-  const { products, visible, updated, classes, setShowingCart } = props;
+  const { products, visible, updated, setShowingCart } = props;
+  const classes = styles(theme);
   const storeKitRef = collection(_firestore, "productos/dron/kit_fpv_dron");
   const storeRCRef = collection(_firestore, "productos/dron/RC");
 
@@ -50,7 +53,7 @@ const ListShoppingCart = (props) => {
     suma: 0,
     items: 0,
   });
-  console.log(visible)
+  console.log(visible);
   // const handleClick = (e) => {
   //   e.preventDefault();
   //   navigate("/tienda-base/producto/", { state: { product: products } });
@@ -189,7 +192,7 @@ const ListShoppingCart = (props) => {
     const productsCart = shoppingCart.productos;
     console.log(productsCart);
     localStorage.setItem("cartUpdated", "detalles-envio");
-    setShowingCart(false)
+    setShowingCart(false);
     navigate("/tienda-base/detalles-envio/", {
       state: { productsCart: productsCart },
     });
@@ -197,7 +200,7 @@ const ListShoppingCart = (props) => {
 
   const handleShoppingCart = () => {
     localStorage.setItem("cartUpdated", "ver-carrito");
-    setShowingCart(false)
+    setShowingCart(false);
     navigate("/tienda-base/ver-carrito/", {
       state: {
         makeVisible: visible,
@@ -208,51 +211,51 @@ const ListShoppingCart = (props) => {
 
   return (
     <>
-        <Box className="" maxWidth="sm" style={{ height: "100%" }}>
-          {shoppingCart.productos.map(
-            ({ titulo, precio, imagenes, productID }) => (
-              <Card style={{ height: "100%", display: "flex" }} key={productID}>
-                {/* <CardActionArea onClick={handleClick}></CardActionArea> */}
-                <CardMedia
-                  component="img"
-                  height="120"
-                  image={imagenes[0]}
-                  alt={titulo}
-                ></CardMedia>
+      <Box className="" maxWidth="sm" style={{ height: "100%" }}>
+        {shoppingCart.productos.map(
+          ({ titulo, precio, imagenes, productID }) => (
+            <Card style={{ height: "100%", display: "flex" }} key={productID}>
+              {/* <CardActionArea onClick={handleClick}></CardActionArea> */}
+              <CardMedia
+                component="img"
+                height="120"
+                image={imagenes[0]}
+                alt={titulo}
+              ></CardMedia>
 
-                <CardHeader
-                  title={titulo}
-                  subheader={precio}
-                  action={
-                    <IconButton color="inherit" onClick={handleCancel}>
-                      <CancelIcon fontSize="large" />
-                    </IconButton>
-                  }
-                ></CardHeader>
-              </Card>
-            )
-          )}
-          <Button variant="contained" color="primary" onClick={handleCheckout}>
-            Finalizar compra
-          </Button>
-          {/* <Button
+              <CardHeader
+                title={titulo}
+                subheader={precio}
+                action={
+                  <IconButton color="inherit" onClick={handleCancel}>
+                    <CancelIcon fontSize="large" />
+                  </IconButton>
+                }
+              ></CardHeader>
+            </Card>
+          )
+        )}
+        <Button variant="contained" color="primary" onClick={handleCheckout}>
+          Finalizar compra
+        </Button>
+        {/* <Button
             variant="contained"
             color="secondary"
             onClick={handleShoppingCart}
           >
             Ver carrito
           </Button> */}
-        </Box>
+      </Box>
     </>
   );
 };
 
 ListShoppingCart.propTypes = {
-  classes: PropTypes.object.isRequired,
+  // classes: PropTypes.object.isRequired,
   setShowingCart: PropTypes.func.isRequired,
   products: PropTypes.object,
-  visible: PropTypes.bool, 
+  visible: PropTypes.bool,
   updated: PropTypes.string,
 };
 
-export default withStyles(styles)(ListShoppingCart);
+export default withRoot(ListShoppingCart);

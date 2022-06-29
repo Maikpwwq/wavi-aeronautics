@@ -1,9 +1,7 @@
-import withRoot from "../modules/withRoot";
 // --- Post bootstrap -----
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { Field, Form, FormSpy } from "react-final-form";
-import { makeStyles } from "@mui/styles";
 import Typography from "../modules/components/Typography";
 import AppFooter from "../modules/views/AppFooter";
 import AppAppBar from "../modules/views/AppAppBar";
@@ -12,8 +10,11 @@ import { email, required } from "../modules/form/validation";
 import RFTextField from "../modules/form/RFTextField";
 import FormButton from "../modules/form/FormButton";
 import FormFeedback from "../modules/form/FormFeedback";
+import withRoot from "../modules/withRoot";
+import theme from "../modules/theme";
+import { styled } from "@mui/material/styles";
 
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
   form: {
     marginTop: theme.spacing(6),
   },
@@ -24,10 +25,15 @@ const useStyles = makeStyles((theme) => ({
   feedback: {
     marginTop: theme.spacing(2),
   },
-}));
+});
 
-function ForgotPassword() {
-  const classes = useStyles();
+const SubForm = styled("form")({
+  paddingTop: theme.spacing(6),
+});
+
+function ForgotPassword(props) {
+  // const { classes } = props;
+  const classes = styles(theme);
   const [sent, setSent] = React.useState(false);
 
   const validate = (values) => {
@@ -67,7 +73,7 @@ function ForgotPassword() {
           validate={validate}
         >
           {({ handleSubmit2, submitting }) => (
-            <form onSubmit={handleSubmit2} className={classes.form} noValidate>
+            <SubForm onSubmit={handleSubmit2} sx={classes.form} noValidate>
               <Field
                 autoFocus
                 autoComplete="email"
@@ -100,7 +106,7 @@ function ForgotPassword() {
                   {submitting || sent ? "En progreso…" : "Enviar enlace"}
                 </NavLink>
               </FormButton>
-            </form>
+            </SubForm>
           )}
         </Form>
       </AppForm>

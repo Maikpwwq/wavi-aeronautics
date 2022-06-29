@@ -1,4 +1,5 @@
 import express from "express";
+import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import webpack from "webpack";
 import helmet from "helmet";
@@ -18,8 +19,24 @@ dotenv.config({
 const { REACT_APP_ENV, REACT_APP_PORT } = process.env;
 
 const app = express();
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "https://wavi-aeronautics-drones.web.app/"); // *, http://localhost:3000, 
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.header(
+    "Access-Control-Allow-Methods: GET, POST, PUT, DELETE, HEAD, OPTIONS"
+  );
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
 app.use(cors());
-app.use(express.static("public"));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use("/public", express.static("public"));
 
 if (REACT_APP_ENV === "development") {
   // console.log('Development config', webpackConfig);
@@ -58,7 +75,7 @@ if (REACT_APP_ENV === "development") {
     helmet.contentSecurityPolicy({
       directives: {
         "default-src": ["'self'"],
-        'script-src': ["'self'"],
+        "script-src": ["'self'"],
       },
     })
   );

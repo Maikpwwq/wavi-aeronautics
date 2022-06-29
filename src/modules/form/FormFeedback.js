@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { withStyles } from '@mui/styles';
+import { styled } from "@mui/material/styles";
+import withRoot from "../withRoot";
+import theme from "../theme";
 import Typography from '../components/Typography';
 
 const styles = (theme) => ({
@@ -19,11 +21,12 @@ const styles = (theme) => ({
 });
 
 function FormFeedback(props) {
+  const classes = styles(theme);
   return (
     <div
       className={clsx(
-        props.classes.root,
-        { [props.classes.error]: props.error, [props.classes.success]: props.success },
+        classes.root,
+        { [classes.error]: props.error, [classes.success]: props.success },
         props.className,
       )}
     >
@@ -34,10 +37,10 @@ function FormFeedback(props) {
 
 FormFeedback.propTypes = {
   children: PropTypes.node,
-  classes: PropTypes.object.isRequired,
-  className: PropTypes.string,
+  // classes: PropTypes.object.isRequired,
+  className: PropTypes.object,
   error: PropTypes.bool,
   success: PropTypes.bool,
 };
 
-export default withStyles(styles)(FormFeedback);
+export default withRoot(FormFeedback);

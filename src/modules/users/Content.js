@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -9,7 +10,9 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
-import { withStyles } from '@mui/styles';
+import withRoot from "../withRoot";
+import theme from "../theme";
+import { styled } from "@mui/material/styles";
 import SearchIcon from '@mui/icons-material/Search';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
@@ -37,15 +40,16 @@ const styles = (theme) => ({
 });
 
 function Content(props) {
-  const { classes } = props;
+  // const { classes } = props;
+  const classes = styles(theme);
 
   return (
-    <Paper className={classes.paper}>
-      <AppBar className={classes.searchBar} position="static" color="default" elevation={0}>
+    <Paper sx={classes.paper}>
+      <AppBar sx={classes.searchBar} position="static" color="default" elevation={0}>
         <Toolbar>
           <Grid container spacing={2} alignItems="center">
             <Grid item>
-              <SearchIcon className={classes.block} color="inherit" />
+              <SearchIcon sx={classes.block} color="inherit" />
             </Grid>
             <Grid item xs>
               <TextField
@@ -53,34 +57,34 @@ function Content(props) {
                 placeholder="Buscar por email, número telefonico o, ID de usuario"
                 InputProps={{
                   // disableUnderline: true,
-                  className: classes.searchInput,
+                  sx: classes.searchInput,
                 }}
               />
             </Grid>
             <Grid item>
-              <Button variant="contained" color="primary" className={classes.addUser}>
+              <Button variant="contained" color="primary" sx={classes.addUser}>
                 Agregar usuario
               </Button>
               <Tooltip title="Reload">
                 <IconButton>
-                  <RefreshIcon className={classes.block} color="inherit" />
+                  <RefreshIcon sx={classes.block} color="inherit" />
                 </IconButton>
               </Tooltip>
             </Grid>
           </Grid>
         </Toolbar>
       </AppBar>
-      <div className={classes.contentWrapper}>
+      <Box sx={classes.contentWrapper}>
         <Typography color="textSecondary" align="center">
           No existen usuarios registrados aun
         </Typography>
-      </div>
+      </Box>
     </Paper>
   );
 }
 
 Content.propTypes = {
-  classes: PropTypes.object.isRequired,
+  // classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Content);
+export default withRoot(Content);

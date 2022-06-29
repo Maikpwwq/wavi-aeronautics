@@ -3,7 +3,9 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import MuiPaper from '@mui/material/Paper';
 import { capitalize } from '@mui/material/utils';
-import { withStyles } from '@mui/styles';
+import withRoot from "../withRoot";
+import theme from "../theme";
+import { styled } from "@mui/material/styles";
 
 const styles = (theme) => ({
   backgroundLight: {
@@ -21,7 +23,8 @@ const styles = (theme) => ({
 });
 
 function Paper(props) {
-  const { background = 'light', classes, className, padding = false, ...other } = props;
+  const { background = 'light', className, padding = false, ...other } = props;
+  const classes = styles(theme);
   return (
     <MuiPaper
       elevation={0}
@@ -40,9 +43,9 @@ function Paper(props) {
 
 Paper.propTypes = {
   background: PropTypes.oneOf(['light', 'main', 'dark']),
-  classes: PropTypes.object.isRequired,
-  className: PropTypes.string,
+  // classes: PropTypes.object.isRequired,
+  className: PropTypes.object,
   padding: PropTypes.bool,
 };
 
-export default withStyles(styles)(Paper);
+export default withRoot(Paper);

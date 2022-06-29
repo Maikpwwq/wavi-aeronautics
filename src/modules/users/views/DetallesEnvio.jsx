@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, NavLink } from "react-router-dom";
-import { withStyles } from "@mui/styles";
+import withRoot from "../../withRoot";
+import theme from "../../theme";
+import { styled } from "@mui/material/styles";
 import MercadoPago from "../components/MercadoPago";
 import Typography from "../../components/Typography";
 
@@ -28,6 +30,7 @@ const styles = (theme) => ({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    textAlign: "center",
   },
   inputInfo: {
     paddingBottom: `${theme.spacing(2)} !important`,
@@ -51,7 +54,8 @@ const styles = (theme) => ({
 });
 
 const DetallesEnvio = (props) => {
-  const { classes } = props;
+  // const { classes } = props;
+  const classes = styles(theme);
   const { state } = useLocation() || {};
   const { productsCart } = state || "";
   console.log(productsCart);
@@ -85,16 +89,15 @@ const DetallesEnvio = (props) => {
 
   return (
     <>
-      <section className={classes.root}>
+      <Box sx={classes.root}>
         <Container
-          className={classes.container}
-          style={{ textAlign: "center" }}
+          sx={classes.container}
         >
-          <Box className={classes.envioContainer}>
+          <Box sx={classes.envioContainer}>
             {/* <NavLink to="/sign-in/">
           Sigue con los datos de tu cuenta!
         </NavLink>         */}
-            <Typography variant="h4" className={classes.title} marked="center">
+            <Typography variant="h4" sx={classes.title} marked="center">
               Detalles de envío
             </Typography>
             <FormGroup
@@ -112,7 +115,7 @@ const DetallesEnvio = (props) => {
                   paddingRight: "33px",
                 }}
               >
-                <FormLabel className={classes.label}>
+                <FormLabel sx={classes.label}>
                   Información personal:
                 </FormLabel>
                 <br />
@@ -124,7 +127,7 @@ const DetallesEnvio = (props) => {
                   value={userInfo.userName}
                   onChange={handlePersonalInfo}
                   // defaultValue="@NOMBRE USUARIO"
-                  className={classes.inputInfo}
+                  sx={classes.inputInfo}
                 />
                 <TextField
                   id="userMail"
@@ -133,7 +136,7 @@ const DetallesEnvio = (props) => {
                   value={userInfo.userMail}
                   onChange={handlePersonalInfo}
                   // defaultValue="@CORREO USUARIO"
-                  className={classes.inputInfo}
+                  sx={classes.inputInfo}
                 />
                 <TextField
                   id="userPhone"
@@ -142,12 +145,12 @@ const DetallesEnvio = (props) => {
                   value={userInfo.userPhone}
                   onChange={handlePersonalInfo}
                   // defaultValue="Celular"
-                  className={classes.inputInfo}
+                  sx={classes.inputInfo}
                 />
               </Box>
 
               <Box style={{ display: "flex", flexDirection: "column" }}>
-                <FormLabel className={classes.label}>
+                <FormLabel sx={classes.label}>
                   Información de envio:
                 </FormLabel>
                 <br />
@@ -159,7 +162,7 @@ const DetallesEnvio = (props) => {
                   value={shippingInfo.shippingDirection}
                   onChange={handleShippinfInfo}
                   // defaultValue="Número Calle/Cr "
-                  className={classes.inputInfo}
+                  sx={classes.inputInfo}
                 />
                 <TextField
                   id="shippingCiudad"
@@ -168,7 +171,7 @@ const DetallesEnvio = (props) => {
                   value={shippingInfo.shippingCiudad}
                   onChange={handleShippinfInfo}
                   // defaultValue="Ciudad"
-                  className={classes.inputInfo}
+                  sx={classes.inputInfo}
                 />
                 <TextField
                   id="shippingBarrio"
@@ -177,7 +180,7 @@ const DetallesEnvio = (props) => {
                   value={shippingInfo.shippingBarrio}
                   onChange={handleShippinfInfo}
                   // defaultValue="Barrio"
-                  className={classes.inputInfo}
+                  sx={classes.inputInfo}
                 />
                 <TextField
                   id="shippingPostalCode"
@@ -186,7 +189,7 @@ const DetallesEnvio = (props) => {
                   value={shippingInfo.shippingPostalCode}
                   onChange={handleShippinfInfo}
                   // defaultValue="Código postal "
-                  className={classes.inputInfo}
+                  sx={classes.inputInfo}
                 />
               </Box>
             </FormGroup>
@@ -199,26 +202,26 @@ const DetallesEnvio = (props) => {
                 // visibility: showResume ? "visible" : "hidden",
               }}
             >
-              <Typography variant="h4" className={classes.title} marked="center">
+              <Typography variant="h4" sx={classes.title} marked="center">
                 Resumen detalles de envio
               </Typography>
-              <Typography variant="h5" className="">
+              <Typography variant="h5" sx="">
                 Información personal:
               </Typography>
-              <Typography variant="body1" className="">
+              <Typography variant="body1" sx="">
                 Nombre: {userInfo.userName} <br />
                 Correo: {userInfo.userMail} <br />
                 Celular: {userInfo.userPhone} <br />
               </Typography>
-              <Typography variant="h5" className="">
+              <Typography variant="h5" sx="">
                 Detalles de envío:
               </Typography>
-              <Typography variant="body1" className="">
+              <Typography variant="body1" sx="">
                 CodigoPostal: {shippingInfo.shippingPostalCode} <br />
                 Dirección: {shippingInfo.shippingDirection} <br />
                 Ciudad: {shippingInfo.shippingCiudad} <br />
               </Typography>
-              <Typography variant="h5" className="">
+              <Typography variant="h5" sx="">
                 Resumen productos:
               </Typography>
               <Box style={{ display: "flex", flexDirection: "column" }}>
@@ -266,9 +269,9 @@ const DetallesEnvio = (props) => {
             </Box>
           )}
         </Container>
-      </section>
+      </Box>
     </>
   );
 };
 
-export default withStyles(styles)(DetallesEnvio);
+export default withRoot(DetallesEnvio);

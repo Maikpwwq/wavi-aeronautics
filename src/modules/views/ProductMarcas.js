@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { withStyles } from "@mui/styles";
+import withRoot from "../withRoot";
+import theme from "../theme";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -58,6 +59,10 @@ const styles = (theme) => ({
   },
   image: {
     marginBottom: theme.spacing(2),
+    width: 180,
+    display: "block",
+    maxWidth: 330,
+    overflow: "hidden",
   },
   curvyLines: {
     pointerEvents: "none",
@@ -75,7 +80,8 @@ const styles = (theme) => ({
 });
 
 function ProductMarcas(props) {
-  const { classes } = props;
+  // const { classes } = props;
+  const classes = styles(theme);
   const marcas = [
     Betafpv,
     Emax,
@@ -88,23 +94,24 @@ function ProductMarcas(props) {
   ];
 
   return (
-    <section className={classes.root}>
-      <Container className={classes.container} style={{ textAlign: "center" }}>
-        <img
+    <Box sx={classes.root}>
+      <Container sx={classes.container} style={{ textAlign: "center" }}>
+        <Box 
+          component="img"
           src={productCurvyLines}
-          className={classes.curvyLines}
+          sx={classes.curvyLines}
           alt="curvy lines"
         />
         <Typography
           variant="h4"
           marked="center"
-          className={classes.title}
+          sx={classes.title}
           component="h2"
         >
           Marcas Destacadas
         </Typography>
-        <div className={classes.marcas}>
-          <Grid container spacing={5} className={classes.logos}>
+        <Box sx={classes.marcas}>
+          <Grid container spacing={5} sx={classes.logos}>
             {marcas.map((marca, i) => {
               // console.log(marca);
               return (
@@ -113,27 +120,20 @@ function ProductMarcas(props) {
                     component="img"
                     src={marca}
                     alt="marcas"
-                    className={classes.image}
-                    sx={{
-                      width: 180,
-                      display: "block",
-                      maxWidth: 330,
-                      overflow: "hidden",
-                      // width: "100%",
-                    }}
+                    sx={classes.image}
                   ></Box>
                 </Grid>
               );
             })}
           </Grid>
-        </div>
+        </Box>
       </Container>
-    </section>
+    </Box>
   );
 }
 
 ProductMarcas.propTypes = {
-  classes: PropTypes.object.isRequired,
+  // classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ProductMarcas);
+export default withRoot(ProductMarcas);

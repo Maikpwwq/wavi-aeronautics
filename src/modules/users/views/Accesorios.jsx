@@ -12,11 +12,16 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "../../components/Typography";
-import { withStyles } from "@mui/styles";
+import withRoot from "../../withRoot";
+import theme from "../../theme";
+import { styled } from "@mui/material/styles";
 
 const styles = (theme) => ({
   presentationProducts: {
-    margin: `${theme.spacing(4)} ${theme.spacing(2)}`,
+    margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`,
+    padding: `${theme.spacing(0)} ${theme.spacing(2)} !important`,
+    display: "flex",
+    flexDirection: "column",
   },
   spacingTexts: {
     margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`,
@@ -34,7 +39,8 @@ const Accesorios = (props) => {
   const _storage = storage;
   const productsRef = collection(_firestore, "productos");
   const productsDoc = doc(productsRef, "radio_control");
-  const { classes } = props;
+  // const { classes } = props;
+  const classes = styles(theme);
   const collectionBetafpvBaterias = collection(
     productsDoc,
     "betafpv/baterias/2PCS-2s-300mAh"
@@ -152,16 +158,9 @@ const Accesorios = (props) => {
   return (
     <>
       <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          mt: 2,
-          mb: 2,
-          ps: 2,
-          pe: 2,
-        }}
+        sx={classes.presentationProducts}
       >
-        <Typography variant="h5" className={classes.spacingTexts}>
+        <Typography variant="h5" sx={classes.spacingTexts}>
           Baterias para drone.
         </Typography>
         {storeProductsBaterias.length == 0 ? (
@@ -170,7 +169,7 @@ const Accesorios = (props) => {
           </Box>
         ) : (
           <>
-            <Typography variant="body1" className={classes.endingTexts}>
+            <Typography variant="body1" sx={classes.endingTexts}>
               Baterias para cada necesidad en potencia y tiempo de vuelo.
             </Typography>
             <Grid container spacing={2}>
@@ -195,4 +194,4 @@ const Accesorios = (props) => {
   );
 };
 
-export default withStyles(styles)(Accesorios);
+export default withRoot(Accesorios);

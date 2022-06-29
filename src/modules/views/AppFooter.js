@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { makeStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
+import withRoot from "../withRoot";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Container from "@mui/material/Container";
@@ -15,52 +16,34 @@ const appFooterFacebook =
 // const appFooterLinkedin =
 ("https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2Ficonos%2FappFooterLinkedin.png?alt=media&token=d1475fcd-9ae1-4c3c-84f5-ee38d76c2da6");
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    backgroundColor: theme.palette.primary.dark,
+const SocialIcons = styled("a")(({ theme }) => ({
+  width: 48,
+  height: 48,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  backgroundColor: theme.palette.warning.main,
+  marginRight: 1,
+  "&:hover": {
+    backgroundColor: theme.palette.warning.dark,
   },
-  container: {
-    marginTop: theme.spacing(8),
-    marginBottom: theme.spacing(8),
-    display: "flex",
-  },
-  iconsWrapper: {
-    height: 120,
-  },
-  icons: {
-    display: "flex",
-  },
-  icon: {
-    width: 48,
-    height: 48,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: theme.palette.warning.main,
-    marginRight: theme.spacing(1),
-    "&:hover": {
-      backgroundColor: theme.palette.warning.dark,
-    },
-  },
-  list: {
-    margin: 0,
-    listStyle: "none",
-    padding: 0,
-  },
-  listItem: {
-    paddingTop: theme.spacing(0.5),
-    paddingBottom: theme.spacing(0.5),
-  },
-  textWhite: {
-    color: theme.palette.secondary.light,
-  },
-  // language: {
-  //   marginTop: theme.spacing(1),
-  //   width: 150,
-  // },
 }));
 
+const LegalItem = styled("li")({
+  paddingTop: 0.5,
+  paddingBottom: 0.5,
+});
+
+const LegalDocuments = styled("ul")({
+  margin: 0,
+  listStyle: "none",
+  padding: 0,
+});
+
+// language: {
+//   marginTop: theme.spacing(1),
+//   width: 150,
+// },
 // const LANGUAGES = [
 //   {
 //     code: 'en-US',
@@ -72,8 +55,9 @@ const useStyles = makeStyles((theme) => ({
 //   },
 // ];
 
-export default function AppFooter() {
-  const classes = useStyles();
+function AppFooter(props) {
+  // const { theme } = props; dont need this anymore
+  // const classes = styles(theme);
 
   function Copyright() {
     return (
@@ -90,35 +74,48 @@ export default function AppFooter() {
   }
 
   return (
-    <Typography component="footer" className={classes.root}>
-      <Container className={classes.container}>
+    <Typography
+      component="footer"
+      sx={{
+        display: "flex",
+        backgroundColor: "#1e1e1f",
+      }}
+    >
+      <Container
+        sx={{
+          marginTop: 8,
+          marginBottom: 8,
+          display: "flex",
+        }}
+      >
         <Grid container spacing={5}>
           <Grid item xs={12} sm={6} md={4}>
             <Grid
               container
               direction="column"
               justifyContent="flex-end"
-              className={classes.iconsWrapper}
+              sx={{
+                height: 120,
+              }}
               spacing={2}
             >
-              <Grid item className={classes.icons}>
-                <a
-                  href="https://www.facebook.com/wavi.aeronautics/"
-                  className={classes.icon}
-                >
+              <Grid
+                item
+                sx={{
+                  display: "flex",
+                }}
+              >
+                <SocialIcons href="https://www.facebook.com/wavi.aeronautics/">
                   <img src={appFooterFacebook} alt="Facebook" />
-                </a>
-                <a
-                  href="https://www.linkedin.com/company/wavi-aeronautics/"
-                  className={classes.icon}
-                >
+                </SocialIcons>
+                <SocialIcons href="https://www.linkedin.com/company/wavi-aeronautics/">
                   <img
                     src={appFooterLinkedin}
                     width="28px"
                     height="28px"
                     alt="Linkedin"
                   />
-                </a>
+                </SocialIcons>
               </Grid>
               <Grid item>
                 <Copyright />
@@ -127,25 +124,25 @@ export default function AppFooter() {
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
             <Typography
-              className={classes.textWhite}
+              className="textWhite"
               variant="h6"
               marked="left"
               gutterBottom
             >
               Legal
             </Typography>
-            <ul className={classes.list}>
-              <li className={classes.listItem}>
-                <NavLink to="/terms/" className={classes.textWhite}>
+            <LegalDocuments>
+              <LegalItem>
+                <NavLink to="/terms/" className="textWhite">
                   {"Terminos"}
                 </NavLink>
-              </li>
-              <li className={classes.listItem}>
-                <NavLink to="/privacy/" className={classes.textWhite}>
+              </LegalItem>
+              <LegalItem>
+                <NavLink to="/privacy/" className="textWhite">
                   {"Privacidad"}
                 </NavLink>
-              </li>
-            </ul>
+              </LegalItem>
+            </LegalDocuments>
           </Grid>
           {/* <Grid item xs={6} sm={8} md={4}>
             <Typography variant="h6" marked="left" gutterBottom>
@@ -199,3 +196,5 @@ export default function AppFooter() {
     </Typography>
   );
 }
+
+export default withRoot(AppFooter);

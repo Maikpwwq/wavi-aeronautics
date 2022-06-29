@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@mui/styles';
+import withRoot from "../withRoot";
+import theme from "../theme";
+import { styled } from "@mui/material/styles";
 import MuiSnackbar from '@mui/material/Snackbar';
 import Slide from '@mui/material/Slide';
 import CloseIcon from '@mui/icons-material/Close';
@@ -41,7 +43,8 @@ function Transition(props) {
 }
 
 function Snackbar(props) {
-  const { classes, onClose, message, ...other } = props;
+  const { onClose, message, ...other } = props;
+  const classes = styles(theme);
 
   return (
     <MuiSnackbar
@@ -57,7 +60,7 @@ function Snackbar(props) {
       }}
       message={
         <React.Fragment>
-          <InfoIcon className={classes.info} />
+          <InfoIcon sx={classes.info} />
           <span>{message}</span>
         </React.Fragment>
       }
@@ -66,7 +69,7 @@ function Snackbar(props) {
           key="close"
           aria-label="close"
           color="inherit"
-          className={classes.close}
+          sx={classes.close}
           onClick={onClose}
         >
           <CloseIcon />
@@ -78,8 +81,8 @@ function Snackbar(props) {
 }
 
 Snackbar.propTypes = {
-  classes: PropTypes.object.isRequired,
+  // classes: PropTypes.object.isRequired,
   SnackbarContentProps: PropTypes.object,
 };
 
-export default withStyles(styles)(Snackbar);
+export default withRoot(Snackbar);

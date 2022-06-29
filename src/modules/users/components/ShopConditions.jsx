@@ -1,5 +1,7 @@
 import React from "react";
-import { withStyles } from "@mui/styles";
+import withRoot from "../../withRoot";
+import theme from "../../theme";
+import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Typography from "../../components/Typography";
 
@@ -11,6 +13,7 @@ const styles = (theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    textAlign: "center",
   },
   title: {
     paddingBottom: theme.spacing(8),
@@ -18,13 +21,14 @@ const styles = (theme) => ({
 });
 
 const ShopConditions = (props) => {
-  const { classes } = props;
+  // const { classes } = props;
+  const classes = styles(theme);
   return (
     <>
-      <Box maxWidth="md" className={classes.container} style={{ textAlign: "center" }}>
+      <Box maxWidth="md" sx={classes.container}>
         <br />
         <br />
-        <Typography variant="h4" className={classes.title} marked="center">
+        <Typography variant="h4" sx={classes.title} marked="center">
           Condiciones de la compra. </Typography>
         <br />
         <br />
@@ -60,4 +64,4 @@ const ShopConditions = (props) => {
 
 
 
-export default withStyles(styles)(ShopConditions);
+export default withRoot(ShopConditions);

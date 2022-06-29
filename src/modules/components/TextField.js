@@ -1,7 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { withStyles } from '@mui/styles';
+import withRoot from "../withRoot";
+import theme from "../theme";
+import { styled } from "@mui/material/styles";
 import MuiTextField from '@mui/material/TextField';
 import { capitalize } from '@mui/material/utils';
 
@@ -61,7 +63,6 @@ const styles = (theme) => ({
 
 function TextField(props) {
   const {
-    classes,
     InputProps = {},
     InputLabelProps,
     noBorder = false,
@@ -69,7 +70,7 @@ function TextField(props) {
     SelectProps,
     ...other
   } = props;
-
+  const classes = styles(theme);
   const {
     classes: { input: InputPropsClassesInput, ...InputPropsClassesOther } = {},
     ...InputPropsOther
@@ -112,7 +113,7 @@ function TextField(props) {
 }
 
 TextField.propTypes = {
-  classes: PropTypes.object.isRequired,
+  // classes: PropTypes.object.isRequired,
   InputLabelProps: PropTypes.object,
   InputProps: PropTypes.object,
   noBorder: PropTypes.bool,
@@ -120,4 +121,4 @@ TextField.propTypes = {
   size: PropTypes.oneOf(['small', 'medium', 'large', 'xlarge']),
 };
 
-export default withStyles(styles)(TextField);
+export default withRoot(TextField);

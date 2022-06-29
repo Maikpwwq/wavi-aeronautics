@@ -23,11 +23,15 @@ const serverRoutes = () => {
     {
       element: <Home />,
       path: "/",
-      // children: [      ]
+      // children: [ ],
     },
     {
       path: "/sign-in/",
       element: <SignIn />,
+    },
+    {
+      path: "/wavi-aeronautics/",
+      element: <Home />,
     },
     {
       path: "/sign-up/",
@@ -58,7 +62,7 @@ const serverRoutes = () => {
               path: "producto",
               element: <ProductDetail />,
             },
-          ]
+          ],
         },
         {
           path: "radio-control",
@@ -68,7 +72,7 @@ const serverRoutes = () => {
               path: "producto",
               element: <ProductDetail />,
             },
-          ]
+          ],
         },
         {
           path: "trasmisor-receptor",
@@ -78,7 +82,7 @@ const serverRoutes = () => {
               path: "producto",
               element: <ProductDetail />,
             },
-          ]
+          ],
         },
         {
           path: "accesorios",
@@ -88,7 +92,7 @@ const serverRoutes = () => {
               path: "producto",
               element: <ProductDetail />,
             },
-          ]
+          ],
         },
         {
           path: "software",

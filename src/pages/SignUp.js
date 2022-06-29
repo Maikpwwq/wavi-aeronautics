@@ -4,12 +4,10 @@ import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { collection, doc, setDoc } from "firebase/firestore";
 
-import 'sessionstorage-polyfill'
-import 'localstorage-polyfill'
-global.sessionstorage
-global.localStorage
-
-import { makeStyles } from "@mui/styles";
+import "sessionstorage-polyfill";
+import "localstorage-polyfill";
+global.sessionstorage;
+global.localStorage;
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import { Field, Form, FormSpy } from "react-final-form";
@@ -24,22 +22,8 @@ import FormFeedback from "../modules/form/FormFeedback";
 import { auth, firestore } from "../firebase/firebaseClient";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
-const useStyles = makeStyles((theme) => ({
-  form: {
-    paddingTop: theme.spacing(6),
-  },
-  button: {
-    paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(2),
-  },
-  feedback: {
-    paddingTop: theme.spacing(2),
-  },
-}));
-
 function SignUp() {
   const navigate = useNavigate();
-  const classes = useStyles();
   const _firestore = firestore;
   const shoppingsRef = collection(_firestore, "shoppingCart");
   const usersRef = collection(_firestore, "users");
@@ -151,7 +135,7 @@ function SignUp() {
           {({ handleSubmit2, submitting }) => (
             <form
               onSubmit={handleSubmit2}
-              className={classes.form}
+              sx={{ paddingTop: theme.spacing(6) }}
               method="post"
               noValidate
             >
@@ -207,14 +191,18 @@ function SignUp() {
               <FormSpy subscription={{ submitError: true }}>
                 {({ submitError }) =>
                   submitError ? (
-                    <FormFeedback className={classes.feedback} error>
+                    <FormFeedback sx={{ paddingTop: theme.spacing(2) }} error>
                       {submitError}
                     </FormFeedback>
                   ) : null
                 }
               </FormSpy>
               <FormButton
-                className={classes.button && "navlink"}
+                className="navlink"
+                sx={{
+                  paddingTop: theme.spacing(3),
+                  paddingBottom: theme.spacing(2),
+                }}
                 disabled={submitting || sent}
                 type="submit"
                 color="secondary"

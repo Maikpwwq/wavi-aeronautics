@@ -2,7 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { withStyles } from '@mui/styles';
+import withRoot from "../withRoot";
+import theme from "../theme";
+import { styled } from "@mui/material/styles";
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -82,16 +84,17 @@ const styles = (theme) => ({
 });
 
 function Navigator(props) {
-  const { classes, ...other } = props;
+  const { ...other } = props;
+  const classes = props.classes;
 
   return (
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
-        <ListItem className={clsx(classes.firebase, classes.item, classes.itemCategory)}>
+        <ListItem sx={clsx(classes.firebase, classes.item, classes.itemCategory)}>
           Wavi Aeronautics
         </ListItem>
-        <ListItem className={clsx(classes.item, classes.itemCategory)}>
-          <ListItemIcon className={classes.itemIcon}>
+        <ListItem sx={clsx(classes.item, classes.itemCategory)}>
+          <ListItemIcon sx={classes.itemIcon}>
             <HomeIcon />
           </ListItemIcon>
           <ListItemText
@@ -104,7 +107,7 @@ function Navigator(props) {
         </ListItem>
         {categories.map(({ id, children }) => (
           <React.Fragment key={id}>
-            <ListItem className={classes.categoryHeader}>
+            <ListItem sx={classes.categoryHeader}>
               <ListItemText
                 classes={{
                   primary: classes.categoryHeaderPrimary,
@@ -119,7 +122,7 @@ function Navigator(props) {
                 button
                 className={clsx(classes.item, active && classes.itemActiveItem)}
               >
-                <ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
+                <ListItemIcon sx={classes.itemIcon}>{icon}</ListItemIcon>
                 <ListItemText
                   classes={{
                     primary: classes.itemPrimary,
@@ -130,7 +133,7 @@ function Navigator(props) {
               </ListItem>
             ))}
 
-            <Divider className={classes.divider} />
+            <Divider sx={classes.divider} />
           </React.Fragment>
         ))}
       </List>
@@ -139,7 +142,7 @@ function Navigator(props) {
 }
 
 Navigator.propTypes = {
-  classes: PropTypes.object.isRequired,
+  // classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Navigator);
+export default withRoot(Navigator);

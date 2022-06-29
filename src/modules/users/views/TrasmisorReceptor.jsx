@@ -12,11 +12,16 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "../../components/Typography";
-import { withStyles } from "@mui/styles";
+import withRoot from "../../withRoot";
+import theme from "../../theme";
+import { styled } from "@mui/material/styles";
 
 const styles = (theme) => ({
   presentationProducts: {
-    margin: `${theme.spacing(4)} ${theme.spacing(2)}`,
+    margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`,
+    padding: `${theme.spacing(0)} ${theme.spacing(2)} !important`,
+    display: "flex",
+    flexDirection: "column",
   },
   spacingTexts: {
     margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`,
@@ -27,6 +32,7 @@ const styles = (theme) => ({
 });
 
 const TrasmisorReceptor = (props) => {
+  const classes = styles(theme);
   const shoppingCartID = localStorage.getItem("cartID") || null;
   const productosReceptor =
     sessionStorage.getItem("Productos_Receptor") || null;
@@ -34,7 +40,7 @@ const TrasmisorReceptor = (props) => {
   const _storage = storage;
   const productsRef = collection(_firestore, "productos");
   const productsDoc = doc(productsRef, "radio_control");
-  const { classes } = props;
+  // const { classes } = props;
   const collectionBetafpvReceptor = collection(
     productsDoc,
     "betafpv/receptor/BETAFPV-ELRS"
@@ -161,17 +167,8 @@ const TrasmisorReceptor = (props) => {
 
   return (
     <>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          mt: 2,
-          mb: 2,
-          ps: 2,
-          pe: 2,
-        }}
-      >
-        <Typography variant="h5" className={classes.spacingTexts}>
+      <Box sx={classes.presentationProducts}>
+        <Typography variant="h5" sx={classes.spacingTexts}>
           Receptor para drone.
         </Typography>
         {storeProductsReceptor.length == 0 ? (
@@ -180,7 +177,7 @@ const TrasmisorReceptor = (props) => {
           </Box>
         ) : (
           <>
-            <Typography variant="body1" className={classes.endingTexts}>
+            <Typography variant="body1" sx={classes.endingTexts}>
               Receptor para cada necesidad en potencia y distacia de vuelo.
             </Typography>
             <Grid container spacing={2}>
@@ -205,4 +202,4 @@ const TrasmisorReceptor = (props) => {
   );
 };
 
-export default withStyles(styles)(TrasmisorReceptor);
+export default withRoot(TrasmisorReceptor);

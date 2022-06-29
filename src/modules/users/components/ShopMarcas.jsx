@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { withStyles } from "@mui/styles";
+import withRoot from "../../withRoot";
+import theme from "../../theme";
+import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -37,8 +39,9 @@ const styles = (theme) => ({
     paddingBottom: theme.spacing(3),
     position: "relative",
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
+    textAlign: "center",
   },
   item: {
     display: "flex",
@@ -51,6 +54,10 @@ const styles = (theme) => ({
   },
   image: {
     marginBottom: theme.spacing(2),
+    width: 100,
+    display: "block",
+    maxWidth: 150,
+    overflow: "hidden",
   },
   curvyLines: {
     pointerEvents: "none",
@@ -71,7 +78,8 @@ const styles = (theme) => ({
 });
 
 function ShopMarcas(props) {
-  const { classes } = props;
+  // const { classes } = props;
+  const classes = styles(theme);
   const marcas = [
     Betafpv,
     Emax,
@@ -83,53 +91,55 @@ function ShopMarcas(props) {
     Tbs,
   ];
 
-  return ( 
-    <section className={classes.root}>
-      <Container className={classes.container} style={{ textAlign: "center" }}>
-        <img
+  return (
+    <Box sx={classes.root}>
+      <Container sx={classes.container}>
+        <Box
+          component="img"
           src={productCurvyLines}
-          className={classes.curvyLines}
+          sx={classes.curvyLines}
           alt="curvy lines"
         />
         <Typography
           variant="h4"
           marked="center"
-          className={classes.title}
+          sx={classes.title}
           component="h2"
         >
           Marcas Destacadas
         </Typography>
-        <div className={classes.marcas}>
-          <Grid container spacing={3} className={classes.logosContainer}>
+        <Box sx={classes.marcas}>
+          <Grid container spacing={3} sx={classes.logosContainer}>
             {marcas.map((marca, i) => {
               // console.log(marca);
               return (
-                <Grid item sm={3} xs={6} md={2} lg={2} key={i} className={classes.logos}>
+                <Grid
+                  item
+                  sm={3}
+                  xs={6}
+                  md={2}
+                  lg={2}
+                  key={i}
+                  sx={classes.logos}
+                >
                   <Box
                     component="img"
                     src={marca}
                     alt="marcas"
-                    className={classes.image}
-                    sx={{
-                      width: 100,
-                      display: "block",
-                      maxWidth: 150,
-                      overflow: "hidden",
-                      // width: "100%",
-                    }}
+                    sx={classes.image}
                   ></Box>
                 </Grid>
               );
             })}
           </Grid>
-        </div>
+        </Box>
       </Container>
-    </section>
+    </Box>
   );
 }
 
 ShopMarcas.propTypes = {
-  classes: PropTypes.object.isRequired,
+  // classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ShopMarcas);
+export default withRoot(ShopMarcas);

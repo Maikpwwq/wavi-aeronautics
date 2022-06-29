@@ -1,11 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { ThemeProvider, withStyles } from "@mui/styles";
-import { createTheme } from "@mui/material/styles";
+import { ThemeProvider, createTheme, styled } from "@mui/material/styles";
+import withRoot from "../withRoot";
+import theme from "../theme";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-
-import Hidden from "@mui/material/Hidden";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import Navigator from "./Navigator";
@@ -142,7 +141,7 @@ innerTheme = {
 
 const drawerWidth = 256;
 
-const styles = {
+const styles = (theme) => ({
   root: {
     display: "flex",
     minHeight: "100vh",
@@ -158,12 +157,7 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     overflow: "auto",
-  },
-  main: {
-    flex: 1,
-    padding: innerTheme.spacing(2, 2),
-    background: "#eaeff1",
-    // zIndex: -1,
+    overflowX: "auto",
   },
   shopMore: {
     padding: innerTheme.spacing(2),
@@ -173,14 +167,23 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
   },
-  footer: {
-    padding: innerTheme.spacing(2),
+});
+
+const Footer = styled("footer")(({ theme }) => ({
+  padding: theme.spacing(2),
+  background: "#eaeff1",
+}));
+
+const Main = styled("main")(({ theme }) => ({
+  flex: 1,
+    padding: theme.spacing(2, 2),
     background: "#eaeff1",
-  },
-};
+    // zIndex: -1,
+}));
 
 function Paperbase(props) {
-  const { classes } = props;
+  // const { classes } = props;
+  const classes = styles(theme);
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
@@ -189,10 +192,10 @@ function Paperbase(props) {
 
   return (
     <ThemeProvider theme={innerTheme}>
-      <div className={classes.root}>
+      <Box sx={classes.root}>
         <CssBaseline />
         {/* <nav className={classes.drawer}>
-          <Hidden smUp implementation="js">
+          <Box sx={{ display: { xs: 'none', md: 'block' } }} implementation="js">
             <Navigator
               PaperProps={{ style: { width: drawerWidth } }}
               variant="temporary"
@@ -200,32 +203,32 @@ function Paperbase(props) {
               onClose={handleDrawerToggle}
             />
           </Hidden>
-          <Hidden xsDown implementation="css">
+          <Box sx={{ display: { xs: 'block', md: 'none' } }} implementation="css">
             <Navigator PaperProps={{ style: { width: drawerWidth } }} />
-          </Hidden>
+          </Box>
         </nav> */}
-        <div className={classes.app} style={{ overflowX: "auto" }}>
+        <Box sx={classes.app}>
           <Header onDrawerToggle={handleDrawerToggle} />
-          <main className={classes.main}>
+          <Main>
             {/* <Products /> */}
             <Rutas />
             {/* <Content /> */}
-          </main>
-          <Box className={classes.shopMore}>
+          </Main>
+          <Box sx={classes.shopMore}>
             <ShopConditions />
           </Box>
           <ShopMarcas />
-          <footer className={classes.footer}>
+          <Footer>
             <Copyright />
-          </footer>
-        </div>
-      </div>
+          </Footer>
+        </Box>
+      </Box>
     </ThemeProvider>
   );
 }
 
 Paperbase.propTypes = {
-  classes: PropTypes.object.isRequired,
+  // classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Paperbase);
+export default withRoot(Paperbase);

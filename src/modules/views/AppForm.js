@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
-import { withStyles } from '@mui/styles';
+import withRoot from "../withRoot";
+import theme from "../theme";
 import Paper from '../components/Paper';
 const appCurvyLines = "../../../publicAssets/static/themes/appCurvyLines.png";
 
@@ -21,13 +22,13 @@ const styles = (theme) => ({
 });
 
 function AppForm(props) {
-  const { children, classes } = props;
-
+  const { children } = props;
+  const classes = styles(theme);
   return (
-    <div className={classes.root}>
+    <div sx={classes.root}>
       <Container maxWidth="sm">
         <Box mt={7} mb={12}>
-          <Paper className={classes.paper}>{children}</Paper>
+          <Paper sx={classes.paper}>{children}</Paper>
         </Box>
       </Container>
     </div>
@@ -36,7 +37,7 @@ function AppForm(props) {
 
 AppForm.propTypes = {
   children: PropTypes.node.isRequired,
-  classes: PropTypes.object.isRequired,
+  // classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(AppForm);
+export default withRoot(AppForm);

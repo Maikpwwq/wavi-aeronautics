@@ -4,18 +4,18 @@ import ShoppingCart from "./views/ShoppingCart";
 
 import PropTypes from "prop-types";
 
-import 'sessionstorage-polyfill'
-import 'localstorage-polyfill'
-global.sessionstorage
-global.localStorage
+import "sessionstorage-polyfill";
+import "localstorage-polyfill";
+global.sessionstorage;
+global.localStorage;
 
+import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import HelpIcon from "@mui/icons-material/Help";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import Hidden from "@mui/material/Hidden";
 import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -25,7 +25,9 @@ import Tabs from "@mui/material/Tabs";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import { withStyles } from "@mui/styles";
+import withRoot from "../withRoot";
+import theme from "../theme";
+import { styled } from "@mui/material/styles";
 
 import AvatarUser from "../../../publicAssets/static/img/l3mik3l.png";
 // import WaviPixelLogo from "../../../publicAssets/static/img/WaviPixelLogo.png";
@@ -35,10 +37,6 @@ const WaviPixelLogo =
 const lightColor = "rgba(255, 255, 255, 0.7)";
 
 const styles = (theme) => ({
-  title: {
-    fontSize: 24,
-    flex: 1,
-  },
   secondaryBar: {
     zIndex: 1, // Ver listado carrito de compras
   },
@@ -51,8 +49,13 @@ const styles = (theme) => ({
   iconButtonAvatar: {
     padding: 4,
   },
-  link: {
+  linkLogo: {
+    // fontSize: 24,
+    flex: 1,
     textDecoration: "none",
+    alignItems: "center",
+    display: "flex",
+    fontSize: "2rem",
     color: lightColor,
     "&:hover": {
       color: theme.palette.common.white,
@@ -61,10 +64,17 @@ const styles = (theme) => ({
   button: {
     borderColor: lightColor,
   },
+  image: {
+    borderRadius: "50%",
+    marginRight: "30px",
+    height: 48,
+    width: 48,
+  },
 });
 
 function Header(props) {
-  const { classes, onDrawerToggle } = props;
+  const { onDrawerToggle } = props;
+  const classes = styles(theme);
   const navigate = useNavigate();
   const shoppingCartID = localStorage.getItem("cartID");
   const shoppingCartSuma =
@@ -85,7 +95,7 @@ function Header(props) {
 
   const handleShowCart = () => {
     setShowingCart(!showingCart);
-    console.log(showingCart)
+    console.log(showingCart);
     localStorage.setItem("cartUpdated", "show");
   };
 
@@ -131,7 +141,7 @@ function Header(props) {
       <AppBar color="primary" position="sticky" elevation={0}>
         <Toolbar>
           <Grid container spacing={1} alignItems="center">
-            {/* <Hidden smUp>
+            {/* <Box sx={{ display: { xs: 'block', md: 'none'} }}>
               <Grid item>
                 <IconButton
                   color="inherit"
@@ -142,31 +152,21 @@ function Header(props) {
                   <MenuIcon />
                 </IconButton>
               </Grid>
-            </Hidden> */}
+            </Box> */}
             <Grid item>
               <NavLink
                 to="/"
-                variant="h2"
+                variant="h6"
                 underline="none"
                 color="inherit"
-                className={classes.title && classes.link}
-                style={{
-                  alignItems: "center",
-                  display: "flex",
-                  fontSize: "2rem",
-                }}
+                style={classes.linkLogo}
                 // activeClassName="active"
               >
-                <img
-                  className={classes.image}
+                <Box
+                  component="img"
+                  sx={classes.image}
                   src={WaviPixelLogo}
                   alt="logo Wavi Aeronautics"
-                  height="48"
-                  width="48"
-                  style={{
-                    borderRadius: "50%",
-                    marginRight: "30px",
-                  }}
                 />
                 {"Wavi Aeronautics"}
               </NavLink>
@@ -251,7 +251,7 @@ function Header(props) {
       </AppBar>
       <AppBar
         component="div"
-        className={classes.secondaryBar}
+        sx={classes.secondaryBar}
         color="primary"
         position="static"
         elevation={0}
@@ -260,8 +260,7 @@ function Header(props) {
           onChange={handleChange}
           value={value}
           textColor="inherit"
-          className={classes.productTabs}
-          style={{ overflowX: "scroll" }}
+          sx={classes.productTabs}
         >
           <Tab textColor="inherit" label="Drones" value={0} />
           <Tab textColor="inherit" label="Radio Control" value={1} />
@@ -275,8 +274,8 @@ function Header(props) {
 }
 
 Header.propTypes = {
-  classes: PropTypes.object.isRequired,
+  // classes: PropTypes.object.isRequired,
   onDrawerToggle: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(Header);
+export default withRoot(Header);

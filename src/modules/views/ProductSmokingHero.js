@@ -1,9 +1,11 @@
 import React from "react";
 // import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import { withStyles } from "@mui/styles";
+import withRoot from "../withRoot";
+import theme from "../theme";
 import Typography from "../components/Typography";
 // import producBuoy from "../../../publicAssets/static/themes/producBuoy.svg";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
@@ -26,41 +28,45 @@ const styles = (theme) => ({
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
   },
-  whatsApp: {
-    width: 60,
-  },
+});
+
+const WhatsAppContacto = styled("a")({
+  width: 60,
 });
 
 function ProductSmokingHero(props) {
-  const { classes } = props;
-
+  // const { classes } = props;
+  const classes = styles(theme);
   const handleChatClick = () => {};
 
   return (
-    <Container className={classes.root} component="section">
-      <Button className={classes.button}>
+    <Container sx={classes.root} component="section">
+      <Button sx={classes.button}>
         <Typography variant="h4" component="span">
           ¿Tienes preguntas? ¿Buscas ayuda?
         </Typography>
       </Button>
-      <Typography variant="subtitle1" className={classes.link}>
-      ¡Escríbenos aquí!
+      <Typography variant="subtitle1" sx={classes.link}>
+        ¡Escríbenos aquí!
       </Typography>
-      <a
+      <WhatsAppContacto
         href="https://api.whatsapp.com/send?phone=573196138057"
         target="_blank"
         rel="noopener noreferrer"
-        className={classes.whatsApp}
       >
-        <WhatsAppIcon fontSize="large" alt="WhatsAppChat" style={{ color: "#4fcc5d"}}/>
-      </a>
+        <WhatsAppIcon
+          fontSize="large"
+          alt="WhatsAppChat"
+          style={{ color: "#4fcc5d" }}
+        />
+      </WhatsAppContacto>
       {/* <Link to={{  pathname: "https://api.whatsapp.com/send?phone=573196138057" }} target="_blank" /> */}
     </Container>
   );
 }
 
 ProductSmokingHero.propTypes = {
-  classes: PropTypes.object.isRequired,
+  // classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ProductSmokingHero);
+export default withRoot(ProductSmokingHero);

@@ -1,6 +1,10 @@
 import React from "react";
 import { renderToString } from "react-dom/server"; // , renderToNodeStream
-
+import { ThemeProvider } from "@mui/material/styles";
+import { CacheProvider } from "@emotion/react";
+import createEmotionCache from "./createEmotionCache";
+import createEmotionServer from "@emotion/server/create-instance";
+import theme from "../src/modules/theme";
 // import ReactDOMServer from 'react-dom/server';
 import { Provider } from "react-redux";
 import { createStore } from "redux";
@@ -11,7 +15,7 @@ import initialState from "../src/initialState";
 
 // const { ServerDataContext, resolveData } = createServerContext();
 
-const setResponse = (html, preloadedState, manifest) => {
+const setResponse = (html, css, preloadedState, manifest) => {
   const mainStyles = manifest ? manifest["main.css"] : "assets/app.css";
   const mainBuild = manifest ? manifest["main.js"] : "assets/app.js";
   const vendorBuild = manifest ? manifest["vendors.js"] : "assets/vendor.js";
@@ -24,7 +28,9 @@ const setResponse = (html, preloadedState, manifest) => {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="author" content="Michael Arias">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        ${css}
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
         <link rel="stylesheet" href="${mainStyles}" type="text/css"/>
         <title>Wavi Aeronautics</title>
       </head>
@@ -82,10 +88,11 @@ const renderApp = (app) => {
     //   return res.redirect(redirectInfo.destination)
     // }
     // END
-    res.header("Access-Control-Allow-Origin", "http://localhost:3003");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    res.header("Access-Control-Allow-Credentials", "true");
+    // https://mui.com/material-ui/guides/server-rendering/
+    const cache = createEmotionCache();
+    const { extractCriticalToChunks, constructStyleTagsFromChunks } =
+      createEmotionServer(cache);
+
     const store = createStore(reducer, initialState);
     const Routing = serverRoutes;
     // We need to render app twice.
@@ -94,7 +101,11 @@ const renderApp = (app) => {
     const html = renderToString(
       <Provider store={store}>
         <StaticRouter location={req.url} context={context}>
-          <Routing />
+          <CacheProvider value={cache}>
+            <ThemeProvider theme={theme}>
+              <Routing />
+            </ThemeProvider>
+          </CacheProvider>
         </StaticRouter>
       </Provider>
     );
@@ -121,9 +132,12 @@ const renderApp = (app) => {
     //     </Provider>
     //   </ServerDataContext>,
     // );
+    // Grab the CSS from emotion
+    const emotionChunks = extractCriticalToChunks(html);
+    const emotionCss = constructStyleTagsFromChunks(emotionChunks);
     const finalState = store.getState();
     // console.log('p', finalState.playing);
-    res.send(setResponse(html, finalState, req.hashManifest));
+    res.send(setResponse(html, emotionCss, finalState, req.hashManifest));
   });
 };
 

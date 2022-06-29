@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { withStyles } from "@mui/styles";
+import withRoot from "../withRoot";
+import theme from "../theme";
+import { styled } from "@mui/material/styles";
 import { capitalize } from "@mui/material/utils";
 import MuiTypography from "@mui/material/Typography";
 
@@ -35,6 +37,10 @@ const styles = (theme) => ({
   },
 });
 
+const SPAN =styled('span')({
+
+})
+
 const variantMapping = {
   h1: "h1",
   h2: "h1",
@@ -46,14 +52,15 @@ const variantMapping = {
 };
  
 function Typography(props) {
-  const { children, classes, marked = false, variant, ...other } = props;
+  const { children, marked = false, variant, ...other } = props;
+  const classes = styles(theme);
 
   return (
     <MuiTypography variantMapping={variantMapping} variant={variant} {...other}>
       {children}
       {marked ? (
-        <span
-          className={
+        <SPAN
+          sx={
             classes[`marked${capitalize(variant) + capitalize(marked)}`]
           }
         />
@@ -64,9 +71,9 @@ function Typography(props) {
 
 Typography.propTypes = {
   children: PropTypes.node,
-  classes: PropTypes.object.isRequired,
+  // classes: PropTypes.object.isRequired,
   marked: PropTypes.oneOf([false, "center", "left"]),
   variant: PropTypes.string,
 };
 
-export default withStyles(styles)(Typography);
+export default withRoot(Typography);

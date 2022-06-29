@@ -3,7 +3,9 @@ import { v4 as uuidv4 } from "uuid";
 import { firestore, storage, auth } from "../../../firebase/firebaseClient";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { useTheme } from "@mui/material/styles";
-import { withStyles } from "@mui/styles";
+import withRoot from "../../withRoot";
+import theme from "../../theme";
+import { styled } from "@mui/material/styles";
 
 import 'sessionstorage-polyfill'
 import 'localstorage-polyfill'
@@ -18,7 +20,10 @@ import Typography from "../../components/Typography";
 
 const styles = (theme) => ({
   presentationProducts: {
-    margin: `${theme.spacing(4)} ${theme.spacing(2)}`,
+    margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`,
+    padding: `${theme.spacing(0)} ${theme.spacing(2)} !important`,
+    display: "flex",
+    flexDirection: "column",
   },
   spacingTexts: {
     margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`,
@@ -31,8 +36,9 @@ const styles = (theme) => ({
 const Products = (props) => {
   // const user = auth.currentUser || {};
   // const userID = user.uid || null;
-  const { classes } = props;
+  // const { classes } = props;
   const theme = useTheme();
+  const classes = styles(theme);
   const shoppingCartID = localStorage.getItem("cartID") || null;
   const productosDrones = sessionStorage.getItem("Productos_Drones") || null;
   const productosDronesRC =
@@ -143,17 +149,8 @@ const Products = (props) => {
 
   return (
     <>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          mt: 2,
-          mb: 2,
-          ps: 2,
-          pe: 2,
-        }}
-      >
-        <Typography variant="h5" className={classes.spacingTexts}>
+      <Box sx={classes.presentationProducts}>
+        <Typography variant="h5" sx={classes.spacingTexts}>
           Kits de Dron FPV:
         </Typography>
         <>
@@ -163,7 +160,7 @@ const Products = (props) => {
             </Box>
           ) : (
             <>
-              <Typography variant="body1" className={classes.endingTexts}>
+              <Typography variant="body1" sx={classes.endingTexts}>
                 Descubre los mejores kits de Dron FPV listos para vuelo.
               </Typography>
               <Grid container spacing={2}>
@@ -171,7 +168,7 @@ const Products = (props) => {
                   return (
                     <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
                       <ProductCard
-                        className="d-flex mb-2"
+                        sx="d-flex mb-2"
                         products={product}
                         productID={k}
                       ></ProductCard>
@@ -181,7 +178,7 @@ const Products = (props) => {
               </Grid>
               <br />
               <br />
-              <Typography variant="h5" className={classes.spacingTexts}>
+              <Typography variant="h5" sx={classes.spacingTexts}>
                 Drones a control remoto BNF/PNP/RTF.{" "}
               </Typography>
               <Typography variant="body1">
@@ -192,7 +189,7 @@ const Products = (props) => {
                 Plug aNd Play: Esta es la versión incluye todo menos el
                 transmisor, el radio control, el receptor, batería y cargador.
               </Typography>
-              <Typography variant="body1" className={classes.endingTexts}>
+              <Typography variant="body1" sx={classes.endingTexts}>
                 Ready To Fly: Esta es la versión completa, puede funcionar desde
                 el momento que lo recibes.
               </Typography>
@@ -217,4 +214,4 @@ const Products = (props) => {
   );
 };
 
-export default withStyles(styles)(Products);
+export default withRoot(Products);

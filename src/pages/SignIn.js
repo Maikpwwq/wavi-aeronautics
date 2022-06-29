@@ -1,9 +1,7 @@
-import withRoot from "../modules/withRoot";
 // --- Post bootstrap -----
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Field, Form, FormSpy } from "react-final-form";
-import { makeStyles } from "@mui/styles";
 import Link from "@mui/material/Link";
 import Typography from "../modules/components/Typography";
 import AppFooter from "../modules/views/AppFooter";
@@ -16,10 +14,11 @@ import FormFeedback from "../modules/form/FormFeedback";
 import { auth } from "../firebase/firebaseClient";
 import { EmailAuthProvider, signInWithCredential } from "firebase/auth";
 
-const useStyles = makeStyles((theme) => ({
-  form: {
-    paddingTop: theme.spacing(6),
-  },
+import withRoot from "../modules/withRoot";
+import theme from "../modules/theme";
+import { styled } from "@mui/material/styles";
+
+const styles = (theme) => ({
   button: {
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(2),
@@ -27,11 +26,16 @@ const useStyles = makeStyles((theme) => ({
   feedback: {
     paddingTop: theme.spacing(2),
   },
-}));
+});
 
-function SignIn() {
+const SubForm = styled("form")({
+  paddingTop: theme.spacing(6),
+});
+
+function SignIn(props) {
   const navigate = useNavigate();
-  const classes = useStyles();
+  //const { classes } = props;
+  const classes = styles(theme);
 
   // const { user, loading, error, signInWithProvider } = useFirebaseAuth();
 
@@ -119,7 +123,7 @@ function SignIn() {
           validate={validate}
         >
           {({ handleSubmit2, submitting }) => (
-            <form onSubmit={handleSubmit2} className={classes.form} noValidate>
+            <SubForm onSubmit={handleSubmit2} sx={classes.form} noValidate>
               <Field
                 autoComplete="email"
                 autoFocus
@@ -150,14 +154,15 @@ function SignIn() {
               <FormSpy subscription={{ submitError: true }}>
                 {({ submitError }) =>
                   submitError ? (
-                    <FormFeedback className={classes.feedback} error>
+                    <FormFeedback sx={classes.feedback} error>
                       {submitError}
                     </FormFeedback>
                   ) : null
                 }
               </FormSpy>
               <FormButton
-                className={(classes.button, "navlink")}
+                sx={classes.button}
+                className="navlink"
                 disabled={submitting || sent}
                 size="large"
                 type="submit"
@@ -167,7 +172,7 @@ function SignIn() {
               >
                 {submitting || sent ? "En progreso…" : "Iniciar sesión"}
               </FormButton>
-            </form>
+            </SubForm>
           )}
         </Form>
         <Typography align="center">

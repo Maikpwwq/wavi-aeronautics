@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import 'sessionstorage-polyfill'
-import 'localstorage-polyfill'
-global.sessionstorage
-global.localStorage
+import "sessionstorage-polyfill";
+import "localstorage-polyfill";
+global.sessionstorage;
+global.localStorage;
 import { auth } from "../../../firebase/firebaseClient";
 import { useNavigate } from "react-router-dom";
 import { useMercadopago } from "react-sdk-mercadopago";
@@ -11,7 +11,9 @@ var mercadopago = require("mercadopago");
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "../../components/Typography";
-import { withStyles } from "@mui/styles";
+import withRoot from "../../withRoot";
+import theme from "../../theme";
+import { styled } from "@mui/material/styles";
 
 const styles = (theme) => ({
   checkout: {
@@ -24,6 +26,7 @@ const styles = (theme) => ({
     alignItems: "center",
     top: "24px",
     position: "relative",
+    visibility: visibility ? "visible" : "hidden",
   },
 });
 
@@ -33,7 +36,8 @@ const MercadoPago = (props) => {
   const userID = user.uid || null;
   const shoppingCartID = localStorage.getItem("cartID");
   const usedID = userID ? userID : shoppingCartID;
-  const { visible, products, classes, userInfo, shippingInfo } = props;
+  const { visible, products, userInfo, shippingInfo } = props;
+  const classes = styles(theme);
   const visibility = products.length > 0 && visible ? true : false;
   const accessToken = process.env.MERCADOPAGOS_ACCESS_TOKEN;
   const publicKey = process.env.MERCADOPAGOS_PUBLIC_KEY;
@@ -100,7 +104,7 @@ const MercadoPago = (props) => {
       payer: pagador,
       shipments: metodoEnvio,
     };
-    console.log(consult)
+    console.log(consult);
     const response = await fetch(
       `https://api.mercadopago.com/checkout/preferences?access_token=${accessToken}`,
       {
@@ -148,16 +152,11 @@ const MercadoPago = (props) => {
 
   return (
     <>
-      <Box
-        sx={{
-          visibility: visibility ? "visible" : "hidden",
-        }}
-        className={classes.pagoBtn}
-      >
+      <Box sx={classes.pagoBtn}>
         <Button
           variant="contained"
           color="primary"
-          className={classes.checkout}
+          sx={classes.checkout}
           onClick={handleCheckout}
         >
           Confirmar Orden
@@ -168,4 +167,4 @@ const MercadoPago = (props) => {
   );
 };
 
-export default withStyles(styles)(MercadoPago);
+export default withRoot(MercadoPago);

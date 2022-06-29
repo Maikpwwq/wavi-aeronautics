@@ -1,7 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import clsx from "clsx";
-import { withStyles } from "@mui/styles";
+// import clsx from "clsx";
+import withRoot from "../withRoot";
+import theme from "../theme";
+import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import productHeroWonder from "../../../publicAssets/static/themes/productHeroWonder.png";
 import productHeroArrowDown from "../../../publicAssets/static/themes/productHeroArrowDown.png";
@@ -25,6 +27,7 @@ const styles = (theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    textAlign: "center"
   },
   backdrop: {
     position: "absolute",
@@ -36,38 +39,36 @@ const styles = (theme) => ({
     opacity: 0.5,
     zIndex: -1,
   },
-  background: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
-    zIndex: -2,
-  },
   arrowDown: {
     position: "absolute",
     bottom: theme.spacing(4),
+    height: 16,
+    width: 12,
   },
 });
 
 function ProductHeroLayout(props) {
-  const { backgroundClassName, children, classes } = props;
+  const { backgroundClassName, children } = props;
+  const classes = styles(theme);
 
   return (
-    <section className={classes.root}>
-      <Container className={classes.container} style={{ textAlign: "center" }}>
-        <img src={productHeroWonder} alt="wonder" width="147" height="80" />
+    <Box sx={classes.root}>
+      <Container sx={classes.container}>
+        <Box
+          component="img"
+          src={productHeroWonder}
+          alt="maravilloso"
+          width="147"
+          height="80"
+        />
         {children}
-        <div className={classes.backdrop} />
-        <div className={clsx(classes.background, backgroundClassName)} />
-        <img
-          className={classes.arrowDown}
+        <Box sx={classes.backdrop} />
+        <Box sx={backgroundClassName} />
+        <Box
+          component="img"
+          sx={classes.arrowDown}
           src={productHeroArrowDown}
-          height="16"
-          width="12"
-          alt="arrow down"
+          alt="Desliza para ver más"
         />
       </Container>
       {/* <Container>
@@ -96,14 +97,13 @@ function ProductHeroLayout(props) {
           Recibe nuestras ofertas
         </Typography>
       </Container> */}
-    </section>
+    </Box>
   );
 }
 
 ProductHeroLayout.propTypes = {
-  backgroundClassName: PropTypes.string.isRequired,
+  backgroundClassName: PropTypes.object.isRequired,
   children: PropTypes.node.isRequired,
-  classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ProductHeroLayout);
+export default withRoot(ProductHeroLayout);

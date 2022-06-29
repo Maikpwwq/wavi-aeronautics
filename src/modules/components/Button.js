@@ -1,7 +1,8 @@
-import { withStyles } from '@mui/styles';
-import Button from '@mui/material/Button';
+import React from "react";
+import MuiButton from '@mui/material/Button';
+import theme from "../theme";
 
-export default withStyles((theme) => ({
+const styles = (theme) => ({
   root: {
     borderRadius: 0,
     fontWeight: theme.typography.fontWeightMedium,
@@ -21,4 +22,11 @@ export default withStyles((theme) => ({
     padding: theme.spacing(2, 5),
     fontSize: theme.typography.pxToRem(16),
   },
-}))(Button);
+});
+
+const Button = (props) => {
+  const classes = styles(theme);
+  return <MuiButton {...props} />;
+}
+
+export default Button;
