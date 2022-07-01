@@ -18,25 +18,41 @@ dotenv.config({
 });
 const { REACT_APP_ENV, REACT_APP_PORT } = process.env;
 
-const app = express();
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "https://wavi-aeronautics-drones.web.app/"); // *, http://localhost:3000, 
+//CORS middleware
+var allowCrossDomain = function (req, res, next) {
+  res.header("X-Frame-Options", "SAMEORIGIN");
+  res.header("X-Content-Type-Options", "nosniff");
+  res.header("X-XSS-Protection", "1; mode=block");
+  res.header("Access-Control-Allow-Origin", "*");
+  // "https://wavi-aeronautics-drones.web.app/",
+  //   "https://connect.facebook.net",
+  //   "https://web.facebook.com/",
+  //   "http://localhost:3000",
+  //   "https://firebasestorage.googleapis.com/"
   res.header(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
+    "Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method"
   );
   res.header(
-    "Access-Control-Allow-Methods: GET, POST, PUT, DELETE, HEAD, OPTIONS"
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, HEAD, OPTIONS"
   );
   res.header("Access-Control-Allow-Credentials", "true");
   next();
-});
-app.use(cors());
+};
+
+const app = express();
+app.use(allowCrossDomain);
+app.use(cors({ origin: "*", credentials: true, optionsSuccessStatus: 200 }));
+app.options(
+  "*",
+  cors({ origin: "*", credentials: true, optionsSuccessStatus: 200 })
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/public", express.static("public"));
+app.use("/public", express.static("public")); // express-static-gzip
 
 if (REACT_APP_ENV === "development") {
   // console.log('Development config', webpackConfig);
@@ -56,7 +72,7 @@ if (REACT_APP_ENV === "development") {
   // app.use(
   //   helmet.contentSecurityPolicy({
   //     directives: {
-  //       'default-src': ["'self'"],
+  //       'default-src': ["'none'"],
   //       'script-src': ["'self'", "'sha256-lKtLIbt/r08geDBLpzup7D3pTCavi4hfYSO45z98900='"],
   //       'img-src': ["'self'", 'https://firebasestorage.googleapis.com/'],
   //       'style-src-elem': ["'self'", 'https://fonts.googleapis.com'],
@@ -74,8 +90,11 @@ if (REACT_APP_ENV === "development") {
   app.use(
     helmet.contentSecurityPolicy({
       directives: {
-        "default-src": ["'self'"],
-        "script-src": ["'self'"],
+        "media-src": ["*"],
+        "default-src": ["*"],
+        "script-src": ["*"],
+        "img-src": ["'self'", "https://firebasestorage.googleapis.com/"],
+        "object-src": "'none'",
       },
     })
   );
@@ -83,7 +102,7 @@ if (REACT_APP_ENV === "development") {
   app.disable("x-powered-by");
   // app.set("x-powered-by", false);
 }
-renderApp(app); // app.get("*", renderApp);
+renderApp(app); // same as app.get("*", renderApp);
 
 app.listen(REACT_APP_PORT, (err, res) => {
   if (err) console.log(err);

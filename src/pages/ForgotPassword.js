@@ -89,14 +89,15 @@ function ForgotPassword(props) {
               <FormSpy subscription={{ submitError: true }}>
                 {({ submitError }) =>
                   submitError ? (
-                    <FormFeedback className={classes.feedback} error>
+                    <FormFeedback sx={classes.feedback} error>
                       {submitError}
                     </FormFeedback>
                   ) : null
                 }
               </FormSpy>
               <FormButton
-                className={(classes.button, "navlink")}
+                className="navlink"
+                sx={classes.button}
                 disabled={submitting || sent}
                 size="large"
                 color="secondary"

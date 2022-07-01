@@ -21,6 +21,7 @@ import FormButton from "../modules/form/FormButton";
 import FormFeedback from "../modules/form/FormFeedback";
 import { auth, firestore } from "../firebase/firebaseClient";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import theme from "../modules/theme";
 
 function SignUp() {
   const navigate = useNavigate();

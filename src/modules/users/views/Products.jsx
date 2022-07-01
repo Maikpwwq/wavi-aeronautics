@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { firestore, storage, auth } from "../../../firebase/firebaseClient";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
@@ -7,10 +7,10 @@ import withRoot from "../../withRoot";
 import theme from "../../theme";
 import { styled } from "@mui/material/styles";
 
-import 'sessionstorage-polyfill'
-import 'localstorage-polyfill'
-global.sessionstorage
-global.localStorage
+import "sessionstorage-polyfill";
+import "localstorage-polyfill";
+global.sessionstorage;
+global.localStorage;
 
 import Box from "@mui/material/Box";
 import ProductCard from "../components/ProductCard";
@@ -139,13 +139,16 @@ const Products = (props) => {
   };
 
   useEffect(() => {
-    localStorage.setItem("cartUpdated", "tienda");
-    console.log("shoppingCartID", shoppingCartID);
-    if (!shoppingCartID) {
-      newShoppingCart();
-    }
-    productosToSessionStore();
-  }, [shoppingCartID]);
+    setTimout(() => {
+      localStorage.setItem("cartUpdated", "tienda");
+      console.log("shoppingCartID", shoppingCartID);
+      if (!shoppingCartID) {
+        newShoppingCart();
+      }
+      productosToSessionStore();
+    }, 0);
+  }, [shoppingCartID, storeProducts]); // productsCollection, productsCollectionRC,
+  console.log( "shoppingCartID", shoppingCartID);
 
   return (
     <>

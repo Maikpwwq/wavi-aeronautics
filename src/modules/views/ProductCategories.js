@@ -108,11 +108,11 @@ const styles = (theme) => ({
 function ProductCategories(props) {
   // const { classes } = props;
   const classes = styles(theme);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const handleImageClick = () => {
-    navigate("/tienda-base/");
-  };
+  // const handleImageClick = () => {
+  //   navigate("/tienda-base/");
+  // };
 
   const images = [
     {
@@ -170,13 +170,14 @@ function ProductCategories(props) {
       <Box sx={classes.images}>
         {images.map((image) => (
           <ButtonBase
-            onClick={handleImageClick}
+            // onClick={handleImageClick}
             key={image.title}
             sx={classes.imageWrapper}
             style={{
               width: image.width,
             }}
           >
+            <NavLink to="/tienda-base/">
             <Box
               sx={classes.imageSrc}
               style={{
@@ -195,6 +196,7 @@ function ProductCategories(props) {
                 <Box sx={classes.imageMarked} />
               </Typography>
             </Box>
+            </NavLink>
           </ButtonBase>
         ))}
       </Box>

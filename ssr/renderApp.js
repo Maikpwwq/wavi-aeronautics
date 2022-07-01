@@ -26,6 +26,7 @@ const setResponse = (html, css, preloadedState, manifest) => {
       <head> 
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
         <meta name="author" content="Michael Arias">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         ${css}
@@ -42,7 +43,8 @@ const setResponse = (html, css, preloadedState, manifest) => {
             "\\u003c"
           )},
         </script>
-        <script src="${mainBuild}" type="text/javascript"></script>
+        <!-- "application/javascript" -->
+        <script src="${mainBuild}" ></script>
         <script src="${vendorBuild}" type="text/javascript"></script>
 
         <!-- Messenger Plugin de chat Code -->
@@ -97,10 +99,12 @@ const renderApp = (app) => {
     const Routing = serverRoutes;
     // We need to render app twice.
     // First - render App to reqister all effects
-    const context = { url: undefined };
+    // const context = { url: undefined }; context={context}
     const html = renderToString(
+      // const httpContext: HttpContextData = { cacheControl: [], statusCode: 200, };
+      // <HttpProvider context={httpContext}></HttpProvider>
       <Provider store={store}>
-        <StaticRouter location={req.url} context={context}>
+        <StaticRouter location={req.url}>
           <CacheProvider value={cache}>
             <ThemeProvider theme={theme}>
               <Routing />
@@ -109,14 +113,14 @@ const renderApp = (app) => {
         </StaticRouter>
       </Provider>
     );
-    if (context.url !== undefined) {
-      // Somewhere a `<Redirect>` was rendered
-      // res.redirect(301, context.url);
-      console.log("redirecting to", context.url);
-      res.writeHead(301, {
-        Location: context.url,
-      });
-    }
+    // if (httpContext.redirectLocation) {
+    //   // Somewhere a `<Redirect>` was rendered
+    //   // res.redirect(301, context.url);
+    //   console.log("redirecting to", context.url);
+    //   res.writeHead(301, {
+    //     Location: context.url,
+    //   });
+    // }
     // // Wait for all effects to finish
     // const data = await resolveData();
     // // Inject into html initial data

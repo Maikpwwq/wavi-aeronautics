@@ -83,9 +83,10 @@ function ProductCTA(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setOpen(true);
+    setOpen(true); // open snackbar
     const suscriptionId = uuidv4();
     userSuscribe(suscribeMail, suscriptionId);
+    setSuscribeMail(null);
   };
 
   const handleClose = () => {

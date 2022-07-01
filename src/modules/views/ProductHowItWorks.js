@@ -56,7 +56,9 @@ const styles = (theme) => ({
   beneficios: {
     marginBottom: `${theme.spacing(8)} !important`,
   },
-  button: {},
+  button: {
+    minWidth: 200,
+  },
 });
 
 function ProductHowItWorks(props) {
@@ -134,11 +136,10 @@ function ProductHowItWorks(props) {
           color="secondary"
           size="large"
           variant="contained"
-          className={classes.button && "navlink"}
-          component="button"
-          // href="/sign-up/"
+          className="navlink"
+          sx={classes.button}
         >
-          <NavLink to="/sign-up/">{"Comenzar"}</NavLink>
+          <NavLink to="/sign-up/">{"Comenzar"}</NavLink> 
         </Button>
       </Container>
     </Box>

@@ -81,7 +81,7 @@ module.exports = {
       },     
       {
         test: /\.md$/,
-        loader: 'raw-loader',
+        loader: 'raw-loader', // warkdown-with-front-matter-loader
       },
       // {
       //   test: /\.json$/,

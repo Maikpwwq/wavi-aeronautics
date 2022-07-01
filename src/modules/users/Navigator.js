@@ -120,7 +120,7 @@ function Navigator(props) {
               <ListItem
                 key={childId}
                 button
-                className={clsx(classes.item, active && classes.itemActiveItem)}
+                sx={(classes.item, active && classes.itemActiveItem)}
               >
                 <ListItemIcon sx={classes.itemIcon}>{icon}</ListItemIcon>
                 <ListItemText

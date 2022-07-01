@@ -153,7 +153,7 @@ function AppFooter(props) {
               SelectProps={{
                 native: true,
               }}
-              className={classes.language}
+              sx={classes.language}
             >
               {LANGUAGES.map((language) => (
                 <option value={language.code} key={language.code}>

@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import PropTypes from "prop-types";
 import Button from "../components/Button";
 import withRoot from "../withRoot";
@@ -46,7 +46,7 @@ const styles = (theme) => ({
 function ProductHero(props) {
   // const { theme } = props;
   const classes = styles(theme);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   return (
     <ProductHeroLayout backgroundClassName={classes.background}>
       {/* Increase the network loading priority of the background image. */}
@@ -67,15 +67,12 @@ function ProductHero(props) {
       </Typography>
       <Button
         color="secondary"
-        variant="contained"
         size="large"
+        variant="contained"
         className="navlink"
         sx={classes.button}
-        onClick={() => {navigate("/sign-up/")}}
-        // component="a" 
-        // to="/sign-up/"
       >
-        Registrarse
+        <NavLink to="/sign-up/">{"Registrarse"}</NavLink>
       </Button>
       <Typography variant="body2" color="inherit" sx={classes.more}>
         Disfruta nuestras ofertas

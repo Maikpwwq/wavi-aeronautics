@@ -67,7 +67,6 @@ const styles = (theme) => ({
 function AppAppBar(props) {
   // const { theme } = props;
   const classes = styles(theme);
-  console.log(classes);
   const user = auth.currentUser || {};
   const userID = user.uid || null;
   const [userAuth, setUserAuth] = useState(false);
@@ -139,7 +138,7 @@ function AppAppBar(props) {
               <StyledNavLink
                 variant="h6"
                 underline="none"
-                className={clsx(classes.linkSecondary)}
+                sx={classes.linkSecondary}
                 onClick={handleSignOut}
                 to="/"
               >

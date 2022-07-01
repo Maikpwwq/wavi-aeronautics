@@ -16,6 +16,10 @@ import { StyledEngineProvider } from '@mui/material/styles';
 
 import PaperBase from "./modules/users/Paperbase";
 
+// import { useLayoutEffect } from 'react'
+
+// export const useBrowserLayoutEffect = process.browser ? useLayoutEffect : () => {}
+
 function App() {
   return (
     <div className="app"> 

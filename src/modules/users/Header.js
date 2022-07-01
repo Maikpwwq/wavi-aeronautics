@@ -123,17 +123,18 @@ function Header(props) {
   const handleChange = (event, newValue) => {
     // console.log(event, newValue);
     setValue(newValue);
-    if (newValue === 0) {
-      navigate("drones");
-    } else if (newValue === 1) {
-      navigate("radio-control");
-    } else if (newValue === 2) {
-      navigate("trasmisor-receptor");
-    } else if (newValue === 3) {
-      navigate("accesorios");
-    } else if (newValue === 4) {
-      navigate("software");
-    }
+    // in SSR navigate is not well supported
+    // if (newValue === 0) {
+    //   navigate("drones", {replace: true});
+    // } else if (newValue === 1) {
+    //   navigate("radio-control");
+    // } else if (newValue === 2) {
+    //   navigate("trasmisor-receptor");
+    // } else if (newValue === 3) {
+    //   navigate("accesorios");
+    // } else if (newValue === 4) {
+    //   navigate("software");
+    // }
   };
 
   return (
@@ -197,7 +198,7 @@ function Header(props) {
       </AppBar>
       <AppBar
         component="div"
-        className={classes.secondaryBar}
+        sx={classes.secondaryBar}
         color="primary"
         position="static"
         elevation={0}
@@ -262,11 +263,11 @@ function Header(props) {
           textColor="inherit"
           sx={classes.productTabs}
         >
-          <Tab textColor="inherit" label="Drones" value={0} />
-          <Tab textColor="inherit" label="Radio Control" value={1} />
-          <Tab textColor="inherit" label="Transmisión/Recepción" value={2} />
-          <Tab textColor="inherit" label="Accesorios" value={3} />
-          <Tab textColor="inherit" label="Software" value={4} />
+          <Tab textColor="inherit" label="Drones" value={0} component="a" href="/tienda-base/drones/"></Tab>
+          <Tab textColor="inherit" label="Radio Control" value={1} component="a" href="/tienda-base/radio-control/"/>
+          <Tab textColor="inherit" label="Transmisión/Recepción" value={2} component="a" href="/tienda-base/trasmisor-receptor/" />
+          <Tab textColor="inherit" label="Accesorios" value={3} component="a" href="/tienda-base/accesorios/" />
+          <Tab textColor="inherit" label="Software" value={4} component="a" href="/tienda-base/software/" />
         </Tabs>
       </AppBar>
     </React.Fragment>

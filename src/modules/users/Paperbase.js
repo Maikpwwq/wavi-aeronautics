@@ -19,7 +19,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="https://maikpwwq.github.io/wavi-aeronautics/">
+      <Link color="inherit" href="/">
         Wavi Aeronautics
       </Link>{" "}
       {new Date().getFullYear()}
