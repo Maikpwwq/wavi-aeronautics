@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import PropTypes from 'prop-types';
 import { useTheme } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -45,11 +46,13 @@ const styles = (theme) => ({
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 const ProductDetail = (props) => {
-  const { state } = useLocation() || {};
-  const { product } = state || "";
-  // const { classes } = props;
-  const classes = styles(theme);
   const theme = useTheme();
+  const classes = styles(theme);
+// const { classes } = props;
+  const { state } = useLocation();
+  const { product } = state || {};
+  console.log( "state", state);
+  // const { product } = props;
   const { titulo, precio, descripcion, especificaciones, incluye, imagenes } =
     product;
   const maxSteps = imagenes.length;
@@ -172,5 +175,9 @@ const ProductDetail = (props) => {
     </>
   );
 };
+
+ProductDetail.propTypes = {
+  // product: PropTypes.object.isRequired,
+}
 
 export default withRoot(ProductDetail);

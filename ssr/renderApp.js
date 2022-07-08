@@ -7,11 +7,13 @@ import createEmotionServer from "@emotion/server/create-instance";
 import theme from "../src/modules/theme";
 // import ReactDOMServer from 'react-dom/server';
 import { Provider } from "react-redux";
-import { createStore } from "redux";
+// import { createStore } from "redux";
+import ConfigureAppStore from "../src/store/index";
+// import { configureStore } from "@reduxjs/toolkit";
 import { StaticRouter } from "react-router-dom/server";
 import serverRoutes from "./routes/serverRoutes";
 import reducer from "../src/reducers/reducers";
-import initialState from "../src/initialState";
+import initialState from "./initialState";
 
 // const { ServerDataContext, resolveData } = createServerContext();
 
@@ -94,8 +96,13 @@ const renderApp = (app) => {
     const cache = createEmotionCache();
     const { extractCriticalToChunks, constructStyleTagsFromChunks } =
       createEmotionServer(cache);
-
-    const store = createStore(reducer, initialState);
+    const preloadState = initialState();
+    const store = ConfigureAppStore(preloadState);
+    // const store = configureStore({
+    //   reducer: reducer,
+    //   preloadState: initialState,
+    // });
+    //const store = createStore(reducer, initialState);
     const Routing = serverRoutes;
     // We need to render app twice.
     // First - render App to reqister all effects
@@ -139,8 +146,9 @@ const renderApp = (app) => {
     // Grab the CSS from emotion
     const emotionChunks = extractCriticalToChunks(html);
     const emotionCss = constructStyleTagsFromChunks(emotionChunks);
+    // const finalState = store.getState();
     const finalState = store.getState();
-    // console.log('p', finalState.playing);
+    console.log("p", finalState);
     res.send(setResponse(html, emotionCss, finalState, req.hashManifest));
   });
 };

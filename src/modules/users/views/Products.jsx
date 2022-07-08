@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { firestore, storage, auth } from "../../../firebase/firebaseClient";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import {
+  connect,
+  ReactReduxContext,
+  useStore,
+  useSelector,
+  useDispatch,
+} from "react-redux";
+import { getObservableDrone } from "../../../services/sharedServices";
 import { useTheme } from "@mui/material/styles";
 import withRoot from "../../withRoot";
 import theme from "../../theme";
@@ -34,121 +39,35 @@ const styles = (theme) => ({
 });
 
 const Products = (props) => {
+  const theme = useTheme();
+  const classes = styles(theme);
   // const user = auth.currentUser || {};
   // const userID = user.uid || null;
   // const { classes } = props;
-  const theme = useTheme();
-  const classes = styles(theme);
-  const shoppingCartID = localStorage.getItem("cartID") || null;
-  const productosDrones = sessionStorage.getItem("Productos_Drones") || null;
-  const productosDronesRC =
-    sessionStorage.getItem("Productos_DronesRC") || null;
-  const _firestore = firestore;
-  const _storage = storage;
-  const shoppingsRef = collection(_firestore, "shoppingCart");
-  // const productsRef = collection(_firestore, "productos/dron/kit_fpv_dron")
-  const productsRef = collection(_firestore, "productos");
-  const productsDoc = doc(productsRef, "dron");
-  const productsCollection = collection(productsDoc, "kit_fpv_dron");
-  const productsCollectionRC = collection(productsDoc, "RC");
-
+  // const dispatch = useDispatch();
+  // const state = useSelector((state))
+  // read redux store
+  // const { storeProducts, storeProductsRC } = props;
+  // const { storeProducts, storeProductsRC } = [];
+  // or
+  // const { store } = useContext(ReactReduxContext);
+  // const store = useStore();
+  // console.log("Drones", store);
+  // console.log("Drones", storeProducts, storeProductsRC, store, state);
+  const subscription = getObservableDrone();
   const [storeProducts, setStoreProducts] = useState([]);
   const [storeProductsRC, setStoreProductsRC] = useState([]);
 
-  const shoppingsToFirestore = async (updateInfo, userRef) => {
-    await setDoc(doc(shoppingsRef, userRef), updateInfo, { merge: true });
-  };
-
-  // Lectura del catalogo de productos desde firestore
-  const productsFromFirestore = async () => {
-    const productData = await getDocs(productsCollection);
-    const productDataRC = await getDocs(productsCollectionRC);
-    let productos = [];
-    let productosRC = [];
-    productData.forEach((DOC) => {
-      productos.push(DOC.data());
+  // useEffect(() => {
+  if (!storeProducts.length > 0 && !storeProductsRC.length > 0) {
+    subscription.subscribe((response) => {
+      // console.log("productObservable", response);
+      const { storeProducts, storeProductsRC } = response;
+      setStoreProducts(storeProducts);
+      setStoreProductsRC(storeProductsRC);
     });
-    productDataRC.forEach((DOC) => {
-      productosRC.push(DOC.data());
-    });
-    return [productos, productosRC];
-  };
-
-  const productosToSessionStore = () => {
-    let productData;
-    let productos = [];
-    let productosRC = [];
-    if (!productosDrones || !productosDronesRC) {
-      console.log(productosDrones, productosDronesRC);
-      productData = productsFromFirestore();
-      productData.then((response) => {
-        console.log(response[0], response[1]);
-        productos = response[0];
-        productosRC = response[1];
-        parsePrices(productos, productosRC);
-      });
-    } else {
-      productos = JSON.parse(productosDrones);
-      productosRC = JSON.parse(productosDronesRC);
-      parsePrices(productos, productosRC);
-    }
-  };
-
-  const parsePrices = (productos, productosRC) => {
-    console.log(productos, productosRC);
-    if (productos && productos.length > 0) {
-      sessionStorage.setItem("Productos_Drones", JSON.stringify(productos));
-      productos.map((product, index, array) => {
-        console.log(product.precio);
-        if (
-          typeof parseInt(product.precio) === "number" &&
-          product.precio !== "Agotado"
-        ) {
-          array[index].precio = parseInt(product.precio).toLocaleString(
-            "es-CO",
-            { style: "currency", currency: "COP" }
-          );
-        }
-      });
-      setStoreProducts(productos);
-
-      //console.log(storeProducts)
-    }
-    if (productosRC && productosRC.length > 0) {
-      sessionStorage.setItem("Productos_DronesRC", JSON.stringify(productosRC));
-      productosRC.map((product, index, array) => {
-        if (
-          typeof parseInt(product.precio) === "number" &&
-          product.precio !== "Agotado"
-        ) {
-          array[index].precio = parseInt(product.precio).toLocaleString(
-            "es-CO",
-            { style: "currency", currency: "COP" }
-          );
-        }
-      });
-      setStoreProductsRC(productosRC);
-    }
-  };
-
-  const newShoppingCart = () => {
-    const shoppingsId = uuidv4();
-    shoppingsToFirestore({ productos: [] }, shoppingsId);
-    localStorage.setItem("cartID", shoppingsId);
-    localStorage.setItem("cartUpdated", "id");
-  };
-
-  useEffect(() => {
-    setTimout(() => {
-      localStorage.setItem("cartUpdated", "tienda");
-      console.log("shoppingCartID", shoppingCartID);
-      if (!shoppingCartID) {
-        newShoppingCart();
-      }
-      productosToSessionStore();
-    }, 0);
-  }, [shoppingCartID, storeProducts]); // productsCollection, productsCollectionRC,
-  console.log( "shoppingCartID", shoppingCartID);
+  }
+  // }, [storeProducts, storeProductsRC]);
 
   return (
     <>
@@ -217,4 +136,11 @@ const Products = (props) => {
   );
 };
 
-export default withRoot(Products);
+const mapStateToProps = (state) => {
+  return {
+    storeProducts: state.drones,
+    storeProductsRC: state.dronesRC,
+  };
+};
+
+export default connect(mapStateToProps, null)(withRoot(Products));
