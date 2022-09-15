@@ -15,7 +15,7 @@ import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
 import withRoot from "../../withRoot";
-import theme from "../../theme";
+import theme from "../innerTheme";
 import { styled } from "@mui/material/styles";
 
 const styles = (theme) => ({

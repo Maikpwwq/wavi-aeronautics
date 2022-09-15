@@ -1,6 +1,6 @@
 import React from "react";
 import withRoot from "../../withRoot";
-import theme from "../../theme";
+import theme from "../innerTheme";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Typography from "../../components/Typography";

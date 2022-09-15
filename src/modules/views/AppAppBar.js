@@ -129,7 +129,7 @@ function AppAppBar(props) {
             color="inherit"
             variant="h6"
             underline="none"
-            to="/tienda-base/"
+            to="/tienda/"
           >
             {"Tienda"}
           </StyledNavLink>

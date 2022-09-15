@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import withRoot from "../../withRoot";
-import theme from "../../theme";
+import theme from "../innerTheme";
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { firestore, auth } from "../../../firebase/firebaseClient";
@@ -56,7 +56,7 @@ const ListShoppingCart = (props) => {
   console.log(visible);
   // const handleClick = (e) => {
   //   e.preventDefault();
-  //   navigate("/tienda-base/producto/", { state: { product: products } });
+  //   navigate("/tienda/producto/", { state: { product: products } });
   // };
 
   const productsFromFirestore = async () => {
@@ -193,7 +193,7 @@ const ListShoppingCart = (props) => {
     console.log(productsCart);
     localStorage.setItem("cartUpdated", "detalles-envio");
     setShowingCart(false);
-    navigate("/tienda-base/detalles-envio/", {
+    navigate("/tienda/detalles-envio/", {
       state: { productsCart: productsCart },
     });
   };
@@ -201,7 +201,7 @@ const ListShoppingCart = (props) => {
   const handleShoppingCart = () => {
     localStorage.setItem("cartUpdated", "ver-carrito");
     setShowingCart(false);
-    navigate("/tienda-base/ver-carrito/", {
+    navigate("/tienda/ver-carrito/", {
       state: {
         makeVisible: visible,
         makeUpdated: updated,

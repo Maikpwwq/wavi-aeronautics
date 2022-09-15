@@ -263,11 +263,11 @@ function Header(props) {
           textColor="inherit"
           sx={classes.productTabs}
         >
-          <Tab textColor="inherit" label="Drones" value={0} component="a" href="/tienda-base/drones/"></Tab>
-          <Tab textColor="inherit" label="Radio Control" value={1} component="a" href="/tienda-base/radio-control/"/>
-          <Tab textColor="inherit" label="Transmisión/Recepción" value={2} component="a" href="/tienda-base/trasmisor-receptor/" />
-          <Tab textColor="inherit" label="Accesorios" value={3} component="a" href="/tienda-base/accesorios/" />
-          <Tab textColor="inherit" label="Software" value={4} component="a" href="/tienda-base/software/" />
+          <Tab textColor="inherit" label="Drones" value={0} component="a" href="/tienda/drones/"></Tab>
+          <Tab textColor="inherit" label="Radio Control" value={1} component="a" href="/tienda/radio-control/"/>
+          <Tab textColor="inherit" label="Transmisión/Recepción" value={2} component="a" href="/tienda/trasmisor-receptor/" />
+          <Tab textColor="inherit" label="Accesorios" value={3} component="a" href="/tienda/accesorios/" />
+          <Tab textColor="inherit" label="Software" value={4} component="a" href="/tienda/software/" />
         </Tabs>
       </AppBar>
     </React.Fragment>

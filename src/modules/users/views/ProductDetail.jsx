@@ -18,7 +18,7 @@ import SwipeableViews from "react-swipeable-views";
 import Typography from "../../components/Typography";
 import { autoPlay } from "react-swipeable-views-utils";
 import withRoot from "../../withRoot";
-import theme from "../../theme";
+import theme from "../innerTheme";
 import { styled } from "@mui/material/styles";
 
 const styles = (theme) => ({

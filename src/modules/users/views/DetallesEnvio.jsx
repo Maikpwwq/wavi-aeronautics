@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, NavLink } from "react-router-dom";
 import withRoot from "../../withRoot";
-import theme from "../../theme";
+import theme from "../innerTheme";
 import { styled } from "@mui/material/styles";
 import MercadoPago from "../components/MercadoPago";
 import Typography from "../../components/Typography";

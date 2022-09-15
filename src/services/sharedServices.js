@@ -5,6 +5,7 @@ import FirebaseRadioControlProducts from "./FirebaseRadioControlProducts.jsx";
 import FirebaseTrasmisorReceptorProducts from "./FirebaseTrasmisorReceptorProducts.jsx";
 import FirebaseAccesoriosProducts from "./FirebaseAccesoriosProducts.jsx";
 import FirebaseShoppingCart from "./FirebaseShoppingCart.jsx";
+import FirebaseSubscribe from "./FirebaseSubscribe.jsx";
 
 const urlsPrivate = {
   get_tipo_identificacion: "/api/adm-tipo-identificacions",
@@ -68,6 +69,18 @@ const getAllShoppingCart = new Observable((subscriber) => {
   }
 });
 
+const subscribeToWavi = (suscribeMail) =>
+  new Observable((subscriber) => {
+    const response = FirebaseSubscribe(suscribeMail);
+    console.log("firebaseResponse", response, suscribeMail);
+    try {
+      subscriber.next(response);
+      // subscriber.complete();
+    } catch (err) {
+      subscriber.error(err); // delivers an error if it caught one
+    }
+  });
+
 const getObservableDrone = () => {
   return getAllDroneProduct;
 };
@@ -86,6 +99,10 @@ const getObservableAccesorios = () => {
 
 const getShoppingCart = () => {
   return getAllShoppingCart;
+};
+
+const getSubscribe = (suscribeMail) => {
+  return subscribeToWavi(suscribeMail);
 };
 
 // const getAllDroneProduct = () => {
@@ -174,6 +191,8 @@ export {
   getAllTrasmisorReceptor,
   getObservableTrasmisorReceptor,
   getAllShoppingCart,
-  getShoppingCart
+  getShoppingCart,
+  subscribeToWavi,
+  getSubscribe,
 };
 // export default SharedService;

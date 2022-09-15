@@ -111,7 +111,7 @@ function ProductCategories(props) {
   // const navigate = useNavigate();
 
   // const handleImageClick = () => {
-  //   navigate("/tienda-base/");
+  //   navigate("/tienda/");
   // };
 
   const images = [
@@ -177,7 +177,7 @@ function ProductCategories(props) {
               width: image.width,
             }}
           >
-            <NavLink to="/tienda-base/">
+            <NavLink to="/tienda/">
             <Box
               sx={classes.imageSrc}
               style={{

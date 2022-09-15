@@ -30,7 +30,7 @@ function Rutas() {
         <Route path="ver-carrito/*" element={<ShoppingCart />} />
         <Route path="detalles-envio" element={<DetallesEnvio />} />
         <Route path="detalles-envio/*" element={<DetallesEnvio />} />
-        <Route path="*" element={<Navigate to="/tienda-base/"></Navigate>} />
+        <Route path="*" element={<Navigate to="/tienda/"></Navigate>} />
       </Routes>
     </>
   );

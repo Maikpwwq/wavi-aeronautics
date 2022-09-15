@@ -68,7 +68,7 @@ function SignIn(props) {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     readInputs();
     readInputs();
     if (
@@ -85,7 +85,7 @@ function SignIn(props) {
           var user = usercred.user;
           setSent(true);
           alert("Se ha iniciado una nueva sesión");
-          navigate("/tienda-base/");
+          navigate("/tienda/");
         })
         .catch((err) => {
           // Manejar los Errores aqui.
@@ -112,9 +112,9 @@ function SignIn(props) {
           </Typography>
           <Typography variant="body2" align="center">
             {"¿No eres miembro aun?, "}
-            <Link href="/sign-up/" align="center" underline="always">
-              <NavLink to="/sign-up/">{"Registrarse"}</NavLink>
-            </Link>
+            <NavLink to="/sign-up/" underline="always">
+              {"Registrarse"}
+            </NavLink>
           </Typography>
         </React.Fragment>
         <Form
@@ -128,6 +128,7 @@ function SignIn(props) {
                 autoComplete="email"
                 autoFocus
                 component={RFTextField}
+                variant="outlined"
                 disabled={submitting || sent}
                 fullWidth
                 id="emailText"
@@ -162,8 +163,9 @@ function SignIn(props) {
               </FormSpy>
               <FormButton
                 sx={classes.button}
-                className="navlink"
+                // className="navlink"
                 disabled={submitting || sent}
+                mounted={!sent}
                 size="large"
                 type="submit"
                 color="secondary"
@@ -176,9 +178,7 @@ function SignIn(props) {
           )}
         </Form>
         <Typography align="center">
-          <Link underline="always" href="/forgot-password/">
-            <NavLink to="/forgot-password/">{"Recordar password"}</NavLink>
-          </Link>
+          <NavLink to="/forgot-password/">{"Recordar password"}</NavLink>
         </Typography>
       </AppForm>
       <AppFooter />

@@ -21,8 +21,8 @@ import DetallesEnvio from "../../src/modules/users/views/DetallesEnvio";
 const serverRoutes = () => {
   return useRoutes([
     {
-      element: <Home />,
       path: "/",
+      element: <Home />,
       // children: [ ],
     },
     {
@@ -50,7 +50,7 @@ const serverRoutes = () => {
       element: <ForgotPassword />,
     },
     {
-      path: "/tienda-base/*",
+      path: "/tienda/*",
       element: <PaperBase />,
       children: [
         // Rutas Internas Tienda

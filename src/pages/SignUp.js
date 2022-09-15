@@ -22,9 +22,25 @@ import FormFeedback from "../modules/form/FormFeedback";
 import { auth, firestore } from "../firebase/firebaseClient";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import theme from "../modules/theme";
+import { styled } from "@mui/material/styles";
+
+const styles = (theme) => ({
+  button: {
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(2),
+  },
+  feedback: {
+    paddingTop: theme.spacing(2),
+  },
+});
+
+const SubForm = styled("form")({
+  paddingTop: theme.spacing(6),
+});
 
 function SignUp() {
   const navigate = useNavigate();
+  const classes = styles(theme);
   const _firestore = firestore;
   const shoppingsRef = collection(_firestore, "shoppingCart");
   const usersRef = collection(_firestore, "users");
@@ -100,7 +116,7 @@ function SignUp() {
           localStorage.setItem("cartUpdated", "id");
           setSent(true);
           alert("Se ha registrado el usuario", displayName);
-          navigate("/tienda-base/");
+          navigate("/tienda/");
         })
         .catch((err) => {
           console.log("Error upgrading anonymous account", err);
@@ -122,9 +138,9 @@ function SignUp() {
           </Typography>
           <Typography variant="body2" align="center">
             ¿Ya tienes una cuenta?,
-            <Link href="/sign-in/" underline="always">
-              <NavLink to="/sign-in/">{" Iniciar sesión aquí"}</NavLink>
-            </Link>
+            <NavLink to="/sign-in/" underline="always">
+              {" Iniciar sesión aquí"}
+            </NavLink>
           </Typography>
         </React.Fragment>
         <Form
@@ -134,9 +150,9 @@ function SignUp() {
           // render
         >
           {({ handleSubmit2, submitting }) => (
-            <form
+            <SubForm
               onSubmit={handleSubmit2}
-              sx={{ paddingTop: theme.spacing(6) }}
+              sx={classes.form}
               method="post"
               noValidate
             >
@@ -192,27 +208,25 @@ function SignUp() {
               <FormSpy subscription={{ submitError: true }}>
                 {({ submitError }) =>
                   submitError ? (
-                    <FormFeedback sx={{ paddingTop: theme.spacing(2) }} error>
+                    <FormFeedback sx={classes.feedback} error>
                       {submitError}
                     </FormFeedback>
                   ) : null
                 }
               </FormSpy>
               <FormButton
-                className="navlink"
-                sx={{
-                  paddingTop: theme.spacing(3),
-                  paddingBottom: theme.spacing(2),
-                }}
+                sx={classes.button}
+                // className="navlink"
                 disabled={submitting || sent}
+                mounted={!sent}
                 type="submit"
                 color="secondary"
                 fullWidth
-                onClick={handleSubmit}
+                // onClick={handleSubmit}
               >
                 {submitting || sent ? "En progreso…" : "Registrarse"}
               </FormButton>
-            </form>
+            </SubForm>
           )}
         </Form>
       </AppForm>

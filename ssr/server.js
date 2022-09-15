@@ -20,15 +20,17 @@ const { REACT_APP_ENV, REACT_APP_PORT } = process.env;
 
 //CORS middleware
 var allowCrossDomain = function (req, res, next) {
-  res.header("X-Frame-Options", "SAMEORIGIN");
-  res.header("X-Content-Type-Options", "nosniff");
+  // res.header("X-Frame-Options", "SAMEORIGIN");
+  // res.header("X-Content-Type-Options", "nosniff");
   res.header("X-XSS-Protection", "1; mode=block");
   res.header("Access-Control-Allow-Origin", "*");
+  res.header("Cross-Origin-Resource-Policy", "cross-origin");
   // "https://wavi-aeronautics-drones.web.app/",
   //   "https://connect.facebook.net",
   //   "https://web.facebook.com/",
   //   "http://localhost:3000",
   //   "https://firebasestorage.googleapis.com/"
+  res.header("Accept-Language", "es-ES,es;q=0.9");
   res.header(
     "Access-Control-Allow-Headers",
     "Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method"
@@ -42,6 +44,7 @@ var allowCrossDomain = function (req, res, next) {
 };
 
 const app = express();
+// app.use(helmet());
 app.use(allowCrossDomain);
 app.use(cors({ origin: "*", credentials: true, optionsSuccessStatus: 200 }));
 app.options(
@@ -93,7 +96,7 @@ if (REACT_APP_ENV === "development") {
         "media-src": ["*"],
         "default-src": ["*"],
         "script-src": ["*"],
-        "img-src": ["'self'", "https://firebasestorage.googleapis.com/"],
+        "img-src": ["'self'", "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/"],
         "object-src": "'none'",
       },
     })

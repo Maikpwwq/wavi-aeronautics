@@ -1,8 +1,7 @@
-import React from "react";
-import { firestore } from "../../firebase/firebaseClient";
-import { collection, doc, setDoc } from "firebase/firestore";
-import { v4 as uuidv4 } from "uuid";
+import React, {useState} from "react";
 import PropTypes from "prop-types";
+import { getSubscribe } from "../../services/sharedServices";
+// import FirebaseSubscribe from "../../services/FirebaseSubscribe.jsx";
 import withRoot from "../withRoot";
 import theme from "../theme";
 import { styled } from "@mui/material/styles";
@@ -72,21 +71,24 @@ const Form = styled("form")({
 function ProductCTA(props) {
   // const { classes } = props;
   const classes = styles(theme);
-  const _firestore = firestore;
-  const suscribeRef = collection(_firestore, "suscritos");
-  const [open, setOpen] = React.useState(false);
-  const [suscribeMail, setSuscribeMail] = React.useState(null);
+  const [open, setOpen] = useState(false);
+  const [suscribeMail, setSuscribeMail] = useState({
+    correo: "",
+  });
 
-  const userSuscribe = async (updateInfo, userID) => {
-    await setDoc(doc(suscribeRef, userID), updateInfo, { merge: true });
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setOpen(true); // open snackbar
-    const suscriptionId = uuidv4();
-    userSuscribe(suscribeMail, suscriptionId);
-    setSuscribeMail(null);
+  const handleSubmit = () => {
+    // e.preventDefault();
+    console.log("subscribeMail", suscribeMail.correo);
+    const subscription = getSubscribe(suscribeMail.correo);
+    // if (suscribeMail.correo !== "") {
+      subscription.subscribe((response) => {
+        console.log("subscribeObservable", response);
+        // FirebaseSubscribe(suscribeMail.correo);  
+        setOpen(true); // open snackbar
+        // });
+        setSuscribeMail(null);
+      });
+    // };
   };
 
   const handleClose = () => {
@@ -101,7 +103,8 @@ function ProductCTA(props) {
       <Grid container>
         <Grid item xs={12} md={6} sx={classes.cardWrapper}>
           <Box sx={classes.card}>
-            <Form onSubmit={handleSubmit} sx={classes.cardContent}>
+            {/* onSubmit={handleSubmit} */}
+            <Form sx={classes.cardContent}>
               <Typography variant="h2" component="h2" gutterBottom>
                 Recibe nuestras ofertas
               </Typography>
@@ -115,10 +118,11 @@ function ProductCTA(props) {
                 onChange={(e) => setSuscribeMail({ correo: e.target.value })}
               />
               <Button
-                type="submit"
+                // type="submit"
                 color="primary"
                 variant="contained"
                 sx={classes.button}
+                onClick={handleSubmit}
               >
                 Suscribirme!
               </Button>
@@ -126,7 +130,7 @@ function ProductCTA(props) {
           </Box>
         </Grid>
         <Grid item xs={12} md={6} sx={classes.imagesWrapper}>
-          <Box sx={{ display: { xs: 'none', md: 'block'} }}>
+          <Box sx={{ display: { xs: "none", md: "block" } }}>
             <Box sx={classes.imageDots} />
             <Box
               component="img"

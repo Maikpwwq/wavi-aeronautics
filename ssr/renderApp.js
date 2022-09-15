@@ -29,6 +29,13 @@ const setResponse = (html, css, preloadedState, manifest) => {
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+        <meta http-equiv="Content-Security-Policy" content="
+          default-src 'unsafe-inline' https://www.facebook.com/v14.0/plugins/customerchat.php; 
+          img-src 'self' https://firebasestorage.googleapis.com/; 
+          connect-src 'self' https://wavi-aeronautics-drones.web.app/src/ https://www.google-analytics.com https://analytics.google.com https://www.facebook.com/plugins/customer_chat/SDK/ https://www.facebook.com/plugins/customer_chat/facade/; 
+          script-src 'self' 'unsafe-inline' https://wavi-aeronautics-drones.web.app/src/ https://cdn.polyfill.io https://code.jquery.com https://www.google-analytics.com https://connect.facebook.net/es_LA/sdk/xfbml.customerchat.js;
+          style-src 'self' 'unsafe-inline' https://wavi-aeronautics-drones.web.app/ https://cdn.jsdelivr.net https://use.fontawesome.com https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap https://fonts.googleapis.com/icon?family=Material+Icons; 
+          font-src 'self' 'unsafe-inline' https://fonts.gstatic.com/s/roboto/v30/ https://fonts.gstatic.com/s/materialicons/v139/;"
         <meta name="author" content="Michael Arias">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         ${css}

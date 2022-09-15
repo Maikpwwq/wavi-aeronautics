@@ -5,6 +5,7 @@ import Button from '../components/Button';
 
 function FormButton(props) {
   const { disabled, mounted, ...others } = props;
+  console.log(disabled);
   return <Button disabled={!mounted || disabled} type="submit" variant="contained" {...others} />;
 }
 
