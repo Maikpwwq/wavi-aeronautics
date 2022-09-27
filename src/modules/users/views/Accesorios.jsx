@@ -36,7 +36,7 @@ const Accesorios = (props) => {
   const subscription = getObservableAccesorios();
   const [storeProductsBaterias, setStoreProductsBaterias] = useState([]);
 
-  if (!storeProductsBaterias.length > 0) {
+  if (storeProductsBaterias == undefined || !storeProductsBaterias.length > 0) {
     subscription.subscribe((response) => {
       // console.log("productObservable", response);
       const { productsBaterias } = response;
@@ -50,7 +50,8 @@ const Accesorios = (props) => {
         <Typography variant="h5" sx={classes.spacingTexts}>
           Baterias para drone.
         </Typography>
-        {storeProductsBaterias.length == 0 ? (
+        {storeProductsBaterias == undefined ||
+        storeProductsBaterias.length == 0 ? (
           <Box sx={{ display: "flex" }}>
             <CircularProgress />
           </Box>

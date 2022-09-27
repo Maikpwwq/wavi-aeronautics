@@ -59,7 +59,12 @@ const Products = (props) => {
   const [storeProductsRC, setStoreProductsRC] = useState([]);
 
   // useEffect(() => {
-  if (!storeProducts.length > 0 && !storeProductsRC.length > 0) {
+  if (
+    storeProducts == undefined ||
+    storeProductsRC == undefined ||
+    !storeProducts.length > 0 ||
+    !storeProductsRC.length > 0
+  ) {
     subscription.subscribe((response) => {
       // console.log("productObservable", response);
       const { storeProducts, storeProductsRC } = response;
@@ -76,7 +81,7 @@ const Products = (props) => {
           Kits de Dron FPV:
         </Typography>
         <>
-          {storeProducts.length == 0 ? (
+          { storeProducts == undefined || storeProducts.length == 0 ? (
             <Box sx={{ display: "flex" }}>
               <CircularProgress />
             </Box>

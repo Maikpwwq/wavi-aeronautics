@@ -30,12 +30,11 @@ const styles = (theme) => ({
 });
 
 const RadioContol = (props) => {
-  
   // const { classes } = props;
   const classes = styles(theme);
   const subscription = getObservableRadioControl();
   const [storeProductsRC, setStoreProductsRC] = useState([]);
-  if ( !storeProductsRC.length > 0 ) {
+  if (storeProductsRC == undefined || !storeProductsRC.length > 0) {
     subscription.subscribe((response) => {
       // console.log("productObservable", response);
       const { storeProductsRC } = response;
@@ -49,7 +48,7 @@ const RadioContol = (props) => {
         <Typography variant="h5" sx={classes.spacingTexts}>
           Dispositivos de Control Remoto.
         </Typography>
-        {storeProductsRC.length == 0 ? (
+        {storeProductsRC == undefined || storeProductsRC.length == 0 ? (
           <Box sx={{ display: "flex" }}>
             <CircularProgress />
           </Box>

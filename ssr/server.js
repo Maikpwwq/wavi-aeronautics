@@ -13,6 +13,9 @@ import webpackConfig from "../config/webpack.dev";
 import renderApp from "./renderApp";
 import getManifest from "./getManifest";
 
+import SignInAuth from "./auth/SignInAuth.js";
+import SignUpAuth from "./auth/SignUpAuth.js";
+
 dotenv.config({
   path: path.resolve(__dirname, "../.env"),
 });
@@ -96,7 +99,10 @@ if (REACT_APP_ENV === "development") {
         "media-src": ["*"],
         "default-src": ["*"],
         "script-src": ["*"],
-        "img-src": ["'self'", "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/"],
+        "img-src": [
+          "'self'",
+          "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/",
+        ],
         "object-src": "'none'",
       },
     })
@@ -105,7 +111,37 @@ if (REACT_APP_ENV === "development") {
   app.disable("x-powered-by");
   // app.set("x-powered-by", false);
 }
-renderApp(app); // same as app.get("*", renderApp);
+
+// POST method route
+app.post("/sign-in*", function (req, res) {
+  const { email, password } = req.body;
+  if (email !== undefined && password !== undefined) {
+    // console.log("POST request to sign-in", email, password);
+    SignInAuth({ email, password, res });
+  }
+});
+
+app.post("/sign-up*", function (req, res) {
+  const { firstName, lastName, email, password } = req.body;
+  if (
+    email !== undefined &&
+    password !== undefined &&
+    firstName !== undefined &&
+    lastName !== undefined
+  ) {
+    // console.log("POST request to sign-up", req.body);
+    SignUpAuth({ firstName, lastName, email, password, res });
+  }
+});
+
+app.post("/*", function (req, res) {
+  console.log("POST request to the homepage", req.body);
+  res.send("POST request to the homepage");
+  res.redirect("/");
+});
+
+// GET method route same as app.get("*", renderApp);
+renderApp(app);
 
 app.listen(REACT_APP_PORT, (err, res) => {
   if (err) console.log(err);

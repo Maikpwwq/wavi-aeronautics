@@ -20,6 +20,8 @@ import { CardActionArea } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
+// import { useQuery } from "react-query";
+
 const ProductCard = (props) => {
   // const navigate = useNavigate();
   const { products } = props;
@@ -39,6 +41,16 @@ const ProductCard = (props) => {
       localStorage.setItem("cartUpdated", "firestore");
     });
   }
+
+  // const { isLoading, error, data, refetch } = useQuery(
+  //   "SignInData",
+  //   () => handleSubmit(data),
+  //   { enabled: false }
+  // );
+
+  // if (isLoading) return "Loading...";
+
+  // if (error) return "An error has occurred: " + error.message;
 
   // const handleClick = (e) => {
   //   e.preventDefault();
@@ -109,19 +121,21 @@ const ProductCard = (props) => {
           {/* onClick={handleClick} */}
           <CardActionArea>
             {/* <NavLink to="producto/" product={products}> */}
-            <NavLink
-              to={{
-                pathname: "producto/",
-                state: { product: products ? products : {} },
-              }}
-            >
-              <CardMedia
-                component="img"
-                height="330"
-                image={imagenes[0]}
-                alt={titulo}
-              ></CardMedia>
-            </NavLink>
+            {products && products !== null && products !== undefined && (
+              <NavLink
+                to={{
+                  pathname: "producto/",
+                  state: { product: products },
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  height="330"
+                  image={imagenes[0]}
+                  alt={titulo}
+                ></CardMedia>
+              </NavLink>
+            )}
           </CardActionArea>
           <CardHeader
             title={titulo}

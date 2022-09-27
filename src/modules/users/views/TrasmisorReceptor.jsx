@@ -35,7 +35,7 @@ const TrasmisorReceptor = (props) => {
   const classes = styles(theme);
   const [storeProductsReceptor, setStoreProductsReceptor] = useState([]);
   const subscription = getObservableTrasmisorReceptor();
-  if (!storeProductsReceptor.length > 0) {
+  if (storeProductsReceptor == undefined || !storeProductsReceptor.length > 0) {
     subscription.subscribe((response) => {
       // console.log("productObservable", response);
       const { storeProductsReceptor } = response;
@@ -49,7 +49,8 @@ const TrasmisorReceptor = (props) => {
         <Typography variant="h5" sx={classes.spacingTexts}>
           Receptor para drone.
         </Typography>
-        {storeProductsReceptor.length == 0 ? (
+        {storeProductsReceptor == undefined ||
+        storeProductsReceptor.length == 0 ? (
           <Box sx={{ display: "flex" }}>
             <CircularProgress />
           </Box>

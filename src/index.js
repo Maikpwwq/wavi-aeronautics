@@ -8,9 +8,11 @@ import ConfigureAppStore from "./store/index";
 // import { createStore, compose, applyMiddleware } from 'redux'
 // import thunkMiddleware from 'redux-thunk'
 // import { composeWithDevTools } from '@redux-devtools/extension';
-
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevTools } from "react-query/devtools";
 import App from "./App";
 
+const queryClient = new QueryClient();
 // Create a browser
 // let history = createBrowserHistory(); Borrar esta linea
 history.listen((location, action) => {
@@ -35,7 +37,10 @@ const root = hydrateRoot(
   containerReactApp,
   <Router history={history}>
     <Provider store={store}>
-      <App />
+      <QueryClientProvider contextSharing={true} client={queryClient}>
+        <App />
+        <ReactQueryDevTools initialIsOpen={false} />
+      </QueryClientProvider>
     </Provider>
   </Router>
 );

@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -48,15 +48,24 @@ const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 const ProductDetail = (props) => {
   const theme = useTheme();
   const classes = styles(theme);
-// const { classes } = props;
+  // const { classes } = props;
   const { state } = useLocation();
   const { product } = state || {};
-  console.log( "state", state);
+  console.log("state", state);
   // const { product } = props;
   const { titulo, precio, descripcion, especificaciones, incluye, imagenes } =
-    product;
-  const maxSteps = imagenes.length;
-  const [activeStep, setActiveStep] = React.useState(0);
+    product ? product : "";
+  const maxSteps = imagenes? imagenes.length : 0;
+
+  const [activeStep, setActiveStep] = useState(0);
+  const [productInfo, setProductInfo] = useState({
+    titulo: titulo || "",
+    precio: precio || "",
+    descripcion: descripcion || "",
+    especificaciones: especificaciones || "",
+    incluye: incluye || "",
+    imagenes: imagenes || [],
+  });
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -78,8 +87,8 @@ const ProductDetail = (props) => {
             {/* maxWidth="lg" <CardActionArea>
           </CardActionArea> */}
             <CardHeader
-              title={titulo}
-              subheader={precio}
+              title={productInfo.titulo}
+              subheader={productInfo.precio}
               sx={classes.detailProduct}
             ></CardHeader>
             <CardContent>
@@ -91,11 +100,11 @@ const ProductDetail = (props) => {
                     onChangeIndex={handleStepChange}
                     enableMouseEvents
                   >
-                    {imagenes.map((image) => (
+                    {productInfo.imagenes.map((image) => (
                       <Box
                         component="img"
                         src={image}
-                        alt={titulo}
+                        alt={productInfo.titulo}
                         sx={{
                           height: 400,
                           display: "block",
@@ -142,23 +151,23 @@ const ProductDetail = (props) => {
                 </Box>
                 <Box sx={classes.infoProduct}>
                   <Typography variant="h5">Descripción: </Typography>
-                  <Typography variant="body1">{descripcion}</Typography>
+                  <Typography variant="body1">{productInfo.descripcion}</Typography>
                 </Box>
               </Box>
               <Box sx={classes.detailProduct}>
                 <Typography variant="h5">Especificaciones: </Typography>
-                <Typography variant="body1">{especificaciones}</Typography>
+                <Typography variant="body1">{productInfo.especificaciones}</Typography>
                 <br />
                 <Typography variant="h5">Incluye: </Typography>
-                <Typography variant="body1">{incluye}</Typography>
+                <Typography variant="body1">{productInfo.incluye}</Typography>
               </Box>
             </CardContent>
             <CardMedia component="div" sx={classes.moreImgs}>
-              {imagenes.map((image) => (
+              {productInfo.imagenes.map((image) => (
                 <Box
                   component="img"
                   src={image}
-                  alt={titulo}
+                  alt={productInfo.titulo}
                   sx={{
                     height: 330,
                     display: "block",
@@ -178,6 +187,6 @@ const ProductDetail = (props) => {
 
 ProductDetail.propTypes = {
   // product: PropTypes.object.isRequired,
-}
+};
 
 export default withRoot(ProductDetail);

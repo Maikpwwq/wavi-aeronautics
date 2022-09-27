@@ -1,6 +1,6 @@
 // --- Post bootstrap -----
-import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 import { Field, Form, FormSpy } from "react-final-form";
 import Link from "@mui/material/Link";
 import Typography from "../modules/components/Typography";
@@ -11,8 +11,6 @@ import { email, required } from "../modules/form/validation";
 import RFTextField from "../modules/form/RFTextField";
 import FormButton from "../modules/form/FormButton";
 import FormFeedback from "../modules/form/FormFeedback";
-import { auth } from "../firebase/firebaseClient";
-import { EmailAuthProvider, signInWithCredential } from "firebase/auth";
 
 import withRoot from "../modules/withRoot";
 import theme from "../modules/theme";
@@ -33,17 +31,14 @@ const SubForm = styled("form")({
 });
 
 function SignIn(props) {
-  const navigate = useNavigate();
   //const { classes } = props;
   const classes = styles(theme);
 
-  // const { user, loading, error, signInWithProvider } = useFirebaseAuth();
-
-  const [sent, setSent] = React.useState(false);
-  const [userSigninInfo, setSigninInfo] = React.useState({
-    userEmail: null,
-    userPassword: null,
-  });
+  const [sent, setSent] = useState(false);
+  // const [userSigninInfo, setSigninInfo] = useState({
+  //   userEmail: null,
+  //   userPassword: null,
+  // });
 
   const validate = (values) => {
     const errors = required(["email", "password"], values);
@@ -58,48 +53,18 @@ function SignIn(props) {
     return errors;
   };
 
-  const readInputs = () => {
-    setSigninInfo({
-      ...userSigninInfo,
-      userEmail: document.getElementById("emailText").value,
-      userPassword: document.getElementById("passwordText").value,
-    });
-    console.log(userSigninInfo.userEmail, userSigninInfo.userPassword);
-  };
+  // const readInputs = () => {
+  //   setSigninInfo({
+  //     ...userSigninInfo,
+  //     userEmail: document.getElementById("emailText").value,
+  //     userPassword: document.getElementById("passwordText").value,
+  //   });
+  //   console.log(userSigninInfo.userEmail, userSigninInfo.userPassword);
+  // };
 
   const handleSubmit = (e) => {
-    // e.preventDefault();
-    readInputs();
-    readInputs();
-    if (
-      (userSigninInfo.userEmail !== null, userSigninInfo.userPassword !== null)
-    ) {
-      let credential = EmailAuthProvider.credential(
-        userSigninInfo.userEmail,
-        userSigninInfo.userPassword
-      );
-      signInWithCredential(auth, credential)
-        // Auth.updateCurrentUser.linkWithCredential(credential)
-        .then((usercred) => {
-          // Al iniciar sesion almacena una instancia del usuario
-          var user = usercred.user;
-          setSent(true);
-          alert("Se ha iniciado una nueva sesión");
-          navigate("/tienda/");
-        })
-        .catch((err) => {
-          // Manejar los Errores aqui.
-          console.log("Error upgrading anonymous account", err);
-          // console.log(user, loading, error, signInWithProvider)
-          var errorCode = err.code;
-          var errorMessage = err.message;
-          if (errorCode === "auth/wrong-password") {
-            alert("Wrong password.");
-          } else {
-            alert(errorMessage);
-          }
-        });
-    }
+    e.preventDefault();
+    console.log("submit", e);
   };
 
   return (
@@ -121,9 +86,15 @@ function SignIn(props) {
           onSubmit={handleSubmit}
           subscription={{ submitting: true }}
           validate={validate}
+          method="post"
         >
           {({ handleSubmit2, submitting }) => (
-            <SubForm onSubmit={handleSubmit2} sx={classes.form} noValidate>
+            <SubForm
+              onSubmit={handleSubmit2}
+              sx={classes.form}
+              noValidate
+              method="post"
+            >
               <Field
                 autoComplete="email"
                 autoFocus
@@ -169,7 +140,8 @@ function SignIn(props) {
                 size="large"
                 type="submit"
                 color="secondary"
-                onClick={handleSubmit}
+                // onClick={refetch}
+                // onClick={handleSubmit}
                 fullWidth
               >
                 {submitting || sent ? "En progreso…" : "Iniciar sesión"}
