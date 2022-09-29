@@ -103,6 +103,10 @@ const serverRoutes = () => {
           element: <ProductDetail />,
         },
         {
+          path: "producto/:productoId",
+          element: <ProductDetail />,
+        },
+        {
           path: "ver-carrito",
           element: <ShoppingCart />,
         },

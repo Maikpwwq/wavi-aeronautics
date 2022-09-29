@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getObservableAccesorios } from "../../../services/sharedServices";
+import { useSelector } from "react-redux";
 import "sessionstorage-polyfill";
 import "localstorage-polyfill";
 global.sessionstorage;
@@ -31,18 +31,14 @@ const styles = (theme) => ({
 
 const Accesorios = (props) => {
   // const { classes } = props;
+  const shopState = useSelector((store) => store.shop);
+  const { baterias } = shopState;
+
   const classes = styles(theme);
 
-  const subscription = getObservableAccesorios();
-  const [storeProductsBaterias, setStoreProductsBaterias] = useState([]);
-
-  if (storeProductsBaterias == undefined || !storeProductsBaterias.length > 0) {
-    subscription.subscribe((response) => {
-      // console.log("productObservable", response);
-      const { productsBaterias } = response;
-      setStoreProductsBaterias(productsBaterias);
-    });
-  }
+  const [storeProductsBaterias, setStoreProductsBaterias] = useState(
+    baterias || []
+  );
 
   return (
     <>

@@ -1,5 +1,4 @@
 // load store state from server side
-import React, { useState, useEffect, useLayoutEffect } from "react";
 import {
   getAllDroneProduct,
   getAllAccesoriosProduct,
@@ -9,45 +8,51 @@ import {
 } from "../src/services/sharedServices";
 
 const initialState = () => {
-  // const [storeDrone, setStoreDrone] = useState(null);
-  // const [storeDroneRC, setStoreDroneRC] = useState(null);
+  const shop = [];
 
-  // const _sharedService = SharedService;
-  // console.log(getAllDroneProduct);
   const subscription$ = getAllDroneProduct;
   subscription$.subscribe((response) => {
-    // console.log("subscription", response);
-    // const { storeProducts, storeProductsRC } = response;
-    // console.log(storeProducts, storeProductsRC);
-    // setStoreDrone(storeProducts);
-    // setStoreDroneRC(storeProductsRC);
-    // subscription.unsubscribe();
+    if (!!response) {
+      const { storeProducts, storeProductsRC } = response;
+      shop.drones = storeProducts;
+      shop.dronesRC = storeProductsRC;
+    }
   });
   const subscription2$ = getAllAccesoriosProduct;
-  subscription2$.subscribe((response) => {});
+  subscription2$.subscribe((response) => {
+    if (!!response) {
+      const { productsBaterias } = response;
+      shop.baterias = productsBaterias;
+    }
+  });
   const subscription3$ = getAllRadioControl;
-  subscription3$.subscribe((response) => {});
+  subscription3$.subscribe((response) => {
+    if (!!response) {
+      const { storeProductsRC } = response;
+      shop.radioControl = storeProductsRC;
+    }
+  });
   const subscription4$ = getAllTrasmisorReceptor;
-  subscription4$.subscribe((response) => {});
-  const subscription5$ = getAllShoppingCart;
-  subscription5$.subscribe((response) => {});
-  // const subscription = getObservable();
-  // subscription.subscribe((response) => {
-  //   console.log(response);
-  // });
+  subscription4$.subscribe((response) => {
+    if (!!response) {
+      const { storeProductsReceptor } = response;
+      shop.receptores = storeProductsReceptor;
+    }
+  });
 
-  return {
-    user: {},
-    shoppingCart: [],
-    allProducts: [{}],
-    drones: [{}], //storeDrone? [{ storeDrone }] :
-    dronesRC: [{}], //storeDroneRC? [{ storeDroneRC }] :
-    baterias: [{}],
-    radioControl: [{}],
-    accesorios: [{}],
-    receptores: [{}],
-    trasnmisores: [{}],
-  };
+  const subscription5$ = getAllShoppingCart;
+  subscription5$.subscribe((response) => {
+    //console.log("subscription5", response);
+  });
+
+  if (!!shop.receptores) {
+    return {
+      user: {},
+      shoppingCart: [],
+      product: [{}],
+      shop,
+    };
+  }
 };
 
 export default initialState;

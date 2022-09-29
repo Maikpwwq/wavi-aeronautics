@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { useSelector } from 'react-redux';
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 import Button from "@mui/material/Button";
@@ -20,6 +21,7 @@ import { autoPlay } from "react-swipeable-views-utils";
 import withRoot from "../../withRoot";
 import theme from "../innerTheme";
 import { styled } from "@mui/material/styles";
+import { sharingInformationService } from "../../../services/sharing-information";
 
 const styles = (theme) => ({
   onSmallCol: {
@@ -48,14 +50,20 @@ const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 const ProductDetail = (props) => {
   const theme = useTheme();
   const classes = styles(theme);
-  // const { classes } = props;
-  const { state } = useLocation();
+  const { producto } = props;
+  console.log("producto", producto);
+  const location = useLocation();
+  console.log("location", location);
+  const { state } = location;
   const { product } = state || {};
   console.log("state", state);
   // const { product } = props;
   const { titulo, precio, descripcion, especificaciones, incluye, imagenes } =
     product ? product : "";
-  const maxSteps = imagenes? imagenes.length : 0;
+  const maxSteps = imagenes ? imagenes.length : 0;
+
+  const productState = useSelector(store => store.product);
+  console.log("productState", productState);
 
   const [activeStep, setActiveStep] = useState(0);
   const [productInfo, setProductInfo] = useState({
@@ -66,6 +74,14 @@ const ProductDetail = (props) => {
     incluye: incluye || "",
     imagenes: imagenes || [],
   });
+
+  const suscription$ = sharingInformationService.getSubject();
+
+  useEffect(() => {
+    suscription$.subscribe((response) => {
+      console.log("response", response);
+    });
+  }, []);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -151,12 +167,16 @@ const ProductDetail = (props) => {
                 </Box>
                 <Box sx={classes.infoProduct}>
                   <Typography variant="h5">Descripción: </Typography>
-                  <Typography variant="body1">{productInfo.descripcion}</Typography>
+                  <Typography variant="body1">
+                    {productInfo.descripcion}
+                  </Typography>
                 </Box>
               </Box>
               <Box sx={classes.detailProduct}>
                 <Typography variant="h5">Especificaciones: </Typography>
-                <Typography variant="body1">{productInfo.especificaciones}</Typography>
+                <Typography variant="body1">
+                  {productInfo.especificaciones}
+                </Typography>
                 <br />
                 <Typography variant="h5">Incluye: </Typography>
                 <Typography variant="body1">{productInfo.incluye}</Typography>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { getObservableTrasmisorReceptor } from "../../../services/sharedServices";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import ProductCard from "../components/ProductCard";
 
 import "sessionstorage-polyfill";
@@ -32,16 +32,11 @@ const styles = (theme) => ({
 
 const TrasmisorReceptor = (props) => {
   // const { classes } = props;
+  const shopState = useSelector((store) => store.shop);
+  const { receptores } = shopState;
+
   const classes = styles(theme);
-  const [storeProductsReceptor, setStoreProductsReceptor] = useState([]);
-  const subscription = getObservableTrasmisorReceptor();
-  if (storeProductsReceptor == undefined || !storeProductsReceptor.length > 0) {
-    subscription.subscribe((response) => {
-      // console.log("productObservable", response);
-      const { storeProductsReceptor } = response;
-      setStoreProductsReceptor(storeProductsReceptor);
-    });
-  }
+  const [storeProductsReceptor, setStoreProductsReceptor] = useState(receptores || []);
 
   return (
     <>

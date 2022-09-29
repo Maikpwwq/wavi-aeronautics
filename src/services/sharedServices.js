@@ -120,20 +120,6 @@ const getSubscribe = (suscribeMail) => {
 
 // all asynchronous or callback-based code in a single, composable function
 const SharedService = () => {
-  const url = "http://";
-  const subject = new Subject();
-  const behaviorSubject = new BehaviorSubject(["Hola", "Mundo"]);
-  const getObservable = () => {
-    return subject;
-  };
-  const setObservable = (dataInfo) => {
-    subject.next(dataInfo);
-  };
-  const dispachData = (data) => subject.next(data);
-  const resetDataSubject = () => {
-    subject.asObservable();
-  };
-
   // const http = HttpClient();
 
   //    getAll = (nameService): Observable<any> => http.get(`${this.url}${urlsPrivate[nameService]}`);

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { firestore, auth } from "../../../firebase/firebaseClient";
+import { loadDetail } from "../../../store/states/product";
 import { collection, doc, setDoc, getDoc } from "firebase/firestore";
 import { getShoppingCart } from "../../../services/sharedServices";
 
@@ -19,14 +21,18 @@ import CardActions from "@mui/material/CardActions";
 import { CardActionArea } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { sharingInformationService } from "../../../services/sharing-information";
 
 // import { useQuery } from "react-query";
 
 const ProductCard = (props) => {
-  // const navigate = useNavigate();
+  const dispatcher = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  // console.log("location", location);
   const { products } = props;
   const { titulo, precio, imagenes, productID } = products;
-  console.log(products);
+  // console.log(products);
   const [shoppingCart, setShoppingCart] = useState({
     productos: [],
   });
@@ -41,6 +47,18 @@ const ProductCard = (props) => {
       localStorage.setItem("cartUpdated", "firestore");
     });
   }
+
+  const handleShowDetails = () => {
+    console.log("handleShowDetails");
+    if (!!products) {
+      dispatcher(loadDetail(products));
+    }
+    // navigate(`producto`, { state: { product: products } });
+    // e.preventDefault();
+    // console.log("productID", productID);
+    // sharingInformationService.setSubject(productID);
+  };
+  // handleShowDetails(productID);
 
   // const { isLoading, error, data, refetch } = useQuery(
   //   "SignInData",
@@ -122,19 +140,23 @@ const ProductCard = (props) => {
           <CardActionArea>
             {/* <NavLink to="producto/" product={products}> */}
             {products && products !== null && products !== undefined && (
-              <NavLink
-                to={{
-                  pathname: "producto/",
-                  state: { product: products },
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  height="330"
-                  image={imagenes[0]}
-                  alt={titulo}
-                ></CardMedia>
-              </NavLink>
+              <Button onClick={handleShowDetails}>
+                <NavLink
+                  // producto={products}
+                  state={products}
+                  to={{
+                    pathname: `producto/${titulo}`, // productID
+                    state: { product: products },
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    height="330"
+                    image={imagenes[0]}
+                    alt={titulo}
+                  ></CardMedia>
+                </NavLink>
+              </Button>
             )}
           </CardActionArea>
           <CardHeader

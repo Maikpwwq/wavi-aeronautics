@@ -12,7 +12,7 @@ import ConfigureAppStore from "../src/store/index";
 // import { configureStore } from "@reduxjs/toolkit";
 import { StaticRouter } from "react-router-dom/server";
 import serverRoutes from "./routes/serverRoutes";
-import reducer from "../src/reducers/reducers";
+// import reducer from "../src/reducers/reducers";
 import initialState from "./initialState";
 
 import { QueryClient, QueryClientProvider } from "react-query";

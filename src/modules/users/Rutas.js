@@ -26,6 +26,7 @@ function Rutas() {
         <Route path="accesorios/producto" element={<ProductDetail />} />
         <Route path="software" element={<Software />} />
         <Route path="producto" element={<ProductDetail />} />
+        <Route path="producto/:productoId" element={<ProductDetail />} />
         <Route path="ver-carrito" element={<ShoppingCart />} />
         <Route path="ver-carrito/*" element={<ShoppingCart />} />
         <Route path="detalles-envio" element={<DetallesEnvio />} />

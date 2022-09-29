@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState} from "react";
 import {
   connect,
   ReactReduxContext,
@@ -6,7 +6,6 @@ import {
   useSelector,
   useDispatch,
 } from "react-redux";
-import { getObservableDrone } from "../../../services/sharedServices";
 import { useTheme } from "@mui/material/styles";
 import withRoot from "../../withRoot";
 import theme from "../innerTheme";
@@ -39,40 +38,20 @@ const styles = (theme) => ({
 });
 
 const Products = (props) => {
+  const shopState = useSelector((store) => store.shop);
+  const { drones, dronesRC } = shopState;
+
   const theme = useTheme();
   const classes = styles(theme);
   // const user = auth.currentUser || {};
   // const userID = user.uid || null;
-  // const { classes } = props;
+
   // const dispatch = useDispatch();
   // const state = useSelector((state))
-  // read redux store
-  // const { storeProducts, storeProductsRC } = props;
-  // const { storeProducts, storeProductsRC } = [];
-  // or
   // const { store } = useContext(ReactReduxContext);
-  // const store = useStore();
-  // console.log("Drones", store);
-  // console.log("Drones", storeProducts, storeProductsRC, store, state);
-  const subscription = getObservableDrone();
-  const [storeProducts, setStoreProducts] = useState([]);
-  const [storeProductsRC, setStoreProductsRC] = useState([]);
 
-  // useEffect(() => {
-  if (
-    storeProducts == undefined ||
-    storeProductsRC == undefined ||
-    !storeProducts.length > 0 ||
-    !storeProductsRC.length > 0
-  ) {
-    subscription.subscribe((response) => {
-      // console.log("productObservable", response);
-      const { storeProducts, storeProductsRC } = response;
-      setStoreProducts(storeProducts);
-      setStoreProductsRC(storeProductsRC);
-    });
-  }
-  // }, [storeProducts, storeProductsRC]);
+  const [storeProducts, setStoreProducts] = useState(drones || []);
+  const [storeProductsRC, setStoreProductsRC] = useState(dronesRC || []);
 
   return (
     <>
@@ -81,7 +60,7 @@ const Products = (props) => {
           Kits de Dron FPV:
         </Typography>
         <>
-          { storeProducts == undefined || storeProducts.length == 0 ? (
+          {storeProducts == undefined || storeProducts.length == 0 ? (
             <Box sx={{ display: "flex" }}>
               <CircularProgress />
             </Box>

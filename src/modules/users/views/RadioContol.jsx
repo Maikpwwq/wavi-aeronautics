@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { getObservableRadioControl } from "../../../services/sharedServices";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import "sessionstorage-polyfill";
 import "localstorage-polyfill";
 global.sessionstorage;
@@ -31,16 +31,11 @@ const styles = (theme) => ({
 
 const RadioContol = (props) => {
   // const { classes } = props;
+  const shopState = useSelector((store) => store.shop);
+  const { radioControl } = shopState;
+
   const classes = styles(theme);
-  const subscription = getObservableRadioControl();
-  const [storeProductsRC, setStoreProductsRC] = useState([]);
-  if (storeProductsRC == undefined || !storeProductsRC.length > 0) {
-    subscription.subscribe((response) => {
-      // console.log("productObservable", response);
-      const { storeProductsRC } = response;
-      setStoreProductsRC(storeProductsRC);
-    });
-  }
+  const [storeProductsRC, setStoreProductsRC] = useState(radioControl || []);
 
   return (
     <>
