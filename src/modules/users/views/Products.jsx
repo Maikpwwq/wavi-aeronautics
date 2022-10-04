@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import {
   connect,
   ReactReduxContext,
@@ -75,6 +75,7 @@ const Products = (props) => {
                     <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
                       <ProductCard
                         sx="d-flex mb-2"
+                        category="drones"
                         products={product}
                         productID={k}
                       ></ProductCard>
@@ -105,6 +106,7 @@ const Products = (props) => {
                     <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
                       <ProductCard
                         className="d-flex mb-2"
+                        category="dronesRC"
                         products={product}
                         productID={k}
                       ></ProductCard>

@@ -51,7 +51,8 @@ export const { loadDetail, modifyDetail, unmountDetail } = productSlice.actions;
 //   imagenes,
 // }) => {
 //   try {
-//     dispatcher(
+//     console.log("loadCurrent");
+//     dispatch(
 //       loadDetail({
 //         titulo,
 //         precio,
@@ -75,7 +76,8 @@ export const { loadDetail, modifyDetail, unmountDetail } = productSlice.actions;
 //   imagenes,
 // }) => {
 //   try {
-//     dispatcher(
+//     console.log("modifyCurrent");
+//     dispatch(
 //       modifyDetail({
 //         titulo,
 //         precio,

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 import Button from "@mui/material/Button";
@@ -10,18 +10,17 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import { CardActionArea } from "@mui/material";
 import MobileStepper from "@mui/material/MobileStepper";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import CircularProgress from "@mui/material/CircularProgress";
+
 import SwipeableViews from "react-swipeable-views";
 import Typography from "../../components/Typography";
 import { autoPlay } from "react-swipeable-views-utils";
 import withRoot from "../../withRoot";
-import theme from "../innerTheme";
-import { styled } from "@mui/material/styles";
-import { sharingInformationService } from "../../../services/sharing-information";
+// import theme from "../innerTheme";
+// import { styled } from "@mui/material/styles";
 
 const styles = (theme) => ({
   onSmallCol: {
@@ -50,38 +49,26 @@ const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 const ProductDetail = (props) => {
   const theme = useTheme();
   const classes = styles(theme);
-  const { producto } = props;
-  console.log("producto", producto);
   const location = useLocation();
-  console.log("location", location);
-  const { state } = location;
-  const { product } = state || {};
-  console.log("state", state);
-  // const { product } = props;
-  const { titulo, precio, descripcion, especificaciones, incluye, imagenes } =
-    product ? product : "";
-  const maxSteps = imagenes ? imagenes.length : 0;
+  const { search } = location;
+  const category = search.split("=")[1];
+  console.log("location", location, category);
 
-  const productState = useSelector(store => store.product);
-  console.log("productState", productState);
+  const shopState = useSelector((store) => store.product);
+  let product = shopState || [];
+  const { titulo, precio, descripcion, especificaciones, incluye, imagenes } = shopState;
 
   const [activeStep, setActiveStep] = useState(0);
-  const [productInfo, setProductInfo] = useState({
-    titulo: titulo || "",
-    precio: precio || "",
-    descripcion: descripcion || "",
-    especificaciones: especificaciones || "",
-    incluye: incluye || "",
-    imagenes: imagenes || [],
-  });
+  // const [productInfo, setProductInfo] = useState({
+  //   titulo: titulo || "",
+  //   precio: precio || "",
+  //   descripcion: descripcion || "",
+  //   especificaciones: especificaciones || "",
+  //   incluye: incluye || "",
+  //   imagenes: imagenes || [],
+  // });
 
-  const suscription$ = sharingInformationService.getSubject();
-
-  useEffect(() => {
-    suscription$.subscribe((response) => {
-      console.log("response", response);
-    });
-  }, []);
+  const maxSteps = product ? product.imagenes.length : 0;
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -98,115 +85,121 @@ const ProductDetail = (props) => {
   return (
     <>
       <Container fixed>
-        <Box sx={{ pt: 8, pb: 6 }}>
-          <Card>
-            {/* maxWidth="lg" <CardActionArea>
-          </CardActionArea> */}
-            <CardHeader
-              title={productInfo.titulo}
-              subheader={productInfo.precio}
-              sx={classes.detailProduct}
-            ></CardHeader>
-            <CardContent>
-              <Box sx={classes.onSmallCol}>
-                <Box sx={{ maxWidth: 400, flexGrow: 1 }}>
-                  <AutoPlaySwipeableViews
-                    axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-                    index={activeStep}
-                    onChangeIndex={handleStepChange}
-                    enableMouseEvents
-                  >
-                    {productInfo.imagenes.map((image) => (
-                      <Box
-                        component="img"
-                        src={image}
-                        alt={productInfo.titulo}
-                        sx={{
-                          height: 400,
-                          display: "block",
-                          maxWidth: 400,
-                          overflow: "hidden",
-                          width: "100%",
-                        }}
-                      ></Box>
-                    ))}
-                  </AutoPlaySwipeableViews>
-                  <MobileStepper
-                    steps={maxSteps}
-                    position="static"
-                    activeStep={activeStep}
-                    nextButton={
-                      <Button
-                        size="small"
-                        onClick={handleNext}
-                        disabled={activeStep === maxSteps - 1}
-                      >
-                        Siguiente
-                        {theme.direction === "rtl" ? (
-                          <KeyboardArrowLeft />
-                        ) : (
-                          <KeyboardArrowRight />
-                        )}
-                      </Button>
-                    }
-                    backButton={
-                      <Button
-                        size="small"
-                        onClick={handleBack}
-                        disabled={activeStep === 0}
-                      >
-                        {theme.direction === "rtl" ? (
-                          <KeyboardArrowRight />
-                        ) : (
-                          <KeyboardArrowLeft />
-                        )}
-                        Anterior
-                      </Button>
-                    }
-                  />
+        {!!product && product ? (
+          <Box sx={{ pt: 8, pb: 6 }}>
+            <Card>
+              <CardHeader
+                title={product.titulo}
+                subheader={product.precio}
+                sx={classes.detailProduct}
+              ></CardHeader>
+              <CardContent>
+                <Box sx={classes.onSmallCol}>
+                  <Box sx={{ maxWidth: 400, flexGrow: 1 }}>
+                    <AutoPlaySwipeableViews
+                      axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+                      index={activeStep}
+                      onChangeIndex={handleStepChange}
+                      enableMouseEvents
+                    >
+                      {!!product.imagenes &&
+                        product.imagenes.map((image, key) => (
+                          <Box
+                            key={key}
+                            component="img"
+                            src={image}
+                            alt={product.titulo}
+                            sx={{
+                              height: 400,
+                              display: "block",
+                              maxWidth: 400,
+                              overflow: "hidden",
+                              width: "100%",
+                            }}
+                          ></Box>
+                        ))}
+                    </AutoPlaySwipeableViews>
+                    <MobileStepper
+                      steps={maxSteps}
+                      position="static"
+                      activeStep={activeStep}
+                      nextButton={
+                        <Button
+                          size="small"
+                          onClick={handleNext}
+                          disabled={activeStep === maxSteps - 1}
+                        >
+                          Siguiente
+                          {theme.direction === "rtl" ? (
+                            <KeyboardArrowLeft />
+                          ) : (
+                            <KeyboardArrowRight />
+                          )}
+                        </Button>
+                      }
+                      backButton={
+                        <Button
+                          size="small"
+                          onClick={handleBack}
+                          disabled={activeStep === 0}
+                        >
+                          {theme.direction === "rtl" ? (
+                            <KeyboardArrowRight />
+                          ) : (
+                            <KeyboardArrowLeft />
+                          )}
+                          Anterior
+                        </Button>
+                      }
+                    />
+                  </Box>
+                  <Box sx={classes.infoProduct}>
+                    <Typography variant="h5">Descripción: </Typography>
+                    <Typography variant="body1">
+                      {product.descripcion}
+                    </Typography>
+                  </Box>
                 </Box>
-                <Box sx={classes.infoProduct}>
-                  <Typography variant="h5">Descripción: </Typography>
+                <Box sx={classes.detailProduct}>
+                  <Typography variant="h5">Especificaciones: </Typography>
                   <Typography variant="body1">
-                    {productInfo.descripcion}
+                    {product.especificaciones}
                   </Typography>
+                  <br />
+                  <Typography variant="h5">Incluye: </Typography>
+                  <Typography variant="body1">{product.incluye}</Typography>
                 </Box>
-              </Box>
-              <Box sx={classes.detailProduct}>
-                <Typography variant="h5">Especificaciones: </Typography>
-                <Typography variant="body1">
-                  {productInfo.especificaciones}
-                </Typography>
-                <br />
-                <Typography variant="h5">Incluye: </Typography>
-                <Typography variant="body1">{productInfo.incluye}</Typography>
-              </Box>
-            </CardContent>
-            <CardMedia component="div" sx={classes.moreImgs}>
-              {productInfo.imagenes.map((image) => (
-                <Box
-                  component="img"
-                  src={image}
-                  alt={productInfo.titulo}
-                  sx={{
-                    height: 330,
-                    display: "block",
-                    maxWidth: 330,
-                    overflow: "hidden",
-                    width: "100%",
-                  }}
-                ></Box>
-              ))}
-            </CardMedia>
-          </Card>
-        </Box>
+              </CardContent>
+              <CardMedia component="div" sx={classes.moreImgs}>
+                {!!product.imagenes &&
+                  product.imagenes.map((image, key) => (
+                    <Box
+                      key={key}
+                      component="img"
+                      src={image}
+                      alt={product.titulo}
+                      sx={{
+                        height: 330,
+                        display: "block",
+                        maxWidth: 330,
+                        overflow: "hidden",
+                        width: "100%",
+                      }}
+                    ></Box>
+                  ))}
+              </CardMedia>
+            </Card>
+          </Box>
+        ) : (
+          <Box sx={{ display: "flex" }}>
+            <CircularProgress />
+          </Box>
+        )}
       </Container>
     </>
   );
 };
 
-ProductDetail.propTypes = {
-  // product: PropTypes.object.isRequired,
-};
+ProductDetail.propTypes = {};
 
 export default withRoot(ProductDetail);

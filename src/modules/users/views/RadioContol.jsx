@@ -59,6 +59,7 @@ const RadioContol = (props) => {
                 return (
                   <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
                     <ProductCard
+                      category="radioControl"
                       className="d-flex mb-2"
                       products={product}
                       productID={k}

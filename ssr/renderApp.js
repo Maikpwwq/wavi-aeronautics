@@ -5,15 +5,13 @@ import { CacheProvider } from "@emotion/react";
 import createEmotionCache from "./createEmotionCache";
 import createEmotionServer from "@emotion/server/create-instance";
 import theme from "../src/modules/theme";
-// import ReactDOMServer from 'react-dom/server';
 import { Provider } from "react-redux";
-// import { createStore } from "redux";
 import ConfigureAppStore from "../src/store/index";
-// import { configureStore } from "@reduxjs/toolkit";
 import { StaticRouter } from "react-router-dom/server";
 import serverRoutes from "./routes/serverRoutes";
-// import reducer from "../src/reducers/reducers";
 import initialState from "./initialState";
+
+import { modifyDetail } from "../src/store/states/product";
 
 import { QueryClient, QueryClientProvider } from "react-query";
 const queryClient = new QueryClient();
@@ -97,30 +95,27 @@ const setResponse = (html, css, preloadedState, manifest) => {
 
 const renderApp = (app) => {
   app.get("*", (req, res) => {
-    // BEGIN New redirect handling
-    // const redirectInfo = requiresRedirect(req)
-    // if (redirectInfo !== false) {
-    //   return res.redirect(redirectInfo.destination)
-    // }
-    // END
-    // https://mui.com/material-ui/guides/server-rendering/
     const cache = createEmotionCache();
     const { extractCriticalToChunks, constructStyleTagsFromChunks } =
       createEmotionServer(cache);
+
     const preloadState = initialState();
     const store = ConfigureAppStore(preloadState);
-    // const store = configureStore({
-    //   reducer: reducer,
-    //   preloadState: initialState,
-    // });
-    //const store = createStore(reducer, initialState);
+
+    const selectedProduct = res.get("ProductDetail");
+    const product = selectedProduct ? JSON.parse(selectedProduct) : null;
+    if (product) {
+      console.log("producto", product);
+      try {
+        store.dispatch(modifyDetail(product));
+      } catch (e) {
+        return console.error(e.message);
+      }
+    }
+
     const Routing = serverRoutes;
-    // We need to render app twice.
-    // First - render App to reqister all effects
-    // const context = { url: undefined }; context={context}
+
     const html = renderToString(
-      // const httpContext: HttpContextData = { cacheControl: [], statusCode: 200, };
-      // <HttpProvider context={httpContext}></HttpProvider>
       <Provider store={store}>
         <QueryClientProvider contextSharing={true} client={queryClient}>
           <StaticRouter location={req.url}>
@@ -133,35 +128,12 @@ const renderApp = (app) => {
         </QueryClientProvider>
       </Provider>
     );
-    // if (httpContext.redirectLocation) {
-    //   // Somewhere a `<Redirect>` was rendered
-    //   // res.redirect(301, context.url);
-    //   console.log("redirecting to", context.url);
-    //   res.writeHead(301, {
-    //     Location: context.url,
-    //   });
-    // }
-    // // Wait for all effects to finish
-    // const data = await resolveData();
-    // // Inject into html initial data
-    // res.write(data.toHtml());
-    // // Render App for the second time
-    // // This time data form effects will be avaliable in components
-    // const htmlStream = renderToNodeStream(
-    //   <ServerDataContext>
-    //     <Provider store={store}>
-    //       <StaticRouter location={req.url} context={{}}>
-    //         <Routing />
-    //       </StaticRouter>
-    //     </Provider>
-    //   </ServerDataContext>,
-    // );
     // Grab the CSS from emotion
     const emotionChunks = extractCriticalToChunks(html);
     const emotionCss = constructStyleTagsFromChunks(emotionChunks);
-    // const finalState = store.getState();
     const finalState = store.getState();
-    console.log("p", finalState);
+    console.log("finalState", finalState);
+
     res.send(setResponse(html, emotionCss, finalState, req.hashManifest));
   });
 };

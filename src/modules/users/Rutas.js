@@ -16,17 +16,30 @@ function Rutas() {
     <>
       <Routes>
         <Route index element={<Products />} />
-        <Route path="drones" element={<Products />} />
-        <Route path="drones/producto" element={<ProductDetail />} />
-        <Route path="radio-control" element={<RadioContol />} />
-        <Route path="radio-control/producto" element={<ProductDetail />} />
-        <Route path="trasmisor-receptor" element={<TrasmisorReceptor />} />
-        <Route path="trasmisor-receptor/producto" element={<ProductDetail />} />
-        <Route path="accesorios" element={<Accesorios />} />
-        <Route path="accesorios/producto" element={<ProductDetail />} />
+        <Route path="drones" element={<Products />}>
+          <Route path="producto" element={<ProductDetail />}>
+            <Route path=":productoId" element={<ProductDetail />} />
+          </Route>
+        </Route>
+        <Route path="radio-control" element={<RadioContol />}>
+          <Route path="producto" element={<ProductDetail />}>
+            <Route path=":productoId" element={<ProductDetail />} />
+          </Route>
+        </Route>
+        <Route path="trasmisor-receptor" element={<TrasmisorReceptor />}>
+          <Route path="producto" element={<ProductDetail />}>
+            <Route path=":productoId" element={<ProductDetail />} />
+          </Route>
+        </Route>
+        <Route path="accesorios" element={<Accesorios />}>
+          <Route path="producto" element={<ProductDetail />}>
+            <Route path=":productoId" element={<ProductDetail />} />
+          </Route>
+        </Route>
         <Route path="software" element={<Software />} />
-        <Route path="producto" element={<ProductDetail />} />
-        <Route path="producto/:productoId" element={<ProductDetail />} />
+        <Route path="producto" element={<ProductDetail />}>
+          <Route path=":productoId" element={<ProductDetail />} />
+        </Route>
         <Route path="ver-carrito" element={<ShoppingCart />} />
         <Route path="ver-carrito/*" element={<ShoppingCart />} />
         <Route path="detalles-envio" element={<DetallesEnvio />} />

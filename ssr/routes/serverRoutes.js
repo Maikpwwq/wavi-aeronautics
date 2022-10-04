@@ -61,6 +61,12 @@ const serverRoutes = () => {
             {
               path: "producto",
               element: <ProductDetail />,
+              children: [
+                {
+                  path: ":productoId",
+                  element: <ProductDetail />,
+                },
+              ],
             },
           ],
         },
@@ -71,6 +77,12 @@ const serverRoutes = () => {
             {
               path: "producto",
               element: <ProductDetail />,
+              children: [
+                {
+                  path: ":productoId",
+                  element: <ProductDetail />,
+                },
+              ],
             },
           ],
         },
@@ -81,6 +93,12 @@ const serverRoutes = () => {
             {
               path: "producto",
               element: <ProductDetail />,
+              children: [
+                {
+                  path: ":productoId",
+                  element: <ProductDetail />,
+                },
+              ],
             },
           ],
         },
@@ -91,6 +109,12 @@ const serverRoutes = () => {
             {
               path: "producto",
               element: <ProductDetail />,
+              children: [
+                {
+                  path: ":productoId",
+                  element: <ProductDetail />,
+                },
+              ],
             },
           ],
         },
@@ -101,10 +125,12 @@ const serverRoutes = () => {
         {
           path: "producto",
           element: <ProductDetail />,
-        },
-        {
-          path: "producto/:productoId",
-          element: <ProductDetail />,
+          children: [
+            {
+              path: ":productoId",
+              element: <ProductDetail />,
+            },
+          ],
         },
         {
           path: "ver-carrito",

@@ -65,6 +65,7 @@ const Accesorios = (props) => {
                     <ProductCard
                       className="d-flex mb-2"
                       products={product}
+                      category="baterias"
                       productID={k}
                     ></ProductCard>
                   </Grid>

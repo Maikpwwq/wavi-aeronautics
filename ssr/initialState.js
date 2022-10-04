@@ -49,7 +49,6 @@ const initialState = () => {
     return {
       user: {},
       shoppingCart: [],
-      product: [{}],
       shop,
     };
   }

@@ -8,6 +8,9 @@ import * as path from "path";
 import webpackDevMiddleware from "webpack-dev-middleware";
 import webpackHotMiddleware from "webpack-hot-middleware";
 import webpackConfig from "../config/webpack.dev";
+import { sharingInformationService } from "../src/services/sharing-information";
+// import { modifyDetail } from "../src/store/states/product";
+
 // import webpackConfig from '../config/webpack.prod';
 
 import renderApp from "./renderApp";
@@ -15,6 +18,8 @@ import getManifest from "./getManifest";
 
 import SignInAuth from "./auth/SignInAuth.js";
 import SignUpAuth from "./auth/SignUpAuth.js";
+import { getProductById } from "../src/services/sharedServices.js";
+import { encode } from "punycode";
 
 dotenv.config({
   path: path.resolve(__dirname, "../.env"),
@@ -139,6 +144,43 @@ app.post("/*", function (req, res) {
   res.send("POST request to the homepage");
   res.redirect("/");
 });
+
+app.get(
+  [
+    "/tienda/producto*",
+    "/tienda/drones/producto*",
+    "/tienda/radio-control/producto*",
+    "/tienda/trasmisor-receptor/producto*",
+    "/tienda/accesorios/producto*",
+  ],
+  function (req, res, next) {
+    const { id, category } = req.query;
+    if (!!id) {
+      // console.log("GET request to the product", p);
+      getProductById(id, category).subscribe((data) => {
+        console.log("Aqui no entra", data);
+      });
+      const productData = sharingInformationService.getSubject();
+      productData.subscribe((data) => {
+        if (!!data) {
+          console.log("initDetail", data[0]);
+          try {
+            res.set({ ProductDetail: JSON.stringify(data[0]) });
+          } catch (error) {
+            console.log("Error", error);
+          }
+          // res.append("ProductDetail", JSON.stringify(data[0]));
+          // try {
+          //   res.append("ProductDetail", JSON.stringify(data[0]));
+          // } catch (error) {
+          //   console.log("Error", error);
+          // }
+          next();
+        }
+      });
+    }
+  }
+);
 
 // GET method route same as app.get("*", renderApp);
 renderApp(app);

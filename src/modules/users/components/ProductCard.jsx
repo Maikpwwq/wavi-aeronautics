@@ -22,16 +22,18 @@ import { CardActionArea } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { sharingInformationService } from "../../../services/sharing-information";
+import PropTypes from "prop-types";
 
 // import { useQuery } from "react-query";
 
-const ProductCard = (props) => {
-  const dispatcher = useDispatch();
-  const navigate = useNavigate();
-  const location = useLocation();
+const ProductCard = ({ products, category }) => {
+  // const dispatcher = useDispatch();
+  // const navigate = useNavigate();
+  // const location = useLocation();
   // console.log("location", location);
-  const { products } = props;
-  const { titulo, precio, imagenes, productID } = products;
+  const categoria = category || "tienda";
+  const producto = products;
+  const { titulo, precio, imagenes, productID } = producto;
   // console.log(products);
   const [shoppingCart, setShoppingCart] = useState({
     productos: [],
@@ -48,16 +50,16 @@ const ProductCard = (props) => {
     });
   }
 
-  const handleShowDetails = () => {
-    console.log("handleShowDetails");
-    if (!!products) {
-      dispatcher(loadDetail(products));
-    }
-    // navigate(`producto`, { state: { product: products } });
-    // e.preventDefault();
-    // console.log("productID", productID);
-    // sharingInformationService.setSubject(productID);
-  };
+  // const handleShowDetails = () => {
+  //   console.log("handleShowDetails");
+  //   if (!!products) {
+  //     dispatcher(loadDetail(products));
+  //   }
+  //   // navigate(`producto`, { state: { product: products } });
+  //   // e.preventDefault();
+  //   // console.log("productID", productID);
+  //   // sharingInformationService.setSubject(productID);
+  // };
   // handleShowDetails(productID);
 
   // const { isLoading, error, data, refetch } = useQuery(
@@ -138,25 +140,20 @@ const ProductCard = (props) => {
         <Card style={{ height: "100%" }}>
           {/* onClick={handleClick} */}
           <CardActionArea>
-            {/* <NavLink to="producto/" product={products}> */}
-            {products && products !== null && products !== undefined && (
-              <Button onClick={handleShowDetails}>
-                <NavLink
-                  // producto={products}
-                  state={products}
-                  to={{
-                    pathname: `producto/${titulo}`, // productID
-                    state: { product: products },
-                  }}
-                >
-                  <CardMedia
-                    component="img"
-                    height="330"
-                    image={imagenes[0]}
-                    alt={titulo}
-                  ></CardMedia>
-                </NavLink>
-              </Button>
+            {producto !== undefined && (
+              <NavLink
+                to={{
+                  pathname: `producto?id=${productID}&category=${categoria}`, // titulo
+                  // state: { product: products },
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  height="330"
+                  image={imagenes[0]}
+                  alt={titulo}
+                ></CardMedia>
+              </NavLink>
             )}
           </CardActionArea>
           <CardHeader
@@ -172,6 +169,11 @@ const ProductCard = (props) => {
       </Box>
     </>
   );
+};
+
+ProductCard.propTypes = {
+  products: PropTypes.object.isRequired,
+  category: PropTypes.string.isRequired,
 };
 
 export default ProductCard;
