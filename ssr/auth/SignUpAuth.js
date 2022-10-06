@@ -33,13 +33,16 @@ const SignUpAuth = ({ firstName, lastName, email, password, res }) => {
           userName: displayName,
         };
         const usedId = user.uid;
-        userToFirestore(data, usedId);
         // Instancia un carrito de compras vacio
-        shoppingsToFirestore({ productos: [] }, usedId);
-        localStorage.setItem("cartID", usedId);
-        localStorage.setItem("cartUpdated", "id");
-        console.log("Se ha registrado el usuario", displayName);
-        res.redirect("/tienda/");
+        shoppingsToFirestore({ productos: [] }, usedId).then(() => {
+          localStorage.setItem("cartID", usedId);
+          localStorage.setItem("cartUpdated", "id");
+          console.log("Instancia un carrito de compras vacio");
+        });
+        userToFirestore(data, usedId).then(() => {
+          console.log("Se ha registrado el usuario", displayName);
+          res.redirect("/tienda/");
+        });
       })
       .catch((err) => {
         console.log("Error upgrading anonymous account", err);

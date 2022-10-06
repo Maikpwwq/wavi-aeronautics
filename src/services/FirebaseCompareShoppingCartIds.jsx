@@ -28,6 +28,7 @@ const FirebaseCompareShoppingCartIds = (products) => {
 
   var shoppingCart = [];
 
+  // TODO: replace for arrow function: search product by id? need to use all Refs in comparison
   const productsFromFirestore = async () => {
     // console.log(shoppingsRef, userID);
     const collectionsWavi = new Array(storeRCRef, storeKitRef);
