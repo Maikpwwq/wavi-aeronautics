@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { firestore, auth } from "../../../firebase/firebaseClient";
-import { collection, doc, getDoc } from "firebase/firestore";
 import ListShoppingCart from "../components/ListShoppingCart";
+import { sharingInformationService } from "../../../services/sharing-information";
+import FirebaseCompareShoppingCartIds from "../../../services/FirebaseCompareShoppingCartIds";
 
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
-import 'sessionstorage-polyfill'
-import 'localstorage-polyfill'
-global.sessionstorage
-global.localStorage
+import "sessionstorage-polyfill";
+import "localstorage-polyfill";
+global.sessionstorage;
+global.localStorage;
 
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -33,57 +34,31 @@ const styles = (theme) => ({
 });
 
 const ShoppingCart = (props) => {
-  const user = auth.currentUser || {};
-  const userID = user.uid || null;
+  // const shoppingCart = useSelector((store) => store.shoppingCart);
+  let cart = ["EfOjZScDg7ZIkLQvGG6u", "EfOjZScDg7ZIkLQvGG6u"]; // []
+  let cartInfo = [];
+  const productData = sharingInformationService.getSubject();
+  productData.subscribe((data) => {
+    if (!!data) {
+      cart = data;
+      // console.log("Detail shoppingCard", data, cart);
+      FirebaseCompareShoppingCartIds(cart);
+    }
+  });
+
   const { visible, updated, setShowingCart } = props || {};
   const classes = styles(theme);
-  // console.log("props", visible, updated);
+  console.log("props", visible, updated);
   const { state } = useLocation() || {};
   const { makeVisible, makeUpdated } = state || "";
-  // console.log("state", makeVisible, makeUpdated);
+  console.log("state", makeVisible, makeUpdated);
   const visibleSettings = makeVisible || visible;
   const updatedSettings = makeUpdated || updated;
   console.log("settings", visibleSettings, updatedSettings);
-  const shoppingCartID = localStorage.getItem("cartID");
-  const usedID = userID ? userID : shoppingCartID;
-  const _firestore = firestore;
-  const shoppingsRef = collection(_firestore, "shoppingCart");
-  const [storeProducts, setStoreProducts] = useState({
-    productos: [],
-  });
-
-  // const [settings, setSettings] = useState({
-  //   visibleSettings: visible || makeVisible || "",
-  //   updatedSettings: updated || makeUpdated || "",
-  // });
-
-  const productosFromFirestore = async () => {
-    const productsDoc = doc(shoppingsRef, usedID);
-    const shoppingsData = await getDoc(productsDoc);
-    let productos = [];
-    if (shoppingsData.data()) {
-      // console.log(productData.data().productos);
-      productos.push(shoppingsData.data().productos);
-      if (productos.length > 0) {
-        setStoreProducts({ ...storeProducts, productos: productos });
-      }
-      localStorage.setItem("cartUpdated", "firestore");
-    }
-    // console.log(productos);
-    // console.log(shoppingsData.data().productos);
-  };
-
-  useEffect(() => {
-    // console.log(usedID);
-    if (usedID) {
-      productosFromFirestore();
-      console.log("loadFirebase")
-    }
-  }, [visible || updated]);
 
   return (
     <>
-      {storeProducts.productos == [] ? (
+      {cart == [] ? (
         <Box sx={{ display: "flex" }}>
           <CircularProgress />
         </Box>
@@ -96,30 +71,31 @@ const ShoppingCart = (props) => {
             visibility: visibleSettings ? "visible" : "hidden",
           }}
         >
-          {storeProducts.productos.map((product, k) => {
-            // console.log(product);
-            return (
-              <Grid
-                item
-                key={k}
-                sm={12}
-                xs={12}
-                md={5}
-                lg={4}
-                xl={3}
-                sx={classes.cartList}
-              >
-                <ListShoppingCart
-                  className="d-flex mb-2"
-                  products={product}
-                  visible={visibleSettings}
-                  updated={updatedSettings}
-                  productID={k}
-                  setShowingCart={setShowingCart}
-                ></ListShoppingCart>
-              </Grid>
-            );
-          })}
+          {/* {cart.productos &&
+            cartInfo.productos.map((product, k) => { 
+              // console.log("product", product);
+              return ( */}
+                <Grid
+                  item
+                  // key={k}
+                  sm={12}
+                  xs={12}
+                  md={5}
+                  lg={4}
+                  xl={3}
+                  sx={classes.cartList}
+                >
+                  <ListShoppingCart
+                    className="d-flex mb-2"
+                    // products={product}
+                    visible={visibleSettings}
+                    updated={updatedSettings}
+                    // productID={k}
+                    setShowingCart={setShowingCart}
+                  ></ListShoppingCart>
+                </Grid>
+              {/* );
+            })} */}
         </Grid>
       )}
     </>
@@ -129,7 +105,7 @@ const ShoppingCart = (props) => {
 ShoppingCart.propTypes = {
   // classes: PropTypes.object.isRequired,
   setShowingCart: PropTypes.func.isRequired,
-  visible: PropTypes.bool, 
+  visible: PropTypes.bool,
   updated: PropTypes.string,
 };
 

@@ -1,81 +1,41 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
-import { firestore, auth } from "../../../firebase/firebaseClient";
-import { loadDetail } from "../../../store/states/product";
-import { collection, doc, setDoc, getDoc } from "firebase/firestore";
-import { getShoppingCart } from "../../../services/sharedServices";
+import React, { useState } from "react";
+// import { useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
+// import { loadDetail } from "../../../store/states/product";
+// import { getAllShoppingCart } from "../../../services/sharedServices";
+import FirebaseAddToCart from "../../../services/FirebaseAddToCart";
 
 import "sessionstorage-polyfill";
 import "localstorage-polyfill";
 global.sessionstorage;
 global.localStorage;
 
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
 import { CardActionArea } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import { sharingInformationService } from "../../../services/sharing-information";
 import PropTypes from "prop-types";
 
 // import { useQuery } from "react-query";
 
 const ProductCard = ({ products, category }) => {
   // const dispatcher = useDispatch();
-  // const navigate = useNavigate();
-  // const location = useLocation();
-  // console.log("location", location);
   const categoria = category || "tienda";
   const producto = products;
   const { titulo, precio, imagenes, productID } = producto;
-  // console.log(products);
-  const [shoppingCart, setShoppingCart] = useState({
-    productos: [],
-  });
 
-  const subscription = getShoppingCart();
-  if (!shoppingCart.productos > 0) {
-    subscription.subscribe((response) => {
-      // console.log("productObservable", response);
-      const { shoppingCart } = response;
-      setShoppingCart({ ...shoppingCart, productos: shoppingCart });
-      loadData(shoppingCart);
-      localStorage.setItem("cartUpdated", "firestore");
-    });
-  }
+  // const storedCart = useSelector((store) => store.shoppingCart);
+  // let cart = storedCart || [];
+  // console.log("cart products", cart);
 
-  // const handleShowDetails = () => {
-  //   console.log("handleShowDetails");
-  //   if (!!products) {
-  //     dispatcher(loadDetail(products));
-  //   }
-  //   // navigate(`producto`, { state: { product: products } });
-  //   // e.preventDefault();
-  //   // console.log("productID", productID);
-  //   // sharingInformationService.setSubject(productID);
-  // };
-  // handleShowDetails(productID);
+  // const [shoppingCart, setShoppingCart] = useState({
+  //   productos: [cart],
+  // });
 
-  // const { isLoading, error, data, refetch } = useQuery(
-  //   "SignInData",
-  //   () => handleSubmit(data),
-  //   { enabled: false }
-  // );
-
-  // if (isLoading) return "Loading...";
-
-  // if (error) return "An error has occurred: " + error.message;
-
-  // const handleClick = (e) => {
-  //   e.preventDefault();
-  //   navigate("producto/", { state: { product: products } });
-  // };
+  let shoppingCart;
 
   // const readData = () => {
   //   shoppingsFromFirestore().then((snapshot) => {
@@ -91,68 +51,45 @@ const ProductCard = ({ products, category }) => {
   //   });
   // };
 
-  // const loadData = (cardProductos) => {
-  //   setShoppingCart({ ...shoppingCart, productos: cardProductos });
-  // }
-
-  // useEffect(() => {
-  //   // console.log(usedID);
-  //   if (usedID) {
-  //     readData();
-
-  //   }
-  // }, [usedID, shoppingUpdatedItems]);
-
-  const shoppingsToFirestore = async (updateInfo, userRef) => {
-    await setDoc(doc(shoppingsRef, userRef), updateInfo); // , { merge: true }
-  };
-
   const handleAddCard = (e) => {
     e.preventDefault();
-    if (usedID) {
-      let cardProductos = [];
-      readData();
-      // console.log(shoppingCart);
-      shoppingCart.productos.map((product, n) => {
-        cardProductos.push(product);
-      });
-      // console.log(cardProductos);
-      // var index = cardProductos.length;
-      // console.log(index, shoppingCart.productos.length);
-      // cardProductos[index] = shoppingCart.productos
-      //let cardProductos = shoppingCart.productos + productID;
-      cardProductos.push(productID);
-      // console.log(cardProductos);
-      // cardProductos[index] = productID
-      loadData(cardProductos);
-      // console.log(userID, productID);
-      // console.log(shoppingCart);
-      // console.log(cardProductos);
-      shoppingsToFirestore({ productos: cardProductos }, usedID);
-      localStorage.setItem("cartUpdated", "agregar");
-      readData();
-    }
+    // if (usedID) {
+    let cardProductos = [];
+    // readData();
+    // console.log(shoppingCart);
+    shoppingCart.productos.map((product, n) => {
+      cardProductos.push(product);
+    });
+    console.log("cardProductos", cardProductos);
+    // cardProductos.push(productID);
+    FirebaseAddToCart({ productos: cardProductos });
+    // loadData(cardProductos);
+    // console.log(userID, productID);
+    // console.log(shoppingCart);
+    // shoppingsToFirestore({ productos: cardProductos }, usedID);
+    // localStorage.setItem("cartUpdated", "agregar");
+    // readData();
+    // }
   };
 
   return (
     <>
       <Box className="" maxWidth="sm" style={{ height: "100%" }}>
         <Card style={{ height: "100%" }}>
-          {/* onClick={handleClick} */}
           <CardActionArea>
-            {producto !== undefined && (
+            {producto !== undefined && imagenes && (
               <NavLink
                 to={{
                   pathname: `producto?id=${productID}&category=${categoria}`, // titulo
                   // state: { product: products },
                 }}
               >
-                <CardMedia
-                  component="img"
-                  height="330"
-                  image={imagenes[0]}
-                  alt={titulo}
-                ></CardMedia>
+                  <CardMedia
+                    component="img"
+                    height="330"
+                    image={imagenes[0]}
+                    alt={titulo}
+                  ></CardMedia>
               </NavLink>
             )}
           </CardActionArea>

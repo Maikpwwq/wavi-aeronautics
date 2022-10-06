@@ -1,16 +1,12 @@
 import React, { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { firestore, storage, auth } from "../firebase/firebaseClient";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import { firestore } from "../firebase/firebaseClient";
+import { collection, doc, getDocs } from "firebase/firestore";
 
 function FirebaseDroneProducts (props) {
-  const shoppingCartID = localStorage.getItem("cartID") || null;
   const productosDrones = sessionStorage.getItem("Productos_Drones") || null;
   const productosDronesRC =
     sessionStorage.getItem("Productos_DronesRC") || null;
   const _firestore = firestore;
-  const _storage = storage;
-  const shoppingsRef = collection(_firestore, "shoppingCart");
   // const productsRef = collection(_firestore, "productos/dron/kit_fpv_dron")
   const productsRef = collection(_firestore, "productos");
   const productsDoc = doc(productsRef, "dron");
@@ -22,10 +18,6 @@ function FirebaseDroneProducts (props) {
 
   var storeProducts = [];
   var storeProductsRC = [];
-
-  const shoppingsToFirestore = async (updateInfo, userRef) => {
-    await setDoc(doc(shoppingsRef, userRef), updateInfo, { merge: true });
-  };
 
   // Lectura del catalogo de productos desde firestore
   const productsFromFirestore = async () => {
@@ -78,9 +70,7 @@ function FirebaseDroneProducts (props) {
           );
         }
       });
-      // setStoreProducts(productos);
       storeProducts = productos;
-      //console.log(storeProducts)
     }
     if (productosRC && productosRC.length > 0) {
       sessionStorage.setItem("Productos_DronesRC", JSON.stringify(productosRC));
@@ -95,44 +85,15 @@ function FirebaseDroneProducts (props) {
           );
         }
       });
-      // setStoreProductsRC(productosRC);
       storeProductsRC = productosRC;
     }
-    // console.log("response", storeProducts.length, storeProductsRC.length);
-    // return { storeProducts, storeProductsRC };
   };
-
-  const newShoppingCart = () => {
-    const shoppingsId = uuidv4();
-    shoppingsToFirestore({ productos: [] }, shoppingsId);
-    localStorage.setItem("cartID", shoppingsId);
-    localStorage.setItem("cartUpdated", "id");
-  };
-
-  if (!shoppingCartID) {
-    console.log("shoppingCartID", shoppingCartID);
-    newShoppingCart();
-  }
 
   productosToSessionStore();
   if (storeProducts.length > 0 && storeProductsRC.length > 0) {
-      //console.log("response", storeProducts, storeProductsRC);
-      // console.log("response", storeProducts.length, storeProductsRC.length);
       const response = { storeProducts, storeProductsRC };
       return response;
   }
-
-  // useEffect(() => {
-  //   setTimout(() => {
-  //     localStorage.setItem("cartUpdated", "tienda");
-  //     console.log("shoppingCartID", shoppingCartID);
-  //     if (!shoppingCartID) {
-  //       newShoppingCart();
-  //     }
-  //     productosToSessionStore();
-  //   }, 0);
-  // }, [shoppingCartID, productosDrones, productosDronesRC]); 
-  // productsCollection, productsCollectionRC,
 };
 
 export default FirebaseDroneProducts;

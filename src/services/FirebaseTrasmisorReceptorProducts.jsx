@@ -1,13 +1,11 @@
-import React, { useState } from "react";
-import { firestore, storage } from "../firebase/firebaseClient";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import React from "react";
+import { firestore } from "../firebase/firebaseClient";
+import { collection, doc, getDocs } from "firebase/firestore";
 
 function FirebaseTrasmisorReceptorProducts(props) {
-  const shoppingCartID = localStorage.getItem("cartID") || null;
   const productosReceptor =
     sessionStorage.getItem("Productos_Receptor") || null;
   const _firestore = firestore;
-  const _storage = storage;
   const productsRef = collection(_firestore, "productos");
   const productsDoc = doc(productsRef, "radio_control");
 
@@ -109,7 +107,7 @@ function FirebaseTrasmisorReceptorProducts(props) {
       parsePrices(productos);
     }
   };
-
+ 
   const parsePrices = (productos) => {
     //console.log(productos);
     if (productos && productos.length > 0) {

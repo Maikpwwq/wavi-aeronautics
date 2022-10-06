@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { firestore, storage } from "../firebase/firebaseClient";
+import { firestore } from "../firebase/firebaseClient";
 import { collection, doc, getDocs, query, where } from "firebase/firestore";
 
 import { sharingInformationService } from "./sharing-information";

@@ -86,7 +86,9 @@ function Header(props) {
       ? sessionStorage.getItem("cartProducts")
       : null;
   const shoppingUpdatedItems = localStorage.getItem("cartUpdated");
-  const [showingCart, setShowingCart] = useState(false);
+  // TODO: Cambiar a un estado flase
+  const [showingCart, setShowingCart] = useState(true);
+
   const [value, setValue] = React.useState(0);
   const [shoppingCart, setShoppingCart] = useState({
     suma: shoppingCartSuma > 0 ? shoppingCartSuma : 0,
@@ -94,10 +96,13 @@ function Header(props) {
   });
 
   const handleShowCart = () => {
+    console.log("showingCart", showingCart);
     setShowingCart(!showingCart);
-    console.log(showingCart);
+    console.log("showingCart", showingCart);
     localStorage.setItem("cartUpdated", "show");
   };
+
+  // Desde aca se controla el estado de cantidad de productos y total de la compra
 
   // Asignar data almacenada en el localStorage
   useEffect(() => {
@@ -234,7 +239,7 @@ function Header(props) {
             </Grid>
             <Grid item>
               <Tooltip title="Carrito">
-                <IconButton color="inherit" onClick={handleShowCart}>
+                <IconButton color="inherit" onClick={() => handleShowCart}>
                   <ShoppingCartIcon fontSize="large" />
                 </IconButton>
               </Tooltip>
@@ -263,11 +268,41 @@ function Header(props) {
           textColor="inherit"
           sx={classes.productTabs}
         >
-          <Tab textColor="inherit" label="Drones" value={0} component="a" href="/tienda/drones/"></Tab>
-          <Tab textColor="inherit" label="Radio Control" value={1} component="a" href="/tienda/radio-control/"/>
-          <Tab textColor="inherit" label="Transmisión/Recepción" value={2} component="a" href="/tienda/trasmisor-receptor/" />
-          <Tab textColor="inherit" label="Accesorios" value={3} component="a" href="/tienda/accesorios/" />
-          <Tab textColor="inherit" label="Software" value={4} component="a" href="/tienda/software/" />
+          <Tab
+            textColor="inherit"
+            label="Drones"
+            value={0}
+            component="a"
+            href="/tienda/drones/"
+          ></Tab>
+          <Tab
+            textColor="inherit"
+            label="Radio Control"
+            value={1}
+            component="a"
+            href="/tienda/radio-control/"
+          />
+          <Tab
+            textColor="inherit"
+            label="Transmisión/Recepción"
+            value={2}
+            component="a"
+            href="/tienda/trasmisor-receptor/"
+          />
+          <Tab
+            textColor="inherit"
+            label="Accesorios"
+            value={3}
+            component="a"
+            href="/tienda/accesorios/"
+          />
+          <Tab
+            textColor="inherit"
+            label="Software"
+            value={4}
+            component="a"
+            href="/tienda/software/"
+          />
         </Tabs>
       </AppBar>
     </React.Fragment>

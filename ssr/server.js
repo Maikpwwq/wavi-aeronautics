@@ -10,7 +10,7 @@ import webpackHotMiddleware from "webpack-hot-middleware";
 import webpackConfig from "../config/webpack.dev";
 import { sharingInformationService } from "../src/services/sharing-information";
 // import { modifyDetail } from "../src/store/states/product";
-
+// import storeRoutes from "./routes/storeRoutes.js";
 // import webpackConfig from '../config/webpack.prod';
 
 import renderApp from "./renderApp";
@@ -116,6 +116,9 @@ if (REACT_APP_ENV === "development") {
   app.disable("x-powered-by");
   // app.set("x-powered-by", false);
 }
+
+// Handling routes request
+// app.use("/tienda*", storeRoutes)
 
 // POST method route
 app.post("/sign-in*", function (req, res) {

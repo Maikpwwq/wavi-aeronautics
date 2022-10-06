@@ -1,12 +1,10 @@
-import React, { useState } from "react";
-import { firestore, storage } from "../firebase/firebaseClient";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import React from "react";
+import { firestore } from "../firebase/firebaseClient";
+import { collection, doc, getDocs } from "firebase/firestore";
 
 function FirebaseRadioControlProducts(props) {
-  const shoppingCartID = localStorage.getItem("cartID") || null;
   const productosRadioControl = sessionStorage.getItem("Productos_RC") || null;
   const _firestore = firestore;
-  const _storage = storage;
   const productsRef = collection(_firestore, "productos");
   const productsDoc = doc(productsRef, "radio_control");
 

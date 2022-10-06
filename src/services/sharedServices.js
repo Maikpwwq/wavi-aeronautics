@@ -5,7 +5,7 @@ import FirebaseDroneProducts from "./FirebaseDroneProducts.jsx";
 import FirebaseRadioControlProducts from "./FirebaseRadioControlProducts.jsx";
 import FirebaseTrasmisorReceptorProducts from "./FirebaseTrasmisorReceptorProducts.jsx";
 import FirebaseAccesoriosProducts from "./FirebaseAccesoriosProducts.jsx";
-import FirebaseShoppingCart from "./FirebaseShoppingCart.jsx";
+import FirebaseShoppingCart from "./FirebaseLoadShoppingCart.jsx";
 import FirebaseSubscribe from "./FirebaseSubscribe.jsx";
 
 const urlsPrivate = {
@@ -19,15 +19,6 @@ const getProductById = (searchId, category) =>
   new Observable((subscriber) => {
     const response = FirebaseSearchProductById(searchId, category);
     console.log("firebase Id search", searchId, category, response);
-    // if (!!response) {
-    //   console.log("firebase Response2", response);
-    //   try {
-    //     subscriber.next(response);
-    //     // subscriber.complete();
-    //   } catch (err) {
-    //     subscriber.error(err); // delivers an error if it caught one
-    //   }
-    // }
   });
 
 const getAllDroneProduct = new Observable((subscriber) => {
@@ -37,7 +28,7 @@ const getAllDroneProduct = new Observable((subscriber) => {
     subscriber.next(response);
     // subscriber.complete();
   } catch (err) {
-    subscriber.error(err); // delivers an error if it caught one
+    subscriber.error(err); 
   }
 });
 
@@ -48,7 +39,7 @@ const getAllRadioControl = new Observable((subscriber) => {
     subscriber.next(response);
     // subscriber.complete();
   } catch (err) {
-    subscriber.error(err); // delivers an error if it caught one
+    subscriber.error(err); 
   }
 });
 
@@ -59,7 +50,7 @@ const getAllTrasmisorReceptor = new Observable((subscriber) => {
     subscriber.next(response);
     // subscriber.complete();
   } catch (err) {
-    subscriber.error(err); // delivers an error if it caught one
+    subscriber.error(err); 
   }
 });
 
@@ -70,19 +61,20 @@ const getAllAccesoriosProduct = new Observable((subscriber) => {
     subscriber.next(response);
     // subscriber.complete();
   } catch (err) {
-    subscriber.error(err); // delivers an error if it caught one
+    subscriber.error(err); 
   }
 });
 
 const getAllShoppingCart = new Observable((subscriber) => {
-  const response = FirebaseShoppingCart();
-  // console.log("firebaseResponse", response);
-  try {
-    subscriber.next(response);
-    // subscriber.complete();
-  } catch (err) {
-    subscriber.error(err); // delivers an error if it caught one
-  }
+  // const response = 
+  FirebaseShoppingCart();
+  // console.log("FirebaseShoppingCart", response);
+  // try {
+  //   subscriber.next(response);
+  subscriber.complete();
+  // } catch (err) {
+  //   subscriber.error(err); 
+  // }
 });
 
 const subscribeToWavi = (suscribeMail) =>

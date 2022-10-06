@@ -1,7 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-// import { useDispatch } from "react-redux";
-
-// const dispatcher = useDispatch();
 
 export const initialShop = {
   drones: [{}],
@@ -15,15 +12,18 @@ export const initialShop = {
 
 // Slice
 const shopSlice = createSlice({
-  name: "shoppingCart",
+  name: "shop",
   initialState: initialShop,
   reducers: {
-    loadShop: (state, action) => {
-      return { ...state, productShop: [...state.productShop, action.payload] };
+    loadStore: (state, action) => {
+      state.shop = action.payload;
+    },
+    updateStore: (state, action) => {
+      return { ...state, ...action.payload };
     },
   },
 });
 export default shopSlice.reducer;
 
 // export actions
-export const { loadShop } = shopSlice.actions;
+export const { loadStore, updateStore } = shopSlice.actions;

@@ -7,8 +7,32 @@ import {
   getAllShoppingCart,
 } from "../src/services/sharedServices";
 
+import { sharingInformationService } from "../src/services/sharing-information";
+
 const initialState = () => {
   const shop = [];
+  const shoppingCart = [];
+
+  const subscription5$ = getAllShoppingCart;
+  subscription5$.subscribe();
+  // (response) => {
+  //   if (!!response) {
+  //     console.log("subscription5", response);
+  //     const { cart } = response;
+  //     shoppingCart.productos = cart;
+  //   }
+  // }
+
+  const productData = sharingInformationService.getSubject();
+  productData.subscribe((data) => {
+    if (!!data) {
+      // console.log("Detail productCard", data);
+      shoppingCart.productos = data;
+    } 
+    // else {
+    //   shoppingCart.productos = [];
+    // }
+  });
 
   const subscription$ = getAllDroneProduct;
   subscription$.subscribe((response) => {
@@ -40,18 +64,22 @@ const initialState = () => {
     }
   });
 
-  const subscription5$ = getAllShoppingCart;
-  subscription5$.subscribe((response) => {
-    //console.log("subscription5", response);
-  });
+  // console.log("shoppingCart", shoppingCart);
 
   if (!!shop.receptores) {
     return {
       user: {},
-      shoppingCart: [],
+      shoppingCart,
       shop,
     };
-  }
+  } 
+  // else if (!!shop.receptores) {
+  //   return {
+  //     user: {},
+  //     shoppingCart,
+  //     shop,
+  //   };
+  // }
 };
 
 export default initialState;

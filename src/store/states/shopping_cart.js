@@ -8,16 +8,16 @@ export const initialCart = {
 };
 
 // Slice
-const cartSlice = createSlice({
-  name: "cart",
+const shoppingCartSlice = createSlice({
+  name: "shoppingCart",
   initialState: initialCart,
   reducers: {
     createCard: (state, action) => {
-      state.shoppingCart = action.payload;
+      state.shoppingCart.productos = action.payload;
       //localStorage.setItem("user", JSON.stringify(action.payload));
     },
     setCart: (state, action) => {
-      return { ...state, shoppingCart: [...state.shoppinCart, action.payload] };
+      return { ...state, productos: [...state.shoppinCart.productos, action.payload] };
     },
     eliminateFromCart: (state, action) => {
       return {
@@ -33,11 +33,11 @@ const cartSlice = createSlice({
     },
   },
 });
-export default cartSlice.reducer;
+export default shoppingCartSlice.reducer;
 
 // export actions
 export const { createCard, setCart, eliminateFromCart, deleteCart } =
-  cartSlice.actions;
+  shoppingCartSlice.actions;
 
 // export const newCart = ({ products }) => {
 //   try {

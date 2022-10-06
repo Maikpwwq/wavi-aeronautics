@@ -14,20 +14,17 @@ import App from "./App";
 
 const queryClient = new QueryClient();
 // Create a browser
-// let history = createBrowserHistory(); Borrar esta linea
-history.listen((location, action) => {
-  // this is called whenever new locations come in
-  // the action is POP, PUSH, or REPLACE
-  console.log(location, action);
-});
+
+// history.listen((location, action) => {
+//   // this is called whenever new locations come in
+//   // the action is POP, PUSH, or REPLACE
+//   console.log(location, action);
+// });
+
 // The redux-dev-tools and redux-thunk are already included in redux-toolkit.
 // const composeEnhancers = composeWithDevTools(applyMiddleware(thunkMiddleware)) || compose;
 // const store = createStore(reducer, window.__PRELOADED_STATE__, composeEnhancers());
 const preloadState = window.__PRELOADED_STATE__;
-// const store = configureStore({
-//   reducer: reducer,
-//   preloadState,
-// });
 const store = ConfigureAppStore(preloadState);
 delete window.__PRELOADED_STATE__;
 
@@ -44,3 +41,5 @@ const root = hydrateRoot(
     </Provider>
   </Router>
 );
+
+// export default store;
