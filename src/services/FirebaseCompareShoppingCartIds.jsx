@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { firestore, auth } from "../firebase/firebaseClient";
 import { collection, getDocs } from "firebase/firestore";
-import { sharingInformationService } from "./sharing-information";
+// import { sharingInformationService } from "./sharing-information";
+import { ShowCartContext } from "../pages/commerce/providers/ShoppingCartProvider";
 import PropTypes from "prop-types";
 
-const FirebaseCompareShoppingCartIds = (products) => {
+export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
+  // const { updateCart } = useContext(ShowCartContext);
+  console.log("products", products, updateCart);
   const AllProducts = sessionStorage.getItem("Todos los productos") || null;
   const shoppingCartItems =
     sessionStorage.getItem("cartProducts") !== 0
@@ -125,8 +128,9 @@ const FirebaseCompareShoppingCartIds = (products) => {
       // localStorage.removeItem("cartUpdated");
       // console.log("service", shoppingCart);
       if (!!shoppingCart.productos) {
-        // console.log("service", shoppingCart);
-        sharingInformationService.setSubject(shoppingCart);
+        console.log("service", shoppingCart);
+        updateCart(shoppingCart);
+        // sharingInformationService.setSubject(shoppingCart);
       }
     }
   };

@@ -5,7 +5,7 @@ import FirebaseDroneProducts from "./FirebaseDroneProducts.jsx";
 import FirebaseRadioControlProducts from "./FirebaseRadioControlProducts.jsx";
 import FirebaseTrasmisorReceptorProducts from "./FirebaseTrasmisorReceptorProducts.jsx";
 import FirebaseAccesoriosProducts from "./FirebaseAccesoriosProducts.jsx";
-import FirebaseShoppingCart from "./FirebaseLoadShoppingCart.jsx";
+import FirebaseLoadShoppingCart from "./FirebaseLoadShoppingCart.jsx";
 import FirebaseSubscribe from "./FirebaseSubscribe.jsx";
 
 const urlsPrivate = {
@@ -28,7 +28,7 @@ const getAllDroneProduct = new Observable((subscriber) => {
     subscriber.next(response);
     // subscriber.complete();
   } catch (err) {
-    subscriber.error(err); 
+    subscriber.error(err);
   }
 });
 
@@ -39,7 +39,7 @@ const getAllRadioControl = new Observable((subscriber) => {
     subscriber.next(response);
     // subscriber.complete();
   } catch (err) {
-    subscriber.error(err); 
+    subscriber.error(err);
   }
 });
 
@@ -50,7 +50,7 @@ const getAllTrasmisorReceptor = new Observable((subscriber) => {
     subscriber.next(response);
     // subscriber.complete();
   } catch (err) {
-    subscriber.error(err); 
+    subscriber.error(err);
   }
 });
 
@@ -61,20 +61,19 @@ const getAllAccesoriosProduct = new Observable((subscriber) => {
     subscriber.next(response);
     // subscriber.complete();
   } catch (err) {
-    subscriber.error(err); 
+    subscriber.error(err);
   }
 });
 
 const getAllShoppingCart = new Observable((subscriber) => {
-  // const response = 
-  FirebaseShoppingCart();
-  // console.log("FirebaseShoppingCart", response);
-  // try {
-  //   subscriber.next(response);
-  subscriber.complete();
-  // } catch (err) {
-  //   subscriber.error(err); 
-  // }
+  const response = FirebaseLoadShoppingCart();
+  console.log("FirebaseShoppingCart", response);
+  try {
+    subscriber.next(response);
+    subscriber.complete();
+  } catch (err) {
+    subscriber.error(err);
+  }
 });
 
 const subscribeToWavi = (suscribeMail) =>

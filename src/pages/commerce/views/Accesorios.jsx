@@ -1,17 +1,16 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import ProductCard from "../components/ProductCard";
-
+import React, { useState, useEffect } from "react";
+import { useSelector, connect } from "react-redux";
 import "sessionstorage-polyfill";
 import "localstorage-polyfill";
 global.sessionstorage;
 global.localStorage;
 
+import ProductCard from "../components/ProductCard";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
-import Typography from "../../components/Typography";
-import withRoot from "../../withRoot";
+import Typography from "../../../modules/components/Typography";
+import withRoot from "../../../modules/withRoot";
 import theme from "../innerTheme";
 import { styled } from "@mui/material/styles";
 
@@ -30,40 +29,43 @@ const styles = (theme) => ({
   },
 });
 
-const TrasmisorReceptor = (props) => {
+const Accesorios = (props) => {
   // const { classes } = props;
   const shopState = useSelector((store) => store.shop);
-  const { receptores } = shopState;
+  const { baterias } = shopState;
 
   const classes = styles(theme);
-  const [storeProductsReceptor, setStoreProductsReceptor] = useState(receptores || []);
+
+  const [storeProductsBaterias, setStoreProductsBaterias] = useState(
+    baterias || []
+  );
 
   return (
     <>
       <Box sx={classes.presentationProducts}>
         <Typography variant="h5" sx={classes.spacingTexts}>
-          Receptor para drone.
+          Baterias para drone.
         </Typography>
-        {storeProductsReceptor == undefined ||
-        storeProductsReceptor.length == 0 ? (
+        {storeProductsBaterias == undefined ||
+        storeProductsBaterias.length == 0 ? (
           <Box sx={{ display: "flex" }}>
             <CircularProgress />
           </Box>
         ) : (
           <>
             <Typography variant="body1" sx={classes.endingTexts}>
-              Receptor para cada necesidad en potencia y distacia de vuelo.
+              Baterias para cada necesidad en potencia y tiempo de vuelo.
             </Typography>
             <Grid container spacing={2}>
-              {storeProductsReceptor.map((product, k) => {
+              {storeProductsBaterias.map((product, k) => {
                 // console.log(product, k);
                 // productID
                 return (
                   <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
                     <ProductCard
-                      category="receptores"
                       className="d-flex mb-2"
                       products={product}
+                      category="baterias"
                       productID={k}
                     ></ProductCard>
                   </Grid>
@@ -77,4 +79,10 @@ const TrasmisorReceptor = (props) => {
   );
 };
 
-export default withRoot(TrasmisorReceptor);
+const mapStateToProps = (state) => {
+  return {
+    storeProductsBaterias: state.baterias,
+  };
+};
+
+export default connect(mapStateToProps, null)(withRoot(Accesorios));

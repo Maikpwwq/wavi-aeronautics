@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 // import { useDispatch } from "react-redux";
-
+// import { bindActionCreators } from 'redux'
 // const dispatcher = useDispatch();
 
 export const initialCart = {
@@ -12,12 +12,15 @@ const shoppingCartSlice = createSlice({
   name: "shoppingCart",
   initialState: initialCart,
   reducers: {
-    createCard: (state, action) => {
+    createCart: (state, action) => {
       state.shoppingCart.productos = action.payload;
       //localStorage.setItem("user", JSON.stringify(action.payload));
     },
     setCart: (state, action) => {
-      return { ...state, productos: [...state.shoppinCart.productos, action.payload] };
+      return {
+        ...state,
+        productos: [...state.shoppinCart.productos, action.payload],
+      };
     },
     eliminateFromCart: (state, action) => {
       return {
@@ -36,8 +39,13 @@ const shoppingCartSlice = createSlice({
 export default shoppingCartSlice.reducer;
 
 // export actions
-export const { createCard, setCart, eliminateFromCart, deleteCart } =
+export const { createCart, setCart, eliminateFromCart, deleteCart } =
   shoppingCartSlice.actions;
+
+// const boundActionCreators = bindActionCreators(
+//   { createCart, setCart, eliminateFromCart, deleteCart },
+//   dispatch
+// );
 
 // export const newCart = ({ products }) => {
 //   try {

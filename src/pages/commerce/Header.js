@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { ShowCartContext } from "./providers/ShoppingCartProvider";
 import { useNavigate, NavLink } from "react-router-dom";
-import ShoppingCart from "./views/ShoppingCart";
 
+import ShoppingCart from "./views/ShoppingCart";
 import PropTypes from "prop-types";
 
 import "sessionstorage-polyfill";
@@ -25,8 +26,8 @@ import Tabs from "@mui/material/Tabs";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import withRoot from "../withRoot";
-import theme from "../theme";
+import withRoot from "../../modules/withRoot";
+import theme from "../../modules/theme";
 import { styled } from "@mui/material/styles";
 
 import AvatarUser from "../../../publicAssets/static/img/l3mik3l.png";
@@ -74,56 +75,61 @@ const styles = (theme) => ({
 
 function Header(props) {
   const { onDrawerToggle } = props;
+
+  const { shoppingCart, updateShowCart } = useContext(ShowCartContext);
+  // const ShowCartContext = createContext();
+
   const classes = styles(theme);
   const navigate = useNavigate();
-  const shoppingCartID = localStorage.getItem("cartID");
-  const shoppingCartSuma =
-    sessionStorage.getItem("cartSum") !== 0
-      ? sessionStorage.getItem("cartSum")
-      : null;
-  const shoppingCartItems =
-    sessionStorage.getItem("cartProducts") !== 0
-      ? sessionStorage.getItem("cartProducts")
-      : null;
-  const shoppingUpdatedItems = localStorage.getItem("cartUpdated");
+  // const shoppingCartID = localStorage.getItem("cartID");
+  // const shoppingCartSuma =
+  //   sessionStorage.getItem("cartSum") !== 0
+  //     ? sessionStorage.getItem("cartSum")
+  //     : null;
+  // const shoppingCartItems =
+  //   sessionStorage.getItem("cartProducts") !== 0
+  //     ? sessionStorage.getItem("cartProducts")
+  //     : null;
+  // const shoppingUpdatedItems = localStorage.getItem("cartUpdated");
   // TODO: Cambiar a un estado flase
-  const [showingCart, setShowingCart] = useState(true);
+  // const [showingCart, setShowingCart] = useState(true);
 
-  const [value, setValue] = React.useState(0);
-  const [shoppingCart, setShoppingCart] = useState({
-    suma: shoppingCartSuma > 0 ? shoppingCartSuma : 0,
-    items: shoppingCartItems > 0 ? shoppingCartItems : 0,
-  });
+  const [value, setValue] = useState(0);
+  // const [shoppingCart, setShoppingCart] = useState({
+  //   suma: shoppingCartSuma > 0 ? shoppingCartSuma : 0,
+  //   items: shoppingCartItems > 0 ? shoppingCartItems : 0,
+  // });
 
   const handleShowCart = () => {
-    console.log("showingCart", showingCart);
-    setShowingCart(!showingCart);
-    console.log("showingCart", showingCart);
+    console.log("showingCart", shoppingCart.show);
+    updateShowCart(!shoppingCart.show);
+    // setShowingCart(!showingCart);
+    // console.log("showingCart", showingCart);
     localStorage.setItem("cartUpdated", "show");
   };
 
   // Desde aca se controla el estado de cantidad de productos y total de la compra
 
   // Asignar data almacenada en el localStorage
-  useEffect(() => {
-    if (shoppingCartItems > 0) {
-      // localStorage.setItem("cartUpdated", "items");
-      setShoppingCart({
-        ...shoppingCart,
-        items: shoppingCartItems,
-      });
-    }
-  }, [shoppingCartItems]);
+  // useEffect(() => {
+  //   if (shoppingCartItems > 0) {
+  //     // localStorage.setItem("cartUpdated", "items");
+  //     setShoppingCart({
+  //       ...shoppingCart,
+  //       items: shoppingCartItems,
+  //     });
+  //   }
+  // }, [shoppingCartItems]);
 
-  useEffect(() => {
-    if (shoppingCartSuma > 0) {
-      // localStorage.setItem("cartUpdated", "suma");
-      setShoppingCart({
-        ...shoppingCart,
-        suma: shoppingCartSuma,
-      });
-    }
-  }, [shoppingCartSuma]);
+  // useEffect(() => {
+  //   if (shoppingCartSuma > 0) {
+  //     // localStorage.setItem("cartUpdated", "suma");
+  //     setShoppingCart({
+  //       ...shoppingCart,
+  //       suma: shoppingCartSuma,
+  //     });
+  //   }
+  // }, [shoppingCartSuma]);
 
   const handleChange = (event, newValue) => {
     // console.log(event, newValue);
@@ -239,18 +245,20 @@ function Header(props) {
             </Grid>
             <Grid item>
               <Tooltip title="Carrito">
-                <IconButton color="inherit" onClick={() => handleShowCart}>
+                <IconButton
+                  color="inherit"
+                  onClick={() => updateShowCart(!shoppingCart.show)}
+                >
                   <ShoppingCartIcon fontSize="large" />
                 </IconButton>
               </Tooltip>
             </Grid>
           </Grid>
-
           <ShoppingCart
             className=""
-            visible={showingCart}
-            updated={shoppingUpdatedItems}
-            setShowingCart={setShowingCart}
+            // visible={showingCart}
+            // updated={shoppingUpdatedItems}
+            // setShowingCart={setShowingCart}
           />
           {/* hidden */}
         </Toolbar>

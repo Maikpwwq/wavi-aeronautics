@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { firestore, auth } from "../firebase/firebaseClient";
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
-import { sharingInformationService } from "./sharing-information";
-//import { createCard } from "../store/states/shopping_cart";
+// import { sharingInformationService } from "./sharing-information";
+// import { createCart } from "../store/states/shopping_cart";
 // import store from "../../ssr/renderApp.js";
 
-// import { useStore } from "react-redux";
+// import { connect, useStore } from "react-redux";
+import { ShowCartContext } from "../pages/commerce/providers/ShoppingCartProvider";
+import FirebaseCompareShoppingCartIds from "./FirebaseCompareShoppingCartIds";
 
-function FirebaseLoadShoppingCart(props) {
-  // const store = useStore();
+
+export const FirebaseLoadShoppingCart = () => { // { dispatch }
+
+  const { updateShoppingCart, updateCart } = useContext(ShowCartContext);
+
+  // console.log("props", createCart);
   const user = auth.currentUser || {};
   const userID = user.uid || null;
   const shoppingCartID = localStorage.getItem("cartID") || null;
@@ -54,12 +60,32 @@ function FirebaseLoadShoppingCart(props) {
 
   if (!!usedID) {
     shoppingsFromFirestore().then(() => {
-      // console.log("shoppingCart", shoppingCart);
+      console.log("shoppingCart", shoppingCart);
       // store.dispatch(createCard(shoppingCart));
-      sharingInformationService.setSubject(shoppingCart);
-      return shoppingCart;
+      // dispatch.createCart(shoppingCart);
+      updateShoppingCart(shoppingCart);
+      FirebaseCompareShoppingCartIds({shoppingCart, updateCart}); 
+      // sharingInformationService.setSubject(shoppingCart);
+      // return shoppingCart;
     });
   }
-}
+};
+
+const mapStateToProps = {};
+
+// const mapDispatchToProps = (dispatch) => {
+  //    dispatching plain actions
+  // createCart,
+  // return {
+    // ...bindActionCreators({ createCart }, dispatch)
+    // createCart: (shoppingCart) => dispatch.createCart(shoppingCart),
+    // createCart,
+    // dispatch,
+//   };
+// };
 
 export default FirebaseLoadShoppingCart;
+// export default connect(
+//   mapStateToProps,
+//   null //mapDispatchToProps
+// )(FirebaseLoadShoppingCart);

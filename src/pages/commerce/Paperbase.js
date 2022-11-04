@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { ThemeProvider, styled } from "@mui/material/styles";
-import withRoot from "../withRoot";
-import theme from "../theme";
+import withRoot from "../../modules/withRoot";
+import theme from "../../modules/theme";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -16,6 +16,8 @@ import ShopMarcas from "./components/ShopMarcas";
 import ShopConditions from "./components/ShopConditions";
 import innerTheme from "./innerTheme";
 
+import { getAllShoppingCart } from "../../services/sharedServices";
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -28,8 +30,6 @@ function Copyright() {
     </Typography>
   );
 }
-
-
 
 const drawerWidth = 256;
 
@@ -68,9 +68,9 @@ const Footer = styled("footer")(({ theme }) => ({
 
 const Main = styled("main")(({ theme }) => ({
   flex: 1,
-    padding: theme.spacing(2, 2),
-    background: "#eaeff1",
-    // zIndex: -1,
+  padding: theme.spacing(2, 2),
+  background: "#eaeff1",
+  // zIndex: -1,
 }));
 
 function Paperbase(props) {
@@ -81,6 +81,15 @@ function Paperbase(props) {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  const subscription$ = getAllShoppingCart;
+  subscription$.subscribe((response) => {
+    if (!!response) {
+      console.log("subscription5", response);
+      // const { cart } = response;
+      // shoppingCart.productos = cart;
+    }
+  });
 
   return (
     <ThemeProvider theme={innerTheme}>

@@ -1,12 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import withRoot from "../../withRoot";
+import withRoot from "../../../modules/withRoot";
 import theme from "../innerTheme";
 import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import Typography from "../../components/Typography";
+import Typography from "../../../modules/components/Typography";
 
 const Betafpv =
   "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/marcas%2Fbetafpv_180x.webp?alt=media&token=d7998922-10cd-4fd9-9e92-017ee75383b9";

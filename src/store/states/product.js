@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 // import { useDispatch } from "react-redux";
-
 // const dispatcher = useDispatch();
 
 export const initialProduct = {

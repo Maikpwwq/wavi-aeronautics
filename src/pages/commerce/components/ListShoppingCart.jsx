@@ -1,62 +1,66 @@
-import React, { useState, useEffect } from "react";
-import withRoot from "../../withRoot";
-import theme from "../innerTheme";
-import { useNavigate } from "react-router-dom";
-import { firestore, auth } from "../../../firebase/firebaseClient";
 import { collection, doc, setDoc } from "firebase/firestore";
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { auth, firestore } from "../../../firebase/firebaseClient";
 import { sharingInformationService } from "../../../services/sharing-information";
+import withRoot from "../../../modules/withRoot";
+import theme from "../innerTheme";
+import { ShowCartContext } from "../providers/ShoppingCartProvider";
 
-import PropTypes from "prop-types";
 
-import "sessionstorage-polyfill";
 import "localstorage-polyfill";
+import "sessionstorage-polyfill";
 global.sessionstorage;
 global.localStorage;
 
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 // import CardContent from "@mui/material/CardContent";
 // import CardActions from "@mui/material/CardActions";
 // import { CardActionArea } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
 import CancelIcon from "@mui/icons-material/Cancel";
+import IconButton from "@mui/material/IconButton";
 // import { styled } from "@mui/material/styles";
 
 const styles = (theme) => ({});
 
 const ListShoppingCart = (props) => {
+  const { shoppingCart, updateShowCart, updateShoppingCart, updateCart } =
+    useContext(ShowCartContext);
+  // console.log("ShowCartContext ListShoppingCart", shoppingCart, updateShowCart, updateShoppingCart);
+
   const user = auth.currentUser || {};
   const userID = user.uid || null;
   const shoppingCartID = localStorage.getItem("cartID");
   const usedID = userID ? userID : shoppingCartID;
   const navigate = useNavigate();
-  const { visible, updated, setShowingCart } = props; // products,
+  // const { visible, updated, setShowingCart } = props; // products,
   const classes = styles(theme);
   const _firestore = firestore;
   const shoppingsRef = collection(_firestore, "shoppingCart");
 
-  var shoppingCart = [];
+  var myShoppingCart = [];
   // const [shoppingCart, setShoppingCart] = useState({
   //   productos: [],
   //   suma: 0,
   //   items: 0,
   // });
 
-  console.log("visibility", visible);
+  // console.log("visibility", visible);
   // const handleClick = (e) => {
   //   e.preventDefault();
   //   navigate("/tienda/producto/", { state: { product: products } });
   // };
 
-  if (shoppingCart.length === 0) {
+  if (myShoppingCart.length === 0) {
     const productData = sharingInformationService.getSubject();
     productData.subscribe((data) => {
       if (!!data) {
-        shoppingCart = data;
-        // console.log("Detail shoppingCard", data, shoppingCart);
+        myShoppingCart = data;
+        console.log("Detail shoppingCard", data, shoppingCart);
       }
     });
   }
@@ -69,8 +73,8 @@ const ListShoppingCart = (props) => {
     e.preventDefault();
     if (usedID) {
       let cardProductos = [];
-      console.log("shoppingCart", shoppingCart);
-      shoppingCart.productos.map((product, n) => {
+      console.log("myShoppingCart", myShoppingCart);
+      myShoppingCart.productos.map((product, n) => {
         cardProductos.push(product);
       });
       console.log(cardProductos);
@@ -92,10 +96,10 @@ const ListShoppingCart = (props) => {
   };
 
   const handleCheckout = () => {
-    const productsCart = shoppingCart.productos;
+    const productsCart = myShoppingCart.productos;
     console.log(productsCart);
     localStorage.setItem("cartUpdated", "detalles-envio");
-    setShowingCart(false);
+    updateShowCart(false);
     navigate("/tienda/detalles-envio/", {
       state: { productsCart: productsCart },
     });
@@ -103,10 +107,10 @@ const ListShoppingCart = (props) => {
 
   const handleShoppingCart = () => {
     localStorage.setItem("cartUpdated", "ver-carrito");
-    setShowingCart(false);
+    updateShowCart(false);
     navigate("/tienda/ver-carrito/", {
       state: {
-        makeVisible: visible,
+        makeVisible: shoppingCart.show,
         makeUpdated: updated,
       },
     });
@@ -115,8 +119,8 @@ const ListShoppingCart = (props) => {
   return (
     <>
       <Box className="" maxWidth="sm" style={{ height: "100%" }}>
-        {shoppingCart.productos &&
-          shoppingCart.productos.map(
+        {myShoppingCart.productos &&
+          myShoppingCart.productos.map(
             ({ titulo, precio, imagenes, productID }) => (
               <Card style={{ height: "100%", display: "flex" }} key={productID}>
                 {/* <CardActionArea onClick={handleClick}></CardActionArea> */}
@@ -131,7 +135,7 @@ const ListShoppingCart = (props) => {
                   title={titulo}
                   subheader={precio}
                   action={
-                    <IconButton color="inherit" onClick={handleCancel}>
+                    <IconButton color="inherit" onClick={() => handleCancel}>
                       <CancelIcon fontSize="large" />
                     </IconButton>
                   }
@@ -139,7 +143,7 @@ const ListShoppingCart = (props) => {
               </Card>
             )
           )}
-        <Button variant="contained" color="primary" onClick={handleCheckout}>
+        <Button variant="contained" color="primary" onClick={() => handleCheckout}>
           Finalizar compra
         </Button>
         {/* <Button
@@ -156,10 +160,10 @@ const ListShoppingCart = (props) => {
 
 ListShoppingCart.propTypes = {
   // classes: PropTypes.object.isRequired,
-  setShowingCart: PropTypes.func.isRequired,
+  // setShowingCart: PropTypes.func.isRequired,
   // products: PropTypes.array,
-  visible: PropTypes.bool,
-  updated: PropTypes.string,
+  // visible: PropTypes.bool,
+  // updated: PropTypes.string,
 };
 
 export default withRoot(ListShoppingCart);

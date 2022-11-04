@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, connect } from "react-redux";
 import "sessionstorage-polyfill";
 import "localstorage-polyfill";
 global.sessionstorage;
@@ -9,8 +9,8 @@ import ProductCard from "../components/ProductCard";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
-import Typography from "../../components/Typography";
-import withRoot from "../../withRoot";
+import Typography from "../../../modules/components/Typography";
+import withRoot from "../../../modules/withRoot";
 import theme from "../innerTheme";
 import { styled } from "@mui/material/styles";
 
@@ -29,7 +29,7 @@ const styles = (theme) => ({
   },
 });
 
-const RadioContol = (props) => {
+export const RadioContol = (props) => {
   // const { classes } = props;
   const shopState = useSelector((store) => store.shop);
   const { radioControl } = shopState;
@@ -75,4 +75,10 @@ const RadioContol = (props) => {
   );
 };
 
-export default withRoot(RadioContol);
+const mapStateToProps = (state) => {
+  return {
+    storeProductsRC: state.radioControl,
+  };
+};
+
+export default connect(mapStateToProps, null)(withRoot(RadioContol));

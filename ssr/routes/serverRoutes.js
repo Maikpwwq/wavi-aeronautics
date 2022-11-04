@@ -7,16 +7,18 @@ import SignUp from "../../src/pages/SignUp";
 // import Privacy from "../../src/pages/Privacy";
 import ForgotPassword from "../../src/pages/ForgotPassword";
 import NotFound from "../../src/pages/NotFound";
-import PaperBase from "../../src/modules/users/Paperbase";
+import PaperBase from "../../src/pages/commerce/Paperbase";
 // Rutas Internas Tienda
-import Products from "../../src/modules/users/views/Products";
-import TrasmisorReceptor from "../../src/modules/users/views/TrasmisorReceptor";
-import RadioContol from "../../src/modules/users/views/RadioContol";
-import Accesorios from "../../src/modules/users/views/Accesorios";
-import Software from "../../src/modules/users/views/Software";
-import ProductDetail from "../../src/modules/users/views/ProductDetail";
-import ShoppingCart from "../../src/modules/users/views/ShoppingCart";
-import DetallesEnvio from "../../src/modules/users/views/DetallesEnvio";
+import Products from "../../src/pages/commerce/views/Products";
+import TrasmisorReceptor from "../../src/pages/commerce/views/TrasmisorReceptor";
+import RadioContol from "../../src/pages/commerce/views/RadioContol";
+import Accesorios from "../../src/pages/commerce/views/Accesorios";
+import Software from "../../src/pages/commerce/views/Software";
+import ProductDetail from "../../src/pages/commerce/views/ProductDetail";
+import ShoppingCart from "../../src/pages/commerce/views/ShoppingCart";
+import DetallesEnvio from "../../src/pages/commerce/views/DetallesEnvio";
+
+import ShoppingCartProvider from "../../src/pages/commerce/providers/ShoppingCartProvider";
 
 const serverRoutes = () => {
   return useRoutes([
@@ -51,7 +53,11 @@ const serverRoutes = () => {
     },
     {
       path: "/tienda/*",
-      element: <PaperBase />,
+      element: (
+        <ShoppingCartProvider>
+          <PaperBase />
+        </ShoppingCartProvider>
+      ),
       children: [
         // Rutas Internas Tienda
         {

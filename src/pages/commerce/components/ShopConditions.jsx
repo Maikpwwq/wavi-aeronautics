@@ -1,9 +1,9 @@
 import React from "react";
-import withRoot from "../../withRoot";
+import withRoot from "../../../modules/withRoot";
 import theme from "../innerTheme";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Typography from "../../components/Typography";
+import Typography from "../../../modules/components/Typography";
 
 const styles = (theme) => ({
   container: {

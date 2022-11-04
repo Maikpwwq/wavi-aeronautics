@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { auth } from "../../firebase/firebaseClient";
-import { signOut } from "firebase/auth";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import withRoot from "../withRoot";
-import theme from "../theme";
-import PropTypes from "prop-types";
-import clsx from "clsx";
 import { styled } from "@mui/material/styles";
+import Toolbar from "@mui/material/Toolbar";
+import { signOut } from "firebase/auth";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { auth } from "../../firebase/firebaseClient";
 import AppBar from "../components/AppBar";
+import theme from "../theme";
+import withRoot from "../withRoot";
 // import WaviPixelLogo from "../../../publicAssets/static/img/WaviPixelLogo.png";
 const WaviPixelLogo =
   "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FWaviPixelLogo.png?alt=media&token=7edcec69-8b24-4b95-b970-6b9acfddbdeb";
@@ -79,7 +77,8 @@ function AppAppBar(props) {
     console.log(user, userAuth);
   }, [user]);
 
-  const handleSignOut = () => {
+  const handleSignOut = (e) => {
+    e.preventDefault();
     signOut(auth)
       .then(() => {
         setUserAuth(false);
@@ -139,7 +138,7 @@ function AppAppBar(props) {
                 variant="h6"
                 underline="none"
                 sx={classes.linkSecondary}
-                onClick={handleSignOut}
+                onClick={(e) => handleSignOut(e)}
                 to="/"
               >
                 {"Cerrar Sesión"}

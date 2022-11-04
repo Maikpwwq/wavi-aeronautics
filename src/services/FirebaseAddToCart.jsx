@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { firestore, storage, auth } from "../firebase/firebaseClient";
-import { collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { collection, doc, setDoc } from "firebase/firestore";
+import { auth, firestore } from "../firebase/firebaseClient";
 
 function FirebaseAddToCart({ products }) {
   const productos = products;

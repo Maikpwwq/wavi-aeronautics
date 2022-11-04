@@ -6,7 +6,7 @@ import createEmotionCache from "./createEmotionCache";
 import createEmotionServer from "@emotion/server/create-instance";
 import theme from "../src/modules/theme";
 import { Provider } from "react-redux";
-import ConfigureAppStore from "../src/store/index";
+import ConfigureAppStore from "../src/store/store";
 import { StaticRouter } from "react-router-dom/server";
 import serverRoutes from "./routes/serverRoutes";
 import initialState from "./initialState";

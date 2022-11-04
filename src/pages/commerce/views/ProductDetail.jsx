@@ -16,9 +16,9 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import SwipeableViews from "react-swipeable-views";
-import Typography from "../../components/Typography";
+import Typography from "../../../modules/components/Typography";
 import { autoPlay } from "react-swipeable-views-utils";
-import withRoot from "../../withRoot";
+import withRoot from "../../../modules/withRoot";
 // import theme from "../innerTheme";
 // import { styled } from "@mui/material/styles";
 
@@ -79,6 +79,7 @@ const ProductDetail = (props) => {
   };
 
   const handleStepChange = (step) => {
+    console.log("step", step);
     setActiveStep(step);
   };
 
@@ -99,7 +100,7 @@ const ProductDetail = (props) => {
                     <AutoPlaySwipeableViews
                       axis={theme.direction === "rtl" ? "x-reverse" : "x"}
                       index={activeStep}
-                      onChangeIndex={handleStepChange}
+                      onChangeIndex={(e) => handleStepChange(e)}
                       enableMouseEvents
                     >
                       {!!product.imagenes &&
@@ -126,7 +127,7 @@ const ProductDetail = (props) => {
                       nextButton={
                         <Button
                           size="small"
-                          onClick={handleNext}
+                          onClick={() => handleNext()}
                           disabled={activeStep === maxSteps - 1}
                         >
                           Siguiente
@@ -140,7 +141,7 @@ const ProductDetail = (props) => {
                       backButton={
                         <Button
                           size="small"
-                          onClick={handleBack}
+                          onClick={() => handleBack()}
                           disabled={activeStep === 0}
                         >
                           {theme.direction === "rtl" ? (

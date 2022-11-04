@@ -80,7 +80,8 @@ const ProductCard = ({ products, category }) => {
             {producto !== undefined && imagenes && (
               <NavLink
                 to={{
-                  pathname: `producto?id=${productID}&category=${categoria}`, // titulo
+                  pathname: `producto`, // titulo
+                  search: `?id=${productID}&category=${categoria}`,
                   // state: { product: products },
                 }}
               >
@@ -97,7 +98,7 @@ const ProductCard = ({ products, category }) => {
             title={titulo}
             subheader={precio}
             action={
-              <IconButton color="inherit" onClick={handleAddCard}>
+              <IconButton color="inherit" onClick={(e) => handleAddCard(e)}>
                 <AddShoppingCartIcon fontSize="large" />
               </IconButton>
             }

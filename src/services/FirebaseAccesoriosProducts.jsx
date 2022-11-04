@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { collection, doc, getDocs } from "firebase/firestore";
 import { firestore, storage } from "../firebase/firebaseClient";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 
 function FirebaseAccesoriosProducts(props) {
   const shoppingCartID = localStorage.getItem("cartID") || null;

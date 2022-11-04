@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 // import history from "./history";
 import { createBrowserHistory as history } from "history";
 import { Provider } from "react-redux";
-import ConfigureAppStore from "./store/index";
+import ConfigureAppStore from "./store/store";
 // import { createStore, compose, applyMiddleware } from 'redux'
 // import thunkMiddleware from 'redux-thunk'
 // import { composeWithDevTools } from '@redux-devtools/extension';
