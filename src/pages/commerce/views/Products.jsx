@@ -7,7 +7,7 @@ import {
   useDispatch,
 } from "react-redux";
 import { useTheme } from "@mui/material/styles";
-import withRoot from "../../../modules/withRoot";
+import withRoot from "modules/withRoot";
 import theme from "../innerTheme";
 import { styled } from "@mui/material/styles";
 
@@ -20,7 +20,7 @@ import Box from "@mui/material/Box";
 import ProductCard from "../components/ProductCard";
 import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
-import Typography from "../../../modules/components/Typography";
+import Typography from "modules/components/Typography";
 
 const styles = (theme) => ({
   presentationProducts: {

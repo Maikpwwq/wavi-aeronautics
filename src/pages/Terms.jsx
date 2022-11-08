@@ -1,14 +1,14 @@
-import withRoot from "../modules/withRoot";
+import withRoot from "modules/withRoot";
 // --- Post bootstrap -----
 import React, { useState, useEffect } from "react";
 // import ReactMarkdown from 'react-markdown'
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-import Markdown from "../modules/components/Markdown";
-import Typography from "../modules/components/Typography";
-import AppAppBar from "../modules/views/AppAppBar";
-// import terms from "../modules/views/terms.md";
-import AppFooter from "../modules/views/AppFooter";
+import Markdown from "modules/components/Markdown";
+import Typography from "modules/components/Typography";
+import AppAppBar from "modules/views/AppAppBar";
+// import terms from "modules/views/terms.md";
+import AppFooter from "modules/views/AppFooter";
 
 function Terms() {
   let [readable, setReadable] = useState({ md: "terms" });

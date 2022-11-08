@@ -16,9 +16,9 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import SwipeableViews from "react-swipeable-views";
-import Typography from "../../../modules/components/Typography";
+import Typography from "modules/components/Typography";
 import { autoPlay } from "react-swipeable-views-utils";
-import withRoot from "../../../modules/withRoot";
+import withRoot from "modules/withRoot";
 // import theme from "../innerTheme";
 // import { styled } from "@mui/material/styles";
 

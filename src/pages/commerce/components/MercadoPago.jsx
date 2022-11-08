@@ -3,15 +3,15 @@ import "sessionstorage-polyfill";
 import "localstorage-polyfill";
 global.sessionstorage;
 global.localStorage;
-import { auth } from "../../../firebase/firebaseClient";
+import { auth } from "firebase/firebaseClient";
 import { useNavigate } from "react-router-dom";
 import { useMercadopago } from "react-sdk-mercadopago";
 // import mercadopago from "mercadopago";
 var mercadopago = require("mercadopago");
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Typography from "../../../modules/components/Typography";
-import withRoot from "../../../modules/withRoot";
+import Typography from "modules/components/Typography";
+import withRoot from "modules/withRoot";
 import theme from "../innerTheme";
 import { styled } from "@mui/material/styles";
 

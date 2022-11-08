@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
-import Typography from "../../../modules/components/Typography";
-import withRoot from "../../../modules/withRoot";
+import Typography from "modules/components/Typography";
+import withRoot from "modules/withRoot";
 import theme from "../innerTheme";
 import { styled } from "@mui/material/styles";
 

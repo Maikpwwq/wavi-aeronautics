@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 // import { loadDetail } from "../../../store/states/product";
 // import { getAllShoppingCart } from "../../../services/sharedServices";
-import FirebaseAddToCart from "../../../services/FirebaseAddToCart";
+import FirebaseAddToCart from "services/FirebaseAddToCart";
 
 import "sessionstorage-polyfill";
 import "localstorage-polyfill";

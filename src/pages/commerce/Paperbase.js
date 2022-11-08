@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { ThemeProvider, styled } from "@mui/material/styles";
-import withRoot from "../../modules/withRoot";
-import theme from "../../modules/theme";
+import withRoot from "modules/withRoot";
+import theme from "modules/theme";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -16,7 +16,7 @@ import ShopMarcas from "./components/ShopMarcas";
 import ShopConditions from "./components/ShopConditions";
 import innerTheme from "./innerTheme";
 
-import { getAllShoppingCart } from "../../services/sharedServices";
+import { getAllShoppingCart } from "services/sharedServices";
 
 function Copyright() {
   return (

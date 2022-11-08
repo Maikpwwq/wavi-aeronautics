@@ -2,8 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import withRoot from "../../modules/withRoot";
-import theme from "../../modules/theme";
+import withRoot from "modules/withRoot";
+import theme from "modules/theme";
 import { styled } from "@mui/material/styles";
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';

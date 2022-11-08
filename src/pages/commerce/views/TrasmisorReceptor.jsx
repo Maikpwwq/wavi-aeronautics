@@ -10,8 +10,8 @@ global.localStorage;
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
-import Typography from "../../../modules/components/Typography";
-import withRoot from "../../../modules/withRoot";
+import Typography from "modules/components/Typography";
+import withRoot from "modules/withRoot";
 import theme from "../innerTheme";
 import { styled } from "@mui/material/styles";
 

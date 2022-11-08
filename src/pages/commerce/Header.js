@@ -26,8 +26,8 @@ import Tabs from "@mui/material/Tabs";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import withRoot from "../../modules/withRoot";
-import theme from "../../modules/theme";
+import withRoot from "modules/withRoot";
+import theme from "modules/theme";
 import { styled } from "@mui/material/styles";
 
 import AvatarUser from "../../../publicAssets/static/img/l3mik3l.png";

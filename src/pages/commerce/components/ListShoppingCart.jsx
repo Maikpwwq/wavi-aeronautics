@@ -1,9 +1,9 @@
 import { collection, doc, setDoc } from "firebase/firestore";
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth, firestore } from "../../../firebase/firebaseClient";
-import { sharingInformationService } from "../../../services/sharing-information";
-import withRoot from "../../../modules/withRoot";
+import { auth, firestore } from "firebase/firebaseClient";
+import { sharingInformationService } from "services/sharing-information";
+import withRoot from "modules/withRoot";
 import theme from "../innerTheme";
 import { ShowCartContext } from "../providers/ShoppingCartProvider";
 

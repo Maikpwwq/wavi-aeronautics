@@ -1,8 +1,8 @@
 import React from "react";
 import { hydrateRoot } from "react-dom/client";
 import { BrowserRouter as Router } from "react-router-dom";
-// import history from "./history";
-import { createBrowserHistory as history } from "history";
+import * as history from "./history";
+// import { createBrowserHistory as history } from "./history";
 import { Provider } from "react-redux";
 import ConfigureAppStore from "./store/store";
 // import { createStore, compose, applyMiddleware } from 'redux'
@@ -41,5 +41,3 @@ const root = hydrateRoot(
     </Provider>
   </Router>
 );
-
-// export default store;
