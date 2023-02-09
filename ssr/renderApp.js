@@ -37,7 +37,17 @@ const setResponse = (html, css, preloadedState, manifest) => {
           script-src 'self' 'unsafe-inline' https://wavi-aeronautics-drones.web.app/src/ https://cdn.polyfill.io https://code.jquery.com https://www.google-analytics.com https://connect.facebook.net/es_LA/sdk/xfbml.customerchat.js;
           style-src 'self' 'unsafe-inline' https://wavi-aeronautics-drones.web.app/ https://cdn.jsdelivr.net https://use.fontawesome.com https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap https://fonts.googleapis.com/icon?family=Material+Icons; 
           font-src 'self' 'unsafe-inline' https://fonts.gstatic.com/s/roboto/v30/ https://fonts.gstatic.com/s/materialicons/v139/;"
-        <meta name="author" content="Michael Arias">
+        >
+        <meta name="author" content="Wavi Aeronautics" >
+        <meta
+          name="description"
+          content="Manufacture, distribution and maintenance of Drones. Get updated with the latest trends in technology and advanced VToL equipment."
+        >
+        <meta
+          name="keywords"
+          content="drone, pilotos fpv, fpv, controladora, receptora, baterias para drone, googles, gafas fpv, props, hélices, Kits FPV, Drones RC, Control remoto"
+        >
+        <meta name="google-site-verification" content="HXuPDd0BHjnltDHLqyQkYG5_IRx968JwaWKFEIvOdOI">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>

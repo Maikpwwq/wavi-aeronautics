@@ -1,8 +1,27 @@
 {
   "name": "wavi-aeronautics",
   "version": "1.0.0",
-  "description": "",
+  "description": "Manufacture, distribution and maintenance of Drones. Get updated with the latest trends in technology and advanced VToL equipment.",
   "main": "index.js",
+  "keywords": [
+    "vtol",
+    "aeronautica",
+    "radio control",
+    "drone",
+    "pilotos fpv",
+    "fpv",
+    "controladora",
+    "receptora",
+    "baterias para drone",
+    "googles",
+    "gafas fpv",
+    "props",
+    "hélices",
+    "Kits FPV",
+    "Drones RC",
+    "Control remoto"
+  ],
+  "author": "Wavi Aeronautics",
   "dependencies": {
     "@emotion/cache": "^11.10.5",
     "@emotion/css": "^11.10.5",
@@ -113,12 +132,6 @@
     "type": "git",
     "url": "git+https://github.com/Maikpwwq/wavi-aeronautics.git"
   },
-  "keywords": [
-    "vtol",
-    "aeronautica",
-    "radio control"
-  ],
-  "author": "Michael Arias",
   "license": "ISC",
   "browserslist": {
     "production": [
