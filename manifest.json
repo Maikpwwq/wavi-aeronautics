@@ -1,14 +1,14 @@
 {
-  "main.css": "/wavi-aeronautics/assets/app.d2d2054a6f2a6b326f44.css",
-  "main.js": "/wavi-aeronautics/assets/app.d2d2054a6f2a6b326f44.js",
-  "vendors.js": "/wavi-aeronautics/assets/vendor-bcfa706bca78703d1380.js",
-  "assets/l3mik3l.png": "/wavi-aeronautics/assets/l3mik3l.png",
-  "assets/productCurvyLines.png": "/wavi-aeronautics/assets/productCurvyLines.png",
-  "assets/appFooterLinkedin.png": "/wavi-aeronautics/assets/appFooterLinkedin.png",
-  "assets/productHeroWonder.png": "/wavi-aeronautics/assets/productHeroWonder.png",
-  "assets/productHeroArrowDown.png": "/wavi-aeronautics/assets/productHeroArrowDown.png",
-  "assets/productCTAImageDots.png": "/wavi-aeronautics/assets/productCTAImageDots.png",
-  "app.css.map": "/wavi-aeronautics/assets/app.d2d2054a6f2a6b326f44.css.map",
-  "app.js.map": "/wavi-aeronautics/assets/app.d2d2054a6f2a6b326f44.js.map",
-  "vendor-js.map": "/wavi-aeronautics/assets/vendor-bcfa706bca78703d1380.js.map"
+  "main.css": "/assets/app.9e452695f14d8c2cb528.css",
+  "main.js": "/assets/app.js",
+  "vendors.js": "/assets/vendor.js",
+  "assets/l3mik3l.png": "/assets/l3mik3l.png",
+  "assets/productCurvyLines.png": "/assets/productCurvyLines.png",
+  "assets/appFooterLinkedin.png": "/assets/appFooterLinkedin.png",
+  "assets/productHeroWonder.png": "/assets/productHeroWonder.png",
+  "assets/productHeroArrowDown.png": "/assets/productHeroArrowDown.png",
+  "assets/productCTAImageDots.png": "/assets/productCTAImageDots.png",
+  "app.css.map": "/assets/app.9e452695f14d8c2cb528.css.map",
+  "app.js.map": "/assets/app.js.map",
+  "vendor.js.map": "/assets/vendor.js.map"
 }
