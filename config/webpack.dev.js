@@ -34,10 +34,12 @@ const devConfig = {
         use: { 
           loader: "babel-loader",
           // options: {
-          //   plugins: require.resolve('react-refresh/babel')
-          // },
+          //   presets: [
+          //     ['@babel/preset-env', { targets: "defaults" }]
+          //   ]
+          // }
         },
-        test: /\.(js|jsx)$/,
+        test: /\.(js|jsx)$/, // /\.m?js$/,
         exclude: /(node_modules)/,
       },
       {
