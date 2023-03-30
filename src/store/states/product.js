@@ -17,7 +17,8 @@ const productSlice = createSlice({
   initialState: initialProduct,
   reducers: {
     loadDetail: (state, action) => {
-      state.product = action.payload;
+      console.log("loadDetail", state, action);
+      state = action.payload;
       //localStorage.setItem("currentProduct", JSON.stringify(action.payload));
     },
     modifyDetail: (state, action) => {

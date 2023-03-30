@@ -5,7 +5,7 @@ import { styled } from "@mui/material/styles";
 import withRoot from "../withRoot";
 import theme from "../theme";
 import Typography from '../components/Typography';
-
+ 
 const styles = (theme) => ({
   root: {
     padding: theme.spacing(2),

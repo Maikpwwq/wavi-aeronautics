@@ -4,7 +4,7 @@
   },
   "hosting": {
     "site": "wavi-aeronautics-drones",
-    "public": "dist",
+    "public": "ssr/public", 
     "ignore": [
       "firebase.json",
       "**/.*",

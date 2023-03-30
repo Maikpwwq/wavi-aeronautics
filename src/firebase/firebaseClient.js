@@ -1,4 +1,4 @@
-import { firebaseClientConfig } from './firebaseConfig'
+import { firebaseClientConfig } from '@/firebase/firebaseConfig'
 import { getApps, initializeApp } from 'firebase/app'
 // import * as fb from 'firebase/compat/app'
 

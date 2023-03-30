@@ -1,8 +1,10 @@
+"use client";
 import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import PropTypes from "prop-types";
-import withRoot from "../withRoot";
-import theme from "../theme";
+import withRoot from "@/modules/withRoot";
+import theme from "@/modules/theme";
 import Box from "@mui/material/Box";
 import ButtonBase from "@mui/material/ButtonBase";
 import Container from "@mui/material/Container";
@@ -108,11 +110,11 @@ const styles = (theme) => ({
 function ProductCategories(props) {
   // const { classes } = props;
   const classes = styles(theme);
-  // const navigate = useNavigate();
+  const navigate = useRouter();
 
-  // const handleImageClick = () => {
-  //   navigate("/tienda/");
-  // };
+  const handleImageClick = () => {
+    navigate.push("/tienda/");
+  };
 
   const images = [
     {
@@ -170,33 +172,33 @@ function ProductCategories(props) {
       <Box sx={classes.images}>
         {images.map((image) => (
           <ButtonBase
-            // onClick={handleImageClick}
+            onClick={handleImageClick}
             key={image.title}
             sx={classes.imageWrapper}
             style={{
               width: image.width,
             }}
           >
-            <NavLink to="/tienda/">
-            <Box
-              sx={classes.imageSrc}
-              style={{
-                backgroundImage: `url(${image.url})`,
-              }}
-            />
-            <Box sx={classes.imageBackdrop} />
-            <Box sx={classes.imageButton}>
-              <Typography
-                component="h3"
-                variant="h6"
-                color="inherit"
-                sx={classes.imageTitle}
-              >
-                {image.title}
-                <Box sx={classes.imageMarked} />
-              </Typography>
-            </Box>
-            </NavLink>
+            <Link href="/tienda/">
+              <Box
+                sx={classes.imageSrc}
+                style={{
+                  backgroundImage: `url(${image.url})`,
+                }}
+              />
+              <Box sx={classes.imageBackdrop} />
+              <Box sx={classes.imageButton}>
+                <Typography
+                  component="h3"
+                  variant="h6"
+                  color="inherit"
+                  sx={classes.imageTitle}
+                >
+                  {image.title}
+                  <Box sx={classes.imageMarked} />
+                </Typography>
+              </Box>
+            </Link>
           </ButtonBase>
         ))}
       </Box>

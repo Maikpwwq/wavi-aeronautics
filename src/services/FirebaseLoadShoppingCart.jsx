@@ -1,24 +1,30 @@
+"use client";
 import React, { useState, useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { firestore, auth } from "../firebase/firebaseClient";
+import { firestore, auth } from "@/firebase/firebaseClient";
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
 // import { sharingInformationService } from "./sharing-information";
 // import { createCart } from "../store/states/shopping_cart";
 // import store from "../../ssr/renderApp.js";
 
 // import { connect, useStore } from "react-redux";
-import { ShowCartContext } from "../pages/commerce/providers/ShoppingCartProvider";
+import { ShowCartContext } from "@/app/tienda/providers/ShoppingCartProvider";
 import FirebaseCompareShoppingCartIds from "./FirebaseCompareShoppingCartIds";
 
-
-export const FirebaseLoadShoppingCart = () => { // { dispatch }
+export const FirebaseLoadShoppingCart = () => {
+  // { dispatch }
 
   const { updateShoppingCart, updateCart } = useContext(ShowCartContext);
 
   // console.log("props", createCart);
   const user = auth.currentUser || {};
   const userID = user.uid || null;
-  const shoppingCartID = localStorage.getItem("cartID") || null;
+  let shoppingCartID = null;
+
+  if (typeof window !== "undefined") {
+    // Perform localStorage action
+    shoppingCartID = localStorage.getItem("cartID") || null;
+  }
 
   // const shoppingUpdatedItems = localStorage.getItem("cartUpdated");
   const usedID = userID ? userID : shoppingCartID;
@@ -64,7 +70,7 @@ export const FirebaseLoadShoppingCart = () => { // { dispatch }
       // store.dispatch(createCard(shoppingCart));
       // dispatch.createCart(shoppingCart);
       updateShoppingCart(shoppingCart);
-      FirebaseCompareShoppingCartIds({shoppingCart, updateCart}); 
+      FirebaseCompareShoppingCartIds({ shoppingCart, updateCart });
       // sharingInformationService.setSubject(shoppingCart);
       // return shoppingCart;
     });
@@ -74,13 +80,13 @@ export const FirebaseLoadShoppingCart = () => { // { dispatch }
 const mapStateToProps = {};
 
 // const mapDispatchToProps = (dispatch) => {
-  //    dispatching plain actions
-  // createCart,
-  // return {
-    // ...bindActionCreators({ createCart }, dispatch)
-    // createCart: (shoppingCart) => dispatch.createCart(shoppingCart),
-    // createCart,
-    // dispatch,
+//    dispatching plain actions
+// createCart,
+// return {
+// ...bindActionCreators({ createCart }, dispatch)
+// createCart: (shoppingCart) => dispatch.createCart(shoppingCart),
+// createCart,
+// dispatch,
 //   };
 // };
 

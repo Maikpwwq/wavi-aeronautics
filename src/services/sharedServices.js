@@ -16,9 +16,21 @@ const urlsPrivate = {
 };
 
 const getProductById = (searchId, category) =>
-  new Observable((subscriber) => {
-    const response = FirebaseSearchProductById(searchId, category);
-    console.log("firebase Id search", searchId, category, response);
+  new Observable(async (subscriber) => {
+    const response = await FirebaseSearchProductById(searchId, category);
+    try {
+      console.log(
+        "firebase-Id-search",
+        searchId,
+        category,
+        response,
+        // subscriber
+      );
+      subscriber.next(response);
+      // subscriber.complete();
+    } catch (err) {
+      subscriber.error(err);
+    }
   });
 
 const getAllDroneProduct = new Observable((subscriber) => {

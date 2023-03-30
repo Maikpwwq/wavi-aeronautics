@@ -3,12 +3,13 @@ import { styled } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import { signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
-import { auth } from "../../firebase/firebaseClient";
+import Link from "next/link";
+import { auth } from "@/firebase/firebaseClient";
 import AppBar from "../components/AppBar";
 import theme from "../theme";
 import withRoot from "../withRoot";
-// import WaviPixelLogo from "../../../publicAssets/static/img/WaviPixelLogo.png";
+import clsx from "clsx";
+// import WaviPixelLogo from "public/static/img/WaviPixelLogo.png";
 const WaviPixelLogo =
   "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FWaviPixelLogo.png?alt=media&token=7edcec69-8b24-4b95-b970-6b9acfddbdeb";
 
@@ -20,7 +21,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   },
 }));
 
-const StyledNavLink = styled(NavLink)(({ theme }) => ({
+const StyledNavLink = styled(Link)(({ theme }) => ({
   fontSize: 16,
   color: theme.palette.common.white,
   marginRight: "1em",
@@ -56,7 +57,11 @@ const styles = (theme) => ({
     alignItems: "center",
     maxWidth: "360px",
   },
-
+  link: {
+    fontSize: "21px",
+    textDecoration: "none",
+    color: "white",
+  },
   linkSecondary: {
     color: theme.palette.secondary.main, // "#00aCe4",
   },
@@ -96,20 +101,22 @@ function AppAppBar(props) {
       <AppBar
         position="fixed"
         className="main-bar navlink"
-        style={{ flexDirection: "row" }}
+        style={{ flexDirection: "row", justifyContent: "space-evenly" }}
       >
         <StyledToolbar>
           <Box sx={classes.left}>
-            <NavLink
-              to="/"
+            <Link
+              href="/" 
               variant="h6"
               underline="none"
               color="inherit"
-              sx={classes.title}
+              sx={classes.link}
               style={{
                 alignItems: "center",
                 display: "flex",
                 fontSize: "2rem",
+                color: "white",
+                textDecoration: "none",
               }}
               // activeClassName="active"
             >
@@ -120,26 +127,28 @@ function AppAppBar(props) {
                 alt="logo Wavi Aeronautics"
               />
               {"Wavi Aeronautics"}
-            </NavLink>
+            </Link>
           </Box>
         </StyledToolbar>
         <Box sx={classes.right} sm={12} xs={12}>
           <StyledNavLink
+            sx={classes.link}
             color="inherit"
             variant="h6"
             underline="none"
-            to="/tienda/"
+            href="/tienda/drones"
           >
             {"Tienda"}
           </StyledNavLink>
           {userAuth ? (
             <>
               <StyledNavLink
+                sx={classes.link}
                 variant="h6"
                 underline="none"
                 sx={classes.linkSecondary}
                 onClick={(e) => handleSignOut(e)}
-                to="/"
+                href="/"
               >
                 {"Cerrar Sesión"}
               </StyledNavLink>
@@ -147,10 +156,11 @@ function AppAppBar(props) {
           ) : (
             <>
               <StyledNavLink
+                sx={classes.link}
                 color="inherit"
                 variant="h6"
                 underline="none"
-                to="/sign-in/"
+                href="auth/sign-in/"
               >
                 {"Iniciar sesión"}
               </StyledNavLink>
@@ -158,9 +168,9 @@ function AppAppBar(props) {
                 variant="h6"
                 underline="none"
                 className={clsx(classes.rightLink, classes.linkSecondary)}
-                to="/sign-up/"
+                href="/sign-up/"
               >
-                <NavLink to="/sign-up/">{"Registrarse"}</NavLink>
+                <Link href="/sign-up/">{"Registrarse"}</Link>
               </Link> */}
             </>
           )}

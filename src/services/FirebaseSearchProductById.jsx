@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { firestore } from "../firebase/firebaseClient";
+import { firestore } from "@/firebase/firebaseClient";
 import { collection, doc, getDocs, query, where } from "firebase/firestore";
 
-import { sharingInformationService } from "./sharing-information";
+import { sharingInformationService } from "@/services/sharing-information";
 
 const FirebaseSearchProductById = (searchId, category) => {
   const _firestore = firestore;
@@ -133,15 +133,15 @@ const FirebaseSearchProductById = (searchId, category) => {
   };
 
   const productoSearchStore = () => {
-    let productData;
     let productos = [];
-    productData = productSearchFirestore();
+    const productData = productSearchFirestore();
     productData.then((response) => {
       productos = parsePrices(response);
       if (productos && productos.length > 0) {
-        // console.log("productos", productos);
+        // console.log("compare productos", productos);
         currentProduct = productos;
         sharingInformationService.setSubject(productos);
+        return productos;
       }
     });
   };
@@ -164,6 +164,10 @@ const FirebaseSearchProductById = (searchId, category) => {
   };
 
   productoSearchStore();
+  if (currentProduct.length > 0) {
+    const response = { currentProduct };
+    return response;
+  }
 };
 
 FirebaseSearchProductById.propTypes = {

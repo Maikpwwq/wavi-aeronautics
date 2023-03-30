@@ -1,9 +1,9 @@
 import React, {useState} from "react";
 import PropTypes from "prop-types";
-import { getSubscribe } from "../../services/sharedServices";
-// import FirebaseSubscribe from "../../services/FirebaseSubscribe.jsx";
-import withRoot from "../withRoot";
-import theme from "../theme";
+import { getSubscribe } from "@/services/sharedServices";
+// import FirebaseSubscribe from "@/services/FirebaseSubscribe.jsx";
+import withRoot from "@/modules/withRoot";
+import theme from "@/modules/theme";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -13,8 +13,8 @@ import TextField from "../components/TextField";
 import Snackbar from "../components/Snackbar";
 import Button from "../components/Button";
 
-import productCTAImageDots from "../../../publicAssets/static/themes/productCTAImageDots.png";
-// import PostalOfertas from "../../../publicAssets/static/img/Toma-Aerea-Ciudad.png";
+import productCTAImageDots from "public/static/themes/productCTAImageDots.png";
+// import PostalOfertas from "public/static/img/Toma-Aerea-Ciudad.png";
 
 const styles = (theme) => ({
   root: {

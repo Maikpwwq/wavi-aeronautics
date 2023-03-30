@@ -1,12 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 // import clsx from "clsx";
-import withRoot from "../withRoot";
-import theme from "../theme";
+import withRoot from "@/modules/withRoot";
+import theme from "@/modules/theme";
+import Image from "next/image";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import productHeroWonder from "../../../publicAssets/static/themes/productHeroWonder.png";
-import productHeroArrowDown from "../../../publicAssets/static/themes/productHeroArrowDown.png";
+import productHeroWonder from "public/static/themes/productHeroWonder.png";
+import productHeroArrowDown from "public/static/themes/productHeroArrowDown.png";
 import Typography from "../components/Typography";
 
 const styles = (theme) => ({
@@ -27,7 +28,7 @@ const styles = (theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    textAlign: "center"
+    textAlign: "center",
   },
   backdrop: {
     position: "absolute",
@@ -54,21 +55,22 @@ function ProductHeroLayout(props) {
   return (
     <Box sx={classes.root}>
       <Container sx={classes.container}>
-        <Box
-          component="img"
+        <Image
           src={productHeroWonder}
           alt="maravilloso"
-          width="147"
-          height="80"
+          width={147}
+          height={80}
+          priority
         />
         {children}
         <Box sx={classes.backdrop} />
         <Box sx={backgroundClassName} />
-        <Box
-          component="img"
-          sx={classes.arrowDown}
+        <Image
+          className={classes.arrowDown}
           src={productHeroArrowDown}
           alt="Desliza para ver más"
+          width={33}
+          height={39}
         />
       </Container>
       {/* <Container>

@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import PropTypes from "prop-types";
 import withRoot from "../withRoot";
 import theme from "../theme";
@@ -6,14 +7,14 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "../components/Typography";
-// import Betafpv from "../../../publicAssets/static/img/marcas/betafpv_180x.webp";
-// import Emax from "../../../publicAssets/static/img/marcas/emax_180x.webp";
-// import Ethix from "../../../publicAssets/static/img/marcas/ethix_180x.webp";
-// import Flywoo from "../../../publicAssets/static/img/marcas/flywoo_180x.webp";
-// import Geprc from "../../../publicAssets/static/img/marcas/geprc_logo_180x.webp";
-// import iFlight from "../../../publicAssets/static/img/marcas/iFlight_180x.webp";
-// import RadioMaster from "../../../publicAssets/static/img/marcas/RadioMaster.webp";
-// import Tbs from "../../../publicAssets/static/img/marcas/TBS.webp";
+// import Betafpv from "public/static/img/marcas/betafpv_180x.webp";
+// import Emax from "public/static/img/marcas/emax_180x.webp";
+// import Ethix from "public/static/img/marcas/ethix_180x.webp";
+// import Flywoo from "public/static/img/marcas/flywoo_180x.webp";
+// import Geprc from "public/static/img/marcas/geprc_logo_180x.webp";
+// import iFlight from "public/static/img/marcas/iFlight_180x.webp";
+// import RadioMaster from "public/static/img/marcas/RadioMaster.webp";
+// import Tbs from "public/static/img/marcas/TBS.webp";
 
 const Betafpv =
   "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/marcas%2Fbetafpv_180x.webp?alt=media&token=d7998922-10cd-4fd9-9e92-017ee75383b9";
@@ -32,7 +33,7 @@ const RadioMaster =
 const Tbs =
   "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/marcas%2FTBS.webp?alt=media&token=529dc8dd-b142-458c-bb44-e365a75fb4f3";
 
-import productCurvyLines from "../../../publicAssets/static/themes/productCurvyLines.png";
+import productCurvyLines from "public/static/themes/productCurvyLines.png";
 
 const styles = (theme) => ({
   root: {
@@ -96,11 +97,14 @@ function ProductMarcas(props) {
   return (
     <Box sx={classes.root}>
       <Container sx={classes.container} style={{ textAlign: "center" }}>
-        <Box 
-          component="img"
+        <Image
           src={productCurvyLines}
           sx={classes.curvyLines}
           alt="curvy lines"
+          style={{ position: "absolute" }}
+          // width={100}
+          // height={100}
+          priority
         />
         <Typography
           variant="h4"

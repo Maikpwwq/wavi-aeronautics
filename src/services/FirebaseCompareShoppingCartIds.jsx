@@ -1,8 +1,9 @@
+"use client";
 import React, { useState, useContext } from "react";
-import { firestore, auth } from "../firebase/firebaseClient";
+import { firestore, auth } from "@/firebase/firebaseClient";
 import { collection, getDocs } from "firebase/firestore";
 // import { sharingInformationService } from "./sharing-information";
-import { ShowCartContext } from "../pages/commerce/providers/ShoppingCartProvider";
+import { ShowCartContext } from "@/app/tienda/providers/ShoppingCartProvider";
 import PropTypes from "prop-types";
 
 export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {

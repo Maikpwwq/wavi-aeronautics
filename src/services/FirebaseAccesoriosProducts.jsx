@@ -1,10 +1,14 @@
 import { collection, doc, getDocs } from "firebase/firestore";
-import { firestore, storage } from "../firebase/firebaseClient";
+import { firestore, storage } from "@/firebase/firebaseClient";
 
 function FirebaseAccesoriosProducts(props) {
-  const shoppingCartID = localStorage.getItem("cartID") || null;
-  const productosBaterias =
-    sessionStorage.getItem("Productos_Baterias") || null;
+  let shoppingCartID = null;
+  let productosBaterias = null;
+  if (typeof window !== "undefined") {
+    // Perform localStorage action
+    shoppingCartID = sessionStorage.getItem("cartID") || null;
+    productosBaterias = sessionStorage.getItem("Productos_Baterias") || null;
+  }
   const _storage = storage;
   const _firestore = firestore;
   const productsRef = collection(_firestore, "productos");
@@ -100,7 +104,7 @@ function FirebaseAccesoriosProducts(props) {
 
   const parsePrices = (productos) => {
     // console.log(productos);
-    if (productos && productos.length > 0) {
+    if (productos && productos.length > 0 && typeof window !== "undefined") {
       sessionStorage.setItem("Productos_Baterias", JSON.stringify(productos));
       productos.map((product, index, array) => {
         // console.log(product.precio);

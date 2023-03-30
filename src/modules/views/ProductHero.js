@@ -1,5 +1,7 @@
+"use client";
 import React from "react";
-import { NavLink } from "react-router-dom";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import PropTypes from "prop-types";
 import Button from "../components/Button";
 import withRoot from "../withRoot";
@@ -7,7 +9,7 @@ import theme from "../theme";
 import Typography from "../components/Typography";
 import ProductHeroLayout from "./ProductHeroLayout";
 import Box from "@mui/material/Box";
-// import MavicAir from "../../../publicAssets/static/img/Portada-DJI-Mavic-Air-2.png";
+// import MavicAir from "public/static/img/Portada-DJI-Mavic-Air-2.png";
 const MavicAir =
   "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FPortada-DJI-Mavic-Air-2.png?alt=media&token=c74ad4fe-459b-47e2-8542-fca74408f429";
 
@@ -46,7 +48,7 @@ const styles = (theme) => ({
 function ProductHero(props) {
   // const { theme } = props;
   const classes = styles(theme);
-  // const navigate = useNavigate();
+  const navigate = useRouter();
   return (
     <ProductHeroLayout backgroundClassName={classes.background}>
       {/* Increase the network loading priority of the background image. */}
@@ -72,7 +74,7 @@ function ProductHero(props) {
         className="navlink"
         sx={classes.button}
       >
-        <NavLink to="/sign-up/">{"Registrarse"}</NavLink>
+        <Link href="auth/sign-up/">{"Registrarse"}</Link>
       </Button>
       <Typography variant="body2" color="inherit" sx={classes.more}>
         Disfruta nuestras ofertas

@@ -7,7 +7,7 @@ import Container from "@mui/material/Container";
 import withRoot from "../withRoot";
 import theme from "../theme";
 import Typography from "../components/Typography";
-// import producBuoy from "../../../publicAssets/static/themes/producBuoy.svg";
+// import producBuoy from "public/static/themes/producBuoy.svg";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 
 const styles = (theme) => ({
@@ -60,7 +60,7 @@ function ProductSmokingHero(props) {
           style={{ color: "#4fcc5d" }}
         />
       </WhatsAppContacto>
-      {/* <Link to={{  pathname: "https://api.whatsapp.com/send?phone=573196138057" }} target="_blank" /> */}
+      {/* <Link href={{  pathname: "https://api.whatsapp.com/send?phone=573196138057" }} target="_blank" /> */}
     </Container>
   );
 }

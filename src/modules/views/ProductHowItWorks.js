@@ -1,5 +1,6 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import Link from "next/link";
+import Image from "next/image";
 import PropTypes from "prop-types";
 import withRoot from "../withRoot";
 import theme from "../theme";
@@ -8,10 +9,10 @@ import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import Button from "../components/Button";
 import Typography from "../components/Typography";
-import productCurvyLines from "../../../publicAssets/static/themes/productCurvyLines.png";
-import productHowItWorks1 from "../../../publicAssets/static/themes/productHowItWorks1.svg";
-import productHowItWorks2 from "../../../publicAssets/static/themes/productHowItWorks2.svg";
-import productHowItWorks3 from "../../../publicAssets/static/themes/productHowItWorks3.svg";
+import productCurvyLines from "public/static/themes/productCurvyLines.png";
+import productHowItWorks1 from "public/static/themes/productHowItWorks1.svg";
+import productHowItWorks2 from "public/static/themes/productHowItWorks2.svg";
+import productHowItWorks3 from "public/static/themes/productHowItWorks3.svg";
 
 const styles = (theme) => ({
   root: {
@@ -68,11 +69,14 @@ function ProductHowItWorks(props) {
   return (
     <Box sx={classes.root}>
       <Container sx={classes.container} style={{ textAlign: "center" }}>
-        <Box
-          component="img"
+        <Image
           src={productCurvyLines}
           sx={classes.curvyLines}
           alt="curvy lines"
+          style={{ position: "absolute" }}
+          // width={100}
+          // height={100}
+          priority
         />
         <Typography
           variant="h4"
@@ -87,11 +91,13 @@ function ProductHowItWorks(props) {
             <Grid item xs={12} md={4}>
               <Box sx={classes.item}>
                 <Box sx={classes.number}>1.</Box>
-                <Box
-                  component="img"
+                <Image
                   src={productHowItWorks1}
                   alt="tendencias"
-                  sx={classes.image}
+                  className={classes.image}
+                  width={100}
+                  height={100}
+                  priority
                 />
                 <Typography variant="h5" align="center">
                   {"Actualizaciones de las últimas tendencias del mercado."}
@@ -101,11 +107,13 @@ function ProductHowItWorks(props) {
             <Grid item xs={12} md={4}>
               <Box sx={classes.item}>
                 <Box sx={classes.number}>2.</Box>
-                <Box
-                  component="img"
+                <Image
                   src={productHowItWorks2}
                   alt="actividades"
-                  sx={classes.image}
+                  className={classes.image}
+                  width={100}
+                  height={100}
+                  priority
                 />
                 <Typography variant="h5" align="center">
                   {
@@ -117,11 +125,13 @@ function ProductHowItWorks(props) {
             <Grid item xs={12} md={4}>
               <Box sx={classes.item}>
                 <Box sx={classes.number}>3.</Box>
-                <Box
-                  component="img"
+                <Image
                   src={productHowItWorks3}
                   alt="equipos"
                   sx={classes.image}
+                  width={100}
+                  height={100}
+                  priority
                 />
                 <Typography variant="h5" align="center">
                   {
@@ -139,7 +149,7 @@ function ProductHowItWorks(props) {
           className="navlink"
           sx={classes.button}
         >
-          <NavLink to="/sign-up/">{"Comenzar"}</NavLink> 
+          <Link href="/sign-up/">{"Comenzar"}</Link>
         </Button>
       </Container>
     </Box>

@@ -1,11 +1,15 @@
 import React, { useState } from "react";
-import { firestore } from "../firebase/firebaseClient";
+import { firestore } from "@/firebase/firebaseClient";
 import { collection, doc, getDocs } from "firebase/firestore";
 
-function FirebaseDroneProducts (props) {
-  const productosDrones = sessionStorage.getItem("Productos_Drones") || null;
-  const productosDronesRC =
-    sessionStorage.getItem("Productos_DronesRC") || null;
+function FirebaseDroneProducts(props) {
+  let productosDrones = null;
+  let productosDronesRC = null;
+  if (typeof window !== "undefined") {
+    // Perform localStorage action
+    productosDrones = sessionStorage.getItem("Productos_Drones") || null;
+    productosDronesRC = sessionStorage.getItem("Productos_DronesRC") || null;
+  }
   const _firestore = firestore;
   // const productsRef = collection(_firestore, "productos/dron/kit_fpv_dron")
   const productsRef = collection(_firestore, "productos");
@@ -56,7 +60,7 @@ function FirebaseDroneProducts (props) {
 
   const parsePrices = (productos, productosRC) => {
     // console.log(productos, productosRC);
-    if (productos && productos.length > 0) {
+    if (productos && productos.length > 0 && typeof window !== "undefined") {
       sessionStorage.setItem("Productos_Drones", JSON.stringify(productos));
       productos.map((product, index, array) => {
         // console.log(product.precio);
@@ -72,7 +76,11 @@ function FirebaseDroneProducts (props) {
       });
       storeProducts = productos;
     }
-    if (productosRC && productosRC.length > 0) {
+    if (
+      productosRC &&
+      productosRC.length > 0 &&
+      typeof window !== "undefined"
+    ) {
       sessionStorage.setItem("Productos_DronesRC", JSON.stringify(productosRC));
       productosRC.map((product, index, array) => {
         if (
@@ -91,9 +99,9 @@ function FirebaseDroneProducts (props) {
 
   productosToSessionStore();
   if (storeProducts.length > 0 && storeProductsRC.length > 0) {
-      const response = { storeProducts, storeProductsRC };
-      return response;
+    const response = { storeProducts, storeProductsRC };
+    return response;
   }
-};
+}
 
 export default FirebaseDroneProducts;

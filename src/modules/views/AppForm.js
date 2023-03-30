@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
-import withRoot from "../withRoot";
-import theme from "../theme";
+import withRoot from "@/modules/withRoot";
+import theme from "@/modules/theme";
 import Paper from '../components/Paper';
-const appCurvyLines = "../../../publicAssets/static/themes/appCurvyLines.png";
+const appCurvyLines = "public/static/themes/appCurvyLines.png";
 
 const styles = (theme) => ({
   root: {

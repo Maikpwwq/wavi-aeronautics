@@ -1,9 +1,14 @@
+"use client";
 import React from "react";
-import { firestore } from "../firebase/firebaseClient";
+import { firestore } from "@/firebase/firebaseClient";
 import { collection, doc, getDocs } from "firebase/firestore";
 
 function FirebaseRadioControlProducts(props) {
-  const productosRadioControl = sessionStorage.getItem("Productos_RC") || null;
+  let productosRadioControl = null;
+  if (typeof window !== "undefined") {
+    // Perform localStorage action
+    productosRadioControl = sessionStorage.getItem("Productos_RC") || null;
+  }
   const _firestore = firestore;
   const productsRef = collection(_firestore, "productos");
   const productsDoc = doc(productsRef, "radio_control");
@@ -104,7 +109,7 @@ function FirebaseRadioControlProducts(props) {
 
   const parsePrices = (productos) => {
     //console.log(productos);
-    if (productos && productos.length > 0) {
+    if (productos && productos.length > 0 && typeof window !== "undefined") {
       sessionStorage.setItem("Productos_RC", JSON.stringify(productos));
       productos.map((product, index, array) => {
         //console.log(product.precio);

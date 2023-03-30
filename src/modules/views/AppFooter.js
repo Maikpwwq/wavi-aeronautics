@@ -1,15 +1,16 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import Link from "next/link";
+import Image from "next/image";
 import { styled } from "@mui/material/styles";
 import withRoot from "../withRoot";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
 import Container from "@mui/material/Container";
 import Typography from "../components/Typography";
 import TextField from "../components/TextField";
-// import appFooterFacebook from "../../../publicAssets/static/themes/appFooterFacebook.png";
-// import appFooterTwitter from "../../../publicAssets/static/themes/appFooterTwitter.png";
-import appFooterLinkedin from "../../../publicAssets/static/themes/appFooterLinkedin.png";
+import theme from "../theme";
+// import appFooterFacebook from "public/static/themes/appFooterFacebook.png";
+// import appFooterTwitter from "public/static/themes/appFooterTwitter.png";
+import appFooterLinkedin from "public/static/themes/appFooterLinkedin.png";
 
 const appFooterFacebook =
   "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2Ficonos%2FappFooterFacebook.png?alt=media&token=b54b1ff2-c2b3-4d57-a7fa-c2e0e06d150e";
@@ -32,6 +33,7 @@ const SocialIcons = styled("a")(({ theme }) => ({
 const LegalItem = styled("li")({
   paddingTop: 0.5,
   paddingBottom: 0.5,
+  color: "white",
 });
 
 const LegalDocuments = styled("ul")({
@@ -55,9 +57,17 @@ const LegalDocuments = styled("ul")({
 //   },
 // ];
 
+const styles = (theme) => ({
+  link: {
+    fontSize: "21px",
+    textDecoration: "none",
+    color: "white",
+  },
+});
+
 function AppFooter(props) {
-  // const { theme } = props; dont need this anymore
-  // const classes = styles(theme);
+  // const { theme } = props; // dont need this anymore
+  const classes = styles(theme);
 
   function Copyright() {
     return (
@@ -106,14 +116,21 @@ function AppFooter(props) {
                 }}
               >
                 <SocialIcons href="https://www.facebook.com/wavi.aeronautics/">
-                  <img src={appFooterFacebook} alt="Facebook" />
+                  <Image
+                    src={appFooterFacebook}
+                    alt="Facebook"
+                    width={14}
+                    height={28}
+                    priority
+                  />
                 </SocialIcons>
                 <SocialIcons href="https://www.linkedin.com/company/wavi-aeronautics/">
-                  <img
+                  <Image
                     src={appFooterLinkedin}
-                    width="28px"
-                    height="28px"
+                    width={28}
+                    height={28}
                     alt="Linkedin"
+                    priority
                   />
                 </SocialIcons>
               </Grid>
@@ -125,6 +142,7 @@ function AppFooter(props) {
           <Grid item xs={12} sm={6} md={4}>
             <Typography
               className="textWhite"
+              sx={classes.link}
               variant="h6"
               marked="left"
               gutterBottom
@@ -133,14 +151,14 @@ function AppFooter(props) {
             </Typography>
             <LegalDocuments>
               <LegalItem>
-                <NavLink to="/terms/" className="textWhite">
+                <Link href="/terms/" className="textWhite" sx={classes.link}>
                   {"Terminos"}
-                </NavLink>
+                </Link>
               </LegalItem>
               <LegalItem>
-                <NavLink to="/privacy/" className="textWhite">
+                <Link href="/privacy/" className="textWhite" sx={classes.link}>
                   {"Privacidad"}
-                </NavLink>
+                </Link>
               </LegalItem>
             </LegalDocuments>
           </Grid>
