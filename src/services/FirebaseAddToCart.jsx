@@ -1,8 +1,8 @@
 import { collection, doc, setDoc } from "firebase/firestore";
 import { auth, firestore } from "@/firebase/firebaseClient";
 
-function FirebaseAddToCart({ products }) {
-  const productos = products;
+function FirebaseAddToCart({ productos }) {
+  const cartProductos = productos;
   const user = auth.currentUser || {};
   const userID = user.uid || null;
   const shoppingCartID = localStorage.getItem("cartID");
@@ -12,11 +12,12 @@ function FirebaseAddToCart({ products }) {
 
   const shoppingsToFirestore = async (updateInfo, userRef) => {
     const productData = await setDoc(doc(shoppingsRef, userRef), updateInfo); // , { merge: true }
-    console.log("*productData*", productData);
+    localStorage.setItem("cartUpdated", "agregar");
+    // console.log("*productData*", productData);
     return productData;
   };
-
-  shoppingsToFirestore(productos, usedID);
+  console.log("FirebaseAddToCart", {productos: cartProductos}, usedID);
+  shoppingsToFirestore({ productos: cartProductos }, usedID);
 }
 
 export default FirebaseAddToCart;

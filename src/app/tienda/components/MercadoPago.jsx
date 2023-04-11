@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 // import "localstorage-polyfill";
 // global.sessionstorage;
 // global.localStorage;
-import { auth } from "firebase/firebaseClient";
+import { auth } from "@/firebase/firebaseClient";
 // import { useNavigate } from "react-router-dom";
 import { useMercadopago } from "react-sdk-mercadopago";
 // import mercadopago from "mercadopago";
@@ -40,8 +40,9 @@ const MercadoPago = (props) => {
   const { visible, products, userInfo, shippingInfo } = props;
   const classes = styles(theme);
   const visibility = products.length > 0 && visible ? true : false;
-  const accessToken = process.env.MERCADOPAGOS_ACCESS_TOKEN;
-  const publicKey = process.env.MERCADOPAGOS_PUBLIC_KEY;
+  const accessToken = process.env.NEXT_PUBLIC_MERCADOPAGOS_ACCESS_TOKEN;
+  const publicKey = process.env.NEXT_PUBLIC_MERCADOPAGOS_PUBLIC_KEY;
+  console.log("process.env.", accessToken, publicKey)
   const mercadopagoSDK = useMercadopago.v2(publicKey, {
     locale: "es-CO",
   });

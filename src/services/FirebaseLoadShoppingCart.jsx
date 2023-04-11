@@ -11,7 +11,7 @@ import { collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { ShowCartContext } from "@/app/tienda/providers/ShoppingCartProvider";
 import FirebaseCompareShoppingCartIds from "./FirebaseCompareShoppingCartIds";
 
-export const FirebaseLoadShoppingCart = () => {
+const FirebaseLoadShoppingCart = () => {
   // { dispatch }
 
   const { updateShoppingCart, updateCart } = useContext(ShowCartContext);
@@ -59,10 +59,10 @@ export const FirebaseLoadShoppingCart = () => {
     localStorage.setItem("cartUpdated", "id");
   };
 
-  // if (!shoppingCartID) {
-  //   console.log("shoppingCartID", shoppingCartID);
-  //   newShoppingCart();
-  // }
+  if (!shoppingCartID) {
+    console.log("shoppingCartID", shoppingCartID);
+    newShoppingCart();
+  }
 
   if (!!usedID) {
     shoppingsFromFirestore().then(() => {

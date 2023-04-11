@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { ThemeProvider, styled } from "@mui/material/styles";
 import withRoot from "@/modules/withRoot";
@@ -83,14 +83,16 @@ function Paperbase({ children }) {
   };
 
   const subscription$ = getAllShoppingCart;
-  subscription$.subscribe((response) => {
-    if (!!response) {
-      console.log("subscription5", response);
-      // const { cart } = response;
-      // shoppingCart.productos = cart;
-    }
-  });
-
+  useEffect(() => {
+    subscription$.subscribe((response) => {
+      if (!!response) {
+        console.log("subscription getAllShoppingCart", response);
+        // const { cart } = response;
+        // shoppingCart.productos = cart;
+      }
+    });
+  }, []);
+  
   return (
     <ThemeProvider theme={innerTheme}>
       <Box sx={classes.root}>

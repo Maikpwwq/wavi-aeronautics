@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import { useLocation } from "react-router-dom";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
@@ -86,20 +86,23 @@ const ProductDetail = (props) => {
   const maxSteps = product ? product.imagenes.length : 0;
 
   const currentProduct = sharingInformationService.getSubject();
-  currentProduct.subscribe((data) => {
-    if (!!data) {
-      setProductInfo(data[0]);
-      console.log("currentProduct", data[0], productInfo);
-    }
-  });
 
-  subscription$.subscribe((response) => {
-    if (!!response) {
-      console.log("storeProductInfo", response);
-      // const { storeProductInfo } = response;
-    }
-  });
-
+  useEffect(() => {
+    currentProduct.subscribe((data) => {
+      if (!!data) {
+        setProductInfo(data[0]);
+        console.log("currentProduct", data[0], productInfo);
+      }
+    });
+  
+    subscription$.subscribe((response) => {
+      if (!!response) {
+        console.log("storeProductInfo", response);
+        // const { storeProductInfo } = response;
+      }
+    });  
+  }, []);
+  
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };

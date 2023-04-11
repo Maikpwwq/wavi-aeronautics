@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Link from "next/link";
-// import { loadDetail } from "../../../store/states/product";
 // import { getAllShoppingCart } from "@/services/sharedServices";
-import FirebaseAddToCart from "@/services/FirebaseAddToCart";
+import FirebaseAddToCart from "@/services/FirebaseAddToCart"; 
 import { loadDetail } from "@/store/states/product";
+import { ShowCartContext } from "@/app/tienda/providers/ShoppingCartProvider";
 
 // import "sessionstorage-polyfill";
 // import "localstorage-polyfill";
@@ -28,15 +28,15 @@ const ProductCard = ({ products, category }) => {
   const producto = products;
   const { titulo, precio, imagenes, productID } = producto;
 
+  const { shoppingCart, updateShoppingCart } = useContext(ShowCartContext);
+
   // const storedCart = useSelector((store) => store.shoppingCart);
   // let cart = storedCart || [];
   // console.log("cart products", cart);
 
-  // const [shoppingCart, setShoppingCart] = useState({
-  //   productos: [cart],
+  // const [thisShoppingCart, setShoppingCart] = useState({
+  //   productos: shoppingCart,
   // });
-
-  let shoppingCart;
 
   const handleSelect = () => {
     console.log("producto", producto);
@@ -47,39 +47,39 @@ const ProductCard = ({ products, category }) => {
     }
   };
 
-  // const readData = () => {
-  //   shoppingsFromFirestore().then((snapshot) => {
-  //     // console.log(snapshot);
-  //     const cardProductos = snapshot;
-  //     // console.log(cardProductos, shoppingCart);
-  //     loadData(cardProductos.productos);
-  //     // setShoppingCart({
-  //     //   ...shoppingCart,
-  //     //   productos: cardProductos.productos,
-  //     // });
-  //     // console.log(cardProductos, shoppingCart);
-  //   });
-  // };
+  useEffect(() => {
+    const cardProductos = {};
+    let cart = []
+    cart = shoppingCart.productos;
+    console.log('shoppingCart', shoppingCart);
+    cart.map((product, n) => {
+        const {productID} = product
+        cardProductos[n] = productID;
+      });
+      console.log("cardProductos", cardProductos);
+      FirebaseAddToCart({ productos: cardProductos });
+  }, [shoppingCart]);
 
-  const handleAddCard = (e) => {
+  const handleAddCard = (e, producto) => {
     e.preventDefault();
-    // if (usedID) {
+    readData(producto);
+  };
+
+  const readData = (producto) => {
+    //   shoppingsFromFirestore().then((snapshot) => {
     let cardProductos = [];
-    // readData();
-    // console.log(shoppingCart);
-    shoppingCart.productos.map((product, n) => {
-      cardProductos.push(product);
-    });
-    console.log("cardProductos", cardProductos);
-    // cardProductos.push(productID);
-    FirebaseAddToCart({ productos: cardProductos });
-    // loadData(cardProductos);
-    // console.log(userID, productID);
-    // console.log(shoppingCart);
-    // shoppingsToFirestore({ productos: cardProductos }, usedID);
-    // localStorage.setItem("cartUpdated", "agregar");
-    // readData();
-    // }
+    if (!!shoppingCart.productos){
+      shoppingCart.productos.map((product, n) => {
+        cardProductos.push(product);
+      });
+      cardProductos.push(producto);
+      console.log('cardProductos', cardProductos);
+    }
+    console.log('readData', cardProductos);
+    // setShoppingCart productos:
+    updateShoppingCart(cardProductos);
+    // setShoppingCart({ productos: cardProductos });
+    console.log('shoppingCart', shoppingCart);
   };
 
   return (
@@ -110,7 +110,7 @@ const ProductCard = ({ products, category }) => {
             title={titulo}
             subheader={precio}
             action={
-              <IconButton color="inherit" onClick={(e) => handleAddCard(e)}>
+              <IconButton color="inherit" onClick={(e) => handleAddCard(e, producto)}>
                 <AddShoppingCartIcon fontSize="large" />
               </IconButton>
             }

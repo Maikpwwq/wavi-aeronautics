@@ -40,18 +40,11 @@ const ListShoppingCart = (props) => {
   }, []);
 
   const usedID = userID ? userID : shoppingCartID;
+  console.log("ListShoppingCart", usedID);
   const navigate = useRouter();
-  // const { visible, updated, setShowingCart } = props; // products,
   const classes = styles(theme);
   const _firestore = firestore;
   const shoppingsRef = collection(_firestore, "shoppingCart");
-
-  var myShoppingCart = [];
-  // const [shoppingCart, setShoppingCart] = useState({
-  //   productos: [],
-  //   suma: 0,
-  //   items: 0,
-  // });
 
   // console.log("visibility", visible);
   // const handleClick = (e) => {
@@ -59,15 +52,15 @@ const ListShoppingCart = (props) => {
   //   navigate("/tienda/producto/", { state: { product: products } });
   // };
 
-  if (myShoppingCart.length === 0) {
-    const productData = sharingInformationService.getSubject();
-    productData.subscribe((data) => {
-      if (!!data) {
-        myShoppingCart = data;
-        console.log("Detail shoppingCard", data, shoppingCart);
-      }
-    });
-  }
+  // if (myShoppingCart.length === 0) {
+  //   const productData = sharingInformationService.getSubject();
+  //   productData.subscribe((data) => {
+  //     if (!!data) {
+  //       myShoppingCart = data;
+  //       console.log("Detail shoppingCard", data, shoppingCart);
+  //     }
+  //   });
+  // }
 
   const shoppingsToFirestore = async (updateInfo, userRef) => {
     await setDoc(doc(shoppingsRef, userRef), updateInfo, { merge: true });
@@ -77,8 +70,8 @@ const ListShoppingCart = (props) => {
     e.preventDefault();
     if (usedID) {
       let cardProductos = [];
-      console.log("myShoppingCart", myShoppingCart);
-      myShoppingCart.productos.map((product, n) => {
+      console.log("myShoppingCart", shoppingCart);
+      shoppingCart.productos.map((product, n) => {
         cardProductos.push(product);
       });
       console.log(cardProductos);
@@ -95,42 +88,45 @@ const ListShoppingCart = (props) => {
       shoppingsToFirestore({ productos: cardProductos }, userID);
       shoppingsFromFirestore();
     } else {
-      navigate.push("/sign-in/");
+      navigate.push("sign-in");
     }
   };
 
-  const handleCheckout = () => {
-    const productsCart = myShoppingCart.productos;
-    console.log(productsCart);
+  const handleCheckout = (e) => {
+    e.preventDefault();
+    const productsCart = shoppingCart.productos;
+    console.log("productsCart", productsCart);
     localStorage.setItem("cartUpdated", "detalles-envio");
     updateShowCart(false);
-    navigate.push("/tienda/detalles-envio/", {
-      state: { productsCart: productsCart },
+    navigate.push("tienda/detalles-envio", {
+      // state: { productsCart: productsCart },
     });
   };
 
-  const handleShoppingCart = () => {
+  const handleShoppingCart = (e) => {
+    e.preventDefault();
     localStorage.setItem("cartUpdated", "ver-carrito");
     updateShowCart(false);
-    navigate.push("/tienda/ver-carrito/", {
-      state: {
-        makeVisible: shoppingCart.show,
-        makeUpdated: updated,
-      },
+    navigate.push("tienda/ver-carrito", {
+      // state: {
+      //   makeVisible: shoppingCart.show,
+      //   makeUpdated: updated,
+      // },
     });
   };
 
   return (
     <>
       <Box className="" maxWidth="sm" style={{ height: "100%" }}>
-        {myShoppingCart.productos &&
-          myShoppingCart.productos.map(
+        {shoppingCart.productos &&
+          shoppingCart.productos.map(
             ({ titulo, precio, imagenes, productID }) => (
               <Card style={{ height: "100%", display: "flex" }} key={productID}>
                 {/* <CardActionArea onClick={handleClick}></CardActionArea> */}
                 <CardMedia
                   component="img"
                   height="120"
+                  width="auto"
                   image={imagenes[0]}
                   alt={titulo}
                 ></CardMedia>
@@ -147,20 +143,24 @@ const ListShoppingCart = (props) => {
               </Card>
             )
           )}
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleCheckout}
-        >
-          Finalizar compra
-        </Button>
-        {/* <Button
-            variant="contained"
-            color="secondary"
-            onClick={handleShoppingCart}
-          >
-            Ver carrito
-          </Button> */}
+        {shoppingCart.productos &&
+          <Box className="" maxWidth="sm">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={(e) => handleCheckout(e)}
+            >
+              Finalizar compra
+            </Button>
+            <Button
+                variant="contained"
+                color="secondary"
+                onClick={(e) => handleShoppingCart(e)}
+              >
+              Ver carrito
+            </Button>
+          </Box>
+        }
       </Box>
     </>
   );

@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { ShowCartContext } from "@/app/tienda/providers/ShoppingCartProvider";
 import { useRouter } from "next/navigation";
-import ShoppingCart from "./ShoppingCart";
+import ShoppingCart from "./ShoppingCart"; 
 import PropTypes from "prop-types";
 
 // import "sessionstorage-polyfill";
@@ -248,7 +248,7 @@ function Header(props) {
                 <IconButton
                   color="inherit"
                   onClick={() => updateShowCart(!shoppingCart.show)}
-                >
+                > 
                   <ShoppingCartIcon fontSize="large" />
                 </IconButton>
               </Tooltip>

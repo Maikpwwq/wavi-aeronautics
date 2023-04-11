@@ -11,7 +11,7 @@ import ProductHeroLayout from "./ProductHeroLayout";
 import Box from "@mui/material/Box";
 // import MavicAir from "public/static/img/Portada-DJI-Mavic-Air-2.png";
 const MavicAir =
-  "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FPortada-DJI-Mavic-Air-2.png?alt=media&token=c74ad4fe-459b-47e2-8542-fca74408f429";
+   "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FPortada-DJI-Mavic-Air-2.png?alt=media&token=c74ad4fe-459b-47e2-8542-fca74408f429";
 
 const styles = (theme) => ({
   background: {

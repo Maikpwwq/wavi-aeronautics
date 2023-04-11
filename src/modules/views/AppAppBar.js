@@ -73,7 +73,7 @@ function AppAppBar(props) {
   const user = auth.currentUser || {};
   const userID = user.uid || null;
   const [userAuth, setUserAuth] = useState(false);
-  console.log(user);
+  console.log('user', user);
   useEffect(() => {
     if (user && userID) {
       setUserAuth(true);

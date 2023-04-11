@@ -96,7 +96,7 @@ const SignInForm = () => {
     console.log("submit", e);
     setEvent({ email: e.email, password: e.password });
     await fetchSignIn(e).then((res) => {
-      console.log("submit", res, event, signIn);
+      console.log("submit", res, event, sent);
       router.push("/tienda/drones");
     });
   };

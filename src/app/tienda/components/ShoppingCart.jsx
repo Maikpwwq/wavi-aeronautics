@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useContext } from "react";
 // import { useLocation } from "react-router-dom";
 import { ShowCartContext } from "@/app/tienda/providers/ShoppingCartProvider";
