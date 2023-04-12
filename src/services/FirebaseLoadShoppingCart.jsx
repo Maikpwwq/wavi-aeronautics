@@ -1,21 +1,15 @@
 "use client";
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { firestore, auth } from "@/firebase/firebaseClient";
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
-// import { sharingInformationService } from "./sharing-information";
+import { sharingInformationService } from "./sharing-information";
 // import { createCart } from "../store/states/shopping_cart";
 // import store from "../../ssr/renderApp.js";
-
 // import { connect, useStore } from "react-redux";
-import { ShowCartContext } from "@/app/tienda/providers/ShoppingCartProvider";
-import FirebaseCompareShoppingCartIds from "./FirebaseCompareShoppingCartIds";
 
 const FirebaseLoadShoppingCart = () => {
   // { dispatch }
-
-  const { updateShoppingCart, updateCart } = useContext(ShowCartContext);
-
   // console.log("props", createCart);
   const user = auth.currentUser || {};
   const userID = user.uid || null;
@@ -24,10 +18,12 @@ const FirebaseLoadShoppingCart = () => {
   if (typeof window !== "undefined") {
     // Perform localStorage action
     shoppingCartID = localStorage.getItem("cartID") || null;
+    console.log("shoppingCartID", shoppingCartID);
   }
 
   // const shoppingUpdatedItems = localStorage.getItem("cartUpdated");
   const usedID = userID ? userID : shoppingCartID;
+  console.log("usedID", usedID);
   const _firestore = firestore;
   const shoppingsRef = collection(_firestore, "shoppingCart");
 
@@ -40,41 +36,49 @@ const FirebaseLoadShoppingCart = () => {
   const shoppingsFromFirestore = async () => {
     let cardProductos = {};
     const productData = await getDoc(doc(shoppingsRef, usedID));
+    console.log("shoppingsFromFirestore", productData.data());
     for (var index in productData.data()) {
-      // console.log(productData.data()[index]);
+      // console.log("shoppingsFromFirestore", productData.data()[index]);
       if (productData.data()[index]) {
         cardProductos[index] = productData.data()[index];
       }
     }
     if (cardProductos && cardProductos.productos != []) {
       shoppingCart = cardProductos.productos;
-      // console.log("store", cardProductos, shoppingCart);
+      console.log("store", cardProductos, shoppingCart);
     }
   };
 
   const newShoppingCart = () => {
     const shoppingsId = uuidv4();
     shoppingsToFirestore({ productos: [] }, shoppingsId);
-    localStorage.setItem("cartID", shoppingsId);
-    localStorage.setItem("cartUpdated", "id");
+    if (typeof window !== "undefined") {
+      localStorage.setItem("cartID", shoppingsId);
+      localStorage.setItem("cartUpdated", "id");
+    }
   };
 
   if (!shoppingCartID) {
-    console.log("shoppingCartID", shoppingCartID);
+    console.log("NewShoppingCartID", shoppingCartID);
     newShoppingCart();
   }
 
   if (!!usedID) {
     shoppingsFromFirestore().then(() => {
-      console.log("shoppingCart", shoppingCart);
       // store.dispatch(createCard(shoppingCart));
       // dispatch.createCart(shoppingCart);
-      updateShoppingCart(shoppingCart);
-      FirebaseCompareShoppingCartIds({ shoppingCart, updateCart });
-      // sharingInformationService.setSubject(shoppingCart);
-      // return shoppingCart;
+
+      console.log("shoppingCart", shoppingCart);
+      // { cargaBase: true }
+      sharingInformationService.setSubject({ cart: shoppingCart });
+      return shoppingCart;
     });
+    // if (shoppingCart.length > 0) {
+    //   console.log("shoppingCart", shoppingCart);
+    //   return shoppingCart;
+    // }
   }
+
 };
 
 const mapStateToProps = {};

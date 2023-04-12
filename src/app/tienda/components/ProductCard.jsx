@@ -47,22 +47,28 @@ const ProductCard = ({ products, category }) => {
     }
   };
 
-  useEffect(() => {
-    const cardProductos = {};
+  // Solo activar 
+  // useEffect(() => { }, []);
+
+  const storeToFirebaseCart = () => {
+    // const cardProductos = {};
+    const cardProductos = [];
     let cart = []
     cart = shoppingCart.productos;
     console.log('shoppingCart', shoppingCart);
     cart.map((product, n) => {
         const {productID} = product
-        cardProductos[n] = productID;
+        // cardProductos[n] = productID;
+        cardProductos.push(productID);
       });
       console.log("cardProductos", cardProductos);
       FirebaseAddToCart({ productos: cardProductos });
-  }, [shoppingCart]);
+  }
 
   const handleAddCard = (e, producto) => {
     e.preventDefault();
     readData(producto);
+    storeToFirebaseCart();
   };
 
   const readData = (producto) => {

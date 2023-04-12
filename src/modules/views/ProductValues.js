@@ -33,7 +33,8 @@ const styles = (theme) => ({
     padding: `${theme.spacing(0, 5)} !important`,
   },
   image: {
-    height: 55,
+    height: 70,
+    marginTop: theme.spacing(4),
   },
   title: {
     marginTop: `${theme.spacing(5)} !important`,
@@ -75,7 +76,7 @@ function ProductValues(props) {
           <Grid item xs={12} md={4}>
             <Box sx={classes.item}>
               <Image
-                className={classes.image}
+                style={classes.image}
                 src={productValues1}
                 alt="suitcase"
                 width={100}
@@ -94,7 +95,7 @@ function ProductValues(props) {
           <Grid item xs={12} md={4}>
             <Box sx={classes.item}>
               <Image
-                className={classes.image}
+                style={classes.image}
                 src={productValues2}
                 alt="graph"
                 width={100}
@@ -113,7 +114,7 @@ function ProductValues(props) {
           <Grid item xs={12} md={4}>
             <Box sx={classes.item}>
               <Image
-                className={classes.image}
+                style={classes.image}
                 src={productValues3}
                 alt="clock"
                 width={100}

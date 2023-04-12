@@ -3,11 +3,9 @@ import React, { useState, useContext } from "react";
 import { firestore, auth } from "@/firebase/firebaseClient";
 import { collection, getDocs } from "firebase/firestore";
 // import { sharingInformationService } from "./sharing-information";
-import { ShowCartContext } from "@/app/tienda/providers/ShoppingCartProvider";
 import PropTypes from "prop-types";
 
 export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
-  // const { updateCart } = useContext(ShowCartContext);
   console.log("products", products, updateCart);
   const AllProducts = sessionStorage.getItem("Todos los productos") || null;
   const shoppingCartItems =
@@ -27,15 +25,66 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
   const shoppingCartID = localStorage.getItem("cartID");
   const usedID = userID ? userID : shoppingCartID;
   const _firestore = firestore;
+  // Dron
   const storeKitRef = collection(_firestore, "productos/dron/kit_fpv_dron");
   const storeRCRef = collection(_firestore, "productos/dron/RC");
+  // Radio Control
+  const storeBetafpvRef = collection(
+    _firestore,
+    "productos/radio_control/betafpv"
+  );
+  const storeEachineRef = collection(
+    _firestore,
+    "productos/radio_control/eachine"
+  );
+  const storeEmaxUsaRef = collection(
+    _firestore,
+    "productos/radio_control/emax-usa"
+  );
+  const storeFlyskyRef = collection(
+    _firestore,
+    "productos/radio_control/flysky"
+  );
+  const storeFlywooRef = collection(
+    _firestore,
+    "productos/radio_control/flywoo"
+  );
+  const storeFrskyRef = collection(_firestore, "productos/radio_control/frsky");
+  const storeGeprcRef = collection(_firestore, "productos/radio_control/geprc");
+  const storeIflightRef = collection(
+    _firestore,
+    "productos/radio_control/iflight-rc"
+  );
+  const storeRadioMasterRef = collection(
+    _firestore,
+    "productos/radio_control/radio-master"
+  );
+  const storeTBSRef = collection(
+    _firestore,
+    "productos/radio_control/team-blacksheep"
+  );
+  const storeUruavRef = collection(_firestore, "productos/radio_control/uruav");
 
   var shoppingCart = [];
 
   // TODO: replace for arrow function: search product by id? need to use all Refs in comparison
   const productsFromFirestore = async () => {
     // console.log(shoppingsRef, userID);
-    const collectionsWavi = new Array(storeRCRef, storeKitRef);
+    const collectionsWavi = new Array(
+      storeRCRef,
+      storeKitRef,
+      storeBetafpvRef,
+      storeEachineRef,
+      storeEmaxUsaRef,
+      storeFlyskyRef,
+      storeFlywooRef,
+      storeFrskyRef,
+      storeGeprcRef,
+      storeIflightRef,
+      storeRadioMasterRef,
+      storeTBSRef,
+      storeUruavRef
+    );
     let productData = [];
     for (let product of collectionsWavi) {
       let colectionData = await getDocs(product);
@@ -131,7 +180,7 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
       if (!!shoppingCart.productos) {
         console.log("service", shoppingCart);
         updateCart(shoppingCart);
-        // sharingInformationService.setSubject(shoppingCart);
+        // sharingInformationService.setSubject({shoppingCart});
       }
     }
   };

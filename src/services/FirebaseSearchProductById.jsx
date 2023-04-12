@@ -140,7 +140,7 @@ const FirebaseSearchProductById = (searchId, category) => {
       if (productos && productos.length > 0) {
         // console.log("compare productos", productos);
         currentProduct = productos;
-        sharingInformationService.setSubject(productos);
+        sharingInformationService.setSubject({ productos });
         return productos;
       }
     });

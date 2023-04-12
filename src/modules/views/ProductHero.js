@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { useRouter } from "next/navigation"; 
 import PropTypes from "prop-types";
 import Button from "../components/Button";
 import withRoot from "../withRoot";
@@ -10,12 +11,14 @@ import Typography from "../components/Typography";
 import ProductHeroLayout from "./ProductHeroLayout";
 import Box from "@mui/material/Box";
 // import MavicAir from "public/static/img/Portada-DJI-Mavic-Air-2.png";
-const MavicAir =
-   "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FPortada-DJI-Mavic-Air-2.png?alt=media&token=c74ad4fe-459b-47e2-8542-fca74408f429";
+const MavicAir = "/static/img/Portada-DJI-Mavic-Air-2.png";
+// const MavicAir =
+//    "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FPortada-DJI-Mavic-Air-2.png?alt=media&token=c74ad4fe-459b-47e2-8542-fca74408f429";
 
 const styles = (theme) => ({
   background: {
-    backgroundImage: `url(${MavicAir})`,
+    // backgroundImage: `url(${MavicAir})`,
+    backgroundImage: `url("/static/img/Portada-DJI-Mavic-Air-2.png")`,
     backgroundColor: "#7fc7d9", // Average color of the background image.
     backgroundPosition: "center",
     position: "absolute",
@@ -52,11 +55,12 @@ function ProductHero(props) {
   return (
     <ProductHeroLayout backgroundClassName={classes.background}>
       {/* Increase the network loading priority of the background image. */}
-      <Box
-        component="img"
-        style={{ display: "none" }}
+      <Image
+        style={{ display: "none"}}
         src={MavicAir}
         alt="increase priority"
+        width={1300}
+        height={650}
       />
       <Typography color="inherit" align="center" variant="h2" marked="center">
         Necesitas un Dron

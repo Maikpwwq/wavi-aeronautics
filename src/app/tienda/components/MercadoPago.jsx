@@ -1,9 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 // import "sessionstorage-polyfill";
 // import "localstorage-polyfill";
 // global.sessionstorage;
 // global.localStorage;
+import { ShowCartContext } from "@/app/tienda/providers/ShoppingCartProvider";
 import { auth } from "@/firebase/firebaseClient";
 // import { useNavigate } from "react-router-dom";
 import { useMercadopago } from "react-sdk-mercadopago";
@@ -27,22 +28,36 @@ const styles = (theme) => ({
     alignItems: "center",
     top: "24px",
     position: "relative",
-    visibility: visibility ? "visible" : "hidden",
   },
 });
 
 const MercadoPago = (props) => {
-  // const navigate = useNavigate();
+  const classes = styles(theme);
   const user = auth.currentUser || {};
   const userID = user.uid || null;
-  const shoppingCartID = localStorage.getItem("cartID");
+
+  let shoppingCartID = null;
+  // useEffect(() => {
+  if (typeof window !== "undefined") {
+    shoppingCartID = localStorage.getItem("cartID");
+  }
+  // }, []);
+
   const usedID = userID ? userID : shoppingCartID;
-  const { visible, products, userInfo, shippingInfo } = props;
-  const classes = styles(theme);
-  const visibility = products.length > 0 && visible ? true : false;
+  console.log("usedID", usedID)
+
+  const { shoppingCart, updateShowCart } = useContext(ShowCartContext);
+  const { show, productos } = shoppingCart;
+  console.log("shoppingCart", show, productos)
+  const { userInfo, shippingInfo } = props;
+  // console.log("props", userInfo, shippingInfo)
+
+  const visibility = productos.length > 0 ? true : false;
+
   const accessToken = process.env.NEXT_PUBLIC_MERCADOPAGOS_ACCESS_TOKEN;
   const publicKey = process.env.NEXT_PUBLIC_MERCADOPAGOS_PUBLIC_KEY;
-  console.log("process.env.", accessToken, publicKey)
+  // console.log("process.env.", accessToken, publicKey)
+
   const mercadopagoSDK = useMercadopago.v2(publicKey, {
     locale: "es-CO",
   });
@@ -55,6 +70,20 @@ const MercadoPago = (props) => {
   mercadopago.configure({
     access_token: accessToken,
   });
+
+  // var preference = {
+  //   items: [
+  //     {
+  //       title: 'Test',
+  //       quantity: 1,
+  //       currency_id: 'ARS',
+  //       unit_price: 10.5
+  //     }
+  //   ]
+  // };
+  
+  // mercadopago.preferences.create(preference)
+
   // console.log(accessToken);
   // notification_url: 'https://wavi-aeronautics-drones.web.app/',
   // external_reference: ''
@@ -120,9 +149,9 @@ const MercadoPago = (props) => {
   };
 
   const handleCheckout = () => {
-    if (usedID && visible && products) {
-      // console.log(products);
-      getPreference(products)
+    if (usedID && productos) {
+      console.log("handleCheckout", usedID, productos);
+      getPreference(productos)
         .then((res) => {
           // console.log(res.init_point);
           setCheckoutPro({ ...checkoutPro, url: res.init_point });
@@ -159,6 +188,7 @@ const MercadoPago = (props) => {
           variant="contained"
           color="primary"
           sx={classes.checkout}
+          style={{ visibility: visibility ? "visible" : "hidden"}}
           onClick={() => handleCheckout()}
         >
           Confirmar Orden

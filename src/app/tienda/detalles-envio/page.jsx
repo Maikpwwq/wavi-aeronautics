@@ -1,11 +1,12 @@
 "use client";
-import React, { useState, useEffect } from "react";
-// import { useLocation, NavLink } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
 import withRoot from "@/modules/withRoot";
 import theme from "../innerTheme";
 import { styled } from "@mui/material/styles";
 import MercadoPago from "../components/MercadoPago";
 import Typography from "@/modules/components/Typography";
+
+import { ShowCartContext } from "@/app/tienda/providers/ShoppingCartProvider";
 
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -29,7 +30,7 @@ const styles = (theme) => ({
     paddingBottom: theme.spacing(3),
     position: "relative",
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
     textAlign: "center",
   },
@@ -55,13 +56,11 @@ const styles = (theme) => ({
 });
 
 const DetallesEnvio = (props) => {
-  // const { classes } = props;
   const classes = styles(theme);
-  // const { state } = useLocation() || {};
-  const state = {};
-  const { productsCart } = state || "";
-  console.log(productsCart);
-  const visible = true;
+  const { shoppingCart } = useContext(ShowCartContext);
+  const productsCart = shoppingCart.productos || "";
+  console.log("DetallesEnvio", productsCart);
+
   const [showResume, setShowResume] = useState(false);
   const [userInfo, setUserInfo] = useState({
     userName: "",
@@ -82,6 +81,7 @@ const DetallesEnvio = (props) => {
       [event.target.name]: event.target.value,
     });
   };
+
   const handleShippinfInfo = (event) => {
     setShippingInfo({
       ...shippingInfo,
@@ -92,9 +92,7 @@ const DetallesEnvio = (props) => {
   return (
     <>
       <Box sx={classes.root}>
-        <Container
-          sx={classes.container}
-        >
+        <Container sx={classes.container}>
           <Box sx={classes.envioContainer}>
             {/* <NavLink to="/sign-in/">
           Sigue con los datos de tu cuenta!
@@ -117,9 +115,7 @@ const DetallesEnvio = (props) => {
                   paddingRight: "33px",
                 }}
               >
-                <FormLabel sx={classes.label}>
-                  Información personal:
-                </FormLabel>
+                <FormLabel sx={classes.label}>Información personal:</FormLabel>
                 <br />
                 <br />
                 <TextField
@@ -152,9 +148,7 @@ const DetallesEnvio = (props) => {
               </Box>
 
               <Box style={{ display: "flex", flexDirection: "column" }}>
-                <FormLabel sx={classes.label}>
-                  Información de envio:
-                </FormLabel>
+                <FormLabel sx={classes.label}>Información de envio:</FormLabel>
                 <br />
                 <br />
                 <TextField
@@ -263,8 +257,6 @@ const DetallesEnvio = (props) => {
                 </Table>
               </Box>
               <MercadoPago
-                visible={visible}
-                products={productsCart}
                 shippingInfo={shippingInfo}
                 userInfo={userInfo}
               />

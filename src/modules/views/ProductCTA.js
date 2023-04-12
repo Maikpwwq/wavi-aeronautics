@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import Image from "next/image";
 import PropTypes from "prop-types";
 import { getSubscribe } from "@/services/sharedServices";
 // import FirebaseSubscribe from "@/services/FirebaseSubscribe.jsx";
@@ -14,7 +15,9 @@ import Snackbar from "../components/Snackbar";
 import Button from "../components/Button";
 
 import productCTAImageDots from "public/static/themes/productCTAImageDots.png";
-// import PostalOfertas from "public/static/img/Toma-Aerea-Ciudad.png";
+const PostalOfertas = "/static/img/Toma-Aerea-Ciudad.png";
+// const PostalOfertas =
+//     "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FToma-Aerea-Ciudad.png?alt=media&token=d16460b1-8e78-4f85-977f-afff44385b09";
 
 const styles = (theme) => ({
   root: {
@@ -61,6 +64,7 @@ const styles = (theme) => ({
     bottom: 0,
     width: "100%",
     maxWidth: 600,
+    maxHeight: 400,
   },
 });
 
@@ -94,9 +98,6 @@ function ProductCTA(props) {
   const handleClose = () => {
     setOpen(false);
   };
-
-  const PostalOfertas =
-    "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FToma-Aerea-Ciudad.png?alt=media&token=d16460b1-8e78-4f85-977f-afff44385b09";
 
   return (
     <Container sx={classes.root} component="section">
@@ -132,11 +133,12 @@ function ProductCTA(props) {
         <Grid item xs={12} md={6} sx={classes.imagesWrapper}>
           <Box sx={{ display: { xs: "none", md: "block" } }}>
             <Box sx={classes.imageDots} />
-            <Box
-              component="img"
+            <Image
               src={PostalOfertas}
               alt="Tomas aéreas rápidas y confiables"
-              sx={classes.image}
+              style={classes.image}
+              width={500}
+              height={360}
             />
           </Box>
         </Grid>

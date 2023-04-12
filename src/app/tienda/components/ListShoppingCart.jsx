@@ -25,12 +25,22 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import IconButton from "@mui/material/IconButton";
 // import { styled } from "@mui/material/styles";
 
-const styles = (theme) => ({});
+const styles = (theme) => ({
+  image: {
+    height: "130px",
+    width: "auto !important",
+  },
+  card: {
+    height: "100%", 
+    display: "flex", 
+    justifyContent: "space-evenly",
+  }
+});
 
 const ListShoppingCart = (props) => {
   const { shoppingCart, updateShowCart, updateShoppingCart, updateCart } =
     useContext(ShowCartContext);
-  // console.log("ShowCartContext ListShoppingCart", shoppingCart, updateShowCart, updateShoppingCart);
+  console.log("ShowCartContext ListShoppingCart", shoppingCart);
 
   const user = auth.currentUser || {};
   const userID = user.uid || null;
@@ -120,13 +130,12 @@ const ListShoppingCart = (props) => {
       <Box className="" maxWidth="sm" style={{ height: "100%" }}>
         {shoppingCart.productos &&
           shoppingCart.productos.map(
-            ({ titulo, precio, imagenes, productID }) => (
-              <Card style={{ height: "100%", display: "flex" }} key={productID}>
+            ({ titulo, precio, imagenes, productID }, index) => (
+              <Card style={classes.card} key={index}>
                 {/* <CardActionArea onClick={handleClick}></CardActionArea> */}
                 <CardMedia
+                  sx={classes.image}
                   component="img"
-                  height="120"
-                  width="auto"
                   image={imagenes[0]}
                   alt={titulo}
                 ></CardMedia>

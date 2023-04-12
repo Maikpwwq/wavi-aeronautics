@@ -82,7 +82,7 @@ const getAllShoppingCart = new Observable((subscriber) => {
   console.log("FirebaseShoppingCart", response);
   try {
     subscriber.next(response);
-    subscriber.complete();
+    // subscriber.complete();
   } catch (err) {
     subscriber.error(err);
   }

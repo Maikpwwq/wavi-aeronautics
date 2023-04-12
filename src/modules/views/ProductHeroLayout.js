@@ -43,8 +43,8 @@ const styles = (theme) => ({
   arrowDown: {
     position: "absolute",
     bottom: theme.spacing(4),
-    height: 16,
-    width: 12,
+    height: 21,
+    width: 15,
   },
 });
 
@@ -66,11 +66,11 @@ function ProductHeroLayout(props) {
         <Box sx={classes.backdrop} />
         <Box sx={backgroundClassName} />
         <Image
-          className={classes.arrowDown}
+          style={classes.arrowDown}
           src={productHeroArrowDown}
           alt="Desliza para ver más"
-          width={33}
-          height={39}
+          // width={33}
+          // height={39}
         />
       </Container>
       {/* <Container>

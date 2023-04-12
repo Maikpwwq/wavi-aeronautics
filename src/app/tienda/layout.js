@@ -1,7 +1,9 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import { ThemeProvider, styled } from "@mui/material/styles";
+import { ShowCartContext } from "@/app/tienda/providers/ShoppingCartProvider";
+import FirebaseCompareShoppingCartIds from "@/services/FirebaseCompareShoppingCartIds";
 import withRoot from "@/modules/withRoot";
 import theme from "@/modules/theme";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -17,6 +19,8 @@ import ShopConditions from "./components/ShopConditions";
 import innerTheme from "./innerTheme";
 
 import { getAllShoppingCart } from "@/services/sharedServices";
+import { sharingInformationService } from "@/services/sharing-information";
+
 
 function Copyright() {
   return (
@@ -76,6 +80,8 @@ const Main = styled("main")(({ theme }) => ({
 function Paperbase({ children }) {
   // const { classes } = props;
   const classes = styles(theme);
+  const { updateShoppingCart, updateCart } = useContext(ShowCartContext);
+
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
@@ -83,6 +89,8 @@ function Paperbase({ children }) {
   };
 
   const subscription$ = getAllShoppingCart;
+  const productData = sharingInformationService.getSubject();
+
   useEffect(() => {
     subscription$.subscribe((response) => {
       if (!!response) {
@@ -91,7 +99,23 @@ function Paperbase({ children }) {
         // shoppingCart.productos = cart;
       }
     });
-  }, []);
+  }, [subscription$]);
+
+  useEffect(() => {
+    productData.subscribe((data) => { 
+      if (!!data) {
+        const { cart } = data;
+        console.log("Detail productCard", cart);
+        // se actualiza el array de ids productos
+        FirebaseCompareShoppingCartIds({ products: cart, updateCart });
+        // updateShoppingCart(cart);
+        // shoppingCart.productos = data;
+      }
+      // else {
+      //   shoppingCart.productos = [];
+      // }
+    });
+  }, [productData]);
   
   return (
     <ThemeProvider theme={innerTheme}>

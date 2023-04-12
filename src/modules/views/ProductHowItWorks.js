@@ -44,7 +44,7 @@ const styles = (theme) => ({
     fontWeight: theme.typography.fontWeightMedium,
   },
   image: {
-    height: 55,
+    height: 70,
     marginTop: theme.spacing(4),
     marginBottom: theme.spacing(4),
   },
@@ -71,9 +71,9 @@ function ProductHowItWorks(props) {
       <Container sx={classes.container} style={{ textAlign: "center" }}>
         <Image
           src={productCurvyLines}
-          sx={classes.curvyLines}
+          style={classes.curvyLines}
           alt="curvy lines"
-          style={{ position: "absolute" }}
+          // style={{ position: "absolute" }}
           // width={100}
           // height={100}
           priority
@@ -94,7 +94,7 @@ function ProductHowItWorks(props) {
                 <Image
                   src={productHowItWorks1}
                   alt="tendencias"
-                  className={classes.image}
+                  style={classes.image}
                   width={100}
                   height={100}
                   priority
@@ -110,7 +110,7 @@ function ProductHowItWorks(props) {
                 <Image
                   src={productHowItWorks2}
                   alt="actividades"
-                  className={classes.image}
+                  style={classes.image}
                   width={100}
                   height={100}
                   priority
@@ -128,7 +128,7 @@ function ProductHowItWorks(props) {
                 <Image
                   src={productHowItWorks3}
                   alt="equipos"
-                  sx={classes.image}
+                  style={classes.image}
                   width={100}
                   height={100}
                   priority

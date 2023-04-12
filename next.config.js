@@ -17,6 +17,18 @@ const nextConfig = {
       },
     ],
   },
+  // webpack5: true,
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        net: false,
+        fs: false,
+        tls: false,
+      };
+    }
+
+    return config;
+  },
 };
 
 module.exports = nextConfig;
