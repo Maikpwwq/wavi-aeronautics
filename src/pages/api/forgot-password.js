@@ -1,26 +1,18 @@
 import { auth } from "@/firebase/firebaseClient";
-import { EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
 
 // TODO: UpdatePassword
 export default async function handler(req, res) {
   // console.log("req", req.body, JSON.parse(req.body));
   const { email } = JSON.parse(req.body);
   if (email !== undefined) {
-    // console.log("email are not null", email);
-    let credential = EmailAuthProvider.credentialWithLink(
-      email,
-      window.location.href
-    );
+    console.log("email is not null", email);
     try {
-      await reauthenticateWithCredential(auth, credential)
-        // Auth.updateCurrentUser.linkWithCredential(credential)
+      await sendPasswordResetEmail(auth, email)
         .then((usercred) => {
-          // Al iniciar sesion almacena una instancia del usuario
-          var user = usercred.user;
-          const { uid } = user;
-          // console.log("Se ha iniciado una nueva sesión", uid);
-          // res.redirect("/tienda/drones");
-          return res.json({ userID: uid });
+          // Se envia un correo para cambiar el password de usuario
+          console.log("Se ha enviado un correo de verificación", usercred);
+          return res.json();
         })
         .catch((err) => {
           // Manejar los Errores aqui.
@@ -31,7 +23,7 @@ export default async function handler(req, res) {
           // .redirect("auth/sign-in/").end();
         });
     } catch (error) {
-      console.log("error signInWithCredential", error);
+      console.log("error UpdatePassword", error);
       return res.status(500).send(error).end();
     }
   }

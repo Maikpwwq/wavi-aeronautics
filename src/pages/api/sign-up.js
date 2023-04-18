@@ -45,12 +45,10 @@ export default async function handler(req, res) {
           if (!!usedId) {
             // Instancia un carrito de compras vacio
             shoppingsToFirestore({ productos: [] }, usedId).then(() => {
-              sessionStorage.setItem("cartID", usedId);
-              sessionStorage.setItem("cartUpdated", "id");
               console.log("Instancia un carrito de compras vacio", usedId);
             });
             userToFirestore(data, usedId).then(() => {
-              console.log("Se ha registrado el usuario", displayName);
+              console.log("Se ha registrado un nuevo usuario a Firebase", displayName);
               return res.json({ userID: usedId });
               // res.redirect("/tienda/drones");
             });

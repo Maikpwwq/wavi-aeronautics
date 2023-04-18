@@ -98,17 +98,18 @@ const SignUpForm = () => {
 
   const onSubmit = async (e) => {
     // e.preventDefault();
-    console.log("submit", e);
+    // console.log("submit", e);
     handleChange(e);
     // const signIn =
     await fetchSignUp(e).then((res) => {
       const { userID, errorCode, errorMessage } = res;
-      console.log("submit userID", res, userID);
+      // console.log("submit userID", res, userID);
       if (typeof window !== "undefined" && !!userID) {
         // Perform localStorage action
         setSent(true);
-        handleAlert("Se ha iniciado una nueva sesión.", "success");
-        sessionStorage.setItem("cartID", userID);
+        handleAlert("Se ha registrado un nuevo usuario de forma exitosa.", "success");
+        sessionStorage.setItem("cartID", usedId);
+        sessionStorage.setItem("cartUpdated", "new id");
         console.log("shoppingCartID", userID);
         router.push("/tienda/drones");
       }
@@ -119,7 +120,11 @@ const SignUpForm = () => {
           errorCode === "auth/user-not-found"
         ) {
           handleAlert("Estas credenciales son incorrectas.", "error");
-        } else if (errorCode === "auth/missing-email") {
+        } 
+        else if (errorCode === "auth/weak-password") {
+          handleAlert("Password muy debil.", "error");
+        }
+        else if (errorCode === "auth/missing-email") {
           handleAlert("Falta un correo.", "error");
         } else {
           console.log("errorCode", errorCode);
@@ -137,6 +142,15 @@ const SignUpForm = () => {
       userFirstName: e.firstName,
       userLastName: e.lastName,
     });
+  };
+
+  const handleClose = (event, reason) => {
+    // console.log(reason, event)
+    if (reason === "clickaway") {
+      return;
+    } else {
+      setAlert({ ...alert, open: false, message: "" });
+    }
   };
 
   const handleSubmit = (e) => {

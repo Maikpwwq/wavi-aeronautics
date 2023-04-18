@@ -40,9 +40,10 @@ const SubForm = styled("form")({
 
 const ForgotPasswordForm = () => {
   const classes = styles(theme);
+  const router = useRouter();
 
   const [sent, setSent] = useState(false);
-  const [event, setEvent] = useState({ email: ""});
+  const [event, setEvent] = useState({ email: "" });
   const [alert, setAlert] = useState({
     open: false,
     message: "",
@@ -63,9 +64,9 @@ const ForgotPasswordForm = () => {
   };
 
   const validate = (values) => {
-    const errors = required(["email", "password"], values);
+    const errors = required(["email"], values);
 
-    // TODO: Set Alerts 
+    // TODO: Set Alerts
     if (!errors.email) {
       const emailError = email(values.email, values);
       if (emailError) {
@@ -76,7 +77,7 @@ const ForgotPasswordForm = () => {
     return errors;
   };
 
-  const fetchSignIn = async (event) => {
+  const fetchForgotPassword = async (event) => {
     // await new Promise((resolve) => setTimeout(resolve, 3000));
     // throw new Error('Error al cargar los comentarios')
     const response = await fetch(`http://localhost:3000/api/forgot-password`, {
@@ -109,19 +110,29 @@ const ForgotPasswordForm = () => {
     // e.preventDefault();
     console.log("submit", e);
     handleChange(e);
-    await fetchSignIn(e).then((res) => {
-      const { userID, errorCode, errorMessage } = res;
-      console.log("submit userID", res, userID);
-      sharingInformationService.setSubject({ userID });
-      if (typeof window !== "undefined" && !!userID) {
-        // Perform localStorage action
-        setSent(true);
-        handleAlert("Se ha enviado un correo para modificar la contraseña.", "success");
-        // router.push("/tienda/drones");
-      }
+    await fetchForgotPassword(e).then((res) => {
+      const { errorCode, errorMessage } = res;
+      // sharingInformationService.setSubject({ userID });
       if (!!errorCode && !!errorMessage) {
         setSent(false);
-        handleAlert("Estas credenciales son incorrectas.", "error");
+        if (errorCode === "auth/user-not-found") {
+          handleAlert("Debe usar un email registrado.", "error");
+        } else if (errorCode === "auth/network-request-failed") {
+          handleAlert("Fallo de red para completar la solicitud.", "error");
+        } else {
+          console.log("errorCode", errorCode);
+          handleAlert("Ha sucedido un error intente de nuevo.", "error");
+        }
+      } else {
+        if (typeof window !== "undefined") {
+          // Perform localStorage action
+          setSent(true);
+          handleAlert(
+            "Se ha enviado un correo para modificar la contraseña.",
+            "success"
+          );
+          router.push("/auth/sign-in/");
+        }
       }
     });
   };
