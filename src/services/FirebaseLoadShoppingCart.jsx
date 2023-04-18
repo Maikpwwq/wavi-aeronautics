@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { firestore, auth } from "@/firebase/firebaseClient";
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
@@ -17,13 +17,20 @@ const FirebaseLoadShoppingCart = () => {
 
   if (typeof window !== "undefined") {
     // Perform localStorage action
-    shoppingCartID = localStorage.getItem("cartID") || null;
-    console.log("shoppingCartID", shoppingCartID);
+    shoppingCartID = sessionStorage.getItem("cartID") || null;
+    // console.log("shoppingCartID", shoppingCartID);
   }
 
-  // const shoppingUpdatedItems = localStorage.getItem("cartUpdated");
+  useEffect(() => {
+    if (!shoppingCartID) {
+      console.log("NewShoppingCartID", shoppingCartID);
+      newShoppingCart();
+    }
+  }, [shoppingCartID]);
+
+  // const shoppingUpdatedItems = sessionStorage.getItem("cartUpdated");
   const usedID = userID ? userID : shoppingCartID;
-  console.log("usedID", usedID);
+  console.log("usedID load:", usedID);
   const _firestore = firestore;
   const shoppingsRef = collection(_firestore, "shoppingCart");
 
@@ -53,15 +60,10 @@ const FirebaseLoadShoppingCart = () => {
     const shoppingsId = uuidv4();
     shoppingsToFirestore({ productos: [] }, shoppingsId);
     if (typeof window !== "undefined") {
-      localStorage.setItem("cartID", shoppingsId);
-      localStorage.setItem("cartUpdated", "id");
+      sessionStorage.setItem("cartID", shoppingsId);
+      sessionStorage.setItem("cartUpdated", "id");
     }
   };
-
-  if (!shoppingCartID) {
-    console.log("NewShoppingCartID", shoppingCartID);
-    newShoppingCart();
-  }
 
   if (!!usedID) {
     shoppingsFromFirestore().then(() => {

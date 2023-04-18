@@ -2,8 +2,7 @@
 import { collection, doc, setDoc } from "firebase/firestore";
 import React, { useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { auth, firestore } from "@/firebase/firebaseClient";
-import { sharingInformationService } from "@/services/sharing-information";
+import { firestore } from "@/firebase/firebaseClient";
 import withRoot from "@/modules/withRoot";
 import theme from "../innerTheme";
 import { ShowCartContext } from "@/app/tienda/providers/ShoppingCartProvider";
@@ -42,15 +41,15 @@ const ListShoppingCart = (props) => {
     useContext(ShowCartContext);
   console.log("ShowCartContext ListShoppingCart", shoppingCart);
 
-  const user = auth.currentUser || {};
-  const userID = user.uid || null;
   let shoppingCartID = null;
   useEffect(() => {
-    shoppingCartID = localStorage.getItem("cartID");
-  }, []);
+    // se lee el ID asignado atras durante el login
+    shoppingCartID = sessionStorage.getItem("cartID");
+    console.log("shoppingCartID", shoppingCartID);
+    // se asigna cartID al storeContext del usuario 
+    updateCart({ cartID: shoppingCartID })
+  }, [shoppingCartID]);
 
-  const usedID = userID ? userID : shoppingCartID;
-  console.log("ListShoppingCart", usedID);
   const navigate = useRouter();
   const classes = styles(theme);
   const _firestore = firestore;
@@ -78,7 +77,7 @@ const ListShoppingCart = (props) => {
 
   const handleCancel = (e) => {
     e.preventDefault();
-    if (usedID) {
+    if ( !!shoppingCartID ) {
       let cardProductos = [];
       console.log("myShoppingCart", shoppingCart);
       shoppingCart.productos.map((product, n) => {
@@ -91,12 +90,12 @@ const ListShoppingCart = (props) => {
       //let cardProductos = shoppingCart.productos + productID;
       cardProductos.push(productID);
       // cardProductos[index] = productID
-      setShoppingCart({ ...shoppingCart, productos: cardProductos });
+      updateCart({ ...shoppingCart, productos: cardProductos });
       // console.log(userID, productID);
       console.log(shoppingCart);
       console.log(cardProductos);
-      shoppingsToFirestore({ productos: cardProductos }, userID);
-      shoppingsFromFirestore();
+      shoppingsToFirestore({ productos: cardProductos }, shoppingCartID);
+      // shoppingsFromFirestore();
     } else {
       navigate.push("sign-in");
     }
@@ -106,7 +105,7 @@ const ListShoppingCart = (props) => {
     e.preventDefault();
     const productsCart = shoppingCart.productos;
     console.log("productsCart", productsCart);
-    localStorage.setItem("cartUpdated", "detalles-envio");
+    sessionStorage.setItem("cartUpdated", "detalles-envio");
     updateShowCart(false);
     navigate.push("tienda/detalles-envio", {
       // state: { productsCart: productsCart },
@@ -115,7 +114,7 @@ const ListShoppingCart = (props) => {
 
   const handleShoppingCart = (e) => {
     e.preventDefault();
-    localStorage.setItem("cartUpdated", "ver-carrito");
+    sessionStorage.setItem("cartUpdated", "ver-carrito");
     updateShowCart(false);
     navigate.push("tienda/ver-carrito", {
       // state: {
@@ -132,7 +131,7 @@ const ListShoppingCart = (props) => {
           shoppingCart.productos.map(
             ({ titulo, precio, imagenes, productID }, index) => (
               <Card style={classes.card} key={index}>
-                {/* <CardActionArea onClick={handleClick}></CardActionArea> */}
+                {/* <CardActionArea onClick={handleClick}></CardActionArea> */} 
                 <CardMedia
                   sx={classes.image}
                   component="img"

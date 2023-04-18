@@ -1,15 +1,18 @@
 import { auth } from "@/firebase/firebaseClient";
-import { EmailAuthProvider, signInWithCredential } from "firebase/auth"; 
+import { EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 
-// SignInAuth
+// TODO: UpdatePassword
 export default async function handler(req, res) {
   // console.log("req", req.body, JSON.parse(req.body));
-  const { email, password } = JSON.parse(req.body);
-  if (email !== undefined && password !== undefined) {
-    // console.log("email and password are not null", email, password);
-    let credential = EmailAuthProvider.credential(email, password);
+  const { email } = JSON.parse(req.body);
+  if (email !== undefined) {
+    // console.log("email are not null", email);
+    let credential = EmailAuthProvider.credentialWithLink(
+      email,
+      window.location.href
+    );
     try {
-      await signInWithCredential(auth, credential)
+      await reauthenticateWithCredential(auth, credential)
         // Auth.updateCurrentUser.linkWithCredential(credential)
         .then((usercred) => {
           // Al iniciar sesion almacena una instancia del usuario

@@ -13,21 +13,26 @@ const initialState = () => {
   const shop = [];
   const shoppingCart = [];
 
-  const subscription5$ = getAllShoppingCart;
-  subscription5$.subscribe((response) => {
-    if (!!response) {
-      console.log("subscription5", response);
-      const { cart } = response;
-      shoppingCart.productos = cart;
-    }
-  });
+  // const subscription5$ = getAllShoppingCart;
+  // subscription5$.subscribe((response) => {
+  //   if (!!response) {
+  //     console.log("subscription5", response);
+  //     const { cart } = response;
+  //     shoppingCart.productos = cart;
+  //   }
+  // });
 
   const productData = sharingInformationService.getSubject();
   productData.subscribe((data) => { 
     if (!!data) {
-      console.log("Detail productCard", data.cart);
-      const { cart } = data;
-      shoppingCart.productos = cart;
+      const { cart, userID } = data;
+      console.log("Initial productCard", cart, userID);
+      if (!!cart) {
+        shoppingCart.productos = cart;
+      }
+      if (!!userID) {
+        shoppingCart.cartID = userID
+      }
     }
     // else {
     //   shoppingCart.productos = [];

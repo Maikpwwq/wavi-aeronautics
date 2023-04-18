@@ -81,7 +81,7 @@ function Header(props) {
 
   const classes = styles(theme);
   const navigate = useRouter();
-  // const shoppingCartID = localStorage.getItem("cartID");
+  // const shoppingCartID = sessionStorage.getItem("cartID");
   // const shoppingCartSuma =
   //   sessionStorage.getItem("cartSum") !== 0
   //     ? sessionStorage.getItem("cartSum")
@@ -90,7 +90,7 @@ function Header(props) {
   //   sessionStorage.getItem("cartProducts") !== 0
   //     ? sessionStorage.getItem("cartProducts")
   //     : null;
-  // const shoppingUpdatedItems = localStorage.getItem("cartUpdated");
+  // const shoppingUpdatedItems = sessionStorage.getItem("cartUpdated");
   // TODO: Cambiar a un estado flase
   // const [showingCart, setShowingCart] = useState(true);
 
@@ -105,7 +105,7 @@ function Header(props) {
     updateShowCart(!shoppingCart.show);
     // setShowingCart(!showingCart);
     // console.log("showingCart", showingCart);
-    localStorage.setItem("cartUpdated", "show");
+    sessionStorage.setItem("cartUpdated", "show");
   };
 
   // Desde aca se controla el estado de cantidad de productos y total de la compra

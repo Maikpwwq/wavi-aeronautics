@@ -5,6 +5,7 @@ export const ShowCartContext = createContext();
 const ShoppingCartProvider = ({ children }) => { 
   
   const [shoppingCart, setShoppingCart] = useState({
+    cartID: null,
     productos: [],
     show: false,
     updated: false,

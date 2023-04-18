@@ -42,24 +42,28 @@ export default async function handler(req, res) {
             userName: displayName,
           };
           const usedId = user.uid;
-          // Instancia un carrito de compras vacio
-          shoppingsToFirestore({ productos: [] }, usedId).then(() => {
-            localStorage.setItem("cartID", usedId);
-            localStorage.setItem("cartUpdated", "id");
-            console.log("Instancia un carrito de compras vacio");
-          });
-          userToFirestore(data, usedId).then(() => {
-            console.log("Se ha registrado el usuario", displayName);
-            res.redirect("/tienda/drones");
-          });
+          if (!!usedId) {
+            // Instancia un carrito de compras vacio
+            shoppingsToFirestore({ productos: [] }, usedId).then(() => {
+              sessionStorage.setItem("cartID", usedId);
+              sessionStorage.setItem("cartUpdated", "id");
+              console.log("Instancia un carrito de compras vacio", usedId);
+            });
+            userToFirestore(data, usedId).then(() => {
+              console.log("Se ha registrado el usuario", displayName);
+              return res.json({ userID: usedId });
+              // res.redirect("/tienda/drones");
+            });
+          }
         })
         .catch((err) => {
           console.log("Error upgrading anonymous account", err);
           console.log(err.code);
-          // var errorCode = err.code;
-          var errorMessage = err.message;
+          const errorCode = err.code;
+          const errorMessage = err.message;
           console.log(errorMessage);
-          res.redirect("auth/sign-up/");
+          return res.json({ errorMessage, errorCode });
+          // res.redirect("auth/sign-up/");
         });
     } catch (error) {
       console.log("error", error);

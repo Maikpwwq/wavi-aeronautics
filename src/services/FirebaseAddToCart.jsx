@@ -5,14 +5,14 @@ function FirebaseAddToCart({ productos }) {
   const cartProductos = productos;
   const user = auth.currentUser || {};
   const userID = user.uid || null;
-  const shoppingCartID = localStorage.getItem("cartID");
+  const shoppingCartID = sessionStorage.getItem("cartID");
   const usedID = userID ? userID : shoppingCartID;
   const _firestore = firestore;
   const shoppingsRef = collection(_firestore, "shoppingCart");
 
   const shoppingsToFirestore = async (updateInfo, userRef) => {
     const productData = await setDoc(doc(shoppingsRef, userRef), updateInfo); // , { merge: true }
-    localStorage.setItem("cartUpdated", "agregar");
+    sessionStorage.setItem("cartUpdated", "agregar");
     // console.log("*productData*", productData);
     return productData;
   };

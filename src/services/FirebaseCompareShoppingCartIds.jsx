@@ -22,7 +22,7 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
 
   const user = auth.currentUser || {};
   const userID = user.uid || null;
-  const shoppingCartID = localStorage.getItem("cartID");
+  const shoppingCartID = sessionStorage.getItem("cartID");
   const usedID = userID ? userID : shoppingCartID;
   const _firestore = firestore;
   // Dron
@@ -92,7 +92,7 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
         productData.push(DOC.data());
       });
     }
-    localStorage.setItem("cartUpdated", "productos");
+    sessionStorage.setItem("cartUpdated", "productos");
     return productData;
   };
 
@@ -105,13 +105,13 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
       productData.then((response) => {
         compareProductsIDs(response);
         // console.log(response);
-        localStorage.setItem("cartUpdated", "firestore");
+        sessionStorage.setItem("cartUpdated", "firestore");
         sessionStorage.setItem("Todos los productos", JSON.stringify(response));
       });
     } else {
       productData = JSON.parse(AllProducts);
       compareProductsIDs(productData);
-      localStorage.setItem("cartUpdated", "sessionStorage");
+      sessionStorage.setItem("cartUpdated", "sessionStorage");
       if (shoppingCartSuma > 0) {
         sessionStorage.setItem("cartSum", shoppingCartSuma);
       }
@@ -150,7 +150,7 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
         shoppingCart.productos = cardProductos;
         shoppingCart.items = cardProductos.length;
         // console.log(shoppingCart);
-        localStorage.setItem("cartUpdated", "filterItems");
+        sessionStorage.setItem("cartUpdated", "filterItems");
         sessionStorage.setItem("cartProducts", cardProductos.length);
         calculateCartAmount(cardProductos);
       }
@@ -173,9 +173,9 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
       // console.log(acomulateSum);
       // setShoppingCart({ ...shoppingCart, suma: acomulateSum });
       shoppingCart.suma = acomulateSum;
-      localStorage.setItem("cartUpdated", "suma");
+      sessionStorage.setItem("cartUpdated", "suma");
       sessionStorage.setItem("cartSum", acomulateSum);
-      // localStorage.removeItem("cartUpdated");
+      // sessionStorage.removeItem("cartUpdated");
       // console.log("service", shoppingCart);
       if (!!shoppingCart.productos) {
         console.log("service", shoppingCart);

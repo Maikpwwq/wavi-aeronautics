@@ -2,8 +2,9 @@
 import withRoot from "@/modules/withRoot";
 // --- Post bootstrap -----
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-
+import SnackBarAlert from "@/app/components/SnackBarAlert";
 // import "sessionstorage-polyfill";
 // import "localstorage-polyfill";
 // global.sessionstorage;
@@ -46,12 +47,19 @@ const fetchSignUp = async (event) => {
     method: "POST",
     body: JSON.stringify(event),
     next: { revalidate: 60 },
-  }).then((res) => res.json());
+  }).then((res) => {
+    if (!res.ok) {
+      // throw new Error("Custom Error message", res);
+      console.log("Custom Error message", res);
+    }
+    return res.json();
+  });
   return response;
 };
 
 const SignUpForm = () => {
   const classes = styles(theme);
+  const router = useRouter();
 
   const [signupInfo, setSignupInfo] = useState({
     userEmail: null,
@@ -61,6 +69,16 @@ const SignUpForm = () => {
   });
 
   const [sent, setSent] = useState(false);
+
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+
+  const handleAlert = (message, severity) => {
+    setAlert({ ...alert, open: true, message, severity });
+  };
 
   const validate = (values) => {
     const errors = required(
@@ -81,14 +99,44 @@ const SignUpForm = () => {
   const onSubmit = async (e) => {
     // e.preventDefault();
     console.log("submit", e);
+    handleChange(e);
+    // const signIn =
+    await fetchSignUp(e).then((res) => {
+      const { userID, errorCode, errorMessage } = res;
+      console.log("submit userID", res, userID);
+      if (typeof window !== "undefined" && !!userID) {
+        // Perform localStorage action
+        setSent(true);
+        handleAlert("Se ha iniciado una nueva sesión.", "success");
+        sessionStorage.setItem("cartID", userID);
+        console.log("shoppingCartID", userID);
+        router.push("/tienda/drones");
+      }
+      if (!!errorCode && !!errorMessage) {
+        setSent(false);
+        if (
+          errorCode === "auth/wrong-password" ||
+          errorCode === "auth/user-not-found"
+        ) {
+          handleAlert("Estas credenciales son incorrectas.", "error");
+        } else if (errorCode === "auth/missing-email") {
+          handleAlert("Falta un correo.", "error");
+        } else {
+          console.log("errorCode", errorCode);
+          handleAlert("Ha sucedido un error intente de nuevo.", "error");
+        }
+      }
+    });
+    console.log("submit", event, signIn);
+  };
+
+  const handleChange = (e) => {
     setSignupInfo({
       userEmail: e.email,
       userPassword: e.password,
       userFirstName: e.firstName,
       userLastName: e.lastName,
     });
-    const signIn = await fetchSignUp(e);
-    console.log("submit", event, signIn);
   };
 
   const handleSubmit = (e) => {
@@ -97,93 +145,104 @@ const SignUpForm = () => {
   };
 
   return (
-    <Form
-      onSubmit={onSubmit}
-      subscription={{ submitting: true }}
-      validate={validate}
-      method="post"
-      // render
-    >
-      {({ handleSubmit, submitting }) => (
-        <SubForm
-          onSubmit={handleSubmit}
-          sx={classes.form}
-          method="post"
-          noValidate
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <Field
-                autoFocus
-                component={RFTextField}
-                autoComplete="fname"
-                fullWidth
-                label="Nombres"
-                name="firstName"
-                id="firstName"
-                required
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Field
-                component={RFTextField}
-                autoComplete="lname"
-                fullWidth
-                label="Apellidos"
-                name="lastName"
-                id="lastName"
-                required
-              />
-            </Grid>
-          </Grid>
-          <Field
-            autoComplete="email"
-            component={RFTextField}
-            disabled={submitting || sent}
-            fullWidth
-            id="emailText"
-            label="Email"
-            name="email"
-            type="email"
-            margin="normal"
-            required
-          />
-          <Field
-            fullWidth
-            component={RFTextField}
-            disabled={submitting || sent}
-            required
-            autoComplete="current-password"
-            id="passwordText"
-            label="Password"
-            name="password"
-            type="password"
-            margin="normal"
-          />
-          <FormSpy subscription={{ submitError: true }}>
-            {({ submitError }) =>
-              submitError ? (
-                <FormFeedback sx={classes.feedback} error>
-                  {submitError}
-                </FormFeedback>
-              ) : null
-            }
-          </FormSpy>
-          <FormButton
-            sx={classes.button}
-            // className="navlink"
-            disabled={submitting || sent}
-            mounted={!sent}
-            type="submit"
-            color="secondary"
-            fullWidth
-            // onClick={handleSubmit}
-          >
-            {submitting || sent ? "En progreso…" : "Registrarse"}
-          </FormButton>
-        </SubForm>
+    <>
+      {alert.open && (
+        <SnackBarAlert
+          message={alert.message}
+          onClose={handleClose}
+          severity={alert.severity} // success, error, warning, info, default
+          open={alert.open}
+        />
       )}
-    </Form>
+
+      <Form
+        onSubmit={onSubmit}
+        subscription={{ submitting: true }}
+        validate={validate}
+        method="post"
+        // render
+      >
+        {({ handleSubmit, submitting }) => (
+          <SubForm
+            onSubmit={handleSubmit}
+            sx={classes.form}
+            method="post"
+            noValidate
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Field
+                  autoFocus
+                  component={RFTextField}
+                  autoComplete="fname"
+                  fullWidth
+                  label="Nombres"
+                  name="firstName"
+                  id="firstName"
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Field
+                  component={RFTextField}
+                  autoComplete="lname"
+                  fullWidth
+                  label="Apellidos"
+                  name="lastName"
+                  id="lastName"
+                  required
+                />
+              </Grid>
+            </Grid>
+            <Field
+              autoComplete="email"
+              component={RFTextField}
+              disabled={submitting || sent}
+              fullWidth
+              id="emailText"
+              label="Email"
+              name="email"
+              type="email"
+              margin="normal"
+              required
+            />
+            <Field
+              fullWidth
+              component={RFTextField}
+              disabled={submitting || sent}
+              required
+              autoComplete="current-password"
+              id="passwordText"
+              label="Password"
+              name="password"
+              type="password"
+              margin="normal"
+            />
+            <FormSpy subscription={{ submitError: true }}>
+              {({ submitError }) =>
+                submitError ? (
+                  <FormFeedback sx={classes.feedback} error>
+                    {submitError}
+                  </FormFeedback>
+                ) : null
+              }
+            </FormSpy>
+            <FormButton
+              sx={classes.button}
+              // className="navlink"
+              disabled={submitting || sent}
+              mounted={!sent}
+              type="submit"
+              color="secondary"
+              fullWidth
+              // onClick={handleSubmit}
+            >
+              {submitting || sent ? "En progreso…" : "Registrarse"}
+            </FormButton>
+          </SubForm>
+        )}
+      </Form>
+    </>
   );
 };
 

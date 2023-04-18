@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useContext } from "react";
 import PropTypes from "prop-types";
+import { auth } from "@/firebase/firebaseClient";
 import { ThemeProvider, styled } from "@mui/material/styles";
 import { ShowCartContext } from "@/app/tienda/providers/ShoppingCartProvider";
 import FirebaseCompareShoppingCartIds from "@/services/FirebaseCompareShoppingCartIds";
@@ -84,6 +85,15 @@ function Paperbase({ children }) {
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
+  const user = auth.currentUser || {};
+  const userID = user.uid || null;
+
+  if (typeof window !== "undefined") {
+    // Perform localStorage action
+    console.log("userID", auth.currentUser, userID)
+    // sessionStorage.setItem("cartID", userID);
+  }
+ 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -104,8 +114,9 @@ function Paperbase({ children }) {
   useEffect(() => {
     productData.subscribe((data) => { 
       if (!!data) {
-        const { cart } = data;
-        console.log("Detail productCard", cart);
+        const { cart, userID } = data;
+        console.log("Detail productCard", cart, userID);
+        updateCart({ cartID: userID });
         // se actualiza el array de ids productos
         FirebaseCompareShoppingCartIds({ products: cart, updateCart });
         // updateShoppingCart(cart);

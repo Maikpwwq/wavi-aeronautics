@@ -38,21 +38,11 @@ const SubForm = styled("form")({
   paddingTop: theme.spacing(6),
 });
 
-const LinkTo = styled(Link)({
-  fontSize: "15px",
-  textDecoration: "none !important",
-  color: "black !important",
-});
-const SignInForm = () => {
+const ForgotPasswordForm = () => {
   const classes = styles(theme);
-  const router = useRouter();
 
   const [sent, setSent] = useState(false);
-  const [event, setEvent] = useState({ email: "", password: "" });
-  // const [userSigninInfo, setSigninInfo] = useState({
-  //   userEmail: null,
-  //   userPassword: null,
-  // });
+  const [event, setEvent] = useState({ email: ""});
   const [alert, setAlert] = useState({
     open: false,
     message: "",
@@ -72,10 +62,10 @@ const SignInForm = () => {
     }
   };
 
-  // TODO: Set Alerts 
   const validate = (values) => {
     const errors = required(["email", "password"], values);
 
+    // TODO: Set Alerts 
     if (!errors.email) {
       const emailError = email(values.email, values);
       if (emailError) {
@@ -89,7 +79,7 @@ const SignInForm = () => {
   const fetchSignIn = async (event) => {
     // await new Promise((resolve) => setTimeout(resolve, 3000));
     // throw new Error('Error al cargar los comentarios')
-    const response = await fetch(`http://localhost:3000/api/sign-in`, {
+    const response = await fetch(`http://localhost:3000/api/forgot-password`, {
       method: "POST",
       redirect: "follow",
       body: JSON.stringify(event),
@@ -126,30 +116,18 @@ const SignInForm = () => {
       if (typeof window !== "undefined" && !!userID) {
         // Perform localStorage action
         setSent(true);
-        handleAlert("Se ha iniciado una nueva sesión.", "success");
-        sessionStorage.setItem("cartID", userID);
-        console.log("shoppingCartID", userID);
-        router.push("/tienda/drones");
+        handleAlert("Se ha enviado un correo para modificar la contraseña.", "success");
+        // router.push("/tienda/drones");
       }
       if (!!errorCode && !!errorMessage) {
         setSent(false);
-        if (
-          errorCode === "auth/wrong-password" ||
-          errorCode === "auth/user-not-found"
-        ) {
-          handleAlert("Estas credenciales son incorrectas.", "error");
-        } else if (errorCode === "auth/missing-email") {
-          handleAlert("Falta un correo.", "error");
-        } else {
-          console.log("errorCode", errorCode);
-          handleAlert("Ha sucedido un error intente de nuevo.", "error");
-        }
+        handleAlert("Estas credenciales son incorrectas.", "error");
       }
     });
   };
 
   const handleChange = (e) => {
-    setEvent({ email: e.email, password: e.password });
+    setEvent({ email: e.email });
   };
 
   return (
@@ -193,21 +171,6 @@ const SignInForm = () => {
               required
               size="large"
             />
-            <Field
-              // onChange={() => handleChange}
-              // value={event.value}
-              fullWidth
-              size="large"
-              component={RFTextField}
-              disabled={submitting || sent}
-              required
-              id="passwordText"
-              label="Password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              margin="normal"
-            />
             <FormSpy subscription={{ submitError: true }}>
               {({ submitError }) =>
                 submitError ? (
@@ -230,7 +193,7 @@ const SignInForm = () => {
               // onClick={handleSubmit}
               fullWidth
             >
-              {submitting || sent ? "En progreso…" : "Iniciar sesión"}
+              {submitting || sent ? "En progreso…" : "Enviar email"}
             </FormButton>
           </SubForm>
         )}
@@ -239,8 +202,7 @@ const SignInForm = () => {
   );
 };
 
-function SignIn(props) {
-  //const { classes } = props;
+function ForgotPassword(props) {
   const classes = styles(theme);
 
   return (
@@ -249,29 +211,14 @@ function SignIn(props) {
       <AppForm>
         <React.Fragment>
           <Typography variant="h3" gutterBottom marked="center" align="center">
-            {"Iniciar sesión"}
-          </Typography>
-          <Typography variant="body2" align="center">
-            {"¿No eres miembro aun?, "}
-            <LinkTo
-              className={classes.link}
-              href="auth/sign-up/"
-              underline="always"
-            >
-              {"Registrarse"}
-            </LinkTo>
+            {"Modificar contraseña"}
           </Typography>
         </React.Fragment>
-        <SignInForm />
-        <Typography align="center">
-          <LinkTo className="mt-2" href="auth/forgot-password/">
-            {"Recordar password"}
-          </LinkTo>
-        </Typography>
+        <ForgotPasswordForm />
       </AppForm>
       <AppFooter />
     </React.Fragment>
   );
 }
 
-export default withRoot(SignIn);
+export default withRoot(ForgotPassword);

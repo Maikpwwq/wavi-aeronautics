@@ -39,7 +39,7 @@ const MercadoPago = (props) => {
   let shoppingCartID = null;
   // useEffect(() => {
   if (typeof window !== "undefined") {
-    shoppingCartID = localStorage.getItem("cartID");
+    shoppingCartID = sessionStorage.getItem("cartID");
   }
   // }, []);
 
