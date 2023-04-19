@@ -18,15 +18,16 @@ const FirebaseLoadShoppingCart = () => {
   if (typeof window !== "undefined") {
     // Perform localStorage action
     shoppingCartID = sessionStorage.getItem("cartID") || null;
-    // console.log("shoppingCartID", shoppingCartID);
-  }
-
-  useEffect(() => {
+    console.log("shoppingCartID", shoppingCartID);
     if (!shoppingCartID) {
       console.log("NewShoppingCartID", shoppingCartID);
       newShoppingCart();
     }
-  }, [shoppingCartID]);
+  }
+
+  // useEffect(() => {
+    
+  // }, [shoppingCartID]);
 
   // const shoppingUpdatedItems = sessionStorage.getItem("cartUpdated");
   const usedID = userID ? userID : shoppingCartID;
@@ -41,17 +42,18 @@ const FirebaseLoadShoppingCart = () => {
   };
 
   const shoppingsFromFirestore = async () => {
-    let cardProductos = {};
+    let cardProductos = [];
     const productData = await getDoc(doc(shoppingsRef, usedID));
-    console.log("shoppingsFromFirestore", productData.data());
-    for (var index in productData.data()) {
-      // console.log("shoppingsFromFirestore", productData.data()[index]);
-      if (productData.data()[index]) {
-        cardProductos[index] = productData.data()[index];
+    const productos = productData.data().productos;
+    console.log("shoppingsFromFirestore", productos);
+    for (let index in productos) {
+      console.log("shoppingsFromFirestore", productos[index]);
+      if (productos[index]) {
+        cardProductos.push(productos[index]);
       }
     }
-    if (cardProductos && cardProductos.productos != []) {
-      shoppingCart = cardProductos.productos;
+    if (cardProductos && cardProductos !== []) {
+      shoppingCart = cardProductos;
       console.log("store", cardProductos, shoppingCart);
     }
   };

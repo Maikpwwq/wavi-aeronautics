@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Link from "next/link";
 // import { getAllShoppingCart } from "@/services/sharedServices";
-import FirebaseAddToCart from "@/services/FirebaseAddToCart"; 
+import FirebaseAddToCart from "@/services/FirebaseAddToCart";
 import { loadDetail } from "@/store/states/product";
 import { ShowCartContext } from "@/app/tienda/providers/ShoppingCartProvider";
 
@@ -47,23 +47,25 @@ const ProductCard = ({ products, category }) => {
     }
   };
 
-  // Solo activar 
+  // Solo activar
   // useEffect(() => { }, []);
 
   const storeToFirebaseCart = () => {
     // const cardProductos = {};
     const cardProductos = [];
-    let cart = []
+    let cart = [];
     cart = shoppingCart.productos;
-    console.log('shoppingCart', shoppingCart);
+    console.log("shoppingCart", shoppingCart);
     cart.map((product, n) => {
-        const {productID} = product
-        // cardProductos[n] = productID;
-        cardProductos.push(productID);
-      });
-      console.log("cardProductos", cardProductos);
-      FirebaseAddToCart({ productos: cardProductos });
-  }
+      const { productID, cantidad } = product;
+      // cardProductos[n] = productID;
+      // Se almacena como items del carrito; id de producto y cantidad solicitada
+      cardProductos.push({ productID, cantidad });
+    });
+    console.log("cardProductos", cardProductos);
+    // Servicio que permite al usuario guardar elementos en el carrito de firebase
+    FirebaseAddToCart({ productos: cardProductos });
+  };
 
   const handleAddCard = (e, producto) => {
     e.preventDefault();
@@ -73,19 +75,36 @@ const ProductCard = ({ products, category }) => {
 
   const readData = (producto) => {
     //   shoppingsFromFirestore().then((snapshot) => {
+    let included = true;
     let cardProductos = [];
-    if (!!shoppingCart.productos){
+    if (!!shoppingCart.productos) {
       shoppingCart.productos.map((product, n) => {
         cardProductos.push(product);
       });
-      cardProductos.push(producto);
-      console.log('cardProductos', cardProductos);
+      cardProductos.map((product, n) => {
+        const { productID } = product;
+        console.log(
+          "compare product's ID",
+          product.productID,
+          producto.productID
+        );
+        if (productID === producto.productID) {
+          // TODO aumentar cantidad en 1
+          product.cantidad++;
+          included = false;
+        }
+      });
+      if (included) {
+        producto.cantidad = 1;
+        cardProductos.push(producto);
+        console.log("cardProductos", cardProductos);
+      }
     }
-    console.log('readData', cardProductos);
+    console.log("readData", cardProductos);
     // setShoppingCart productos:
     updateShoppingCart(cardProductos);
     // setShoppingCart({ productos: cardProductos });
-    console.log('shoppingCart', shoppingCart);
+    console.log("shoppingCart", shoppingCart);
   };
 
   return (
@@ -116,7 +135,10 @@ const ProductCard = ({ products, category }) => {
             title={titulo}
             subheader={precio}
             action={
-              <IconButton color="inherit" onClick={(e) => handleAddCard(e, producto)}>
+              <IconButton
+                color="inherit"
+                onClick={(e) => handleAddCard(e, producto)}
+              >
                 <AddShoppingCartIcon fontSize="large" />
               </IconButton>
             }

@@ -52,6 +52,7 @@ const styles = (theme) => ({
   },
   linkLogo: {
     // fontSize: 24,
+    textTransform: "capitalize",
     flex: 1,
     textDecoration: "none",
     alignItems: "center",

@@ -3,8 +3,6 @@ import React, { useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import { auth } from "@/firebase/firebaseClient";
 import { ThemeProvider, styled } from "@mui/material/styles";
-import { ShowCartContext } from "@/app/tienda/providers/ShoppingCartProvider";
-import FirebaseCompareShoppingCartIds from "@/services/FirebaseCompareShoppingCartIds";
 import withRoot from "@/modules/withRoot";
 import theme from "@/modules/theme";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -18,10 +16,6 @@ import Header from "./components/Header";
 import ShopMarcas from "./components/ShopMarcas";
 import ShopConditions from "./components/ShopConditions";
 import innerTheme from "./innerTheme";
-
-import { getAllShoppingCart } from "@/services/sharedServices";
-import { sharingInformationService } from "@/services/sharing-information";
-
 
 function Copyright() {
   return (
@@ -81,8 +75,6 @@ const Main = styled("main")(({ theme }) => ({
 function Paperbase({ children }) {
   // const { classes } = props;
   const classes = styles(theme);
-  const { updateShoppingCart, updateCart } = useContext(ShowCartContext);
-
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const user = auth.currentUser || {};
@@ -98,36 +90,7 @@ function Paperbase({ children }) {
     setMobileOpen(!mobileOpen);
   };
 
-  const subscription$ = getAllShoppingCart;
-  const productData = sharingInformationService.getSubject();
 
-  useEffect(() => {
-    subscription$.subscribe((response) => {
-      if (!!response) {
-        console.log("subscription getAllShoppingCart", response);
-        // const { cart } = response;
-        // shoppingCart.productos = cart;
-      }
-    });
-  }, [subscription$]);
-
-  useEffect(() => {
-    productData.subscribe((data) => { 
-      if (!!data) {
-        const { cart, userID } = data;
-        console.log("Detail productCard", cart, userID);
-        updateCart({ cartID: userID });
-        // se actualiza el array de ids productos
-        FirebaseCompareShoppingCartIds({ products: cart, updateCart });
-        // updateShoppingCart(cart);
-        // shoppingCart.productos = data;
-      }
-      // else {
-      //   shoppingCart.productos = [];
-      // }
-    });
-  }, [productData]);
-  
   return (
     <ThemeProvider theme={innerTheme}>
       <Box sx={classes.root}>

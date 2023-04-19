@@ -11,6 +11,7 @@ import { ShowCartContext } from "@/app/tienda/providers/ShoppingCartProvider";
 // import "sessionstorage-polyfill";
 // global.sessionstorage;
 // global.localStorage;
+import Typography from "@/modules/components/Typography";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -30,10 +31,19 @@ const styles = (theme) => ({
     width: "auto !important",
   },
   card: {
-    height: "100%", 
-    display: "flex", 
+    height: "100%",
+    display: "flex",
     justifyContent: "space-evenly",
-  }
+  },
+  cantidad: {
+    minWidth: "60px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttons: {
+    width: "50%",
+  },
 });
 
 const ListShoppingCart = (props) => {
@@ -45,9 +55,11 @@ const ListShoppingCart = (props) => {
   useEffect(() => {
     // se lee el ID asignado atras durante el login
     shoppingCartID = sessionStorage.getItem("cartID");
-    console.log("shoppingCartID", shoppingCartID);
-    // se asigna cartID al storeContext del usuario 
-    updateCart({ cartID: shoppingCartID })
+    if (!!shoppingCartID) {
+      console.log("shoppingCartID", shoppingCartID);
+      // se asigna cartID al storeContext del usuario
+      updateCart({ cartID: shoppingCartID });
+    }
   }, [shoppingCartID]);
 
   const navigate = useRouter();
@@ -77,7 +89,7 @@ const ListShoppingCart = (props) => {
 
   const handleCancel = (e) => {
     e.preventDefault();
-    if ( !!shoppingCartID ) {
+    if (!!shoppingCartID) {
       let cardProductos = [];
       console.log("myShoppingCart", shoppingCart);
       shoppingCart.productos.map((product, n) => {
@@ -129,9 +141,18 @@ const ListShoppingCart = (props) => {
       <Box className="" maxWidth="sm" style={{ height: "100%" }}>
         {shoppingCart.productos &&
           shoppingCart.productos.map(
-            ({ titulo, precio, imagenes, productID }, index) => (
+            ({ titulo, precio, imagenes, productID, cantidad }, index) => (
               <Card style={classes.card} key={index}>
-                {/* <CardActionArea onClick={handleClick}></CardActionArea> */} 
+                {/* <CardActionArea onClick={handleClick}></CardActionArea> */}
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  marked="center"
+                  align="center"
+                  style={classes.cantidad}
+                >
+                  X {cantidad}
+                </Typography>
                 <CardMedia
                   sx={classes.image}
                   component="img"
@@ -151,24 +172,26 @@ const ListShoppingCart = (props) => {
               </Card>
             )
           )}
-        {shoppingCart.productos &&
+        {shoppingCart.productos && shoppingCart.productos.length >= 1 && (
           <Box className="" maxWidth="sm">
             <Button
               variant="contained"
               color="primary"
+              style={classes.buttons}
               onClick={(e) => handleCheckout(e)}
             >
               Finalizar compra
             </Button>
             <Button
-                variant="contained"
-                color="secondary"
-                onClick={(e) => handleShoppingCart(e)}
-              >
+              variant="contained"
+              color="secondary"
+              style={classes.buttons}
+              onClick={(e) => handleShoppingCart(e)}
+            >
               Ver carrito
             </Button>
           </Box>
-        }
+        )}
       </Box>
     </>
   );

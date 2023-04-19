@@ -8,17 +8,35 @@ import PropTypes from "prop-types";
 export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
   console.log("products", products, updateCart);
   const AllProducts = sessionStorage.getItem("Todos los productos") || null;
-  const shoppingCartItems =
-    sessionStorage.getItem("cartProducts") !== 0
-      ? sessionStorage.getItem("cartProducts")
-      : null;
-  const shoppingCartSuma =
-    sessionStorage.getItem("cartSum") !== 0
-      ? sessionStorage.getItem("cartSum")
-      : null;
+  // const shoppingCartItems =
+  //   sessionStorage.getItem("cartProducts") !== 0
+  //     ? sessionStorage.getItem("cartProducts")
+  //     : null;
+  // const shoppingCartSuma =
+  //   sessionStorage.getItem("cartSum") !== 0
+  //     ? sessionStorage.getItem("cartSum")
+  //     : null;
 
-  const productosIds = products || [""];
-  // console.log("productosIds", productosIds);
+  //     if (shoppingCartSuma > 0) {
+  //       sessionStorage.setItem("cartSum", shoppingCartSuma);
+  //     }
+
+  let productosIds = [];
+  let productosCantidades = [];
+
+  const extractProductsID = (products) => {
+    products.map(({ productID }, index) => {
+      productosIds[index] = productID;
+    });
+    console.log("extractProductsID", productosIds);
+  };
+
+  const extractProductAmount = (products) => {
+    products.map(({ cantidad }, index) => {
+      productosCantidades[index] = cantidad;
+    });
+    console.log("extractProductAmount", productosCantidades);
+  };
 
   const user = auth.currentUser || {};
   const userID = user.uid || null;
@@ -112,12 +130,6 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
       productData = JSON.parse(AllProducts);
       compareProductsIDs(productData);
       sessionStorage.setItem("cartUpdated", "sessionStorage");
-      if (shoppingCartSuma > 0) {
-        sessionStorage.setItem("cartSum", shoppingCartSuma);
-      }
-      if (shoppingCartItems > 0) {
-        sessionStorage.setItem("cartProducts", shoppingCartItems);
-      }
     }
   };
 
@@ -135,23 +147,29 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
         for (let codigo of productosIds) {
           // console.log(iD, codigo);
           if (iD === codigo) {
+            // Se identifica por ID que producto representa para ser añadido
             cardProductos.push(DOC);
+            // Se hace uso de las cantidades asginadas en el carrito de compras
+            cardProductos[counter].cantidad = productosCantidades[counter];
+            // Nuestra marca para identificar el producto en el array
             counter++;
           }
         }
       });
       if (cardProductos !== [] && cardProductos.length > 0) {
-        // console.log("cardProductos", cardProductos);
-        // setShoppingCart({
-        //   ...shoppingCart,
-        //   productos: cardProductos,
-        //   items: cardProductos.length,
-        // });
+        console.log("cardProductos", cardProductos);
         shoppingCart.productos = cardProductos;
-        shoppingCart.items = cardProductos.length;
-        // console.log(shoppingCart);
+        // Se determina la cantidad de objetos agregados al carrito de compras
+        // cardProductos.length;
+        let totalCantidades = 0;
+        productosCantidades.map((cantidad) => {
+          totalCantidades += cantidad;
+        });
+        shoppingCart.items = totalCantidades;
+        console.log("compareProductAmounts", shoppingCart, totalCantidades);
         sessionStorage.setItem("cartUpdated", "filterItems");
-        sessionStorage.setItem("cartProducts", cardProductos.length);
+        sessionStorage.setItem("cartProducts", totalCantidades);
+        // Se envia listado de productos para calcular el valor del carrito de compras
         calculateCartAmount(cardProductos);
       }
     }
@@ -162,11 +180,9 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
     // console.log(acomulateSum);
     cardProductos.map((product, k) => {
       // console.log(acomulateSum, product.precio);
-      if (
-        typeof parseInt(product.precio) === "number" &&
-        product.precio !== "Agotado"
-      ) {
-        acomulateSum += parseInt(product.precio);
+      const { precio, cantidad } = product;
+      if (typeof parseInt(precio) === "number" && precio !== "Agotado") {
+        acomulateSum += parseInt(precio) * cantidad;
       }
     });
     if (acomulateSum > 0) {
@@ -176,7 +192,7 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
       sessionStorage.setItem("cartUpdated", "suma");
       sessionStorage.setItem("cartSum", acomulateSum);
       // sessionStorage.removeItem("cartUpdated");
-      // console.log("service", shoppingCart);
+      console.log("service", shoppingCart);
       if (!!shoppingCart.productos) {
         console.log("service", shoppingCart);
         updateCart(shoppingCart);
@@ -186,6 +202,10 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
   };
 
   if (usedID) {
+    // Funciones para procesar datos de entrada
+    extractProductsID(products);
+    extractProductAmount(products);
+    // Funcion para obtener de Firestore todos los productos de la tienda
     shoppingsFromFirestore();
   }
 };

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import parsePrices from "@/utilities/parse-money";
 import { firestore } from "@/firebase/firebaseClient";
 import { collection, doc, getDocs, query, where } from "firebase/firestore";
 
@@ -146,22 +147,23 @@ const FirebaseSearchProductById = (searchId, category) => {
     });
   };
 
-  const parsePrices = (productos) => {
-    if (!!productos) {
-      productos.map((product, index, array) => {
-        if (
-          typeof parseInt(product.precio) === "number" &&
-          product.precio !== "Agotado"
-        ) {
-          array[index].precio = parseInt(product.precio).toLocaleString(
-            "es-CO",
-            { style: "currency", currency: "COP" }
-          );
-        }
-      });
-      return productos;
-    }
-  };
+  // Se actualiza la importancion desde utilities
+  // const parsePrices = (productos) => {
+  //   if (!!productos) {
+  //     productos.map((product, index, array) => {
+  //       if (
+  //         typeof parseInt(product.precio) === "number" &&
+  //         product.precio !== "Agotado"
+  //       ) {
+  //         array[index].precio = parseInt(product.precio).toLocaleString(
+  //           "es-CO", 
+  //           { style: "currency", currency: "COP" }
+  //         );
+  //       }
+  //     });
+  //     return productos;
+  //   }
+  // };
 
   productoSearchStore();
   if (currentProduct.length > 0) {

@@ -33,12 +33,6 @@ const ShoppingCartProvider = ({ children }) => {
       show: bool,
     }));
   };
-//   const updateCart = (bool) => {
-//     setShoppingCart((shoppingCart) => ({
-//       ...shoppingCart,
-//       updated: bool,
-//     }));
-//  };
 
   return (
     <ShowCartContext.Provider

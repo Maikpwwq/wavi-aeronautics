@@ -11,7 +11,7 @@ function FirebaseAddToCart({ productos }) {
   const shoppingsRef = collection(_firestore, "shoppingCart");
 
   const shoppingsToFirestore = async (updateInfo, userRef) => {
-    const productData = await setDoc(doc(shoppingsRef, userRef), updateInfo); // , { merge: true }
+    const productData = await setDoc(doc(shoppingsRef, userRef), updateInfo, { merge: true });
     sessionStorage.setItem("cartUpdated", "agregar");
     // console.log("*productData*", productData);
     return productData;

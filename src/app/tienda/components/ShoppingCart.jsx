@@ -1,10 +1,10 @@
-"use client"
-import React, { useState, useContext } from "react";
-// import { useLocation } from "react-router-dom";
+"use client";
+import React, { useState, useContext, useEffect } from "react";
 import { ShowCartContext } from "@/app/tienda/providers/ShoppingCartProvider";
 import ListShoppingCart from "./ListShoppingCart";
-// import { sharingInformationService } from "@/services/sharing-information";
 import FirebaseCompareShoppingCartIds from "@/services/FirebaseCompareShoppingCartIds";
+import { getAllShoppingCart } from "@/services/sharedServices";
+import { sharingInformationService } from "@/services/sharing-information";
 
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
@@ -36,7 +36,8 @@ const styles = (theme) => ({
 });
 
 const ShoppingCart = (props) => {
-  const { shoppingCart, updateShoppingCart } = useContext(ShowCartContext);
+  const { shoppingCart, updateCart, updateShoppingCart } =
+    useContext(ShowCartContext);
   console.log("ShowCartContext ShoppingCart", shoppingCart);
   // const { showingCart, setShowingCart, shoppingUpdatedItems } = useContext(ShowCartContext);
 
@@ -58,13 +59,37 @@ const ShoppingCart = (props) => {
   // const { visible, updated, setShowingCart } = props || {};
   const classes = styles(theme);
 
-  // console.log("props", visible, updated);
-  // const { state } = useLocation() || {};
-  // const { makeVisible, makeUpdated } = state || "";
-  // console.log("state", makeVisible, makeUpdated);
-  // const visibleSettings = makeVisible || visible;
-  // const updatedSettings = makeUpdated || updated;
-  // console.log("settings", visibleSettings, updatedSettings);
+  const subscription$ = getAllShoppingCart;
+  const productData = sharingInformationService.getSubject();
+
+  useEffect(() => {
+    subscription$.subscribe((response) => {
+      if (!!response) {
+        console.log("subscription getAllShoppingCart", response);
+        // const { cart } = response;
+        // shoppingCart.productos = cart;
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    productData.subscribe((data) => {
+      if (!!data) {
+        const { cart, userID } = data;
+        console.log("Detail productCard", cart, userID);
+        if (userID) {
+          // Se usa el id para asignarlo al carrito de compras
+          updateCart({ cartID: userID });
+        }
+        if (cart) {
+          // Se envia array con ids de productos, para identificar referencias y almacenarlas en el context
+          FirebaseCompareShoppingCartIds({ products: cart, updateCart });
+        }
+        // updateShoppingCart(cart);
+        // shoppingCart.productos = data;
+      }
+    });
+  }, []);
 
   return (
     <>

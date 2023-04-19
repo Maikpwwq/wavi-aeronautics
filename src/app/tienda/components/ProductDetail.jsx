@@ -91,7 +91,7 @@ const ProductDetail = (props) => {
     currentProduct.subscribe((data) => {
       if (!!data) {
         setProductInfo(data[0]);
-        console.log("currentProduct", data[0], productInfo);
+        console.log("currentProduct", data, data[0], productInfo);
       }
     });
   
