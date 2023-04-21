@@ -4,7 +4,12 @@ import Toolbar from "@mui/material/Toolbar";
 import { signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { auth } from "@/firebase/firebaseClient";
+import { sharingInformationService } from "@/services/sharing-information";
+// let displayName = user.displayName
+// let email = user.email
+// var emailVerified = user.emailVerified
+// var uid = user.uid
+import { auth, currentUser } from "@/firebase/firebaseClient";
 import AppBar from "../components/AppBar";
 import theme from "../theme";
 import withRoot from "../withRoot";
@@ -70,10 +75,23 @@ const styles = (theme) => ({
 function AppAppBar(props) {
   // const { theme } = props;
   const classes = styles(theme);
-  const user = auth.currentUser || {};
+  let user = {};
+  const currentUser = sharingInformationService.getSubject();
+  useEffect(() => {
+    currentUser.subscribe((data) => {
+      if (!!data) {
+        const { currentUser } = data;
+        console.log("currentUser", currentUser, data);
+        if (currentUser) {
+          user = currentUser;
+        }
+      }
+    });
+  }, []);
+  // const user = auth.currentUser || currentUser || {};
   const userID = user.uid || null;
   const [userAuth, setUserAuth] = useState(false);
-  console.log('user', user);
+  console.log("user", currentUser, user);
   useEffect(() => {
     if (user && userID) {
       setUserAuth(true);
@@ -106,7 +124,7 @@ function AppAppBar(props) {
         <StyledToolbar>
           <Box sx={classes.left}>
             <Link
-              href="/" 
+              href="/"
               variant="h6"
               underline="none"
               color="inherit"

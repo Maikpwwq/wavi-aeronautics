@@ -151,7 +151,7 @@ const ListShoppingCart = (props) => {
                   align="center"
                   style={classes.cantidad}
                 >
-                  X {cantidad}
+                  {cantidad} X
                 </Typography>
                 <CardMedia
                   sx={classes.image}
@@ -163,11 +163,11 @@ const ListShoppingCart = (props) => {
                 <CardHeader
                   title={titulo}
                   subheader={precio}
-                  action={
-                    <IconButton color="inherit" onClick={() => handleCancel}>
-                      <CancelIcon fontSize="large" />
-                    </IconButton>
-                  }
+                  // action={
+                  //   <IconButton color="inherit" onClick={() => handleCancel}>
+                  //     <CancelIcon fontSize="large" />
+                  //   </IconButton>
+                  // }
                 ></CardHeader>
               </Card>
             )

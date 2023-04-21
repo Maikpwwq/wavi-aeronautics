@@ -9,7 +9,7 @@ async function ProductPage({ children }) {
   // const { id, category } = params;
   return (
     <article>
-      <p>details layout</p>
+      {/* TODO: Implement new product layout <p>details layout</p> */}
       {children}
     </article>
   );

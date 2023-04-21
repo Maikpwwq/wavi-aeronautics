@@ -6,7 +6,7 @@ import Link from "next/link";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import CardActionArea from "@mui/material/CardActionArea";
+// import CardActionArea from "@mui/material/CardActionArea";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -41,17 +41,8 @@ function ShowCartPage() {
   const { shoppingCart, updateShowCart, updateShoppingCart } =
     useContext(ShowCartContext);
   console.log("ShowCartContext ShoppingCart", shoppingCart);
-  const categoria = "drone"; // TODO: set category
   let cart = shoppingCart.productos;
   const classes = styles(theme);
-
-  // const handleClick = (e, productID, categoria) => {
-  //   e.preventDefault();
-  //   console.log("handleClick", e, productID, categoria);
-  //   navigate.push("tienda/producto", {
-  //     query: `id=${productID}&category=${categoria}`,
-  //   });
-  // };
 
   const handleCheckout = (e) => {
     e.preventDefault();
@@ -84,10 +75,9 @@ function ShowCartPage() {
             >
               <Box className="">
                 {shoppingCart.productos &&
-                  cart.map(({ titulo, precio, imagenes, productID }, index) => (
+                  cart.map(({ titulo, precio, imagenes, productID, categoria }, index) => (
                     <Card style={classes.card} key={index}>
                       <Link
-                        // onClick={(e) => handleClick(e, productID, "drone")}
                         href={{
                           pathname: `tienda/producto`, 
                           query: `id=${productID}&category=${categoria}`,

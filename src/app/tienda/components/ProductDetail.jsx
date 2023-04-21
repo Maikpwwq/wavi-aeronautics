@@ -80,9 +80,6 @@ const ProductDetail = (props) => {
 
   const [activeStep, setActiveStep] = useState(0);
   const [productInfo, setProductInfo] = useState(product);
-
-  console.log("productInfo", productInfo);
-
   const maxSteps = product ? product.imagenes.length : 0;
 
   const currentProduct = sharingInformationService.getSubject();
@@ -90,19 +87,22 @@ const ProductDetail = (props) => {
   useEffect(() => {
     currentProduct.subscribe((data) => {
       if (!!data) {
-        setProductInfo(data[0]);
-        console.log("currentProduct", data, data[0], productInfo);
+        const { productos } = data;
+        if (productos) {
+          // console.log("currentProduct", productos[0], productInfo);
+          setProductInfo(productos[0]);
+        }
       }
     });
-  
+
     subscription$.subscribe((response) => {
       if (!!response) {
         console.log("storeProductInfo", response);
         // const { storeProductInfo } = response;
       }
-    });  
+    });
   }, []);
-  
+
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
