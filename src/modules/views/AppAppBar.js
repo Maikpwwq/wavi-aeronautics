@@ -189,14 +189,6 @@ function AppAppBar (props) {
               >
                 {'Iniciar sesión'}
               </StyledNavLink>
-              {/* <Link
-                variant="h6"
-                underline="none"
-                className={clsx(classes.rightLink, classes.linkSecondary)}
-                href="/sign-up/"
-              >
-                <Link href="/sign-up/">{"Registrarse"}</Link>
-              </Link> */}
             </>
               )}
         </Box>

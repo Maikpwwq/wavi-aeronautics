@@ -113,7 +113,7 @@ function ProductCategories (props) {
   const navigate = useRouter()
 
   const handleImageClick = () => {
-    navigate.push('/tienda/')
+    navigate.push('/tienda/drones/')
   }
 
   const images = [
@@ -179,7 +179,7 @@ function ProductCategories (props) {
               width: image.width
             }}
           >
-            <Link href="/tienda/">
+            <Link href="/tienda/drones">
               <Box
                 sx={classes.imageSrc}
                 style={{

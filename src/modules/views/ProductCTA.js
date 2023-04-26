@@ -82,16 +82,18 @@ function ProductCTA (props) {
 
   const handleSubmit = () => {
     // e.preventDefault();
-    console.log('subscribeMail', suscribeMail.correo)
-    const subscription = getSubscribe(suscribeMail.correo)
-    // if (suscribeMail.correo !== "") {
-    subscription.subscribe((response) => {
-      console.log('subscribeObservable', response)
-      // FirebaseSubscribe(suscribeMail.correo);
-      setOpen(true) // open snackbar
-      // });
-      setSuscribeMail(null)
-    })
+    if (suscribeMail.correo) {
+      console.log('subscribeMail', suscribeMail.correo)
+      const subscription = getSubscribe(suscribeMail)
+      // if (suscribeMail.correo !== "") {
+      subscription.subscribe((response) => {
+        console.log('subscribeObservable', response)
+        // FirebaseSubscribe(suscribeMail.correo);
+        setOpen(true) // open snackbar
+        // });
+        setSuscribeMail(null)
+      })
+    }
     // };
   }
 
@@ -115,6 +117,7 @@ function ProductCTA (props) {
               <TextField
                 noBorder
                 sx={classes.textField}
+                // value={suscribeMail.correo}
                 placeholder="Tu email"
                 onChange={(e) => setSuscribeMail({ correo: e.target.value })}
               />

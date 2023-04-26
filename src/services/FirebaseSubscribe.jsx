@@ -3,13 +3,14 @@ import { firestore } from '@/firebase/firebaseClient'
 import { collection, doc, setDoc } from 'firebase/firestore'
 import { v4 as uuidv4 } from 'uuid'
 
-function FirebaseSubscribe (props) {
+function FirebaseSubscribe (suscribeMail) {
   const _firestore = firestore
-  const { suscribeMail } = props
+  // const { suscribeMail } = props
   const suscribeRef = collection(_firestore, 'suscritos')
 
   const userSuscribe = async (updateInfo, userID) => {
-    await setDoc(doc(suscribeRef, userID), updateInfo, { merge: true })
+    console.log('userSuscribe', updateInfo, userID)
+    await setDoc(doc(suscribeRef, userID), updateInfo) //, { merge: true }
   }
 
   const handleSubscribe = () => {

@@ -149,7 +149,7 @@ function ProductHowItWorks (props) {
           className="navlink"
           sx={classes.button}
         >
-          <Link href="/sign-up/">{'Comenzar'}</Link>
+          <Link href="auth/sign-up/">{'Comenzar'}</Link>
         </Button>
       </Container>
     </Box>

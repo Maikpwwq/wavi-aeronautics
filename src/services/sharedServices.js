@@ -89,8 +89,8 @@ const getAllShoppingCart = new Observable((subscriber) => {
 })
 
 const subscribeToWavi = (suscribeMail) =>
-  new Observable((subscriber) => {
-    const response = FirebaseSubscribe(suscribeMail)
+  new Observable(async (subscriber) => {
+    const response = await FirebaseSubscribe(suscribeMail)
     console.log('firebaseResponse', response, suscribeMail)
     try {
       subscriber.next(response)
