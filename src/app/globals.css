@@ -121,7 +121,7 @@ body {
   height: 100vh;
 }
 .navlink a{
-  font-size: 21px; 
+  /* font-size: 21px;  */
   text-decoration: none;
 }
 .navlink a:link{
@@ -134,7 +134,7 @@ body {
   color: white;    
 }
 a {
-  font-size: 21px; 
+  /* font-size: 21px;  */
   text-decoration: none;
   color: white;   
 }
@@ -149,4 +149,8 @@ a:hover{
 }
 .textWhite {
   color: #fff5f8;
+}
+
+.MuiTabs-flexContainer{
+  overflow: auto;
 }

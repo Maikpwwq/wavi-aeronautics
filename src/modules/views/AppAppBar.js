@@ -60,12 +60,20 @@ const styles = (theme) => ({
     display: 'flex',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    maxWidth: '360px'
+    maxWidth: '360px',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      justifyContent: 'center'
+    }
   },
   link: {
     fontSize: '21px',
     textDecoration: 'none',
-    color: 'white'
+    color: 'white',
+    textAlign: 'center',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '16px !important'
+    }
   },
   linkSecondary: {
     color: theme.palette.secondary.main // "#00aCe4",
@@ -132,7 +140,7 @@ function AppAppBar (props) {
               style={{
                 alignItems: 'center',
                 display: 'flex',
-                fontSize: '2rem',
+                fontSize: '1.6rem',
                 color: 'white',
                 textDecoration: 'none'
               }}

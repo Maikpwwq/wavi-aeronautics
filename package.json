@@ -27,6 +27,7 @@
     "turbo": "next dev --turbo",
     "build": "next build",
     "start": "next start",
+    "run-deploy": "gh-pages -d .next",
     "lint": "next lint"
   },
   "dependencies": {

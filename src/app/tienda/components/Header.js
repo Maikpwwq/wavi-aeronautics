@@ -40,9 +40,7 @@ const styles = (theme) => ({
   secondaryBar: {
     zIndex: 1 // Ver listado carrito de compras
   },
-  productTabs: {
-    overflowX: 'scroll !important'
-  },
+  productTabs: {},
   menuButton: {
     marginLeft: -theme.spacing(1)
   },
@@ -77,36 +75,20 @@ function Header (props) {
   // const { onDrawerToggle } = props
 
   const { shoppingCart, updateShowCart } = useContext(ShowCartContext)
-  // const ShowCartContext = createContext();
 
   const classes = styles(theme)
   const navigate = useRouter()
-  // const shoppingCartID = sessionStorage.getItem("cartID");
-  // const shoppingCartSuma =
-  //   sessionStorage.getItem("cartSum") !== 0
-  //     ? sessionStorage.getItem("cartSum")
-  //     : null;
-  // const shoppingCartItems =
-  //   sessionStorage.getItem("cartProducts") !== 0
-  //     ? sessionStorage.getItem("cartProducts")
-  //     : null;
+
   // const shoppingUpdatedItems = sessionStorage.getItem("cartUpdated");
   // TODO: Cambiar a un estado flase
   // const [showingCart, setShowingCart] = useState(true);
 
+  // TODO set value depending on URL
   const [value, setValue] = useState(0)
   // const [shoppingCart, setShoppingCart] = useState({
   //   suma: shoppingCartSuma > 0 ? shoppingCartSuma : 0,
   //   items: shoppingCartItems > 0 ? shoppingCartItems : 0,
   // });
-
-  // const handleShowCart = () => {
-  //   console.log('showingCart', shoppingCart.show)
-  //   updateShowCart(!shoppingCart.show)
-  //   // setShowingCart(!showingCart);
-  //   // console.log("showingCart", showingCart);
-  //   sessionStorage.setItem('cartUpdated', 'show')
-  // }
 
   // Desde aca se controla el estado de cantidad de productos y total de la compra
 
@@ -265,53 +247,70 @@ function Header (props) {
       </AppBar>
       <AppBar
         component="div"
-        sx={classes.secondaryBar}
+        style={classes.secondaryBar}
+        sx={ { zIndex: 0 } }
         color="primary"
         position="static"
         elevation={0}
       >
-        <Tabs
-          onChange={handleChange}
-          value={value}
-          textColor="inherit"
-          sx={classes.productTabs}
-        >
-          <Tab
-            textColor="inherit"
-            label="Drones"
-            value={0}
-            component="a"
-            href="/tienda/drones/"
-          ></Tab>
-          <Tab
-            textColor="inherit"
-            label="Radio Control"
-            value={1}
-            component="a"
-            href="/tienda/radio-control/"
-          />
-          <Tab
-            textColor="inherit"
-            label="Transmisión/Recepción"
-            value={2}
-            component="a"
-            href="/tienda/trasmisor-receptor/"
-          />
-          <Tab
-            textColor="inherit"
-            label="Accesorios"
-            value={3}
-            component="a"
-            href="/tienda/accesorios/"
-          />
-          <Tab
-            textColor="inherit"
-            label="Software"
-            value={4}
-            component="a"
-            href="/tienda/software/"
-          />
-        </Tabs>
+        <Toolbar className="p-0">
+          {/* <Grid
+            container
+            className="p-2 pb-0"
+            alignItems="center"
+            spacing={1}
+          >
+            <Grid item xs> */}
+              <Tabs
+                onChange={handleChange}
+                value={value}
+                textColor="inherit"
+                sx={classes.productTabs}
+              >
+                <Tab
+                  textColor="inherit"
+                  label="Drones"
+                  value={0}
+                  component="a"
+                  href="/tienda/drones/"
+                  onClick={() => setValue(0)}
+                ></Tab>
+                <Tab
+                  textColor="inherit"
+                  label="Radio Control"
+                  value={1}
+                  component="a"
+                  href="/tienda/radio-control/"
+                  onClick={() => setValue(1)}
+                />
+                <Tab
+                  textColor="inherit"
+                  label="Transmisión/Recepción"
+                  value={2}
+                  component="a"
+                  href="/tienda/trasmisor-receptor/"
+                  onClick={() => setValue(2)}
+                />
+                <Tab
+                  textColor="inherit"
+                  label="Accesorios"
+                  value={3}
+                  component="a"
+                  href="/tienda/accesorios/"
+                  onClick={() => setValue(3)}
+                />
+                <Tab
+                  textColor="inherit"
+                  label="Software"
+                  value={4}
+                  component="a"
+                  href="/tienda/software/"
+                  onClick={() => setValue(4)}
+                />
+              </Tabs>
+            {/* </Grid>
+          </Grid> */}
+        </Toolbar>
       </AppBar>
     </React.Fragment>
   )

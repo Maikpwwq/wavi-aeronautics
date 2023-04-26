@@ -14,6 +14,10 @@ const FirebaseLoadShoppingCart = () => {
   const userID = user.uid || null
   let shoppingCartID = null
 
+  const shoppingsToFirestore = async (updateInfo, userRef) => {
+    await setDoc(doc(shoppingsRef, userRef), updateInfo, { merge: true })
+  }
+
   const newShoppingCart = () => {
     const shoppingsId = uuidv4()
     shoppingsToFirestore({ productos: [] }, shoppingsId)
@@ -44,10 +48,6 @@ const FirebaseLoadShoppingCart = () => {
   const shoppingsRef = collection(_firestore, 'shoppingCart')
 
   let shoppingCart = []
-
-  const shoppingsToFirestore = async (updateInfo, userRef) => {
-    await setDoc(doc(shoppingsRef, userRef), updateInfo, { merge: true })
-  }
 
   const shoppingsFromFirestore = async () => {
     const cardProductos = []
