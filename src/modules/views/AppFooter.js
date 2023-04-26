@@ -6,16 +6,16 @@ import withRoot from '../withRoot'
 import Grid from '@mui/material/Grid'
 import Container from '@mui/material/Container'
 import Typography from '../components/Typography'
-import TextField from '../components/TextField'
+// import TextField from '../components/TextField'
 import theme from '../theme'
 // import appFooterFacebook from "public/static/themes/appFooterFacebook.png";
 // import appFooterTwitter from "public/static/themes/appFooterTwitter.png";
 import appFooterLinkedin from 'public/static/themes/appFooterLinkedin.png'
 
 const appFooterFacebook =
-  'https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2Ficonos%2FappFooterFacebook.png?alt=media&token=b54b1ff2-c2b3-4d57-a7fa-c2e0e06d150e';
+  'https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2Ficonos%2FappFooterFacebook.png?alt=media&token=b54b1ff2-c2b3-4d57-a7fa-c2e0e06d150e'
 // const appFooterLinkedin =
-('https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2Ficonos%2FappFooterLinkedin.png?alt=media&token=d1475fcd-9ae1-4c3c-84f5-ee38d76c2da6')
+// ('https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2Ficonos%2FappFooterLinkedin.png?alt=media&token=d1475fcd-9ae1-4c3c-84f5-ee38d76c2da6')
 
 const SocialIcons = styled('a')(({ theme }) => ({
   width: 48,

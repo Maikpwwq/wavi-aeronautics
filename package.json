@@ -70,7 +70,7 @@
     "eslint-plugin-react": "^7.32.2",
     "gh-pages": "^5.0.0",
     "localstorage-polyfill": "^1.0.1",
-    "sass": "^1.62.0",
+    "sass": "^1.62.1",
     "sessionstorage-polyfill": "^1.0.1",
     "standard": "^17.0.0"
   },
