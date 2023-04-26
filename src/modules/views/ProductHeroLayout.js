@@ -1,56 +1,56 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react'
+import PropTypes from 'prop-types'
 // import clsx from "clsx";
-import withRoot from "@/modules/withRoot";
-import theme from "@/modules/theme";
-import Image from "next/image";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import productHeroWonder from "public/static/themes/productHeroWonder.png";
-import productHeroArrowDown from "public/static/themes/productHeroArrowDown.png";
-import Typography from "../components/Typography";
+import withRoot from '@/modules/withRoot'
+import theme from '@/modules/theme'
+import Image from 'next/image'
+import Box from '@mui/material/Box'
+import Container from '@mui/material/Container'
+import productHeroWonder from 'public/static/themes/productHeroWonder.png'
+import productHeroArrowDown from 'public/static/themes/productHeroArrowDown.png'
+// import Typography from '../components/Typography'
 
 const styles = (theme) => ({
   root: {
     color: theme.palette.common.white,
-    position: "relative",
-    display: "flex",
-    alignItems: "center",
-    [theme.breakpoints.up("sm")]: {
-      height: "80vh",
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center',
+    [theme.breakpoints.up('sm')]: {
+      height: '80vh',
       minHeight: 500,
-      maxHeight: 1300,
-    },
+      maxHeight: 1300
+    }
   },
   container: {
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(14),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    textAlign: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    textAlign: 'center'
   },
   backdrop: {
-    position: "absolute",
+    position: 'absolute',
     left: 0,
     right: 0,
     top: 0,
     bottom: 0,
     backgroundColor: theme.palette.common.black,
     opacity: 0.5,
-    zIndex: -1,
+    zIndex: -1
   },
   arrowDown: {
-    position: "absolute",
+    position: 'absolute',
     bottom: theme.spacing(4),
     height: 21,
-    width: 15,
-  },
-});
+    width: 15
+  }
+})
 
-function ProductHeroLayout(props) {
-  const { backgroundClassName, children } = props;
-  const classes = styles(theme);
+function ProductHeroLayout (props) {
+  const { backgroundClassName, children } = props
+  const classes = styles(theme)
 
   return (
     <Box sx={classes.root}>
@@ -100,12 +100,12 @@ function ProductHeroLayout(props) {
         </Typography>
       </Container> */}
     </Box>
-  );
+  )
 }
 
 ProductHeroLayout.propTypes = {
   backgroundClassName: PropTypes.object.isRequired,
-  children: PropTypes.node.isRequired,
-};
+  children: PropTypes.node.isRequired
+}
 
-export default withRoot(ProductHeroLayout);
+export default withRoot(ProductHeroLayout)

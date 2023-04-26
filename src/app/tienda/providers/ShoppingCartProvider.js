@@ -1,38 +1,37 @@
-import React, { useState, createContext } from "react";
+import React, { useState, createContext } from 'react'
 
-export const ShowCartContext = createContext(); 
+export const ShowCartContext = createContext()
 
-const ShoppingCartProvider = ({ children }) => { 
-  
+const ShoppingCartProvider = ({ children }) => {
   const [shoppingCart, setShoppingCart] = useState({
     cartID: null,
     productos: [],
     show: false,
     updated: false,
     suma: 0,
-    items: 0,
-  });
+    items: 0
+  })
   const updateShoppingCart = (newProductos) => {
-    console.log("updateShoppingCart", newProductos);
+    console.log('updateShoppingCart', newProductos)
     setShoppingCart((shoppingCart) => ({
       ...shoppingCart,
-      productos: newProductos,
-    }));
-  };
+      productos: newProductos
+    }))
+  }
   const updateCart = (newData) => {
-    console.log("updateCart", newData);
+    console.log('updateCart', newData)
     setShoppingCart((shoppingCart) => ({
       ...shoppingCart,
-      ...newData,
-    }));
-  };
+      ...newData
+    }))
+  }
   const updateShowCart = (bool) => {
-    console.log("updateShowCart", bool);
+    console.log('updateShowCart', bool)
     setShoppingCart((shoppingCart) => ({
       ...shoppingCart,
-      show: bool,
-    }));
-  };
+      show: bool
+    }))
+  }
 
   return (
     <ShowCartContext.Provider
@@ -40,7 +39,7 @@ const ShoppingCartProvider = ({ children }) => {
     >
       {children}
     </ShowCartContext.Provider>
-  );
+  )
 }
 
-export default ShoppingCartProvider;
+export default ShoppingCartProvider

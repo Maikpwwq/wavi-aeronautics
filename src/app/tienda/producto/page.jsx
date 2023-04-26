@@ -1,7 +1,7 @@
-import ProductDetail from "@/app/tienda/components/ProductDetail";
+import ProductDetail from '@/app/tienda/components/ProductDetail'
 
-function PostPage() {
-  return <ProductDetail />;
+function PostPage () {
+  return <ProductDetail />
 }
 
-export default PostPage;
+export default PostPage

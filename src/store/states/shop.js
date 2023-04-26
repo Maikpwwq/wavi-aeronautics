@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
 
 export const initialShop = {
   drones: [{}],
@@ -7,23 +7,23 @@ export const initialShop = {
   radioControl: [{}],
   accesorios: [{}],
   receptores: [{}],
-  trasnmisores: [{}],
-};
+  trasnmisores: [{}]
+}
 
 // Slice
 const shopSlice = createSlice({
-  name: "shop",
+  name: 'shop',
   initialState: initialShop,
   reducers: {
     loadStore: (state, action) => {
-      state.shop = action.payload;
+      state.shop = action.payload
     },
     updateStore: (state, action) => {
-      return { ...state, ...action.payload };
-    },
-  },
-});
-export default shopSlice.reducer;
+      return { ...state, ...action.payload }
+    }
+  }
+})
+export default shopSlice.reducer
 
 // export actions
-export const { loadStore, updateStore } = shopSlice.actions;
+export const { loadStore, updateStore } = shopSlice.actions

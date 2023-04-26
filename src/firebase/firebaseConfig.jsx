@@ -8,5 +8,5 @@ export const firebaseClientConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGEID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APPID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENTID,
-};
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENTID
+}

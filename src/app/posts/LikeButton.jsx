@@ -1,13 +1,13 @@
-"use client";
-import { useState } from "react";
+'use client'
+import { useState } from 'react'
 
-function LikeButton({ params }) {
+function LikeButton ({ params }) {
   // const { id } = params;
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(false)
 
   return (
-    <button onClick={() => setLiked(!liked)}>{liked ? "<3" : "**"}</button>
-  );
+    <button onClick={() => setLiked(!liked)}>{liked ? '<3' : '**'}</button>
+  )
 }
 
-export default LikeButton;
+export default LikeButton

@@ -1,18 +1,18 @@
 const parsePrices = (productos) => {
-  if (!!productos) {
+  if (productos) {
     productos.map((product, index, array) => {
       if (
-        typeof parseInt(product.precio) === "number" &&
-        product.precio !== "Agotado"
+        typeof parseInt(product.precio) === 'number' &&
+        product.precio !== 'Agotado'
       ) {
-        array[index].precio = parseInt(product.precio).toLocaleString("es-CO", {
-          style: "currency",
-          currency: "COP",
-        });
+        array[index].precio = parseInt(product.precio).toLocaleString('es-CO', {
+          style: 'currency',
+          currency: 'COP'
+        })
       }
-    });
-    return productos;
+    })
+    return productos
   }
-};
+}
 
-export default parsePrices;
+export default parsePrices

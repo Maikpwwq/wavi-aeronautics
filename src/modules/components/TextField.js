@@ -1,67 +1,67 @@
-import React from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import withRoot from "../withRoot";
-import theme from "../theme";
-import { styled } from "@mui/material/styles";
-import MuiTextField from '@mui/material/TextField';
-import { capitalize } from '@mui/material/utils';
+import React from 'react'
+import clsx from 'clsx'
+import PropTypes from 'prop-types'
+import withRoot from '../withRoot'
+import theme from '../theme'
+// import { styled } from '@mui/material/styles'
+import MuiTextField from '@mui/material/TextField'
+import { capitalize } from '@mui/material/utils'
 
 const styles = (theme) => ({
   root: {
     padding: 0,
     'label + &': {
-      marginTop: theme.spacing(3),
-    },
+      marginTop: theme.spacing(3)
+    }
   },
   input: {
     minWidth: theme.spacing(6),
     backgroundColor: theme.palette.common.white,
     '&$disabled': {
-      backgroundColor: theme.palette.divider,
-    },
+      backgroundColor: theme.palette.divider
+    }
   },
   inputBorder: {
     border: '1px solid #e9ddd0',
     '&:focus': {
-      borderColor: theme.palette.secondary.main,
-    },
+      borderColor: theme.palette.secondary.main
+    }
   },
   disabled: {},
   inputSizeSmall: {
     fontSize: 14,
     padding: theme.spacing(1),
-    width: `calc(100% - ${theme.spacing(2)})`,
+    width: `calc(100% - ${theme.spacing(2)})`
   },
   inputSizeMedium: {
     fontSize: 16,
     padding: theme.spacing(2),
-    width: `calc(100% - ${theme.spacing(4)})`,
+    width: `calc(100% - ${theme.spacing(4)})`
   },
   inputSizeLarge: {
     fontSize: 18,
     padding: 22,
-    width: `calc(100% - ${22 * 2}px)`,
+    width: `calc(100% - ${22 * 2}px)`
   },
   inputSizeXlarge: {
     fontSize: 20,
     padding: 25,
-    width: `calc(100% - ${25 * 2}px)`,
+    width: `calc(100% - ${25 * 2}px)`
   },
   formLabel: {
-    fontSize: 18,
+    fontSize: 18
   },
   select: {
     height: 'auto',
-    borderRadius: 0,
+    borderRadius: 0
   },
   selectIcon: {
     top: '50%',
-    marginTop: -12,
-  },
-});
+    marginTop: -12
+  }
+})
 
-function TextField(props) {
+function TextField (props) {
   const {
     InputProps = {},
     InputLabelProps,
@@ -69,12 +69,12 @@ function TextField(props) {
     size = 'medium',
     SelectProps,
     ...other
-  } = props;
-  const classes = styles(theme);
+  } = props
+  const classes = styles(theme)
   const {
     classes: { input: InputPropsClassesInput, ...InputPropsClassesOther } = {},
     ...InputPropsOther
-  } = InputProps;
+  } = InputProps
 
   return (
     <MuiTextField
@@ -86,30 +86,30 @@ function TextField(props) {
             classes.input,
             classes[`inputSize${capitalize(size)}`],
             {
-              [classes.inputBorder]: !noBorder,
+              [classes.inputBorder]: !noBorder
             },
-            InputPropsClassesInput,
+            InputPropsClassesInput
           ),
           disabled: classes.disabled,
-          ...InputPropsClassesOther,
+          ...InputPropsClassesOther
         },
-        ...InputPropsOther,
+        ...InputPropsOther
       }}
       InputLabelProps={{
         ...InputLabelProps,
         shrink: true,
-        className: classes.formLabel,
+        className: classes.formLabel
       }}
       SelectProps={{
         ...SelectProps,
         classes: {
           select: classes.select,
-          icon: classes.selectIcon,
-        },
+          icon: classes.selectIcon
+        }
       }}
       {...other}
     />
-  );
+  )
 }
 
 TextField.propTypes = {
@@ -118,7 +118,7 @@ TextField.propTypes = {
   InputProps: PropTypes.object,
   noBorder: PropTypes.bool,
   SelectProps: PropTypes.object,
-  size: PropTypes.oneOf(['small', 'medium', 'large', 'xlarge']),
-};
+  size: PropTypes.oneOf(['small', 'medium', 'large', 'xlarge'])
+}
 
-export default withRoot(TextField);
+export default withRoot(TextField)

@@ -1,22 +1,22 @@
-"use client";
-import Image from "next/image";
+'use client'
+// import Image from 'next/image'
 // import styles from "./page.module.css";
-import withRoot from "@/modules/withRoot";
+import withRoot from '@/modules/withRoot'
 // --- Post bootstrap -----
-import React from "react";
-import ProductCategories from "@/modules/views/ProductCategories";
-import ProductSmokingHero from "@/modules/views/ProductSmokingHero";
-import AppFooter from "@/modules/views/AppFooter";
-import ProductHero from "@/modules/views/ProductHero";
-import ProductValues from "@/modules/views/ProductValues";
-import ProductHowItWorks from "@/modules/views/ProductHowItWorks";
-import ProductCTA from "@/modules/views/ProductCTA";
-import ProductMarcas from "@/modules/views/ProductMarcas";
-import AppAppBar from "@/modules/views/AppAppBar";
+import React from 'react'
+import ProductCategories from '@/modules/views/ProductCategories'
+import ProductSmokingHero from '@/modules/views/ProductSmokingHero'
+import AppFooter from '@/modules/views/AppFooter'
+import ProductHero from '@/modules/views/ProductHero'
+import ProductValues from '@/modules/views/ProductValues'
+import ProductHowItWorks from '@/modules/views/ProductHowItWorks'
+import ProductCTA from '@/modules/views/ProductCTA'
+import ProductMarcas from '@/modules/views/ProductMarcas'
+import AppAppBar from '@/modules/views/AppAppBar'
 
-import { inter } from "./fonts";
+// import { inter } from './fonts'
 
-function Home() {
+function Home () {
   return (
     <main>
       {/* className={styles.main} */}
@@ -109,7 +109,7 @@ function Home() {
         </a>
       </div> */}
     </main>
-  );
+  )
 }
 
-export default withRoot(Home);
+export default withRoot(Home)

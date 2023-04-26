@@ -1,7 +1,24 @@
 {
-  "extends": ["./node_modules/standard/eslintrc.json", "next/core-web-vitals"], 
-  "rules": {
-    // "jsx-a11y/anchor-is-valid": "off",
-    // "prettier/prettier": ["error", { "doubleQuote": true }]
-  }
+    "env": {
+        "browser": true,
+        "es2021": true,
+        "node": true
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "standard"
+    ],
+    "overrides": [
+    ],
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+        "react/prop-types": "off",
+        "react/react-in-jsx-scope": "off"
+    }
 }

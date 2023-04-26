@@ -1,28 +1,28 @@
-import React from "react";
-import withRoot from "@/modules/withRoot";
-import theme from "../innerTheme";
-import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Typography from "@/modules/components/Typography";
+import React from 'react'
+import withRoot from '@/modules/withRoot'
+import theme from '../innerTheme'
+// import { styled } from '@mui/material/styles'
+import Box from '@mui/material/Box'
+import Typography from '@/modules/components/Typography'
 
 const styles = (theme) => ({
   container: {
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
-    position: "relative",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    textAlign: "center",
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    textAlign: 'center'
   },
   title: {
-    paddingBottom: theme.spacing(8),
-  },
-});
+    paddingBottom: theme.spacing(8)
+  }
+})
 
 const ShopConditions = (props) => {
   // const { classes } = props;
-  const classes = styles(theme);
+  const classes = styles(theme)
   return (
     <>
       <Box maxWidth="md" sx={classes.container}>
@@ -59,9 +59,7 @@ const ShopConditions = (props) => {
         </Typography>
       </Box>
     </>
-  );
-};
+  )
+}
 
-
-
-export default withRoot(ShopConditions);
+export default withRoot(ShopConditions)

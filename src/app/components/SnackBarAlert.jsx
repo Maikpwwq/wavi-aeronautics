@@ -11,7 +11,7 @@ import Alert from '@mui/material/Alert'
 // }
 
 const SnackBarAlert = ({ message, onClose, severity }) => {
-    return (
+  return (
         <Snackbar open={open} autoHideDuration={6000} onClose={onClose}>
             <Alert
                 onClose={onClose}
@@ -21,13 +21,13 @@ const SnackBarAlert = ({ message, onClose, severity }) => {
                 {message}
             </Alert>
         </Snackbar>
-    )
+  )
 }
 
 SnackBarAlert.propTypes = {
-    message: PropTypes.string.isRequired,
-    onClose: PropTypes.func.isRequired,
-    severity: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+  severity: PropTypes.string.isRequired
 }
 
 export default SnackBarAlert

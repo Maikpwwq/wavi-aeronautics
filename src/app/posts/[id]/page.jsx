@@ -1,5 +1,5 @@
-function PostPage() {
-  return null;
+function PostPage () {
+  return null
 }
 
-export default PostPage;
+export default PostPage

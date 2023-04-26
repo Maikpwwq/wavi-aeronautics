@@ -1,1 +1,1 @@
-export { default as ShoppingCartProvider } from './ShoppingCartProvider';
+export { default as ShoppingCartProvider } from './ShoppingCartProvider'

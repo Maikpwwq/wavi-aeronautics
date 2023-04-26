@@ -1,132 +1,132 @@
 // import { HttpClient } from 'http';
-import { Observable, Subject, BehaviorSubject } from "rxjs";
-import FirebaseSearchProductById from "./FirebaseSearchProductById";
-import FirebaseDroneProducts from "./FirebaseDroneProducts.jsx";
-import FirebaseRadioControlProducts from "./FirebaseRadioControlProducts.jsx";
-import FirebaseTrasmisorReceptorProducts from "./FirebaseTrasmisorReceptorProducts.jsx";
-import FirebaseAccesoriosProducts from "./FirebaseAccesoriosProducts.jsx";
-import FirebaseLoadShoppingCart from "./FirebaseLoadShoppingCart.jsx";
-import FirebaseSubscribe from "./FirebaseSubscribe.jsx";
+import { Observable } from 'rxjs' // Subject, BehaviorSubject
+import FirebaseSearchProductById from './FirebaseSearchProductById'
+import FirebaseDroneProducts from './FirebaseDroneProducts.jsx'
+import FirebaseRadioControlProducts from './FirebaseRadioControlProducts.jsx'
+import FirebaseTrasmisorReceptorProducts from './FirebaseTrasmisorReceptorProducts.jsx'
+import FirebaseAccesoriosProducts from './FirebaseAccesoriosProducts.jsx'
+import FirebaseLoadShoppingCart from './FirebaseLoadShoppingCart.jsx'
+import FirebaseSubscribe from './FirebaseSubscribe.jsx'
 
-const urlsPrivate = {
-  get_tipo_identificacion: "/api/adm-tipo-identificacions",
-  contenidologsfiltro: "/api/servicioauditoria/findByFilters",
-  listarActividades: "/api/servicioHome/listarActividades",
-  actividadAsignadaById: "/api/servicioHome/listarActividadesById",
-};
+// const urlsPrivate = {
+//   get_tipo_identificacion: '/api/adm-tipo-identificacions',
+//   contenidologsfiltro: '/api/servicioauditoria/findByFilters',
+//   listarActividades: '/api/servicioHome/listarActividades',
+//   actividadAsignadaById: '/api/servicioHome/listarActividadesById'
+// }
 
 const getProductById = (searchId, category) =>
   new Observable(async (subscriber) => {
-    const response = await FirebaseSearchProductById(searchId, category);
+    const response = await FirebaseSearchProductById(searchId, category)
     try {
       console.log(
-        "firebase-Id-search",
+        'firebase-Id-search',
         searchId,
         category,
-        response,
+        response
         // subscriber
-      );
-      subscriber.next(response);
+      )
+      subscriber.next(response)
       // subscriber.complete();
     } catch (err) {
-      subscriber.error(err);
+      subscriber.error(err)
     }
-  });
+  })
 
 const getAllDroneProduct = new Observable((subscriber) => {
-  const response = FirebaseDroneProducts();
+  const response = FirebaseDroneProducts()
   // console.log("firebaseResponse", response);
   try {
-    subscriber.next(response);
+    subscriber.next(response)
     // subscriber.complete();
   } catch (err) {
-    subscriber.error(err);
+    subscriber.error(err)
   }
-});
+})
 
 const getAllRadioControl = new Observable((subscriber) => {
-  const response = FirebaseRadioControlProducts();
+  const response = FirebaseRadioControlProducts()
   // console.log("firebaseResponse", response);
   try {
-    subscriber.next(response);
+    subscriber.next(response)
     // subscriber.complete();
   } catch (err) {
-    subscriber.error(err);
+    subscriber.error(err)
   }
-});
+})
 
 const getAllTrasmisorReceptor = new Observable((subscriber) => {
-  const response = FirebaseTrasmisorReceptorProducts();
+  const response = FirebaseTrasmisorReceptorProducts()
   // console.log("firebaseResponse", response);
   try {
-    subscriber.next(response);
+    subscriber.next(response)
     // subscriber.complete();
   } catch (err) {
-    subscriber.error(err);
+    subscriber.error(err)
   }
-});
+})
 
 const getAllAccesoriosProduct = new Observable((subscriber) => {
-  const response = FirebaseAccesoriosProducts();
+  const response = FirebaseAccesoriosProducts()
   // console.log("firebaseResponse", response);
   try {
-    subscriber.next(response);
+    subscriber.next(response)
     // subscriber.complete();
   } catch (err) {
-    subscriber.error(err);
+    subscriber.error(err)
   }
-});
+})
 
 const getAllShoppingCart = new Observable((subscriber) => {
-  const response = FirebaseLoadShoppingCart();
-  console.log("FirebaseShoppingCart", response);
+  const response = FirebaseLoadShoppingCart()
+  console.log('FirebaseShoppingCart', response)
   try {
-    subscriber.next(response);
+    subscriber.next(response)
     // subscriber.complete();
   } catch (err) {
-    subscriber.error(err);
+    subscriber.error(err)
   }
-});
+})
 
 const subscribeToWavi = (suscribeMail) =>
   new Observable((subscriber) => {
-    const response = FirebaseSubscribe(suscribeMail);
-    console.log("firebaseResponse", response, suscribeMail);
+    const response = FirebaseSubscribe(suscribeMail)
+    console.log('firebaseResponse', response, suscribeMail)
     try {
-      subscriber.next(response);
+      subscriber.next(response)
       // subscriber.complete();
     } catch (err) {
-      subscriber.error(err); // delivers an error if it caught one
+      subscriber.error(err) // delivers an error if it caught one
     }
-  });
+  })
 
 const getObservableProductId = () => {
-  return getProductById;
-};
+  return getProductById
+}
 
 const getObservableDrone = () => {
-  return getAllDroneProduct;
-};
+  return getAllDroneProduct
+}
 
 const getObservableRadioControl = () => {
-  return getAllRadioControl;
-};
+  return getAllRadioControl
+}
 
 const getObservableTrasmisorReceptor = () => {
-  return getAllTrasmisorReceptor;
-};
+  return getAllTrasmisorReceptor
+}
 
 const getObservableAccesorios = () => {
-  return getAllAccesoriosProduct;
-};
+  return getAllAccesoriosProduct
+}
 
 const getShoppingCart = () => {
-  return getAllShoppingCart;
-};
+  return getAllShoppingCart
+}
 
 const getSubscribe = (suscribeMail) => {
-  return subscribeToWavi(suscribeMail);
-};
+  return subscribeToWavi(suscribeMail)
+}
 
 // const getAllDroneProduct = () => {
 //     new Observable(function subscribe(subscriber) {
@@ -180,7 +180,7 @@ const SharedService = () => {
   //    add_localstorage = (name, items) => localStorage.setItem(name, JSON.stringify(items));
   //    get_localstorage = (name) => JSON.parse(localStorage.getItem(name));
   //    delete_localstorage = (name) => localStorage.removeItem(name);
-};
+}
 export {
   getProductById,
   getObservableProductId,
@@ -196,6 +196,6 @@ export {
   getAllShoppingCart,
   getShoppingCart,
   subscribeToWavi,
-  getSubscribe,
-};
+  getSubscribe
+}
 // export default SharedService;

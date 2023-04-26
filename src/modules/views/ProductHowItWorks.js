@@ -1,74 +1,74 @@
-import React from "react";
-import Link from "next/link";
-import Image from "next/image";
-import PropTypes from "prop-types";
-import withRoot from "../withRoot";
-import theme from "../theme";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Container from "@mui/material/Container";
-import Button from "../components/Button";
-import Typography from "../components/Typography";
-import productCurvyLines from "public/static/themes/productCurvyLines.png";
-import productHowItWorks1 from "public/static/themes/productHowItWorks1.svg";
-import productHowItWorks2 from "public/static/themes/productHowItWorks2.svg";
-import productHowItWorks3 from "public/static/themes/productHowItWorks3.svg";
+import React from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
+// import PropTypes from 'prop-types'
+import withRoot from '../withRoot'
+import theme from '../theme'
+import Box from '@mui/material/Box'
+import Grid from '@mui/material/Grid'
+import Container from '@mui/material/Container'
+import Button from '../components/Button'
+import Typography from '../components/Typography'
+import productCurvyLines from 'public/static/themes/productCurvyLines.png'
+import productHowItWorks1 from 'public/static/themes/productHowItWorks1.svg'
+import productHowItWorks2 from 'public/static/themes/productHowItWorks2.svg'
+import productHowItWorks3 from 'public/static/themes/productHowItWorks3.svg'
 
 const styles = (theme) => ({
   root: {
-    display: "flex",
+    display: 'flex',
     backgroundColor: theme.palette.secondary.light,
-    overflow: "hidden",
+    overflow: 'hidden'
   },
   container: {
     paddingTop: theme.spacing(10),
     paddingBottom: theme.spacing(15),
-    position: "relative",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
   },
   item: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    padding: theme.spacing(0, 5),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: theme.spacing(0, 5)
   },
   title: {
-    paddingBottom: theme.spacing(8),
+    paddingBottom: theme.spacing(8)
   },
   number: {
     fontSize: 24,
     fontFamily: theme.typography.fontFamily,
     color: theme.palette.secondary.main,
-    fontWeight: theme.typography.fontWeightMedium,
+    fontWeight: theme.typography.fontWeightMedium
   },
   image: {
     height: 70,
     marginTop: theme.spacing(4),
-    marginBottom: theme.spacing(4),
+    marginBottom: theme.spacing(4)
   },
   curvyLines: {
-    pointerEvents: "none",
-    position: "absolute",
+    pointerEvents: 'none',
+    position: 'absolute',
     top: -180,
-    opacity: 0.7,
+    opacity: 0.7
   },
   beneficios: {
-    marginBottom: `${theme.spacing(8)} !important`,
+    marginBottom: `${theme.spacing(8)} !important`
   },
   button: {
-    minWidth: 200,
-  },
-});
+    minWidth: 200
+  }
+})
 
-function ProductHowItWorks(props) {
-  //const { classes } = props;
-  const classes = styles(theme);
+function ProductHowItWorks (props) {
+  // const { classes } = props;
+  const classes = styles(theme)
 
   return (
     <Box sx={classes.root}>
-      <Container sx={classes.container} style={{ textAlign: "center" }}>
+      <Container sx={classes.container} style={{ textAlign: 'center' }}>
         <Image
           src={productCurvyLines}
           style={classes.curvyLines}
@@ -100,7 +100,7 @@ function ProductHowItWorks(props) {
                   priority
                 />
                 <Typography variant="h5" align="center">
-                  {"Actualizaciones de las últimas tendencias del mercado."}
+                  {'Actualizaciones de las últimas tendencias del mercado.'}
                 </Typography>
               </Box>
             </Grid>
@@ -117,7 +117,7 @@ function ProductHowItWorks(props) {
                 />
                 <Typography variant="h5" align="center">
                   {
-                    "Mejorar el tiempo que inviertes en realizar tus actividades."
+                    'Mejorar el tiempo que inviertes en realizar tus actividades.'
                   }
                 </Typography>
               </Box>
@@ -135,7 +135,7 @@ function ProductHowItWorks(props) {
                 />
                 <Typography variant="h5" align="center">
                   {
-                    "Mantenimiento técnico preventivo y correctivo para tus equipos."
+                    'Mantenimiento técnico preventivo y correctivo para tus equipos.'
                   }
                 </Typography>
               </Box>
@@ -149,15 +149,15 @@ function ProductHowItWorks(props) {
           className="navlink"
           sx={classes.button}
         >
-          <Link href="/sign-up/">{"Comenzar"}</Link>
+          <Link href="/sign-up/">{'Comenzar'}</Link>
         </Button>
       </Container>
     </Box>
-  );
+  )
 }
 
 ProductHowItWorks.propTypes = {
   // classes: PropTypes.object.isRequired,
-};
+}
 
-export default withRoot(ProductHowItWorks);
+export default withRoot(ProductHowItWorks)

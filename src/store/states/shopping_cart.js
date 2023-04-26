@@ -1,47 +1,47 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
 // import { useDispatch } from "react-redux";
 // import { bindActionCreators } from 'redux'
 // const dispatcher = useDispatch();
 
 export const initialCart = {
   productos: [],
-  cartID: null,
-};
+  cartID: null
+}
 
 // Slice
 const shoppingCartSlice = createSlice({
-  name: "shoppingCart",
+  name: 'shoppingCart',
   initialState: initialCart,
   reducers: {
     createCart: (state, action) => {
-      state.shoppingCart = action.payload; // .productos
-      //localStorage.setItem("user", JSON.stringify(action.payload));
+      state.shoppingCart = action.payload // .productos
+      // localStorage.setItem("user", JSON.stringify(action.payload));
     },
     setCart: (state, action) => {
       return {
         ...state,
-        productos: [...state.shoppinCart.productos, action.payload],
-      };
+        productos: [...state.shoppinCart.productos, action.payload]
+      }
     },
     eliminateFromCart: (state, action) => {
       return {
         ...state,
         shoppingCart: state.shoppingCart.filter(
           (items) => items.id !== action.payload
-        ),
-      };
+        )
+      }
     },
     deleteCart: (state, action) => {
-      state.shoppingCart = initialCart;
-      //localStorage.removeItem("user");
-    },
-  },
-});
-export default shoppingCartSlice.reducer;
+      state.shoppingCart = initialCart
+      // localStorage.removeItem("user");
+    }
+  }
+})
+export default shoppingCartSlice.reducer
 
 // export actions
 export const { createCart, setCart, eliminateFromCart, deleteCart } =
-  shoppingCartSlice.actions;
+  shoppingCartSlice.actions
 
 // const boundActionCreators = bindActionCreators(
 //   { createCart, setCart, eliminateFromCart, deleteCart },

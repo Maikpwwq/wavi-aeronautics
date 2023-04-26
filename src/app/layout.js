@@ -1,8 +1,8 @@
-import "./globals.css";
+import './globals.css'
 // import Navigation from "./components/Navigation";
-import Providers from "./providers";
+import Providers from './providers'
 
-export default function RootLayout({ children }) {
+export default function RootLayout ({ children }) {
   return (
     <html lang="en">
       {/*
@@ -18,5 +18,5 @@ export default function RootLayout({ children }) {
         </Providers>
       </body>
     </html>
-  );
+  )
 }

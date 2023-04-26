@@ -1,36 +1,36 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
 // import { useDispatch } from "react-redux";
 // const dispatcher = useDispatch();
 
 export const initialProduct = {
-  titulo: "Producto 1",
+  titulo: 'Producto 1',
   precio: 100,
-  descripcion: "Descripcion del producto 1",
-  especificaciones: "Especificaciones del producto 1",
-  incluye: "Incluye del producto 1",
-  imagenes: [],
-};
+  descripcion: 'Descripcion del producto 1',
+  especificaciones: 'Especificaciones del producto 1',
+  incluye: 'Incluye del producto 1',
+  imagenes: []
+}
 
 // Slice
 const productSlice = createSlice({
-  name: "product",
+  name: 'product',
   initialState: initialProduct,
   reducers: {
     loadDetail: (state, action) => {
-      console.log("loadDetail", state, action);
-      state = action.payload;
-      //localStorage.setItem("currentProduct", JSON.stringify(action.payload));
+      console.log('loadDetail', state, action)
+      state = action.payload
+      // localStorage.setItem("currentProduct", JSON.stringify(action.payload));
     },
     modifyDetail: (state, action) => {
-      return { ...state, ...action.payload };
+      return { ...state, ...action.payload }
     },
     unmountDetail: (state, action) => {
-      state.product = initialProduct;
-      //localStorage.removeItem("currentProduct");
-    },
-  },
-});
-export default productSlice.reducer;
+      state.product = initialProduct
+      // localStorage.removeItem("currentProduct");
+    }
+  }
+})
+export default productSlice.reducer
 
 // return {
 //   ...state,
@@ -40,7 +40,7 @@ export default productSlice.reducer;
 // };
 
 // export actions
-export const { loadDetail, modifyDetail, unmountDetail } = productSlice.actions;
+export const { loadDetail, modifyDetail, unmountDetail } = productSlice.actions
 
 // export const loadCurrent = ({
 //   titulo,

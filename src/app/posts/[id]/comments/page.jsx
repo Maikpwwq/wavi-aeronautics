@@ -1,21 +1,21 @@
-import Image from "next/image";
+import Image from 'next/image'
 
 const fetchComments = async (id) => {
   // await new Promise((resolve) => setTimeout(resolve, 3000));
   // throw new Error('Error al cargar los comentarios')
   return fetch(`https://jsonplaceholder.typicode.com/posts/${id}/comments`, {
-    next: { revalidate: 60 },
-  }).then((res) => res.json());
-};
+    next: { revalidate: 60 }
+  }).then((res) => res.json())
+}
 
-async function CommentsPage({ params }) {
-  const { id } = params;
-  const comments = await fetchComments(id);
+async function CommentsPage ({ params }) {
+  const { id } = params
+  const comments = await fetchComments(id)
 
   return (
-    <ul style={{ fontSize: "10px" }}>
+    <ul style={{ fontSize: '10px' }}>
       {comments.map((comment) => {
-        const { id, name, body, email } = comment;
+        const { id, name, body, email } = comment
         return (
           <li key={id}>
             <Image
@@ -28,10 +28,10 @@ async function CommentsPage({ params }) {
             <h2>{name}</h2>
             <p>{body}</p>
           </li>
-        );
+        )
       })}
     </ul>
-  );
+  )
 }
 
-export default CommentsPage;
+export default CommentsPage

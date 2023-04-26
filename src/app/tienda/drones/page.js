@@ -1,49 +1,45 @@
-"use client";
-import React, { Suspense, useState } from "react";
+'use client'
+import React, { Suspense, useState } from 'react'
 import {
   connect,
-  ReactReduxContext,
-  useStore,
-  useSelector,
-  useDispatch,
-} from "react-redux";
-import { useTheme } from "@mui/material/styles";
-import withRoot from "@/modules/withRoot";
-import theme from "../innerTheme";
-import { styled } from "@mui/material/styles";
+  useSelector
+} from 'react-redux'
+import { useTheme } from '@mui/material/styles'
+import withRoot from '@/modules/withRoot'
+// import theme from '../innerTheme'
 
 // import "sessionstorage-polyfill";
 // import "localstorage-polyfill";
 // global.sessionstorage;
 // global.localStorage;
 
-import Box from "@mui/material/Box";
-import ProductCard from "../components/ProductCard";
-import Grid from "@mui/material/Grid";
-import CircularProgress from "@mui/material/CircularProgress";
-import Typography from "@/modules/components/Typography";
+import Box from '@mui/material/Box'
+import ProductCard from '../components/ProductCard'
+import Grid from '@mui/material/Grid'
+import CircularProgress from '@mui/material/CircularProgress'
+import Typography from '@/modules/components/Typography'
 
 const styles = (theme) => ({
   presentationProducts: {
     margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`,
     padding: `${theme.spacing(0)} ${theme.spacing(2)} !important`,
-    display: "flex",
-    flexDirection: "column",
+    display: 'flex',
+    flexDirection: 'column'
   },
   spacingTexts: {
-    margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`,
+    margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`
   },
   endingTexts: {
-    marginBottom: `${theme.spacing(2)} !important`,
-  },
-});
+    marginBottom: `${theme.spacing(2)} !important`
+  }
+})
 
 const Products = (props) => {
-  const shopState = useSelector((store) => store.shop);
-  const { drones, dronesRC } = shopState;
+  const shopState = useSelector((store) => store.shop)
+  const { drones, dronesRC } = shopState
 
-  const theme = useTheme();
-  const classes = styles(theme);
+  const theme = useTheme()
+  const classes = styles(theme)
   // const user = auth.currentUser || {};
   // const userID = user.uid || null;
 
@@ -51,8 +47,8 @@ const Products = (props) => {
   // const state = useSelector((state))
   // const { store } = useContext(ReactReduxContext);
 
-  const [storeProducts, setStoreProducts] = useState(drones || []);
-  const [storeProductsRC, setStoreProductsRC] = useState(dronesRC || []);
+  const [storeProducts] = useState(drones || []) // setStoreProducts
+  const [storeProductsRC] = useState(dronesRC || []) // setStoreProductsRC
 
   return (
     <>
@@ -64,7 +60,7 @@ const Products = (props) => {
           {!!storeProducts && storeProducts.length > 0 && (
             <Suspense
               fallback={
-                <Box sx={{ display: "flex" }}>
+                <Box sx={{ display: 'flex' }}>
                   <CircularProgress />
                 </Box>
               }
@@ -83,13 +79,13 @@ const Products = (props) => {
                         productID={k}
                       ></ProductCard>
                     </Grid>
-                  );
+                  )
                 })}
               </Grid>
               <br />
               <br />
               <Typography variant="h5" sx={classes.spacingTexts}>
-                Drones a control remoto BNF/PNP/RTF.{" "}
+                Drones a control remoto BNF/PNP/RTF.{' '}
               </Typography>
               <Typography variant="body1">
                 Bind aNd Fly: Esta versión es la que viene con todo menos con el
@@ -114,7 +110,7 @@ const Products = (props) => {
                         productID={k}
                       ></ProductCard>
                     </Grid>
-                  );
+                  )
                 })}
               </Grid>
             </Suspense>
@@ -122,15 +118,15 @@ const Products = (props) => {
         </>
       </Box>
     </>
-  );
-};
+  )
+}
 
 const mapStateToProps = (state) => {
   // console.log("state", state);
   return {
     storeProducts: state.drones,
-    storeProductsRC: state.dronesRC,
-  };
-};
+    storeProductsRC: state.dronesRC
+  }
+}
 
-export default connect(mapStateToProps, null)(withRoot(Products));
+export default connect(mapStateToProps, null)(withRoot(Products))

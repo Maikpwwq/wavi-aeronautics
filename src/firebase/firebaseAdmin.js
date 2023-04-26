@@ -8,11 +8,11 @@ import serviceAccount from '../../serviceAccountKey.json'
 // use firebase dtabase instead
 console.log(serviceAccount)
 if (!firebaseAdmin.apps.length) {
-    initializeApp({
-        // credential: firebaseAdmin.credential.cert(serviceAccount),
-        credential: applicationDefault(),
-        databaseURL: 'https://wavi-aeronautics-default-rtdb.firebaseio.com',
-    })
+  initializeApp({
+    // credential: firebaseAdmin.credential.cert(serviceAccount),
+    credential: applicationDefault(),
+    databaseURL: 'https://wavi-aeronautics-default-rtdb.firebaseio.com'
+  })
 }
 
 export { firebaseAdmin }

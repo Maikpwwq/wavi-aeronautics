@@ -1,15 +1,15 @@
-import { configureStore } from "@reduxjs/toolkit";
-import rootReducer from "./rootReducer.js";
+import { configureStore } from '@reduxjs/toolkit'
+import rootReducer from './rootReducer.js'
 
-export default function configureAppStore(preloadedState) {
+export default function configureAppStore (preloadedState) {
   const store = configureStore({
-    reducer: 
+    reducer:
       rootReducer,
     // middleware: (getDefaultMiddleware) =>
     //   getDefaultMiddleware().concat(...),
-    preloadedState,
+    preloadedState
     // enhancers: [monitorReducersEnhancer],
-  });
+  })
 
-  return store;
+  return store
 }

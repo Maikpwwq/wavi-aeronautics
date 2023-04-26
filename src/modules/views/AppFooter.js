@@ -1,46 +1,46 @@
-import React from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { styled } from "@mui/material/styles";
-import withRoot from "../withRoot";
-import Grid from "@mui/material/Grid";
-import Container from "@mui/material/Container";
-import Typography from "../components/Typography";
-import TextField from "../components/TextField";
-import theme from "../theme";
+import React from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
+import { styled } from '@mui/material/styles'
+import withRoot from '../withRoot'
+import Grid from '@mui/material/Grid'
+import Container from '@mui/material/Container'
+import Typography from '../components/Typography'
+import TextField from '../components/TextField'
+import theme from '../theme'
 // import appFooterFacebook from "public/static/themes/appFooterFacebook.png";
 // import appFooterTwitter from "public/static/themes/appFooterTwitter.png";
-import appFooterLinkedin from "public/static/themes/appFooterLinkedin.png";
+import appFooterLinkedin from 'public/static/themes/appFooterLinkedin.png'
 
 const appFooterFacebook =
-  "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2Ficonos%2FappFooterFacebook.png?alt=media&token=b54b1ff2-c2b3-4d57-a7fa-c2e0e06d150e";
+  'https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2Ficonos%2FappFooterFacebook.png?alt=media&token=b54b1ff2-c2b3-4d57-a7fa-c2e0e06d150e';
 // const appFooterLinkedin =
-("https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2Ficonos%2FappFooterLinkedin.png?alt=media&token=d1475fcd-9ae1-4c3c-84f5-ee38d76c2da6");
+('https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2Ficonos%2FappFooterLinkedin.png?alt=media&token=d1475fcd-9ae1-4c3c-84f5-ee38d76c2da6')
 
-const SocialIcons = styled("a")(({ theme }) => ({
+const SocialIcons = styled('a')(({ theme }) => ({
   width: 48,
   height: 48,
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
   backgroundColor: theme.palette.warning.main,
   marginRight: 1,
-  "&:hover": {
-    backgroundColor: theme.palette.warning.dark,
-  },
-}));
+  '&:hover': {
+    backgroundColor: theme.palette.warning.dark
+  }
+}))
 
-const LegalItem = styled("li")({
+const LegalItem = styled('li')({
   paddingTop: 0.5,
   paddingBottom: 0.5,
-  color: "white",
-});
+  color: 'white'
+})
 
-const LegalDocuments = styled("ul")({
+const LegalDocuments = styled('ul')({
   margin: 0,
-  listStyle: "none",
-  padding: 0,
-});
+  listStyle: 'none',
+  padding: 0
+})
 
 // language: {
 //   marginTop: theme.spacing(1),
@@ -59,43 +59,43 @@ const LegalDocuments = styled("ul")({
 
 const styles = (theme) => ({
   link: {
-    fontSize: "21px",
-    textDecoration: "none",
-    color: "white",
-  },
-});
+    fontSize: '21px',
+    textDecoration: 'none',
+    color: 'white'
+  }
+})
 
-function AppFooter(props) {
+function AppFooter (props) {
   // const { theme } = props; // dont need this anymore
-  const classes = styles(theme);
+  const classes = styles(theme)
 
-  function Copyright() {
+  function Copyright () {
     return (
       <React.Fragment>
         <Link
           href="https://maikpwwq.github.io/wavi-aeronautics/"
-          style={{ color: "#fff5f8" }}
+          style={{ color: '#fff5f8' }}
         >
-          Wavi Aeronautics {"© "}
+          Wavi Aeronautics {'© '}
           {new Date().getFullYear()}
         </Link>
       </React.Fragment>
-    );
+    )
   }
 
   return (
     <Typography
       component="footer"
       sx={{
-        display: "flex",
-        backgroundColor: "#1e1e1f",
+        display: 'flex',
+        backgroundColor: '#1e1e1f'
       }}
     >
       <Container
         sx={{
           marginTop: 8,
           marginBottom: 8,
-          display: "flex",
+          display: 'flex'
         }}
       >
         <Grid container spacing={5}>
@@ -105,14 +105,14 @@ function AppFooter(props) {
               direction="column"
               justifyContent="flex-end"
               sx={{
-                height: 120,
+                height: 120
               }}
               spacing={2}
             >
               <Grid
                 item
                 sx={{
-                  display: "flex",
+                  display: 'flex'
                 }}
               >
                 <SocialIcons href="https://www.facebook.com/wavi.aeronautics/">
@@ -152,12 +152,12 @@ function AppFooter(props) {
             <LegalDocuments>
               <LegalItem>
                 <Link href="/terms/" className="textWhite" sx={classes.link}>
-                  {"Terminos"}
+                  {'Terminos'}
                 </Link>
               </LegalItem>
               <LegalItem>
                 <Link href="/privacy/" className="textWhite" sx={classes.link}>
-                  {"Privacidad"}
+                  {'Privacidad'}
                 </Link>
               </LegalItem>
             </LegalDocuments>
@@ -212,7 +212,7 @@ function AppFooter(props) {
         </Grid>
       </Container>
     </Typography>
-  );
+  )
 }
 
-export default withRoot(AppFooter);
+export default withRoot(AppFooter)

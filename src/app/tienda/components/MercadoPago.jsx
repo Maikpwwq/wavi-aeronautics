@@ -1,75 +1,75 @@
-"use client";
-import React, { useEffect, useState, useContext } from "react";
+'use client'
+import React, { useEffect, useState, useContext } from 'react'
 // import "sessionstorage-polyfill";
 // import "localstorage-polyfill";
 // global.sessionstorage;
 // global.localStorage;
-import { ShowCartContext } from "@/app/tienda/providers/ShoppingCartProvider";
-import { auth } from "@/firebase/firebaseClient";
+import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
+import { auth } from '@/firebase/firebaseClient'
 // import { useNavigate } from "react-router-dom";
-import { useMercadopago } from "react-sdk-mercadopago";
+import { useMercadopago } from 'react-sdk-mercadopago'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+// import Typography from '@/modules/components/Typography'
+import withRoot from '@/modules/withRoot'
+import theme from '@/app/tienda/innerTheme'
+// import { styled } from '@mui/material/styles'
 // import mercadopago from "mercadopago";
-var mercadopago = require("mercadopago");
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@/modules/components/Typography";
-import withRoot from "@/modules/withRoot";
-import theme from "@/app/tienda/innerTheme";
-import { styled } from "@mui/material/styles";
+const mercadopago = require('mercadopago')
 
 const styles = (theme) => ({
   checkout: {
     padding: theme.spacing(2),
-    marginRight: theme.spacing(1),
+    marginRight: theme.spacing(1)
   },
   pagoBtn: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    top: "24px",
-    position: "relative",
-  },
-});
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    top: '24px',
+    position: 'relative'
+  }
+})
 
 const MercadoPago = (props) => {
-  const classes = styles(theme);
-  const user = auth.currentUser || {};
-  const userID = user.uid || null;
+  const classes = styles(theme)
+  const user = auth.currentUser || {}
+  const userID = user.uid || null
 
-  let shoppingCartID = null;
+  let shoppingCartID = null
   // useEffect(() => {
-  if (typeof window !== "undefined") {
-    shoppingCartID = sessionStorage.getItem("cartID");
+  if (typeof window !== 'undefined') {
+    shoppingCartID = sessionStorage.getItem('cartID')
   }
   // }, []);
 
-  const usedID = userID ? userID : shoppingCartID;
-  console.log("usedID", usedID)
+  const usedID = userID || shoppingCartID
+  console.log('usedID', usedID)
 
-  const { shoppingCart, updateShowCart } = useContext(ShowCartContext);
-  const { show, productos } = shoppingCart;
-  console.log("shoppingCart", show, productos)
-  const { userInfo, shippingInfo } = props;
+  const { shoppingCart } = useContext(ShowCartContext) // updateShowCart
+  const { show, productos } = shoppingCart
+  console.log('shoppingCart', show, productos)
+  const { userInfo, shippingInfo } = props
   // console.log("props", userInfo, shippingInfo)
 
-  const visibility = productos.length > 0 ? true : false;
+  const visibility = productos.length > 0
 
-  const accessToken = process.env.NEXT_PUBLIC_MERCADOPAGOS_ACCESS_TOKEN;
-  const publicKey = process.env.NEXT_PUBLIC_MERCADOPAGOS_PUBLIC_KEY;
+  const accessToken = process.env.NEXT_PUBLIC_MERCADOPAGOS_ACCESS_TOKEN
+  const publicKey = process.env.NEXT_PUBLIC_MERCADOPAGOS_PUBLIC_KEY
   // console.log("process.env.", accessToken, publicKey)
 
   const mercadopagoSDK = useMercadopago.v2(publicKey, {
-    locale: "es-CO",
-  });
+    locale: 'es-CO'
+  })
   const [checkoutPro, setCheckoutPro] = useState({
-    url: "",
-  });
+    url: ''
+  })
   // v1/checkout/preferences
   // v1/payments/
   // process.env.MERCADOPAGOS_URL
   mercadopago.configure({
-    access_token: accessToken,
-  });
+    access_token: accessToken
+  })
 
   // var preference = {
   //   items: [
@@ -81,7 +81,7 @@ const MercadoPago = (props) => {
   //     }
   //   ]
   // };
-  
+
   // mercadopago.preferences.create(preference)
 
   // console.log(accessToken);
@@ -101,85 +101,85 @@ const MercadoPago = (props) => {
 
   const getPreference = async (productos) => {
     productos.map((producto, index, array) => {
-      let { titulo, precio, descripcion, imagenes } = producto;
+      const { titulo, precio, imagenes } = producto // descripcion,
       array[index] = {
         title: titulo,
         quantity: 1,
-        currency_id: "COP",
+        currency_id: 'COP',
         unit_price: parseInt(precio),
-        picture_url: imagenes[0],
+        picture_url: imagenes[0]
         // description: descripcion,
-      };
-      return array;
-    });
+      }
+      return array
+    })
     const pagador = {
       name: userInfo?.userName,
       email: userInfo?.userMail,
       phone: { number: userInfo?.userPhone },
       address: {
         zip_code: shippingInfo?.shippingPostalCode,
-        street_number: shippingInfo?.shippingDirection,
-      },
-    };
+        street_number: shippingInfo?.shippingDirection
+      }
+    }
     const metodoEnvio = {
-      mode: "custom",
+      mode: 'custom',
       free_shipping: true,
       receiver_address: {
         zip_code: shippingInfo?.shippingPostalCode,
         street_number: shippingInfo?.shippingDirection,
-        city_name: shippingInfo?.shippingCiudad,
-      },
-    };
-    let consult = {
+        city_name: shippingInfo?.shippingCiudad
+      }
+    }
+    const consult = {
       items: productos,
       payer: pagador,
-      shipments: metodoEnvio,
-    };
-    console.log(consult);
+      shipments: metodoEnvio
+    }
+    console.log(consult)
     const response = await fetch(
       `https://api.mercadopago.com/checkout/preferences?access_token=${accessToken}`,
       {
-        headers: { "Content-Type": "application/json" },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(consult),
-        mode: "cors",
-        method: "POST",
+        mode: 'cors',
+        method: 'POST'
       }
-    );
-    return response.json();
-  };
+    )
+    return response.json()
+  }
 
   const handleCheckout = () => {
     if (usedID && productos) {
-      console.log("handleCheckout", usedID, productos);
+      console.log('handleCheckout', usedID, productos)
       getPreference(productos)
         .then((res) => {
           // console.log(res.init_point);
-          setCheckoutPro({ ...checkoutPro, url: res.init_point });
+          setCheckoutPro({ ...checkoutPro, url: res.init_point })
           // setShowResume(true);
           if (mercadopagoSDK) {
             mercadopagoSDK.checkout({
               preference: {
-                id: res.id,
+                id: res.id
               },
               render: {
-                container: ".cho-container",
-                label: "Pagar con Mercado Pago",
-                type: "wallet",
-              },
+                container: '.cho-container',
+                label: 'Pagar con Mercado Pago',
+                type: 'wallet'
+              }
               //   theme: {
               //     elementsColor: '#c0392b'.
               //     headerColor: '#c0392b',
               // }
-            });
+            })
           }
         })
         .catch((err) => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     }
-  };
+  }
 
-  useEffect(() => {}, []);
+  useEffect(() => {}, [])
 
   return (
     <>
@@ -188,7 +188,7 @@ const MercadoPago = (props) => {
           variant="contained"
           color="primary"
           sx={classes.checkout}
-          style={{ visibility: visibility ? "visible" : "hidden"}}
+          style={{ visibility: visibility ? 'visible' : 'hidden' }}
           onClick={() => handleCheckout()}
         >
           Confirmar Orden
@@ -196,7 +196,7 @@ const MercadoPago = (props) => {
         <span className="cho-container" />
       </Box>
     </>
-  );
-};
+  )
+}
 
-export default withRoot(MercadoPago);
+export default withRoot(MercadoPago)

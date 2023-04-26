@@ -1,95 +1,94 @@
-"use client";
-import React, { useEffect, useContext } from "react";
-import PropTypes from "prop-types";
-import { auth } from "@/firebase/firebaseClient";
-import { ThemeProvider, styled } from "@mui/material/styles";
-import withRoot from "@/modules/withRoot";
-import theme from "@/modules/theme";
-import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
-import Navigator from "./components/Navigator";
+'use client'
+import React from 'react'
+// import PropTypes from 'prop-types'
+import { auth } from '@/firebase/firebaseClient'
+import { ThemeProvider, styled } from '@mui/material/styles'
+import withRoot from '@/modules/withRoot'
+import theme from '@/modules/theme'
+import CssBaseline from '@mui/material/CssBaseline'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Link from '@mui/material/Link'
+// import Navigator from './components/Navigator'
 // import Content from "./Content";
 // import Products from "./views/Products";
-import Header from "./components/Header";
-import ShopMarcas from "./components/ShopMarcas";
-import ShopConditions from "./components/ShopConditions";
-import innerTheme from "./innerTheme";
+import Header from './components/Header'
+import ShopMarcas from './components/ShopMarcas'
+import ShopConditions from './components/ShopConditions'
+import innerTheme from './innerTheme'
 
-function Copyright() {
+function Copyright () {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
+      {'Copyright © '}
       <Link color="inherit" href="/">
         Wavi Aeronautics
-      </Link>{" "}
+      </Link>{' '}
       {new Date().getFullYear()}
-      {"."}
+      {'.'}
     </Typography>
-  );
+  )
 }
 
-const drawerWidth = 256;
+const drawerWidth = 256
 
 const styles = (theme) => ({
   root: {
-    display: "flex",
-    minHeight: "100vh",
+    display: 'flex',
+    minHeight: '100vh'
   },
   drawer: {
-    [innerTheme.breakpoints.up("sm")]: {
+    [innerTheme.breakpoints.up('sm')]: {
       width: drawerWidth,
-      flexShrink: 0,
-    },
+      flexShrink: 0
+    }
   },
   app: {
     flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    overflow: "auto",
-    overflowX: "auto",
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'auto',
+    overflowX: 'auto'
   },
   shopMore: {
     padding: innerTheme.spacing(2),
-    background: "#eaeff1",
+    background: '#eaeff1',
     flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-});
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  }
+})
 
-const Footer = styled("footer")(({ theme }) => ({
+const Footer = styled('footer')(({ theme }) => ({
   padding: theme.spacing(2),
-  background: "#eaeff1",
-}));
+  background: '#eaeff1'
+}))
 
-const Main = styled("main")(({ theme }) => ({
+const Main = styled('main')(({ theme }) => ({
   flex: 1,
   padding: theme.spacing(2, 2),
-  background: "#eaeff1",
+  background: '#eaeff1'
   // zIndex: -1,
-}));
+}))
 
-function Paperbase({ children }) {
+function Paperbase ({ children }) {
   // const { classes } = props;
-  const classes = styles(theme);
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const classes = styles(theme)
+  const [mobileOpen, setMobileOpen] = React.useState(false)
 
-  const user = auth.currentUser || {};
-  const userID = user.uid || null;
+  const user = auth.currentUser || {}
+  const userID = user.uid || null
 
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     // Perform localStorage action
-    console.log("userID", auth.currentUser, userID)
+    console.log('userID', auth.currentUser, userID)
     // sessionStorage.setItem("cartID", userID);
   }
- 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
 
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen)
+  }
 
   return (
     <ThemeProvider theme={innerTheme}>
@@ -125,11 +124,11 @@ function Paperbase({ children }) {
         </Box>
       </Box>
     </ThemeProvider>
-  );
+  )
 }
 
 Paperbase.propTypes = {
   // classes: PropTypes.object.isRequired,
-};
+}
 
-export default withRoot(Paperbase);
+export default withRoot(Paperbase)

@@ -1,10 +1,10 @@
-export default function Head() {
+export default function Head () {
   return (
     <>
       <meta charset="UTF-8" />
       <title>Wavi Aeronautics</title>
       <meta content="width=device-width, initial-scale=1" name="viewport" />
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
       <meta name="author" content="Wavi Aeronautics" />
       <meta
         name="description"
@@ -20,5 +20,5 @@ export default function Head() {
         content="HXuPDd0BHjnltDHLqyQkYG5_IRx968JwaWKFEIvOdOI"
       />
     </>
-  );
+  )
 }
