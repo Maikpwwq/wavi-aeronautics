@@ -64,7 +64,7 @@ function FirebaseRadioControlProducts (props) {
   )
 
   const productsFromFirestore = async () => {
-    const collectionRC = new Array(
+    const collectionRC = [
       collectionBetafpvCR,
       collectionEachineCR,
       collectionFlywooCR,
@@ -77,7 +77,7 @@ function FirebaseRadioControlProducts (props) {
       collectionRadioMasterCR4,
       collectionTBSCR,
       collectionTBSCR2
-    )
+    ]
     const productosRC = []
     for (const product of collectionRC) {
       // console.log(product, collectionRC);

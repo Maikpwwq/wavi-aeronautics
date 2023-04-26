@@ -145,6 +145,7 @@ const SignInForm = () => {
 
   const handleChange = (e) => {
     setEvent({ email: e.email, password: e.password })
+    console.log('signIn', event)
   }
 
   return (

@@ -1,87 +1,86 @@
-"use client";
-import React, { useEffect, useState, useContext } from "react";
-import { ShowCartContext } from "@/app/tienda/providers/ShoppingCartProvider";
-import { useRouter } from "next/navigation";
-import ShoppingCart from "./ShoppingCart"; 
-import PropTypes from "prop-types";
+'use client'
+import React, { useState, useContext } from 'react'
+import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
+import { useRouter } from 'next/navigation'
+import ShoppingCart from './ShoppingCart'
+import PropTypes from 'prop-types'
 
 // import "sessionstorage-polyfill";
 // import "localstorage-polyfill";
 // global.sessionstorage;
 // global.localStorage;
 
-import Box from "@mui/material/Box";
-import AppBar from "@mui/material/AppBar";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
-import HelpIcon from "@mui/icons-material/Help";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import IconButton from "@mui/material/IconButton";
-import Link from "@mui/material/Link";
-import MenuIcon from "@mui/icons-material/Menu";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import Tab from "@mui/material/Tab";
-import Tabs from "@mui/material/Tabs";
-import Toolbar from "@mui/material/Toolbar";
-import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
-import withRoot from "@/modules/withRoot";
-import theme from "@/modules/theme";
-import { styled } from "@mui/material/styles";
+import Box from '@mui/material/Box'
+import AppBar from '@mui/material/AppBar'
+// import Avatar from '@mui/material/Avatar'
+// import Button from '@mui/material/Button'
+// import HelpIcon from '@mui/icons-material/Help'
+// import MenuIcon from '@mui/icons-material/Menu'
+// import NotificationsIcon from '@mui/icons-material/Notifications'
+import Grid from '@mui/material/Grid'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import IconButton from '@mui/material/IconButton'
+import Link from '@mui/material/Link'
+import Tab from '@mui/material/Tab'
+import Tabs from '@mui/material/Tabs'
+import Toolbar from '@mui/material/Toolbar'
+import Tooltip from '@mui/material/Tooltip'
+import Typography from '@mui/material/Typography'
+import withRoot from '@/modules/withRoot'
+import theme from '@/modules/theme'
 
-import AvatarUser from "public/static/img/l3mik3l.png";
+// import AvatarUser from 'public/static/img/l3mik3l.png'
 // import WaviPixelLogo from "public/static/img/WaviPixelLogo.png";
 const WaviPixelLogo =
-  "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FWaviPixelLogo.png?alt=media&token=7edcec69-8b24-4b95-b970-6b9acfddbdeb";
+  'https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FWaviPixelLogo.png?alt=media&token=7edcec69-8b24-4b95-b970-6b9acfddbdeb'
 
-const lightColor = "rgba(255, 255, 255, 0.7)";
+const lightColor = 'rgba(255, 255, 255, 0.7)'
 
 const styles = (theme) => ({
   secondaryBar: {
-    zIndex: 1, // Ver listado carrito de compras
+    zIndex: 1 // Ver listado carrito de compras
   },
   productTabs: {
-    overflowX: "scroll !important",
+    overflowX: 'scroll !important'
   },
   menuButton: {
-    marginLeft: -theme.spacing(1),
+    marginLeft: -theme.spacing(1)
   },
   iconButtonAvatar: {
-    padding: 4,
+    padding: 4
   },
   linkLogo: {
     // fontSize: 24,
-    textTransform: "capitalize",
+    textTransform: 'capitalize',
     flex: 1,
-    textDecoration: "none",
-    alignItems: "center",
-    display: "flex",
-    fontSize: "2rem",
+    textDecoration: 'none',
+    alignItems: 'center',
+    display: 'flex',
+    fontSize: '2rem',
     color: lightColor,
-    "&:hover": {
-      color: theme.palette.common.white,
-    },
+    '&:hover': {
+      color: theme.palette.common.white
+    }
   },
   button: {
-    borderColor: lightColor,
+    borderColor: lightColor
   },
   image: {
-    borderRadius: "50%",
-    marginRight: "30px",
+    borderRadius: '50%',
+    marginRight: '30px',
     height: 48,
-    width: 48,
-  },
-});
+    width: 48
+  }
+})
 
-function Header(props) {
-  const { onDrawerToggle } = props;
+function Header (props) {
+  // const { onDrawerToggle } = props
 
-  const { shoppingCart, updateShowCart } = useContext(ShowCartContext);
+  const { shoppingCart, updateShowCart } = useContext(ShowCartContext)
   // const ShowCartContext = createContext();
 
-  const classes = styles(theme);
-  const navigate = useRouter();
+  const classes = styles(theme)
+  const navigate = useRouter()
   // const shoppingCartID = sessionStorage.getItem("cartID");
   // const shoppingCartSuma =
   //   sessionStorage.getItem("cartSum") !== 0
@@ -95,19 +94,19 @@ function Header(props) {
   // TODO: Cambiar a un estado flase
   // const [showingCart, setShowingCart] = useState(true);
 
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(0)
   // const [shoppingCart, setShoppingCart] = useState({
   //   suma: shoppingCartSuma > 0 ? shoppingCartSuma : 0,
   //   items: shoppingCartItems > 0 ? shoppingCartItems : 0,
   // });
 
-  const handleShowCart = () => {
-    console.log("showingCart", shoppingCart.show);
-    updateShowCart(!shoppingCart.show);
-    // setShowingCart(!showingCart);
-    // console.log("showingCart", showingCart);
-    sessionStorage.setItem("cartUpdated", "show");
-  };
+  // const handleShowCart = () => {
+  //   console.log('showingCart', shoppingCart.show)
+  //   updateShowCart(!shoppingCart.show)
+  //   // setShowingCart(!showingCart);
+  //   // console.log("showingCart", showingCart);
+  //   sessionStorage.setItem('cartUpdated', 'show')
+  // }
 
   // Desde aca se controla el estado de cantidad de productos y total de la compra
 
@@ -134,20 +133,20 @@ function Header(props) {
 
   const handleChange = (event, newValue) => {
     // console.log(event, newValue);
-    setValue(newValue);
+    setValue(newValue)
     // in SSR navigate is not well supported
     if (newValue === 0) {
-      navigate.push("tienda/drones", { replace: true });
+      navigate.push('tienda/drones', { replace: true })
     } else if (newValue === 1) {
-      navigate.push("tienda/radio-control");
+      navigate.push('tienda/radio-control')
     } else if (newValue === 2) {
-      navigate.push("tienda/trasmisor-receptor");
+      navigate.push('tienda/trasmisor-receptor')
     } else if (newValue === 3) {
-      navigate.push("tienda/accesorios");
+      navigate.push('tienda/accesorios')
     } else if (newValue === 4) {
-      navigate.push("tienda/software");
+      navigate.push('tienda/software')
     }
-  };
+  }
 
   return (
     <React.Fragment>
@@ -181,7 +180,7 @@ function Header(props) {
                   src={WaviPixelLogo}
                   alt="logo Wavi Aeronautics"
                 />
-                {"Wavi Aeronautics"}
+                {'Wavi Aeronautics'}
               </Link>
             </Grid>
 
@@ -219,7 +218,7 @@ function Header(props) {
           <Grid container alignItems="center" spacing={1}>
             <Grid item xs>
               <Typography color="inherit" variant="h5" component="h1">
-                Tienda{" "}
+                Tienda{' '}
                 <Typography color="inherit" variant="body1">
                   Envios gratis a toda Colombia!
                 </Typography>
@@ -249,7 +248,7 @@ function Header(props) {
                 <IconButton
                   color="inherit"
                   onClick={() => updateShowCart(!shoppingCart.show)}
-                > 
+                >
                   <ShoppingCartIcon fontSize="large" />
                 </IconButton>
               </Tooltip>
@@ -315,12 +314,12 @@ function Header(props) {
         </Tabs>
       </AppBar>
     </React.Fragment>
-  );
+  )
 }
 
 Header.propTypes = {
   // classes: PropTypes.object.isRequired,
-  onDrawerToggle: PropTypes.func.isRequired,
-};
+  onDrawerToggle: PropTypes.func.isRequired
+}
 
-export default withRoot(Header);
+export default withRoot(Header)

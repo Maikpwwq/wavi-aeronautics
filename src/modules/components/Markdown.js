@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles'
 // import MuiTypography from '@mui/material/Typography'
 import Typography from '@mui/material/Typography'
 import Link from '@mui/material/Link'
+import theme from '../theme'
 // import remarkGfm from 'remark-gfm';
 
 const styles = (theme) => ({
@@ -14,8 +15,8 @@ const styles = (theme) => ({
 })
 
 const List = styled('ul')({})
-const classes = styles(theme)
 
+const classes = styles(theme)
 const options = {
   overrides: {
     h1: {
@@ -47,7 +48,7 @@ const options = {
 }
 
 function Markdown (props) {
-  return <ReactMarkdown {...props} /> // options={options} remarkPlugins={[remarkGfm]}
+  return <ReactMarkdown {...props} options={options}/> //  remarkPlugins={[remarkGfm]}
 }
 
 export default Markdown

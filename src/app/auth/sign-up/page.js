@@ -138,6 +138,7 @@ const SignUpForm = () => {
       userFirstName: e.firstName,
       userLastName: e.lastName
     })
+    console.log('SignUp', signupInfo)
   }
 
   const handleClose = (event, reason) => {

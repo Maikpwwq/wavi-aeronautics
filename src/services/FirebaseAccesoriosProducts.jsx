@@ -61,7 +61,7 @@ function FirebaseAccesoriosProducts (props) {
   )
 
   const productsFromFirestore = async () => {
-    const collectionBaterias = new Array(
+    const collectionBaterias = [
       collectionBetafpvBaterias,
       collectionEachineBaterias,
       collectionEachineBaterias2,
@@ -73,7 +73,7 @@ function FirebaseAccesoriosProducts (props) {
       collectionGeprcBaterias,
       collectionIflightBaterias,
       collectionUruavBaterias
-    )
+    ] // new Array(
     const productosBaterias = []
     for (const product of collectionBaterias) {
       // console.log(product, collectionBaterias)

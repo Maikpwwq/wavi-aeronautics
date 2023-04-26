@@ -138,6 +138,7 @@ const ForgotPasswordForm = () => {
 
   const handleChange = (e) => {
     setEvent({ email: e.email })
+    console.log('email', event)
   }
 
   return (

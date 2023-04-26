@@ -37,7 +37,8 @@ const WhatsAppContacto = styled('a')({
 function ProductSmokingHero (props) {
   // const { classes } = props;
   const classes = styles(theme)
-  const handleChatClick = () => {}
+
+  // const handleChatClick = () => {}
 
   return (
     <Container sx={classes.root} component="section">

@@ -87,7 +87,7 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
   // TODO: replace for arrow function: search product by id? need to use all Refs in comparison
   const productsFromFirestore = async () => {
     // console.log(shoppingsRef, userID);
-    const collectionsWavi = new Array(
+    const collectionsWavi = [
       storeRCRef,
       storeKitRef,
       storeBetafpvRef,
@@ -101,7 +101,7 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
       storeRadioMasterRef,
       storeTBSRef,
       storeUruavRef
-    )
+    ]
     const productData = []
     for (const product of collectionsWavi) {
       const colectionData = await getDocs(product)

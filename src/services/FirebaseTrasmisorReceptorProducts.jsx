@@ -67,7 +67,7 @@ function FirebaseTrasmisorReceptorProducts (props) {
   )
 
   const productsFromFirestore = async () => {
-    const collectionReceptor = new Array(
+    const collectionReceptor = [
       collectionBetafpvReceptor,
       collectionFlyskyReceptor,
       collectionFlyskyReceptor2,
@@ -81,7 +81,7 @@ function FirebaseTrasmisorReceptorProducts (props) {
       collectionTeamBlacksheepReceptor2,
       collectionTeamBlacksheepReceptor3,
       collectionTeamBlacksheepReceptor4
-    )
+    ]
     const productosReceptor = []
     for (const product of collectionReceptor) {
       // console.log(product, collectionReceptor)

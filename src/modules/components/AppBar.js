@@ -13,7 +13,7 @@ const styles = (theme) => ({
 
 function AppBar (props) {
   const classes = styles(theme)
-  return <MuiAppBar elevation={0} position="static" {...props} />
+  return <MuiAppBar style={classes.root} elevation={0} position="static" {...props} />
 }
 
 AppBar.propTypes = {

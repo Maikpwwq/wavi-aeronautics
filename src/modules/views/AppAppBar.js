@@ -9,11 +9,11 @@ import { sharingInformationService } from '@/services/sharing-information'
 // let email = user.email
 // var emailVerified = user.emailVerified
 // var uid = user.uid
-import { auth, currentUser } from '@/firebase/firebaseClient'
+import { auth } from '@/firebase/firebaseClient' // currentUser
 import AppBar from '../components/AppBar'
 import theme from '../theme'
 import withRoot from '../withRoot'
-import clsx from 'clsx'
+// import clsx from 'clsx'
 // import WaviPixelLogo from "public/static/img/WaviPixelLogo.png";
 const WaviPixelLogo =
   'https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FWaviPixelLogo.png?alt=media&token=7edcec69-8b24-4b95-b970-6b9acfddbdeb'
