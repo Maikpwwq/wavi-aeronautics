@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
 import { useSelector, connect } from 'react-redux'
 // import "sessionstorage-polyfill";
 // import "localstorage-polyfill";
@@ -34,9 +34,8 @@ export const RadioContol = (props) => {
   // const { classes } = props;
   const shopState = useSelector((store) => store.shop)
   const { radioControl } = shopState
-
   const classes = styles(theme)
-  const [storeProductsRC] = useState(radioControl || [])
+  const [storeProductsRC] = useState(radioControl)
 
   return (
     <>
@@ -44,32 +43,35 @@ export const RadioContol = (props) => {
         <Typography variant="h5" sx={classes.spacingTexts}>
           Dispositivos de Control Remoto.
         </Typography>
-        {!!storeProductsRC || storeProductsRC.length === 0
-          ? (<Box sx={{ display: 'flex' }}>
-              <CircularProgress />
-            </Box>)
-          : (<>
-            <Typography variant="body1" sx={classes.endingTexts}>
-              Controles remotos para volar Drones de RadioContol.
-            </Typography>
-            <Grid container spacing={2}>
-              {storeProductsRC.map((product, k) => {
-                // console.log(product, k);
-                // productID
-                return (
-                  <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
-                    <ProductCard
-                      category="radioControl"
-                      className="d-flex mb-2"
-                      products={product}
-                      productID={k}
-                    ></ProductCard>
-                  </Grid>
-                )
-              })}
-            </Grid>
-          </>)
-          }
+        {!!storeProductsRC && storeProductsRC.length > 0 && (
+          <Suspense
+              fallback={
+                <Box sx={{ display: 'flex' }}>
+                  <CircularProgress />
+                </Box>
+              }
+            >
+              <Typography variant="body1" sx={classes.endingTexts}>
+                Controles remotos para volar Drones de RadioContol.
+              </Typography>
+              <Grid container spacing={2}>
+                {storeProductsRC.map((product, k) => {
+                  // console.log(product, k);
+                  // productID
+                  return (
+                    <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
+                      <ProductCard
+                        category="radioControl"
+                        className="d-flex mb-2"
+                        products={product}
+                        productID={k}
+                      ></ProductCard>
+                    </Grid>
+                  )
+                })}
+              </Grid>
+          </Suspense>
+        )}
       </Box>
     </>
   )

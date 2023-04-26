@@ -40,19 +40,6 @@ const ShoppingCart = (props) => {
   console.log('ShowCartContext ShoppingCart', shoppingCart)
   // const shoppingCart = useSelector((store) => store.shoppingCart);
   const cart = shoppingCart.productos
-
-  // if (shoppingCart.productos && shoppingCart.productos.length > 0) {
-  //   // const productData = sharingInformationService.getSubject();
-  //   // productData.subscribe((data) => {
-  //   //   if (!!data) {
-  //       // updateShoppingCart(data);
-  //       console.log("Detail shoppingIds", cart);
-  //       FirebaseCompareShoppingCartIds(cart);
-  //   //   }
-  //   // });
-  // }
-
-  // const { visible, updated, setShowingCart } = props || {};
   const classes = styles(theme)
 
   const subscription$ = getAllShoppingCart
@@ -81,11 +68,9 @@ const ShoppingCart = (props) => {
           // Se envia array con ids de productos, para identificar referencias y almacenarlas en el context
           FirebaseCompareShoppingCartIds({ products: cart, updateCart })
         }
-        // updateShoppingCart(cart);
-        // shoppingCart.productos = data;
       }
     })
-  }, [])
+  }, [productData])
 
   return (
     <>
@@ -129,9 +114,6 @@ const ShoppingCart = (props) => {
 
 ShoppingCart.propTypes = {
   // classes: PropTypes.object.isRequired,
-  // setShowingCart: PropTypes.func.isRequired,
-  // visible: PropTypes.bool,
-  // updated: PropTypes.string,
 }
 
 export default withRoot(ShoppingCart)

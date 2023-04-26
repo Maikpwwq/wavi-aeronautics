@@ -99,13 +99,13 @@ function AppAppBar (props) {
   // const user = auth.currentUser || currentUser || {};
   const userID = user.uid || null
   const [userAuth, setUserAuth] = useState(false)
-  console.log('user', currentUser, user)
+  console.log('isUserAuth?', currentUser, user)
   useEffect(() => {
     if (user && userID) {
       setUserAuth(true)
-      console.log(user, userAuth)
+      console.log('userAuth', user, userAuth)
     }
-    console.log(user, userAuth)
+    console.log('noUserAuth', user, userAuth)
   }, [user])
 
   const handleSignOut = (e) => {

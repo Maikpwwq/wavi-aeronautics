@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
 import { useSelector, connect } from 'react-redux'
 // import "sessionstorage-polyfill";
 // import "localstorage-polyfill";
@@ -48,12 +48,14 @@ const Accesorios = (props) => {
         <Typography variant="h5" sx={classes.spacingTexts}>
           Baterias para drone.
         </Typography>
-        {!!storeProductsBaterias ||
-        storeProductsBaterias.length === 0
-          ? (<Box sx={{ display: 'flex' }}>
-            <CircularProgress />
-          </Box>)
-          : (<>
+        {!!storeProductsBaterias && storeProductsBaterias.length > 0 && (
+          <Suspense
+              fallback={
+                <Box sx={{ display: 'flex' }}>
+                  <CircularProgress />
+                </Box>
+              }
+          >
             <Typography variant="body1" sx={classes.endingTexts}>
               Baterias para cada necesidad en potencia y tiempo de vuelo.
             </Typography>
@@ -73,8 +75,8 @@ const Accesorios = (props) => {
                 )
               })}
             </Grid>
-          </>
-            )}
+          </Suspense>
+        )}
       </Box>
     </>
   )

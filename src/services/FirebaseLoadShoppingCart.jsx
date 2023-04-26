@@ -20,8 +20,10 @@ const FirebaseLoadShoppingCart = () => {
 
   const newShoppingCart = () => {
     const shoppingsId = uuidv4()
-    shoppingsToFirestore({ productos: [] }, shoppingsId)
     if (typeof window !== 'undefined') {
+      console.log('NewShoppingCartID', shoppingsId)
+      shoppingsToFirestore({ productos: [] }, shoppingsId)
+      shoppingCartID = shoppingsId
       sessionStorage.setItem('cartID', shoppingsId)
       sessionStorage.setItem('cartUpdated', 'id')
     }
@@ -32,7 +34,6 @@ const FirebaseLoadShoppingCart = () => {
     shoppingCartID = sessionStorage.getItem('cartID') || null
     console.log('shoppingCartID', shoppingCartID)
     if (!shoppingCartID) {
-      console.log('NewShoppingCartID', shoppingCartID)
       newShoppingCart()
     }
   }
@@ -52,14 +53,17 @@ const FirebaseLoadShoppingCart = () => {
   const shoppingsFromFirestore = async () => {
     const cardProductos = []
     const productData = await getDoc(doc(shoppingsRef, usedID))
-    const productos = productData.data().productos
-    console.log('shoppingsFromFirestore', productos)
-    for (const index in productos) {
-      console.log('shoppingsFromFirestore', productos[index])
-      if (productos[index]) {
-        cardProductos.push(productos[index])
+    if (productData.data()) {
+      const productos = productData.data().productos
+      console.log('shoppingsFromFirestore', productos)
+      for (const index in productos) {
+        console.log('shoppingsFromFirestore', productos[index])
+        if (productos[index]) {
+          cardProductos.push(productos[index])
+        }
       }
     }
+
     if (cardProductos && cardProductos !== []) {
       shoppingCart = cardProductos
       console.log('store', cardProductos, shoppingCart)

@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
 import { useSelector, connect } from 'react-redux'
 import ProductCard from '../components/ProductCard'
 
@@ -46,11 +46,14 @@ const TrasmisorReceptor = (props) => {
         <Typography variant="h5" sx={classes.spacingTexts}>
           Receptor para drone.
         </Typography>
-        {(!!storeProductsReceptor || storeProductsReceptor.length === 0)
-          ? (<Box sx={{ display: 'flex' }}>
-              <CircularProgress />
-          </Box>)
-          : (<>
+        {!!storeProductsReceptor && storeProductsReceptor.length > 0 && (
+          <Suspense
+            fallback={
+              <Box sx={{ display: 'flex' }}>
+                <CircularProgress />
+              </Box>
+            }
+          >
             <Typography variant="body1" sx={classes.endingTexts}>
               Receptor para cada necesidad en potencia y distacia de vuelo.
             </Typography>
@@ -70,8 +73,8 @@ const TrasmisorReceptor = (props) => {
                 )
               })}
             </Grid>
-          </>)
-          }
+          </Suspense>
+        )}
       </Box>
     </>
   )
