@@ -79,12 +79,12 @@ function ShowCartPage () {
             >
               <Box className="">
                 {shoppingCart.productos &&
-                  cart.map(({ titulo, precio, imagenes, productID, categoria }, index) => (
+                  cart.map(({ titulo, precio, imagenes, productID, categoria, marca }, index) => (
                     <Card style={classes.card} key={index}>
                       <Link
                         href={{
                           pathname: 'tienda/producto',
-                          query: `id=${productID}&category=${categoria}`
+                          query: `id=${productID}&category=${categoria}&marca=${marca}`
                         }}
                       >
                         <CardMedia

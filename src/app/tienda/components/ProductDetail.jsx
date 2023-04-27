@@ -54,14 +54,6 @@ const styles = (theme) => ({
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews)
 
 const ProductDetail = (props) => {
-  // const router = useRouter()
-  // console.log("router", router);
-  const searchParams = useSearchParams()
-  const searchId = searchParams.get('id')
-  const category = searchParams.get('category')
-  const subscription$ = getProductById(searchId, category)
-  // console.log("query", searchParams.get("id"), searchParams.get("category")); // router.query,
-
   // const { state } = router;
   const theme = useTheme()
   const classes = styles(theme)
@@ -73,6 +65,7 @@ const ProductDetail = (props) => {
   // console.log("thisstate", props.state);
   // router.state, router.search, router.query["id"], router.query["category"]
 
+  // se carga del store el initial state de un producto ejemplo
   const shopState = useSelector((store) => store.product)
   const product = shopState || []
   // const { titulo, precio, descripcion, especificaciones, incluye, imagenes } =
@@ -80,25 +73,36 @@ const ProductDetail = (props) => {
 
   const [activeStep, setActiveStep] = useState(0)
   const [productInfo, setProductInfo] = useState(product)
+  console.log('store product', product)
   const maxSteps = product ? product.imagenes.length : 0
+
+  // const router = useRouter()
+  // console.log("router", router);
+  const searchParams = useSearchParams()
+  const searchId = searchParams.get('id')
+  const category = searchParams.get('category')
+  const marca = searchParams.get('marca')
+  const subscription$ = getProductById(searchId, category, marca)
+  console.log('ProductDetail', searchId, category) // router.query,
 
   const currentProduct = sharingInformationService.getSubject()
 
   useEffect(() => {
-    currentProduct.subscribe((data) => {
-      if (data) {
-        const { productos } = data
-        if (productos) {
-          // console.log("currentProduct", productos[0], productInfo);
-          setProductInfo(productos[0])
-        }
-      }
-    })
-
+    // utiliza el servicio para buscar un producto en firebase (searchId, category) y compartir su información
     subscription$.subscribe((response) => {
       if (response) {
         console.log('storeProductInfo', response)
         // const { storeProductInfo } = response;
+      }
+    })
+    // lee la información del producto que fue compartida
+    currentProduct.subscribe((data) => {
+      if (data) {
+        const { productos } = data
+        if (productos) {
+          console.log('currentProduct', productos[0], productInfo)
+          setProductInfo(productos[0])
+        }
       }
     })
   }, [])
@@ -137,8 +141,8 @@ const ProductDetail = (props) => {
                       onChangeIndex={(e) => handleStepChange(e)}
                       enableMouseEvents
                     >
-                      {!!product.imagenes &&
-                        product.imagenes.map((image, key) => (
+                      {!!productInfo.imagenes &&
+                        productInfo.imagenes.map((image, key) => (
                           <Box
                             key={key}
                             component="img"

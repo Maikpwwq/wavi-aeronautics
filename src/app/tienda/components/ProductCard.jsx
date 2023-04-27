@@ -26,8 +26,8 @@ const ProductCard = ({ products, category }) => {
   const dispatch = useDispatch()
   const categoria = category || 'tienda'
   const producto = products
-  const { titulo, precio, imagenes, productID } = producto
-
+  const { titulo, precio, imagenes, productID, marca } = producto
+  console.log('*****', producto)
   const { shoppingCart, updateShoppingCart } = useContext(ShowCartContext)
 
   // const storedCart = useSelector((store) => store.shoppingCart);
@@ -56,6 +56,7 @@ const ProductCard = ({ products, category }) => {
     // const cardProductos = {};
     const cardProductos = []
     let cart = []
+    // copia de los productos agregados al carrito de compras
     cart = shoppingCart.productos
     console.log('shoppingCart', shoppingCart)
     cart.map((product, n) => {
@@ -65,8 +66,10 @@ const ProductCard = ({ products, category }) => {
       cardProductos.push({ productID, cantidad })
     })
     console.log('cardProductos', cardProductos)
-    // Servicio que permite al usuario guardar elementos en el carrito de firebase
-    FirebaseAddToCart({ productos: cardProductos })
+    if (cardProductos.length > 0) {
+      // Servicio que permite al usuario guardar elementos en el carrito de firebase
+      FirebaseAddToCart({ productos: cardProductos })
+    }
   }
 
   const handleAddCard = (e, producto) => {
@@ -108,9 +111,11 @@ const ProductCard = ({ products, category }) => {
     }
     console.log('readData', cardProductos)
     // setShoppingCart productos:
-    updateShoppingCart(cardProductos)
-    // setShoppingCart({ productos: cardProductos });
-    console.log('shoppingCart', shoppingCart)
+    if (cardProductos.length > 0) {
+      updateShoppingCart(cardProductos)
+      // setShoppingCart({ productos: cardProductos });
+      console.log('shoppingCart', shoppingCart)
+    }
   }
 
   return (
@@ -121,9 +126,8 @@ const ProductCard = ({ products, category }) => {
             {producto !== undefined && imagenes && (
               <Link
                 href={{
-                  pathname: 'tienda/producto', // titulo
-                  // search: `?id=${productID}&category=${categoria}`,
-                  query: `id=${productID}&category=${categoria}`,
+                  pathname: 'tienda/producto',
+                  query: `id=${productID}&category=${categoria}&marca=${marca}`,
                   state: { product: products }
                 }}
               >

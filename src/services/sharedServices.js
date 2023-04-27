@@ -15,9 +15,9 @@ import FirebaseSubscribe from './FirebaseSubscribe.jsx'
 //   actividadAsignadaById: '/api/servicioHome/listarActividadesById'
 // }
 
-const getProductById = (searchId, category) =>
+const getProductById = (searchId, category, marca) =>
   new Observable(async (subscriber) => {
-    const response = await FirebaseSearchProductById(searchId, category)
+    const response = await FirebaseSearchProductById(searchId, category, marca)
     try {
       console.log(
         'firebase-Id-search',
