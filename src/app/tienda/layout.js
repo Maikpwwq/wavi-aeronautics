@@ -12,23 +12,11 @@ import Link from '@mui/material/Link'
 // import Navigator from './components/Navigator'
 // import Content from "./Content";
 // import Products from "./views/Products";
+import './page.module.css'
 import Header from './components/Header'
 import ShopMarcas from './components/ShopMarcas'
 import ShopConditions from './components/ShopConditions'
 import innerTheme from './innerTheme'
-
-function Copyright () {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="/">
-        Wavi Aeronautics
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  )
-}
 
 const drawerWidth = 256
 
@@ -42,6 +30,10 @@ const styles = (theme) => ({
       width: drawerWidth,
       flexShrink: 0
     }
+  },
+  blueLink: {
+    textDecoration: 'none',
+    color: '#00aCe4'
   },
   app: {
     flex: 1,
@@ -71,6 +63,21 @@ const Main = styled('main')(({ theme }) => ({
   background: '#eaeff1'
   // zIndex: -1,
 }))
+
+function Copyright () {
+  const classes = styles(innerTheme)
+
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {'Copyright © '}
+      <Link style={classes.blueLink} href="/">
+        Wavi Aeronautics
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  )
+}
 
 function Paperbase ({ children }) {
   // const { classes } = props;

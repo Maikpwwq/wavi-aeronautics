@@ -1,7 +1,7 @@
 'use client'
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import ShoppingCart from './ShoppingCart'
 import PropTypes from 'prop-types'
 
@@ -55,13 +55,17 @@ const styles = (theme) => ({
     alignItems: 'center',
     display: 'flex',
     fontSize: '2rem',
-    color: lightColor,
+    color: '#00aCe4',
     '&:hover': {
       color: theme.palette.common.white
     }
   },
   button: {
     borderColor: lightColor
+  },
+  blueLink: {
+    textDecoration: 'none',
+    color: '#00aCe4'
   },
   image: {
     borderRadius: '50%',
@@ -78,18 +82,40 @@ function Header (props) {
 
   const classes = styles(theme)
   const navigate = useRouter()
+  const pathname = usePathname()
+  const activeTab = pathname.split('/').reverse()[0]
 
   // const shoppingUpdatedItems = sessionStorage.getItem("cartUpdated");
   // TODO: Cambiar a un estado flase
   // const [showingCart, setShowingCart] = useState(true);
 
-  // TODO set value depending on URL
   const [value, setValue] = useState(0)
   // const [shoppingCart, setShoppingCart] = useState({
   //   suma: shoppingCartSuma > 0 ? shoppingCartSuma : 0,
   //   items: shoppingCartItems > 0 ? shoppingCartItems : 0,
   // });
 
+  // here is set activeTab value depending on URL
+  useEffect(() => {
+    console.log('pathname', activeTab)
+    switch (activeTab) {
+      case 'drones':
+        setValue(0)
+        break
+      case 'radio-control':
+        setValue(1)
+        break
+      case 'trasmisor-receptor':
+        setValue(2)
+        break
+      case 'accesorios':
+        setValue(3)
+        break
+      case 'software':
+        setValue(4)
+        break
+    }
+  }, [activeTab])
   // Desde aca se controla el estado de cantidad de productos y total de la compra
 
   // Asignar data almacenada en el localStorage
@@ -230,6 +256,7 @@ function Header (props) {
                 <IconButton
                   color="inherit"
                   onClick={() => updateShowCart(!shoppingCart.show)}
+                  style={classes.blueLink}
                 >
                   <ShoppingCartIcon fontSize="large" />
                 </IconButton>
@@ -248,7 +275,7 @@ function Header (props) {
       <AppBar
         component="div"
         style={classes.secondaryBar}
-        sx={ { zIndex: 0 } }
+        sx={{ zIndex: 0 }}
         color="primary"
         position="static"
         elevation={0}
@@ -261,54 +288,59 @@ function Header (props) {
             spacing={1}
           >
             <Grid item xs> */}
-              <Tabs
-                onChange={handleChange}
-                value={value}
-                textColor="inherit"
-                sx={classes.productTabs}
-              >
-                <Tab
-                  textColor="inherit"
-                  label="Drones"
-                  value={0}
-                  component="a"
-                  href="/tienda/drones/"
-                  onClick={() => setValue(0)}
-                ></Tab>
-                <Tab
-                  textColor="inherit"
-                  label="Radio Control"
-                  value={1}
-                  component="a"
-                  href="/tienda/radio-control/"
-                  onClick={() => setValue(1)}
-                />
-                <Tab
-                  textColor="inherit"
-                  label="Transmisión/Recepción"
-                  value={2}
-                  component="a"
-                  href="/tienda/trasmisor-receptor/"
-                  onClick={() => setValue(2)}
-                />
-                <Tab
-                  textColor="inherit"
-                  label="Accesorios"
-                  value={3}
-                  component="a"
-                  href="/tienda/accesorios/"
-                  onClick={() => setValue(3)}
-                />
-                <Tab
-                  textColor="inherit"
-                  label="Software"
-                  value={4}
-                  component="a"
-                  href="/tienda/software/"
-                  onClick={() => setValue(4)}
-                />
-              </Tabs>
-            {/* </Grid>
+          <Tabs
+            onChange={handleChange}
+            value={value}
+            textColor="inherit"
+            sx={classes.productTabs}
+          >
+            <Tab
+              textColor="inherit"
+              label="Drones"
+              value={0}
+              component="a"
+              href="/tienda/drones/"
+              onClick={() => setValue(0)}
+              style={classes.blueLink}
+            ></Tab>
+            <Tab
+              textColor="inherit"
+              label="Radio Control"
+              value={1}
+              component="a"
+              href="/tienda/radio-control/"
+              onClick={() => setValue(1)}
+              style={classes.blueLink}
+            />
+            <Tab
+              textColor="inherit"
+              label="Transmisión/Recepción"
+              value={2}
+              component="a"
+              href="/tienda/trasmisor-receptor/"
+              onClick={() => setValue(2)}
+              style={classes.blueLink}
+            />
+            <Tab
+              textColor="inherit"
+              label="Accesorios"
+              value={3}
+              component="a"
+              href="/tienda/accesorios/"
+              onClick={() => setValue(3)}
+              style={classes.blueLink}
+            />
+            <Tab
+              textColor="inherit"
+              label="Software"
+              value={4}
+              component="a"
+              href="/tienda/software/"
+              onClick={() => setValue(4)}
+              style={classes.blueLink}
+            />
+          </Tabs>
+          {/* </Grid>
           </Grid> */}
         </Toolbar>
       </AppBar>
