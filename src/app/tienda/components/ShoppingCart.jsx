@@ -53,24 +53,24 @@ const ShoppingCart = (props) => {
         // shoppingCart.productos = cart;
       }
     })
-  }, [])
-
-  useEffect(() => {
     productData.subscribe((data) => {
       if (data) {
         const { cart, userID } = data
         console.log('Detail productCard', cart, userID)
-        if (userID) {
+        if (userID && shoppingCart.cartID === null) {
           // Se usa el id para asignarlo al carrito de compras
           updateCart({ cartID: userID })
         }
-        if (cart) {
+        if (cart && cart.length > 0) {
           // Se envia array con ids de productos, para identificar referencias y almacenarlas en el context
           FirebaseCompareShoppingCartIds({ products: cart, updateCart })
         }
       }
     })
-  }, [productData])
+  }, [shoppingCart])
+
+  // useEffect(() => {
+  // }, [shoppingCart]) // productData
 
   return (
     <>

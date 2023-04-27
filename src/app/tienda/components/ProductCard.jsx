@@ -27,7 +27,6 @@ const ProductCard = ({ products, category }) => {
   const categoria = category || 'tienda'
   const producto = products
   const { titulo, precio, imagenes, productID, marca } = producto
-  console.log('*****', producto)
   const { shoppingCart, updateShoppingCart } = useContext(ShowCartContext)
 
   // const storedCart = useSelector((store) => store.shoppingCart);
@@ -75,6 +74,7 @@ const ProductCard = ({ products, category }) => {
   const handleAddCard = (e, producto) => {
     e.preventDefault()
     readData(producto)
+    // TODO: leer carrito firebase enviar luego a FirebaseCompareShoppingCartIds
     // storeToFirebaseCart()
   }
 

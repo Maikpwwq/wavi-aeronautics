@@ -243,231 +243,131 @@ const FirebaseSearchProductById = (searchId, category, marca) => {
     ) {
       console.log('productSearchFirestore', categoryIde, searchIde, marca)
       // Betafpv
-      const searchBetafpv = await getDocs(queryRefBetafpv)
-      const searchBetafpv2 = await getDocs(queryRefBetafpv2)
-      const searchBetafpv3 = await getDocs(queryRefBetafpv3)
-      const searchBetafpv4 = await getDocs(queryRefBetafpv4)
-      const searchBetafpv5 = await getDocs(queryRefBetafpv5)
+      const collectionsBetafpv = [
+        queryRefBetafpv, queryRefBetafpv2, queryRefBetafpv3, queryRefBetafpv4, queryRefBetafpv5
+      ]
       // Eachine
-      const searchEachine = await getDocs(queryRefEachine)
-      const searchEachine2 = await getDocs(queryRefEachine2)
-      const searchEachine3 = await getDocs(queryRefEachine3)
-      const searchEachine4 = await getDocs(queryRefEachine4)
+      const collectionsEachine = [queryRefEachine, queryRefEachine2, queryRefEachine3, queryRefEachine4]
       // Emaxusa
-      const searchEmaxusa = await getDocs(queryRefEmaxusa)
-      const searchEmaxusa2 = await getDocs(queryRefEmaxusa2)
-      const searchEmaxusa3 = await getDocs(queryRefEmaxusa3)
-      const searchEmaxusa4 = await getDocs(queryRefEmaxusa4)
+      const collectionsEmaxusa = [queryRefEmaxusa, queryRefEmaxusa2, queryRefEmaxusa3, queryRefEmaxusa4]
       // Flysky
-      const searchFlysky = await getDocs(queryRefFlysky)
-      const searchFlysky2 = await getDocs(queryRefFlysky2)
+      const collectionsFlysky = [queryRefFlysky, queryRefFlysky2]
       // Flywoo
-      const searchFlywoo = await getDocs(queryRefFlywoo)
-      const searchFlywoo2 = await getDocs(queryRefFlywoo2)
-      const searchFlywoo3 = await getDocs(queryRefFlywoo3)
-      const searchFlywoo4 = await getDocs(queryRefFlywoo4)
-      const searchFlywoo5 = await getDocs(queryRefFlywoo5)
+      const collectionsFlywoo = [queryRefFlywoo, queryRefFlywoo2, queryRefFlywoo3, queryRefFlywoo4, queryRefFlywoo5]
       // Frsky
-      const searchFrsky = await getDocs(queryRefFrsky)
-      const searchFrsky2 = await getDocs(queryRefFrsky2)
+      const collectionsFrsky = [queryRefFrsky, queryRefFrsky2]
       // Geprc
-      const searchGeprc = await getDocs(queryRefGeprc)
-      const searchGeprc2 = await getDocs(queryRefGeprc2)
+      const collectionsGeprc = [queryRefGeprc, queryRefGeprc2]
       // Iflightrc
-      const searchIflightrc = await getDocs(queryRefIflightrc)
-      const searchIflightrc2 = await getDocs(queryRefIflightrc2)
-      const searchIflightrc3 = await getDocs(queryRefIflightrc3)
-      const searchIflightrc4 = await getDocs(queryRefIflightrc4)
-      const searchIflightrc5 = await getDocs(queryRefIflightrc5)
+      const collectionsIflightrc = [queryRefIflightrc, queryRefIflightrc2, queryRefIflightrc3, queryRefIflightrc4, queryRefIflightrc5]
       // Radiomaster
-      const searchRadiomaster = await getDocs(queryRefRadiomaster)
-      const searchRadiomaster2 = await getDocs(queryRefRadiomaster2)
-      const searchRadiomaster3 = await getDocs(queryRefRadiomaster3)
-      const searchRadiomaster4 = await getDocs(queryRefRadiomaster4)
-      const searchRadiomaster5 = await getDocs(queryRefRadiomaster5)
-      const searchRadiomaster6 = await getDocs(queryRefRadiomaster6)
+      const collectionsRadioMaster = [queryRefRadiomaster, queryRefRadiomaster2, queryRefRadiomaster3, queryRefRadiomaster4, queryRefRadiomaster5, queryRefRadiomaster6]
       // Teamblacksheep
-      const searchTeamblacksheep = await getDocs(queryRefTeamblacksheep)
-      const searchTeamblacksheep2 = await getDocs(queryRefTeamblacksheep2)
-      const searchTeamblacksheep3 = await getDocs(queryRefTeamblacksheep3)
-      const searchTeamblacksheep4 = await getDocs(queryRefTeamblacksheep4)
-      const searchTeamblacksheep5 = await getDocs(queryRefTeamblacksheep5)
-      const searchTeamblacksheep6 = await getDocs(queryRefTeamblacksheep6)
+      const collectionsTeamblacksheep = [queryRefTeamblacksheep, queryRefTeamblacksheep2, queryRefTeamblacksheep3, queryRefTeamblacksheep4, queryRefTeamblacksheep5, queryRefTeamblacksheep6]
       // Uruav
       const searchUruav = await getDocs(queryRefUruav)
       switch (marca) {
         case 'betafpv':
           // Betafpv
           // Se almacenan los documentos encontrados por el filtrado en un listado de productos
-          searchBetafpv.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchBetafpv2.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchBetafpv3.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchBetafpv4.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchBetafpv5.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
+          for (const product of collectionsBetafpv) {
+            const colectionData = await getDocs(product)
+            colectionData.forEach((DOC) => {
+              productos.push(DOC.data())
+            })
+          }
           break
         case 'eachine':
           // Eachine
           // Se almacenan los documentos encontrados por el filtrado en un listado de productos
-          searchEachine.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchEachine2.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchEachine3.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchEachine4.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
+          for (const product of collectionsEachine) {
+            const colectionData = await getDocs(product)
+            colectionData.forEach((DOC) => {
+              productos.push(DOC.data())
+            })
+          }
           break
         case 'emax-usa':
-
           // Emaxusa
           // Se almacenan los documentos encontrados por el filtrado en un listado de productos
-          searchEmaxusa.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchEmaxusa2.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchEmaxusa3.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchEmaxusa4.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
+          for (const product of collectionsEmaxusa) {
+            const colectionData = await getDocs(product)
+            colectionData.forEach((DOC) => {
+              productos.push(DOC.data())
+            })
+          }
           break
         case 'flysky':
-
           // Flysky
           // Se almacenan los documentos encontrados por el filtrado en un listado de productos
-          searchFlysky.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchFlysky2.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
+          for (const product of collectionsFlysky) {
+            const colectionData = await getDocs(product)
+            colectionData.forEach((DOC) => {
+              productos.push(DOC.data())
+            })
+          }
           break
         case 'flywoo':
-
           // Flywoo
           // Se almacenan los documentos encontrados por el filtrado en un listado de productos
-          searchFlywoo.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchFlywoo2.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchFlywoo3.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchFlywoo4.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchFlywoo5.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
+          for (const product of collectionsFlywoo) {
+            const colectionData = await getDocs(product)
+            colectionData.forEach((DOC) => {
+              productos.push(DOC.data())
+            })
+          }
           break
         case 'frsky':
-
           // Frsky
           // Se almacenan los documentos encontrados por el filtrado en un listado de productos
-          searchFrsky.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchFrsky2.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
+          for (const product of collectionsFrsky) {
+            const colectionData = await getDocs(product)
+            colectionData.forEach((DOC) => {
+              productos.push(DOC.data())
+            })
+          }
           break
         case 'geprc':
-
           // Geprc
-          searchGeprc.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchGeprc2.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
+          // Se almacenan los documentos encontrados por el filtrado en un listado de productos
+          for (const product of collectionsGeprc) {
+            const colectionData = await getDocs(product)
+            colectionData.forEach((DOC) => {
+              productos.push(DOC.data())
+            })
+          }
           break
         case 'iflight-rc':
-
-          // Se almacenan los documentos encontrados por el filtrado en un listado de productos
           // Iflightrc
-          searchIflightrc.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchIflightrc2.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchIflightrc3.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchIflightrc4.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchIflightrc5.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
+          // Se almacenan los documentos encontrados por el filtrado en un listado de productos
+          for (const product of collectionsIflightrc) {
+            const colectionData = await getDocs(product)
+            colectionData.forEach((DOC) => {
+              productos.push(DOC.data())
+            })
+          }
           break
         case 'RadioMaster':
-
           // Radiomaster
           // Se almacenan los documentos encontrados por el filtrado en un listado de productos
-          searchRadiomaster.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchRadiomaster2.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchRadiomaster3.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchRadiomaster4.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchRadiomaster5.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchRadiomaster6.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
+          for (const product of collectionsRadioMaster) {
+            const colectionData = await getDocs(product)
+            colectionData.forEach((DOC) => {
+              productos.push(DOC.data())
+            })
+          }
           break
         case 'team-blacksheep':
-
           // Teamblacksheep
           // Se almacenan los documentos encontrados por el filtrado en un listado de productos
-          searchTeamblacksheep.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchTeamblacksheep2.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchTeamblacksheep3.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchTeamblacksheep4.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchTeamblacksheep5.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
-          searchTeamblacksheep6.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
+          for (const product of collectionsTeamblacksheep) {
+            const colectionData = await getDocs(product)
+            colectionData.forEach((DOC) => {
+              productos.push(DOC.data())
+            })
+          }
           break
         case 'uruav':
-
           // Uruav
           // Se almacenan los documentos encontrados por el filtrado en un listado de productos
           searchUruav.forEach((DOC) => {
