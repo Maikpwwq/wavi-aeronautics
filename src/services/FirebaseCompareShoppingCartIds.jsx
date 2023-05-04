@@ -170,17 +170,25 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
   )
   const storeRadioMasterRef3 = collection(
     _firestore,
-    'productos/radio_control/radio-master/control-remoto/tx12'
+    'productos/radio_control/radio-master/control-remoto/zorro'
   )
   const storeRadioMasterRef4 = collection(
     _firestore,
-    'productos/radio_control/radio-master/control-remoto/tx16s'
+    'productos/radio_control/radio-master/control-remoto/tx12'
   )
   const storeRadioMasterRef5 = collection(
     _firestore,
-    'productos/radio_control/radio-master/receptor/NANO-ELRS-EP2'
+    'productos/radio_control/radio-master/control-remoto/tx16s'
   )
   const storeRadioMasterRef6 = collection(
+    _firestore,
+    'productos/radio_control/radio-master/control-remoto/tx16-Max'
+  )
+  const storeRadioMasterRef7 = collection(
+    _firestore,
+    'productos/radio_control/radio-master/receptor/NANO-ELRS-EP2'
+  )
+  const storeRadioMasterRef8 = collection(
     _firestore,
     'productos/radio_control/radio-master/receptor/RadioMaster-R81'
   )
@@ -195,11 +203,11 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
   )
   const storeTBSRef3 = collection(
     _firestore,
-    'productos/radio_control/team-blacksheep/receptor/Crossfire-Nano-RX'
+    'productos/radio_control/team-blacksheep/control-remoto/tango2'
   )
   const storeTBSRef4 = collection(
     _firestore,
-    'productos/radio_control/team-blacksheep/receptor/Crossfire-Nano-Rx-Pro'
+    'productos/radio_control/team-blacksheep/control-remoto/tbs-mambo'
   )
   const storeTBSRef5 = collection(
     _firestore,
@@ -208,6 +216,14 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
   const storeTBSRef6 = collection(
     _firestore,
     'productos/radio_control/team-blacksheep/receptor/Tracer-Nano-Rx'
+  )
+  const storeTBSRef7 = collection(
+    _firestore,
+    'productos/radio_control/team-blacksheep/receptor/Crossfire-Nano-RX'
+  )
+  const storeTBSRef8 = collection(
+    _firestore,
+    'productos/radio_control/team-blacksheep/receptor/Crossfire-Nano-Rx-Pro'
   )
 
   // Uruav
@@ -281,12 +297,16 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
       storeRadioMasterRef4,
       storeRadioMasterRef5,
       storeRadioMasterRef6,
+      storeRadioMasterRef7,
+      storeRadioMasterRef8,
       storeTBSRef,
       storeTBSRef2,
       storeTBSRef3,
       storeTBSRef4,
       storeTBSRef5,
       storeTBSRef6,
+      storeTBSRef7,
+      storeTBSRef8,
       storeUruavRef
     ]
     const productData = []

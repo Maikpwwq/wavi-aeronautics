@@ -48,17 +48,33 @@ function FirebaseRadioControlProducts (props) {
   )
   const collectionRadioMasterCR3 = collection(
     productsDoc,
-    'radio-master/control-remoto/tx12'
+    'radio-master/control-remoto/zorro'
   )
   const collectionRadioMasterCR4 = collection(
     productsDoc,
+    'radio-master/control-remoto/tx12'
+  )
+  const collectionRadioMasterCR5 = collection(
+    productsDoc,
     'radio-master/control-remoto/tx16s'
+  )
+  const collectionRadioMasterCR6 = collection(
+    productsDoc,
+    'radio-master/control-remoto/tx16-Max'
   )
   const collectionTBSCR = collection(
     productsDoc,
     'team-blacksheep/control-remoto/ethix-mambo'
   )
   const collectionTBSCR2 = collection(
+    productsDoc,
+    'team-blacksheep/control-remoto/tbs-mambo'
+  )
+  const collectionTBSCR3 = collection(
+    productsDoc,
+    'team-blacksheep/control-remoto/tango2'
+  )
+  const collectionTBSCR4 = collection(
     productsDoc,
     'team-blacksheep/control-remoto/tango2pro'
   )
@@ -75,8 +91,12 @@ function FirebaseRadioControlProducts (props) {
       collectionRadioMasterCR2,
       collectionRadioMasterCR3,
       collectionRadioMasterCR4,
+      collectionRadioMasterCR5,
+      collectionRadioMasterCR6,
       collectionTBSCR,
-      collectionTBSCR2
+      collectionTBSCR2,
+      collectionTBSCR3,
+      collectionTBSCR4
     ]
     const productosRC = []
     for (const product of collectionRC) {
