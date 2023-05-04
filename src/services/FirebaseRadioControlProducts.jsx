@@ -18,6 +18,14 @@ function FirebaseRadioControlProducts (props) {
     productsDoc,
     'betafpv/control-remoto/lite-radio2'
   )
+  const collectionBetafpvCR2 = collection(
+    productsDoc,
+    'betafpv/control-remoto/lite-radio3'
+  )
+  const collectionBetafpvCR3 = collection(
+    productsDoc,
+    'betafpv/control-remoto/lite-radio3-pro'
+  )
   const collectionEachineCR = collection(
     productsDoc,
     'eachine/control-remoto/liteRadio-2.4G'
@@ -82,6 +90,8 @@ function FirebaseRadioControlProducts (props) {
   const productsFromFirestore = async () => {
     const collectionRC = [
       collectionBetafpvCR,
+      collectionBetafpvCR2,
+      collectionBetafpvCR3,
       collectionEachineCR,
       collectionFlywooCR,
       collectionFlywooCR2,
