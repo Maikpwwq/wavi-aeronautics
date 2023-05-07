@@ -4,6 +4,7 @@ export const initialShop = {
   drones: [{}],
   dronesRC: [{}],
   baterias: [{}],
+  googles: [{}],
   radioControl: [{}],
   accesorios: [{}],
   receptores: [{}],
