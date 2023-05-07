@@ -12,7 +12,15 @@ const FirebaseSearchProductById = (searchId, category, marca) => {
   const productsDoc = doc(productsRef, 'dron')
   const KitRef = collection(productsDoc, 'kit_fpv_dron')
   const KitRefRC = collection(productsDoc, 'RC')
+  const productsGooglesDoc = doc(productsRef, 'Googles')
   const productsRCDoc = doc(productsRef, 'radio_control')
+  // consultar Googles
+  const GooglesDJI = collection(productsGooglesDoc, 'DJI')
+  const GooglesBetafpv = collection(productsGooglesDoc, 'Betafpv')
+  const GooglesEmaxusa = collection(productsGooglesDoc, 'Emaxusa')
+  const GooglesFatShark = collection(productsGooglesDoc, 'FatShark')
+  const GooglesWalksnail = collection(productsGooglesDoc, 'Walksnail')
+  const GooglesIflightRc = collection(productsGooglesDoc, 'Iflight-rc')
   // consultar colecciones en busca de 'baterias', 'cargadores', 'control-remoto', 'receptor'
   // Betafpv
   const KitBetafpv = collection(productsRCDoc, 'betafpv/baterias/2PCS-2s-300mAh')
@@ -75,6 +83,31 @@ const FirebaseSearchProductById = (searchId, category, marca) => {
   // se usa cada colleccion para construir una query que filtre drones
   const queryRef = query(KitRef, where('productID', '==', searchIde))
   const queryRefRC = query(KitRefRC, where('productID', '==', searchIde))
+  // query Google
+  const queryGooglesDJI = query(
+    GooglesDJI,
+    where('productID', '==', searchIde)
+  )
+  const queryGooglesBetafpv = query(
+    GooglesBetafpv,
+    where('productID', '==', searchIde)
+  )
+  const queryGooglesEmaxusa = query(
+    GooglesEmaxusa,
+    where('productID', '==', searchIde)
+  )
+  const queryGooglesFatShark = query(
+    GooglesFatShark,
+    where('productID', '==', searchIde)
+  )
+  const queryGooglesWalksnail = query(
+    GooglesWalksnail,
+    where('productID', '==', searchIde)
+  )
+  const queryGooglesIflightRc = query(
+    GooglesIflightRc,
+    where('productID', '==', searchIde)
+  )
   // query 'baterias', 'cargadores', 'control-remoto', 'receptor'
   // Betafpv
   const queryRefBetafpv = query(
@@ -236,12 +269,25 @@ const FirebaseSearchProductById = (searchId, category, marca) => {
         productos.push(DOC.data())
       })
     } else if (
+      categoryIde === 'Googles') {
+      // Googles collection
+      const collectionsGooglesFpv = [
+        queryGooglesDJI, queryGooglesBetafpv, queryGooglesEmaxusa, queryGooglesFatShark, queryGooglesWalksnail, queryGooglesIflightRc
+      ]
+      for (const product of collectionsGooglesFpv) {
+        const colectionData = await getDocs(product)
+        colectionData.forEach((DOC) => {
+          productos.push(DOC.data())
+        })
+      }
+    } else if (
       categoryIde === 'radioControl' ||
       categoryIde === 'receptores' ||
       categoryIde === 'baterias' ||
       categoryIde === 'cargadores'
     ) {
       console.log('productSearchFirestore', categoryIde, searchIde, marca)
+
       // Betafpv
       const collectionsBetafpv = [
         queryRefBetafpv, queryRefBetafpv2, queryRefBetafpv3, queryRefBetafpv4, queryRefBetafpv5

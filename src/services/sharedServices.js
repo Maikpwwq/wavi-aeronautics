@@ -2,6 +2,7 @@
 import { Observable } from 'rxjs' // Subject, BehaviorSubject
 import FirebaseSearchProductById from './FirebaseSearchProductById'
 import FirebaseDroneProducts from './FirebaseDroneProducts.jsx'
+import FirebaseGooglesProducts from './FirebaseGooglesProducts.jsx'
 import FirebaseRadioControlProducts from './FirebaseRadioControlProducts.jsx'
 import FirebaseTrasmisorReceptorProducts from './FirebaseTrasmisorReceptorProducts.jsx'
 import FirebaseAccesoriosProducts from './FirebaseAccesoriosProducts.jsx'
@@ -35,6 +36,17 @@ const getProductById = (searchId, category, marca) =>
 
 const getAllDroneProduct = new Observable((subscriber) => {
   const response = FirebaseDroneProducts()
+  // console.log("firebaseResponse", response);
+  try {
+    subscriber.next(response)
+    // subscriber.complete();
+  } catch (err) {
+    subscriber.error(err)
+  }
+})
+
+const getAllGoogles = new Observable((subscriber) => {
+  const response = FirebaseGooglesProducts()
   // console.log("firebaseResponse", response);
   try {
     subscriber.next(response)
@@ -189,6 +201,7 @@ export {
   getObservableDrone,
   getAllAccesoriosProduct,
   getObservableAccesorios,
+  getAllGoogles,
   getAllRadioControl,
   getObservableRadioControl,
   getAllTrasmisorReceptor,

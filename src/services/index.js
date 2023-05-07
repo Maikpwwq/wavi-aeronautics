@@ -4,6 +4,7 @@ export { default as FirebaseCompareShoppingCartIds } from './FirebaseCompareShop
 export * from './FirebaseDeleteFromCart'
 export { default as FirebaseDroneProducts } from './FirebaseDroneProducts'
 export { default as FirebaseLoadShoppingCart } from './FirebaseLoadShoppingCart'
+export { default as FirebaseGooglesProducts } from './FirebaseGooglesProducts'
 export { default as FirebaseRadioControlProducts } from './FirebaseRadioControlProducts'
 export { default as FirebaseSearchProductById } from './FirebaseSearchProductById'
 export { default as FirebaseSubscribe } from './FirebaseSubscribe'

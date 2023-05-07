@@ -45,6 +45,13 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
   // Dron
   const storeKitRef = collection(_firestore, 'productos/dron/kit_fpv_dron')
   const storeRCRef = collection(_firestore, 'productos/dron/RC')
+  // Googles
+  const storeGooglesBetafpv = collection(_firestore, 'productos/Googles/Betafpv')
+  const storeGooglesDJI = collection(_firestore, 'productos/Googles/DJI')
+  const storeGooglesEmaxusa = collection(_firestore, 'productos/Googles/Emaxusa')
+  const storeGooglesFatShark = collection(_firestore, 'productos/Googles/FatShark')
+  const storeGooglesIflightRc = collection(_firestore, 'productos/Googles/Iflight-rc')
+  const storeGooglesWalksnail = collection(_firestore, 'productos/Googles/Walksnail')
   // Radio Control
   // Betafpv
   const storeBetafpvRef = collection(
@@ -262,6 +269,7 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
     const collectionsWavi = [
       storeRCRef,
       storeKitRef,
+      storeGooglesBetafpv, storeGooglesDJI, storeGooglesEmaxusa, storeGooglesFatShark, storeGooglesIflightRc, storeGooglesWalksnail,
       storeBetafpvRef,
       storeBetafpvRef2,
       storeBetafpvRef3,

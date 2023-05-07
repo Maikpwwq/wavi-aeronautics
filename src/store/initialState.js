@@ -2,6 +2,7 @@
 import {
   getAllDroneProduct,
   getAllAccesoriosProduct,
+  getAllGoogles,
   getAllRadioControl,
   getAllTrasmisorReceptor
   // getAllShoppingCart
@@ -54,15 +55,22 @@ const initialState = () => {
       shop.baterias = productsBaterias
     }
   })
-  const subscription3$ = getAllRadioControl
+  const subscription3$ = getAllGoogles
   subscription3$.subscribe((response) => {
+    if (response) {
+      const { storeProductsRC } = response
+      shop.googles = storeProductsRC
+    }
+  })
+  const subscription4$ = getAllRadioControl
+  subscription4$.subscribe((response) => {
     if (response) {
       const { storeProductsRC } = response
       shop.radioControl = storeProductsRC
     }
   })
-  const subscription4$ = getAllTrasmisorReceptor
-  subscription4$.subscribe((response) => {
+  const subscription5$ = getAllTrasmisorReceptor
+  subscription5$.subscribe((response) => {
     if (response) {
       const { storeProductsReceptor } = response
       shop.receptores = storeProductsReceptor

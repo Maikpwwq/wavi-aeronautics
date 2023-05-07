@@ -102,17 +102,20 @@ function Header (props) {
       case 'drones':
         setValue(0)
         break
-      case 'radio-control':
+      case 'googles':
         setValue(1)
         break
-      case 'trasmisor-receptor':
+      case 'radio-control':
         setValue(2)
         break
-      case 'accesorios':
+      case 'trasmisor-receptor':
         setValue(3)
         break
-      case 'software':
+      case 'accesorios':
         setValue(4)
+        break
+      case 'software':
+        setValue(5)
         break
     }
   }, [activeTab])
@@ -146,12 +149,14 @@ function Header (props) {
     if (newValue === 0) {
       navigate.push('tienda/drones', { replace: true })
     } else if (newValue === 1) {
-      navigate.push('tienda/radio-control')
+      navigate.push('tienda/googles')
     } else if (newValue === 2) {
-      navigate.push('tienda/trasmisor-receptor')
+      navigate.push('tienda/radio-control')
     } else if (newValue === 3) {
-      navigate.push('tienda/accesorios')
+      navigate.push('tienda/trasmisor-receptor')
     } else if (newValue === 4) {
+      navigate.push('tienda/accesorios')
+    } else if (newValue === 5) {
       navigate.push('tienda/software')
     }
   }
@@ -305,38 +310,47 @@ function Header (props) {
             ></Tab>
             <Tab
               textColor="inherit"
-              label="Radio Control"
+              label="Googles"
               value={1}
               component="a"
-              href="/tienda/radio-control/"
+              href="/tienda/googles/"
               onClick={() => setValue(1)}
               style={classes.blueLink}
             />
             <Tab
               textColor="inherit"
-              label="Transmisión/Recepción"
+              label="Radio Control"
               value={2}
               component="a"
-              href="/tienda/trasmisor-receptor/"
+              href="/tienda/radio-control/"
               onClick={() => setValue(2)}
               style={classes.blueLink}
             />
             <Tab
               textColor="inherit"
-              label="Accesorios"
+              label="Transmisión/Recepción"
               value={3}
               component="a"
-              href="/tienda/accesorios/"
+              href="/tienda/trasmisor-receptor/"
               onClick={() => setValue(3)}
               style={classes.blueLink}
             />
             <Tab
               textColor="inherit"
-              label="Software"
+              label="Accesorios"
               value={4}
               component="a"
-              href="/tienda/software/"
+              href="/tienda/accesorios/"
               onClick={() => setValue(4)}
+              style={classes.blueLink}
+            />
+            <Tab
+              textColor="inherit"
+              label="Software"
+              value={5}
+              component="a"
+              href="/tienda/software/"
+              onClick={() => setValue(5)}
               style={classes.blueLink}
             />
           </Tabs>
