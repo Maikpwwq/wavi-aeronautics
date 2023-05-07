@@ -58,8 +58,8 @@ const initialState = () => {
   const subscription3$ = getAllGoogles
   subscription3$.subscribe((response) => {
     if (response) {
-      const { storeProductsRC } = response
-      shop.googles = storeProductsRC
+      const { productsGoogles } = response
+      shop.googles = productsGoogles
     }
   })
   const subscription4$ = getAllRadioControl

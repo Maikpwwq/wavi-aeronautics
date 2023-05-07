@@ -124,6 +124,10 @@ const getObservableRadioControl = () => {
   return getAllRadioControl
 }
 
+const getObservableGoogles = () => {
+  return getAllGoogles
+}
+
 const getObservableTrasmisorReceptor = () => {
   return getAllTrasmisorReceptor
 }
@@ -202,6 +206,7 @@ export {
   getAllAccesoriosProduct,
   getObservableAccesorios,
   getAllGoogles,
+  getObservableGoogles,
   getAllRadioControl,
   getObservableRadioControl,
   getAllTrasmisorReceptor,

@@ -49,14 +49,14 @@ const styles = (theme) => ({
 const ListShoppingCart = (props) => {
   const { shoppingCart, updateShowCart, updateCart } =
     useContext(ShowCartContext)
-  console.log('ShowCartContext ListShoppingCart', shoppingCart)
+  // console.log('ShowCartContext ListShoppingCart', shoppingCart)
 
   let shoppingCartID = null
   useEffect(() => {
     // se lee el ID asignado atras durante el login
     shoppingCartID = sessionStorage.getItem('cartID')
     if (shoppingCartID) {
-      console.log('shoppingCartID', shoppingCartID)
+      // console.log('shoppingCartID', shoppingCartID)
       // se asigna cartID al storeContext del usuario
       updateCart({ cartID: shoppingCartID })
     }

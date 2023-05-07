@@ -78,7 +78,7 @@ function FirebaseGooglesProducts (props) {
   }
 
   const parsePrices = (productos) => {
-    // console.log(productos);
+    // console.log(productos)
     if (productos && productos.length > 0 && typeof window !== 'undefined') {
       sessionStorage.setItem('Productos_Googles', JSON.stringify(productos))
       productos.map((product, index, array) => {
