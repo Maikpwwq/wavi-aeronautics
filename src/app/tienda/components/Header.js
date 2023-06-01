@@ -268,7 +268,7 @@ function Header (props) {
                   onClick={() => updateShowCart(!shoppingCart.show)}
                   style={classes.blueLink}
                 >
-                  <ShoppingCartIcon fontSize="large" /> 
+                  <ShoppingCartIcon fontSize="large" />
                 </IconButton>
               </Tooltip>
             </Grid>

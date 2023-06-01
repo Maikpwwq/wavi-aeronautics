@@ -1,29 +1,29 @@
-"use client";
-import React, { useEffect } from "react";
-import Link from "next/link";
-import Box from "@mui/material/Box";
-import WhatsAppIcon from "@mui/icons-material/WhatsApp";
-import Typography from "@/modules/components/Typography";
-import withRoot from "@/modules/withRoot";
-import theme from "../innerTheme";
+'use client'
+import React, { useEffect } from 'react'
+import Link from 'next/link'
+import Box from '@mui/material/Box'
+import WhatsAppIcon from '@mui/icons-material/WhatsApp'
+import Typography from '@/modules/components/Typography'
+import withRoot from '@/modules/withRoot'
+import theme from '../innerTheme'
 
 const styles = (theme) => ({
   presentationProducts: {
     margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`,
     padding: `${theme.spacing(0)} ${theme.spacing(2)} !important`,
-    display: "flex",
-    flexDirection: "column",
+    display: 'flex',
+    flexDirection: 'column'
   },
   lisenceLink: {
     color: theme.palette.secondary.main,
-    padding: `${theme.spacing(2)} ${theme.spacing(0)} !important`,
-  },
-});
+    padding: `${theme.spacing(2)} ${theme.spacing(0)} !important`
+  }
+})
 
 const Accesorios = (props) => {
   // const { classes } = props;
-  const classes = styles(theme);
-  useEffect(() => {}, []);
+  const classes = styles(theme)
+  useEffect(() => {}, [])
 
   return (
     <>
@@ -52,12 +52,12 @@ const Accesorios = (props) => {
           <WhatsAppIcon
             fontSize="large"
             alt="WhatsAppChat"
-            style={{ color: "#9c27b0" }}
+            style={{ color: '#9c27b0' }}
           />
         </Link>
       </Box>
     </>
-  );
-};
+  )
+}
 
-export default withRoot(Accesorios);
+export default withRoot(Accesorios)

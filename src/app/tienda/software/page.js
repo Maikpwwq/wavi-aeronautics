@@ -1,28 +1,28 @@
-"use client";
-import React, { useEffect } from "react";
-import Link from "next/link";
-import Box from "@mui/material/Box";
-import Typography from "@/modules/components/Typography";
-import withRoot from "@/modules/withRoot";
-import theme from "../innerTheme";
+'use client'
+import React, { useEffect } from 'react'
+import Link from 'next/link'
+import Box from '@mui/material/Box'
+import Typography from '@/modules/components/Typography'
+import withRoot from '@/modules/withRoot'
+import theme from '../innerTheme'
 
 const styles = (theme) => ({
   presentationProducts: {
     margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`,
     padding: `${theme.spacing(0)} ${theme.spacing(2)} !important`,
-    display: "flex",
-    flexDirection: "column",
+    display: 'flex',
+    flexDirection: 'column'
   },
   lisenceLink: {
     color: theme.palette.secondary.main,
-    padding: `${theme.spacing(2)} ${theme.spacing(0)} !important`,
-  },
-});
+    padding: `${theme.spacing(2)} ${theme.spacing(0)} !important`
+  }
+})
 
 const Accesorios = (props) => {
   // const { classes } = props;
-  const classes = styles(theme);
-  useEffect(() => {}, []);
+  const classes = styles(theme)
+  useEffect(() => {}, [])
 
   return (
     <>
@@ -37,7 +37,7 @@ const Accesorios = (props) => {
           Simulador para vuelo de Drones.
         </Typography>
         <Typography variant="body1">
-          ¡Vive la acción de participar como piloto en carreras de drones FPV,{" "}
+          ¡Vive la acción de participar como piloto en carreras de drones FPV,{' '}
           <br />
           vuela a grandes velocidades, incluye modos multijugador y fuera de
           línea!.
@@ -64,7 +64,7 @@ const Accesorios = (props) => {
           Mapeo Digital
         </Typography>
         <Typography variant="body1">
-          {" "}
+          {' '}
           Software para mapeo por fotogrametría y modelado digital.
         </Typography>
         <Link
@@ -77,7 +77,7 @@ const Accesorios = (props) => {
         </Link>
       </Box>
     </>
-  );
-};
+  )
+}
 
-export default withRoot(Accesorios);
+export default withRoot(Accesorios)

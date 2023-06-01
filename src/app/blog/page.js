@@ -1,21 +1,21 @@
-"use client";
-import { Suspense } from "react";
-import theme from "@/modules/theme";
-import AppFooter from "@/modules/views/AppFooter";
-import AppAppBar from "@/modules/views/AppAppBar";
+'use client'
+import { Suspense } from 'react'
+import theme from '@/modules/theme'
+import AppFooter from '@/modules/views/AppFooter'
+import AppAppBar from '@/modules/views/AppAppBar'
 
 const styles = (theme) => ({
   blogSheet: {
-    maxWidth: "1050px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    margin: "20px auto",
-  },
-});
+    maxWidth: '1050px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: '20px auto'
+  }
+})
 
-function BlogPage() {
-  const classes = styles(theme);
+function BlogPage () {
+  const classes = styles(theme)
   return (
     <section>
       <Suspense fallback={<p>Cargando...</p>}>
@@ -28,7 +28,7 @@ function BlogPage() {
             <p className="pt-4 pb-4">
               Experimenta la sensación de volar en primera persona, ve lo que
               observa la cámara sobre el drone, esa conexión con la ubicación
-              del drone te hará sentir que sales de tu cuerpo.{" "}
+              del drone te hará sentir que sales de tu cuerpo.{' '}
             </p>
             <br />
             <p className="pt-4 pb-4">
@@ -36,7 +36,7 @@ function BlogPage() {
               seguridad para la cámara del drone, pon las baterías en el drone
               sin conectarlas aún, deberás conectar las antenas tanto del mando
               como de las gafas, lo más importante recuerda tener suficientes
-              baterías cargadas y memoria libre para registrar tu vuelo.{" "}
+              baterías cargadas y memoria libre para registrar tu vuelo.{' '}
             </p>
             <br />
             <p className="pt-4 pb-4">
@@ -44,7 +44,7 @@ function BlogPage() {
               vibrar el mando indicando que es el momento en que deberás
               conectar las baterías al drone, por ultimo prende tus Googles y
               estas sintonizaran de forma automática tu canal de video. Al
-              ponerte tus googles te sumergirás en esta aventura.{" "}
+              ponerte tus googles te sumergirás en esta aventura.{' '}
             </p>
             <br />
             <p className="pt-4 pb-4">
@@ -53,7 +53,7 @@ function BlogPage() {
               Para elevar el drone de forma gradual del suelo, ve deslizando
               suavemente la palanca del acelerador, hasta que pueda despegar del
               suelo, inicia tratando de avanzar y retroceder algunos metros,
-              esto varias veces antes de continuar con ejercicios más complejos.{" "}
+              esto varias veces antes de continuar con ejercicios más complejos.{' '}
             </p>
             <br />
             <p className="pt-4 pb-4">
@@ -71,7 +71,7 @@ function BlogPage() {
         <AppFooter />
       </Suspense>
     </section>
-  );
+  )
 }
 
-export default BlogPage;
+export default BlogPage
