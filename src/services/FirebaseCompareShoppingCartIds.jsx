@@ -27,14 +27,14 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
     products.map(({ productID }, index) => {
       productosIds[index] = productID
     })
-    console.log('extractProductsID', productosIds)
+    // console.log('extractProductsID', productosIds)
   }
 
   const extractProductAmount = (products) => {
     products.map(({ cantidad }, index) => {
       productosCantidades[index] = cantidad
     })
-    console.log('extractProductAmount', productosCantidades)
+    // console.log('extractProductAmount', productosCantidades)
   }
 
   const user = auth.currentUser || {}
@@ -356,7 +356,7 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
     let productos = []
     // comparar productos por ids
     if (productData && productData.length > 0) {
-      console.log('productData', productData, productos)
+      // console.log('productData', productData, productos)
       productos = productData
       let counter = 0
       productos.map((DOC) => {
@@ -375,7 +375,7 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
         }
       })
       if (cardProductos !== [] && cardProductos.length > 0) {
-        console.log('cardProductos', cardProductos)
+        // console.log('cardProductos', cardProductos)
         shoppingCart.productos = cardProductos
         // Se determina la cantidad de objetos agregados al carrito de compras
         // cardProductos.length;
@@ -384,7 +384,7 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
           totalCantidades += cantidad
         })
         shoppingCart.items = totalCantidades
-        console.log('compareProductAmounts', shoppingCart, totalCantidades)
+        // console.log('compareProductAmounts', shoppingCart, totalCantidades)
         sessionStorage.setItem('cartUpdated', 'filterItems')
         sessionStorage.setItem('cartProducts', totalCantidades)
         // Se envia listado de productos para calcular el valor del carrito de compras
@@ -411,9 +411,9 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
       sessionStorage.setItem('cartUpdated', 'suma')
       sessionStorage.setItem('cartSum', acomulateSum)
       // sessionStorage.removeItem("cartUpdated");
-      console.log('service', shoppingCart)
+      // console.log('service', shoppingCart)
       if (shoppingCart.productos) {
-        console.log('service', shoppingCart)
+        // console.log('service', shoppingCart)
         updateCart(shoppingCart)
         // sharingInformationService.setSubject({shoppingCart});
       }

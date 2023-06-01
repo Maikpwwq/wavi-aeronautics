@@ -2,6 +2,7 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
 import Box from "@mui/material/Box";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import Typography from "@/modules/components/Typography";
 import withRoot from "@/modules/withRoot";
 import theme from "../innerTheme";
@@ -34,46 +35,25 @@ const Accesorios = (props) => {
           align="center"
           className="pb-4 mb-4"
         >
-          Simulador para vuelo de Drones.
+          Clases de vuelo de Drones.
         </Typography>
         <Typography variant="body1">
-          ¡Vive la acción de participar como piloto en carreras de drones FPV,{" "}
+          ¡Aprende a volar como un experto piloto de drones, conoce todo sobre
+          el mundo del FPV!. <br />
           <br />
-          vuela a grandes velocidades, incluye modos multijugador y fuera de
-          línea!.
-          <br />
-          <br />
-          Se precavido con tus dispositivos y tu inversión, realiza pruebas en
-          un ambiente seguro.
         </Typography>
         <Link
-          href="https://www.velocidrone.com/"
+          href="https://api.whatsapp.com/send?phone=573196138057"
           target="_blank"
           rel="noopener noreferrer"
           style={classes.lisenceLink}
         >
-          Adquiere una licencia Velocidrone!
-        </Link>
-        <Typography
-          variant="h4"
-          gutterBottom
-          marked="center"
-          align="center"
-          className="pb-4 mb-4"
-        >
-          Mapeo Digital
-        </Typography>
-        <Typography variant="body1">
-          {" "}
-          Software para mapeo por fotogrametría y modelado digital.
-        </Typography>
-        <Link
-          href="https://www.pix4d.com/es"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={classes.lisenceLink}
-        >
-          Adquiere una licencia Pix4D!
+          Programa una clase ahora. {' '}
+          <WhatsAppIcon
+            fontSize="large"
+            alt="WhatsAppChat"
+            style={{ color: "#9c27b0" }}
+          />
         </Link>
       </Box>
     </>

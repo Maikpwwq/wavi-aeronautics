@@ -117,6 +117,9 @@ function Header (props) {
       case 'software':
         setValue(5)
         break
+      case 'escuela':
+        setValue(6)
+        break
     }
   }, [activeTab])
   // Desde aca se controla el estado de cantidad de productos y total de la compra
@@ -158,6 +161,8 @@ function Header (props) {
       navigate.push('tienda/accesorios')
     } else if (newValue === 5) {
       navigate.push('tienda/software')
+    } else if (newValue === 6) {
+      navigate.push('tienda/escuela')
     }
   }
 
@@ -263,7 +268,7 @@ function Header (props) {
                   onClick={() => updateShowCart(!shoppingCart.show)}
                   style={classes.blueLink}
                 >
-                  <ShoppingCartIcon fontSize="large" />
+                  <ShoppingCartIcon fontSize="large" /> 
                 </IconButton>
               </Tooltip>
             </Grid>
@@ -351,6 +356,15 @@ function Header (props) {
               component="a"
               href="/tienda/software/"
               onClick={() => setValue(5)}
+              style={classes.blueLink}
+            />
+            <Tab
+              textColor="inherit"
+              label="Escuela"
+              value={6}
+              component="a"
+              href="/tienda/escuela/"
+              onClick={() => setValue(6)}
               style={classes.blueLink}
             />
           </Tabs>

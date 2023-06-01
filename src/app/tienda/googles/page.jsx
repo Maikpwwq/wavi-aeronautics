@@ -60,7 +60,7 @@ const Googles = (props) => {
             </Typography>
             <Grid container spacing={2}>
               {storeProductsGoogles.map((product, k) => {
-                console.log(product, k)
+                // console.log(product, k)
                 // productID
                 return (
                   <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>

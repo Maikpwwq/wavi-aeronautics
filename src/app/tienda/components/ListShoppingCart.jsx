@@ -30,10 +30,15 @@ const styles = (theme) => ({
     height: '130px',
     width: 'auto !important'
   },
+  productBox: {
+    height: '100%',
+    width: 'fit-content'
+  },
   card: {
     height: '100%',
     display: 'flex',
-    justifyContent: 'space-evenly'
+    justifyContent: 'space-evenly',
+    width: 'fit-content'
   },
   cantidad: {
     minWidth: '60px',
@@ -139,7 +144,7 @@ const ListShoppingCart = (props) => {
 
   return (
     <>
-      <Box className="" maxWidth="sm" style={{ height: '100%' }}>
+      <Box className="" maxWidth="sm" style={classes.productBox}>
         {shoppingCart.productos &&
           shoppingCart.productos.map(
             ({ titulo, precio, imagenes, productID, cantidad }, index) => (
