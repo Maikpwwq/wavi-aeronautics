@@ -1,34 +1,41 @@
-import React from 'react'
+import React, { Suspense, useState } from 'react'
+import {
+  connect,
+  useSelector
+} from 'react-redux'
 // import PropTypes from 'prop-types'
 import withRoot from '@/modules/withRoot'
 import theme from '../innerTheme'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
-import Typography from '@/modules/components/Typography'
+import CircularProgress from '@mui/material/CircularProgress'
 
-const Betafpv =
-  'https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/marcas%2Fbetafpv_180x.webp?alt=media&token=d7998922-10cd-4fd9-9e92-017ee75383b9'
-const Emax =
-  'https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/marcas%2Femax_180x.webp?alt=media&token=39acf0cd-f868-484e-8fd5-89f6b0ce4682'
-const Ethix =
-  'https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/marcas%2Fethix_180x.webp?alt=media&token=e0104ba0-f241-4cde-b239-0fc9460113f6'
+import Typography from '@/modules/components/Typography'
+import ProductItem from '@/app/tienda/components/ProductItem'
 
 const styles = (theme) => ({
   root: {
     display: 'flex',
     backgroundColor: '#eaeff1',
     // backgroundImage: `url(${})`,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    with: '100%'
   },
   container: {
-    paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3),
+    padding: `${theme.spacing(3)} ${theme.spacing(0)} !important`,
+    margin: 0,
+    maxWidth: 'fit-content !important',
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    textAlign: 'center'
+    textAlign: 'center',
+    with: '100%'
+  },
+  productsWraper: {
+    flexWrap: 'nowrap',
+    overflow: 'auto'
   },
   item: {
     display: 'flex',
@@ -46,36 +53,41 @@ const styles = (theme) => ({
     maxWidth: 150,
     overflow: 'hidden'
   },
-  curvyLines: {
-    pointerEvents: 'none',
-    position: 'absolute',
-    top: -180,
-    opacity: 0.7
-  },
-  marcas: {
-    marginBottom: `${theme.spacing(4)} !important`
-  },
   logos: {
     paddingLeft: '0 !important',
     marginTop: theme.spacing(2)
   },
   logosContainer: {
-    marginLeft: '24px !important'
+    overflow: 'hidden',
+    flexWrap: 'nowrap',
+    flexDirection: 'column',
+    marginBottom: `${theme.spacing(4)} !important`
+  },
+  presentationProducts: {
+    margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`,
+    padding: `${theme.spacing(0)} ${theme.spacing(2)} !important`,
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  spacingTexts: {
+    margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`
+  },
+  endingTexts: {
+    marginBottom: `${theme.spacing(2)} !important`
   }
 })
 
 function ProductosDestacados (props) {
   // const { classes } = props;
   const classes = styles(theme)
-  const marcas = [
-    Betafpv,
-    Emax,
-    Ethix
-  ]
+  const shopState = useSelector((store) => store.shop)
+  const { drones } = shopState
+
+  const [featuredProducts] = useState(drones || []) // setStoreProducts
 
   return (
     <Box sx={classes.root}>
-      <Container sx={classes.container}>
+      <Container fluid sx={classes.container}>
         <Typography
           variant="h4"
           marked="center"
@@ -84,31 +96,43 @@ function ProductosDestacados (props) {
         >
           Productos Destacados
         </Typography>
-        <Box sx={classes.marcas}>
+        <Typography variant="body1" sx={classes.endingTexts}>
+                Lleva tu Dron, destacamos los mejores kits de FPV listos para vuelo.
+        </Typography>
           <Grid container spacing={3} sx={classes.logosContainer}>
-            {marcas.map((marca, i) => {
-              // console.log(marca);
-              return (
-                <Grid
-                  item
-                  sm={3}
-                  xs={6}
-                  md={2}
-                  lg={2}
-                  key={i}
-                  sx={classes.logos}
-                >
-                  <Box
-                    component="img"
-                    src={marca}
-                    alt="marcas"
-                    sx={classes.image}
-                  ></Box>
-                </Grid>
-              )
-            })}
+          {!!featuredProducts && featuredProducts.length > 0 && (
+            <Suspense
+              fallback={
+                <Box sx={{ display: 'flex' }}>
+                  <CircularProgress />
+                </Box>
+              }
+            >
+              <Grid sx={classes.productsWraper} container spacing={2}>
+                {featuredProducts.map((product, k) => {
+                  return (
+                    <Grid
+                      item
+                      key={k}
+                      sm={12}
+                      xs={12}
+                      md={5}
+                      lg={4}
+                      xl={3}
+                      sx={classes.logos}>
+                      <ProductItem
+                        sx="d-flex mb-2"
+                        category="drones"
+                        products={product}
+                        productID={k}
+                      ></ProductItem>
+                    </Grid>
+                  )
+                })}
+              </Grid>
+            </Suspense>
+          )}
           </Grid>
-        </Box>
       </Container>
     </Box>
   )
@@ -118,4 +142,11 @@ ProductosDestacados.propTypes = {
   // classes: PropTypes.object.isRequired,
 }
 
-export default withRoot(ProductosDestacados)
+const mapStateToProps = (state) => {
+  // console.log("state", state);
+  return {
+    featuredProducts: state.drones
+  }
+}
+
+export default connect(mapStateToProps, null)(withRoot(ProductosDestacados))

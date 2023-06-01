@@ -1,6 +1,7 @@
-// "use client";
+'use client'
 // @ts-ignore
 // import { useSearchParams } from "next/navigation";
+import ProductosDestacados from '@/app/tienda/components/productosDestacados'
 
 async function ProductPage ({ children }) {
   // , params
@@ -11,6 +12,7 @@ async function ProductPage ({ children }) {
     <article>
       {/* TODO: Implement new product layout <p>details layout</p> */}
       {children}
+      <ProductosDestacados />
     </article>
   )
 }

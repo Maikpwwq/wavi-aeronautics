@@ -22,7 +22,19 @@ import PropTypes from 'prop-types'
 
 // import { useQuery } from "react-query";
 
+const styles = () => ({
+  imageCentered: {
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  imageSize: {
+    height: '330px',
+    width: 'auto'
+  }
+})
+
 const ProductCard = ({ products, category }) => {
+  const classes = styles()
   const dispatch = useDispatch()
   const categoria = category || 'tienda'
   const producto = products
@@ -46,6 +58,7 @@ const ProductCard = ({ products, category }) => {
     }
   }
 
+  // TODO: Separar la acción de agregar al carrito para usarla dentro del detalle de producto
   // Solo activar
   useEffect(() => {
     storeToFirebaseCart()
@@ -125,6 +138,7 @@ const ProductCard = ({ products, category }) => {
           <CardActionArea>
             {producto !== undefined && imagenes && (
               <Link
+                style={classes.imageCentered}
                 href={{
                   pathname: 'tienda/producto',
                   query: `id=${productID}&category=${categoria}&marca=${marca}`,
@@ -133,7 +147,7 @@ const ProductCard = ({ products, category }) => {
               >
                 <CardMedia
                   component="img"
-                  height="330"
+                  style={classes.imageSize}
                   image={imagenes[0]}
                   alt={titulo}
                   onClick={() => handleSelect}

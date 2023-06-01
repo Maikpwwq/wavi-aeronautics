@@ -14,7 +14,7 @@ import withRoot from '@/modules/withRoot'
 // global.localStorage;
 
 import Box from '@mui/material/Box'
-import ProductCard from '../components/ProductCard'
+import ProductCard from '@/app/tienda/components/ProductCard'
 import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@/modules/components/Typography'

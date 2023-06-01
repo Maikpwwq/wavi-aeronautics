@@ -52,7 +52,7 @@ function BlogPage () {
               actives encenderán las hélices y el drone permanecerá en el suelo.
               Para elevar el drone de forma gradual del suelo, ve deslizando
               suavemente la palanca del acelerador, hasta que pueda despegar del
-              suelo, inicia tratando de avanzar y retroceder algunos metros,
+              suelo. Inicia tratando de avanzar y retroceder algunos metros,
               esto varias veces antes de continuar con ejercicios más complejos.{' '}
             </p>
             <br />

@@ -14,6 +14,8 @@ import ProductCTA from '@/modules/views/ProductCTA'
 import ProductMarcas from '@/modules/views/ProductMarcas'
 import AppAppBar from '@/modules/views/AppAppBar'
 
+import NuevosProductos from '@/app/tienda/components/nuevosProductos'
+
 // import { inter } from './fonts'
 
 function Home () {
@@ -24,6 +26,7 @@ function Home () {
       <ProductHero />
       <ProductValues />
       <ProductCategories />
+      <NuevosProductos />
       <ProductHowItWorks />
       <ProductCTA />
       <ProductMarcas />
