@@ -3,15 +3,19 @@ import { collection, doc, getDocs } from 'firebase/firestore'
 
 function FirebaseTrasmisorReceptorProducts (props) {
   let productosReceptor = null
+  const productosTransmisor = null
+
   if (typeof window !== 'undefined') {
     // Perform localStorage action
     productosReceptor = sessionStorage.getItem('Productos_Receptor') || null
+    productosReceptor = sessionStorage.getItem('Productos_Transmisor') || null
   }
   const _firestore = firestore
   const productsRef = collection(_firestore, 'productos')
   const productsDoc = doc(productsRef, 'radio_control')
 
   let storeProductsReceptor = []
+  let storeProductsTransmisor = []
 
   const collectionBetafpvReceptor = collection(
     productsDoc,
@@ -66,7 +70,16 @@ function FirebaseTrasmisorReceptorProducts (props) {
     'team-blacksheep/receptor/Traser-Nano-RX'
   )
 
-  const productsFromFirestore = async () => {
+  const collectionTeamBlacksheepTransmisor = collection(
+    productsDoc,
+    'team-blacksheep/transmisor/Crossfire-Nano-Tx/XNsVZwL81NEU8nFyyEFQ'
+  )
+  const collectionBetafpvTransmisor = collection(
+    productsDoc,
+    'betafpv/transmisor/ELRS-Nano-TX/julcx5t5uJzL98LvdmzG'
+  )
+
+  const receptorsFromFirestore = async () => {
     const collectionReceptor = [
       collectionBetafpvReceptor,
       collectionFlyskyReceptor,
@@ -93,27 +106,56 @@ function FirebaseTrasmisorReceptorProducts (props) {
     return productosReceptor
   }
 
+  const transmisorsFromFirestore = async () => {
+    const collectionTransmisor = [
+      collectionBetafpvTransmisor,
+      collectionTeamBlacksheepTransmisor
+    ]
+    const productosTransmisor = []
+    for (const transmisor of collectionTransmisor) {
+      // console.log(transmisor, collectionTransmisor)
+      const productDataTransmisor = await getDocs(transmisor)
+      productDataTransmisor.forEach((DOC) => {
+        productosTransmisor.push(DOC.data())
+      })
+    }
+    return productosTransmisor
+  }
+
   const productosToSessionStore = () => {
-    let productData
-    let productos = []
+    let receptorsData
+    let receptors = []
+    let transmisorsData
+    let transmisors = []
     if (!productosReceptor) {
       // console.log(productosReceptor);
-      productData = productsFromFirestore()
-      productData.then((response) => {
+      receptorsData = receptorsFromFirestore()
+      receptorsData.then((response) => {
         // console.log(response);
-        productos = response
-        parsePrices(productos)
+        receptors = response
+        parsePrices(receptors)
       })
     } else {
-      productos = JSON.parse(productosReceptor)
-      parsePrices(productos)
+      receptors = JSON.parse(productosReceptor)
+      parsePrices(receptors, 'receptors')
+    }
+    if (!productosTransmisor) {
+      // console.log(productosReceptor);
+      transmisorsData = transmisorsFromFirestore()
+      transmisorsData.then((response) => {
+        // console.log(response);
+        transmisors = response
+        parsePrices(transmisors, 'transmisors')
+      })
+    } else {
+      transmisors = JSON.parse(productosTransmisor)
+      parsePrices(transmisors)
     }
   }
 
-  const parsePrices = (productos) => {
+  const parsePrices = (productos, clue) => {
     // console.log(productos);
     if (productos && productos.length > 0 && typeof window !== 'undefined') {
-      sessionStorage.setItem('Productos_Receptor', JSON.stringify(productos))
       productos.map((product, index, array) => {
         // console.log(product.precio);
         if (
@@ -132,13 +174,19 @@ function FirebaseTrasmisorReceptorProducts (props) {
       })
       // setStoreProductsReceptor(productos);
       // console.log(storeProducts)
-      storeProductsReceptor = productos
+      if (clue === 'receptors') {
+        sessionStorage.setItem('Productos_Receptor', JSON.stringify(productos))
+        storeProductsReceptor = productos
+      } else if (clue === 'transmisors') {
+        sessionStorage.setItem('Productos_Transmisor', JSON.stringify(productos))
+        storeProductsTransmisor = productos
+      }
     }
   }
 
   productosToSessionStore()
-  if (storeProductsReceptor.length > 0) {
-    return { storeProductsReceptor }
+  if (storeProductsReceptor.length > 0 && storeProductsTransmisor.length > 0) {
+    return { storeProductsReceptor, storeProductsTransmisor }
   }
 }
 

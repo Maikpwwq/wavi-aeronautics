@@ -19,6 +19,7 @@ import AppBar from '@mui/material/AppBar'
 // import NotificationsIcon from '@mui/icons-material/Notifications'
 import Grid from '@mui/material/Grid'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import IconButton from '@mui/material/IconButton'
 import Link from '@mui/material/Link'
 import Tab from '@mui/material/Tab'
@@ -236,10 +237,10 @@ function Header (props) {
           <Grid container alignItems="center" spacing={1}>
             <Grid item xs>
               <Typography color="inherit" variant="h5" component="h1">
-                Tienda{' '}
-                <Typography color="inherit" variant="body1">
-                  Envios gratis a toda Colombia!
-                </Typography>
+                Tienda
+              </Typography>
+              <Typography color="inherit" variant="body1" sx={{ display: 'flex' }}>
+                <LocalShippingIcon sx={{ marginRight: '1rem' }}/> {' '} Envios gratis a toda Colombia!
               </Typography>
             </Grid>
             {/* <Grid item>

@@ -72,8 +72,9 @@ const initialState = () => {
   const subscription5$ = getAllTrasmisorReceptor
   subscription5$.subscribe((response) => {
     if (response) {
-      const { storeProductsReceptor } = response
+      const { storeProductsReceptor, storeProductsTransmisor } = response
       shop.receptores = storeProductsReceptor
+      shop.transmisores = storeProductsTransmisor
     }
   })
 
