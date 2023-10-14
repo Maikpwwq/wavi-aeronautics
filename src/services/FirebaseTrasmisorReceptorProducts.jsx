@@ -72,11 +72,11 @@ function FirebaseTrasmisorReceptorProducts (props) {
 
   const collectionTeamBlacksheepTransmisor = collection(
     productsDoc,
-    'team-blacksheep/transmisor/Crossfire-Nano-Tx/XNsVZwL81NEU8nFyyEFQ'
+    'team-blacksheep/transmisor/Crossfire-Nano-Tx'
   )
   const collectionBetafpvTransmisor = collection(
     productsDoc,
-    'betafpv/transmisor/ELRS-Nano-TX/julcx5t5uJzL98LvdmzG'
+    'betafpv/transmisor/ELRS-Nano-TX'
   )
 
   const receptorsFromFirestore = async () => {
