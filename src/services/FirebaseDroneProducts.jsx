@@ -68,7 +68,7 @@ function FirebaseDroneProducts (props) {
           typeof parseInt(product.precio) === 'number' &&
           product.precio !== 'Agotado'
         ) {
-          const dolarPrice = 4710 // 02-05-2023
+          const dolarPrice = 4250 // 02-05-2023
           const trasportBase = 30 // USD
           const factorImportation = 1.5
           const dolarToCop = (parseInt(product.precio) + trasportBase) * factorImportation * dolarPrice
@@ -91,7 +91,7 @@ function FirebaseDroneProducts (props) {
           typeof parseInt(product.precio) === 'number' &&
           product.precio !== 'Agotado'
         ) {
-          const dolarPrice = 4710 // 02-05-2023
+          const dolarPrice = 4250 // 02-05-2023
           const trasportBase = 30 // USD
           const factorImportation = 1.5
           const dolarToCop = (parseInt(product.precio) + trasportBase) * factorImportation * dolarPrice

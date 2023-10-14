@@ -400,7 +400,7 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
       // console.log(acomulateSum, product.precio);
       const { precio, cantidad } = product
       if (typeof parseInt(precio) === 'number' && precio !== 'Agotado') {
-        const dolarPrice = 4710 // 02-05-2023
+        const dolarPrice = 4250 // 02-05-2023
         acomulateSum += parseInt(precio) * cantidad * dolarPrice
       }
     })
