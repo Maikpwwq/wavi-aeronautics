@@ -20,7 +20,8 @@ const styles = (theme) => ({
     backgroundColor: '#eaeff1',
     // backgroundImage: `url(${})`,
     overflow: 'hidden',
-    with: '100%'
+    with: '100%',
+    justifyContent: 'center'
   },
   container: {
     padding: `${theme.spacing(3)} ${theme.spacing(0)} !important`,

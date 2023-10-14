@@ -1,21 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
   env: {},
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "api.dicebear.com",
-        port: "",
-        pathname: "/5.x/identicon/svg",
+        protocol: 'https',
+        hostname: 'api.dicebear.com',
+        port: '',
+        pathname: '/5.x/identicon/svg'
       },
       {
-        hostname: "firebasestorage.googleapis.com",
-      },
-    ],
+        hostname: 'firebasestorage.googleapis.com'
+      }
+    ]
   },
   // webpack5: true,
   webpack: (config, { isServer }) => {
@@ -23,12 +20,12 @@ const nextConfig = {
       config.resolve.fallback = {
         net: false,
         fs: false,
-        tls: false,
-      };
+        tls: false
+      }
     }
 
-    return config;
-  },
-};
+    return config
+  }
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig
