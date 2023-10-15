@@ -15,7 +15,7 @@ import withRoot from '@/modules/withRoot'
 import theme from '@/app/tienda/innerTheme'
 // import { styled } from '@mui/material/styles'
 // import mercadopago from "mercadopago";
-import { MercadoPago, Payment } from 'mercadopago'
+import { MercadoPagoConfig, Payment } from 'mercadopago'
 
 const styles = (theme) => ({
   checkout: {
@@ -68,7 +68,7 @@ const GestionarMercadoPago = (props) => {
   // v1/payments/
   // process.env.MERCADOPAGOS_URL
   // Initialize the client object
-  const client = new MercadoPago({
+  const client = new MercadoPagoConfig({
     access_token: accessToken,
     options: { timeout: 5000, idempotencyKey: 'abc' }
   })
