@@ -44,7 +44,7 @@ const styles = (theme) => ({
 
 export const RadioContol = (props) => {
   // const { classes } = props;
-  const shopState = useSelector((store) => store.shop)
+  const shopState = useSelector((store) => store?.shop)
   const { radioControl } = shopState
   const classes = styles(theme)
   const [storeProductsRC] = useState(radioControl)

@@ -151,19 +151,19 @@ function Header (props) {
     setValue(newValue)
     // in SSR navigate is not well supported
     if (newValue === 0) {
-      navigate.push('tienda/drones', { replace: true })
+      navigate.push('drones', { replace: true })
     } else if (newValue === 1) {
-      navigate.push('tienda/googles')
+      navigate.push('googles', { replace: true })
     } else if (newValue === 2) {
-      navigate.push('tienda/radio-control')
+      navigate.push('radio-control', { replace: true })
     } else if (newValue === 3) {
-      navigate.push('tienda/trasmisor-receptor')
+      navigate.push('trasmisor-receptor', { replace: true })
     } else if (newValue === 4) {
-      navigate.push('tienda/accesorios')
+      navigate.push('accesorios', { replace: true })
     } else if (newValue === 5) {
-      navigate.push('tienda/software')
+      navigate.push('software', { replace: true })
     } else if (newValue === 6) {
-      navigate.push('tienda/escuela')
+      navigate.push('escuela', { replace: true })
     }
   }
 

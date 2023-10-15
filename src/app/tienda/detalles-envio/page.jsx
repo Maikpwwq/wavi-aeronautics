@@ -2,7 +2,7 @@
 import React, { useState, useContext } from 'react'
 import withRoot from '@/modules/withRoot'
 import theme from '../innerTheme'
-import MercadoPago from '../components/MercadoPago'
+import GestionarMercadoPago from '../components/GestionarMercadoPago'
 import Typography from '@/modules/components/Typography'
 
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
@@ -57,8 +57,8 @@ const styles = (theme) => ({
 const DetallesEnvio = (props) => {
   const classes = styles(theme)
   const { shoppingCart } = useContext(ShowCartContext)
-  const productsCart = shoppingCart.productos || ''
-  // console.log('DetallesEnvio', productsCart)
+  const productsCart = shoppingCart?.productos
+  console.log('DetallesEnvio', productsCart)
   const [userInfo, setUserInfo] = useState({
     userName: '',
     userMail: '',
@@ -187,7 +187,7 @@ const DetallesEnvio = (props) => {
               </Box>
             </FormGroup>
           </Box>
-          {productsCart && (
+          {!!productsCart && (
             <Box
               style={{
                 display: 'flex',
@@ -227,7 +227,7 @@ const DetallesEnvio = (props) => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {productsCart.map((producto, index) => {
+                    {productsCart.length > 0 && productsCart.map((producto, index) => {
                       const { titulo, precio, imagenes } = producto
                       return (
                         <TableRow key={index}>
@@ -253,7 +253,7 @@ const DetallesEnvio = (props) => {
                   </TableBody>
                 </Table>
               </Box>
-              <MercadoPago
+              <GestionarMercadoPago
                 shippingInfo={shippingInfo}
                 userInfo={userInfo}
               />

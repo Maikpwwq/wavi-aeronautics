@@ -44,50 +44,61 @@ const initialState = () => {
   subscription$.subscribe((response) => {
     if (response) {
       const { storeProducts, storeProductsRC } = response
-      shop.drones = storeProducts
-      shop.dronesRC = storeProductsRC
+      if (storeProducts && storeProductsRC) {
+        // console.log('subscription drone products', storeProducts, storeProductsRC)
+        shop.drones = storeProducts
+        shop.dronesRC = storeProductsRC
+      }
     }
   })
   const subscription2$ = getAllAccesoriosProduct
   subscription2$.subscribe((response) => {
     if (response) {
       const { productsBaterias } = response
-      shop.baterias = productsBaterias
+      if (productsBaterias) {
+        shop.baterias = productsBaterias
+      }
     }
   })
   const subscription3$ = getAllGoogles
   subscription3$.subscribe((response) => {
     if (response) {
       const { productsGoogles } = response
-      shop.googles = productsGoogles
+      if (productsGoogles) {
+        shop.googles = productsGoogles
+      }
     }
   })
   const subscription4$ = getAllRadioControl
   subscription4$.subscribe((response) => {
     if (response) {
       const { storeProductsRC } = response
-      shop.radioControl = storeProductsRC
+      if (storeProductsRC) {
+        shop.radioControl = storeProductsRC
+      }
     }
   })
   const subscription5$ = getAllTrasmisorReceptor
   subscription5$.subscribe((response) => {
     if (response) {
       const { storeProductsReceptor, storeProductsTransmisor } = response
-      shop.receptores = storeProductsReceptor
-      shop.transmisores = storeProductsTransmisor
+      if (storeProductsReceptor && storeProductsTransmisor) {
+        shop.receptors = storeProductsReceptor
+        shop.transmisors = storeProductsTransmisor
+      }
     }
   })
 
   // console.log("shoppingCart", shoppingCart);
 
-  if (shop.receptores) {
+  if (shop.receptors) {
     return {
       user: {},
       shoppingCart,
       shop
     }
   }
-  // else if (!!shop.receptores) {
+  // else if (!!shop.receptors) {
   //   return {
   //     user: {},
   //     shoppingCart,

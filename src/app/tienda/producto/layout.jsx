@@ -3,7 +3,8 @@
 // import { useSearchParams } from "next/navigation";
 import ProductosDestacados from '@/app/tienda/components/productosDestacados'
 
-async function ProductPage ({ children }) {
+// async
+function ProductPage ({ children }) {
   // , params
   // const searchParams = useSearchParams();
   // console.log("searchParams", searchParams.get("id"), searchParams.get("category"));

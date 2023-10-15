@@ -10,9 +10,13 @@ import { sharingInformationService } from './sharing-information'
 const FirebaseLoadShoppingCart = () => {
   // { dispatch }
   // console.log("props", createCart);
-  const user = auth.currentUser || {}
-  const userID = user.uid || null
+  const user = auth?.currentUser || {}
+  const userID = user?.uid || null
   let shoppingCartID = null
+  const _firestore = firestore
+  const shoppingsRef = collection(_firestore, 'shoppingCart')
+
+  let shoppingCart = []
 
   const shoppingsToFirestore = async (updateInfo, userRef) => {
     await setDoc(doc(shoppingsRef, userRef), updateInfo, { merge: true })
@@ -45,10 +49,6 @@ const FirebaseLoadShoppingCart = () => {
   // const shoppingUpdatedItems = sessionStorage.getItem("cartUpdated");
   const usedID = userID || shoppingCartID
   console.log('usedID load:', usedID)
-  const _firestore = firestore
-  const shoppingsRef = collection(_firestore, 'shoppingCart')
-
-  let shoppingCart = []
 
   const shoppingsFromFirestore = async () => {
     const cardProductos = []
@@ -64,7 +64,7 @@ const FirebaseLoadShoppingCart = () => {
       }
     }
 
-    if (cardProductos && cardProductos !== []) {
+    if (cardProductos && cardProductos.length !== 0) {
       shoppingCart = cardProductos
       console.log('store', cardProductos, shoppingCart)
     }

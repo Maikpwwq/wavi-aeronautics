@@ -44,15 +44,13 @@ const styles = (theme) => ({
 
 const Accesorios = (props) => {
   // const { classes } = props;
-  const shopState = useSelector((store) => store.shop)
+  const shopState = useSelector((store) => store?.shop)
   const { baterias } = shopState
 
   const classes = styles(theme)
 
   // setStoreProductsBaterias
-  const [storeProductsBaterias] = useState(
-    baterias || []
-  )
+  const [storeProductsBaterias] = useState(baterias)
 
   return (
     <>

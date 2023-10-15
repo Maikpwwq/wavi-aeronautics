@@ -83,7 +83,7 @@ function ShowCartPage () {
                     <Card style={classes.card} key={index}>
                       <Link
                         href={{
-                          pathname: 'tienda/producto',
+                          pathname: 'producto',
                           query: `id=${productID}&category=${categoria}&marca=${marca}`
                         }}
                       >

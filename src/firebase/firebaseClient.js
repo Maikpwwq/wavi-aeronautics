@@ -4,7 +4,7 @@ import { getApps, initializeApp } from 'firebase/app'
 
 // Productos de Firebase
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
-import { getFirestore } from 'firebase/firestore'
+import { initializeFirestore } from 'firebase/firestore' // getFirestore,
 // import { getDatabase } from 'firebase/database'
 import { getStorage } from 'firebase/storage'
 // import { getAnalytics } from 'firebase/analytics'
@@ -31,7 +31,10 @@ export const auth = getAuth(firebaseApp)
 // export const currentUser = auth.currentUser
 // console.log(currentUser)
 
-export const firestore = getFirestore(firebaseApp)
+// export const firestore = getFirestore(firebaseApp)
+export const firestore = initializeFirestore(firebaseApp, {
+  experimentalAutoDetectLongPolling: true
+})
 // firestore.settings({ timestampsInSnapshots: true })
 
 export const storage = getStorage(firebaseApp)

@@ -282,8 +282,8 @@ const FirebaseSearchProductById = (searchId, category, marca) => {
       }
     } else if (
       categoryIde === 'radioControl' ||
-      categoryIde === 'receptores' ||
-      categoryIde === 'transmisores' ||
+      categoryIde === 'receptors' ||
+      categoryIde === 'transmisors' ||
       categoryIde === 'baterias' ||
       categoryIde === 'cargadores'
     ) {

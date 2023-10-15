@@ -44,14 +44,12 @@ const styles = (theme) => ({
 
 const Googles = (props) => {
   // const { classes } = props;
-  const shopState = useSelector((store) => store.shop)
+  const shopState = useSelector((store) => store?.shop)
   const { googles } = shopState
   const classes = styles(theme)
 
   // setStoreProductsGoogles
-  const [storeProductsGoogles] = useState(
-    googles || []
-  )
+  const [storeProductsGoogles] = useState(googles)
 
   return (
     <>

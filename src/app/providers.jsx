@@ -21,7 +21,8 @@ export default function Providers ({ children }) {
         <ShoppingCartProvider>
           {/* <Hydrate state={pageProps.dehydratedState}></Hydrate> */}
           {children}
-          <ReactQueryDevtools initialIsOpen />
+          <ReactQueryDevtools />
+          {/* initialIsOpen */}
         </ShoppingCartProvider>
       </Provider>
     </QueryClientProvider>

@@ -3,12 +3,12 @@ import { collection, doc, getDocs } from 'firebase/firestore'
 
 function FirebaseTrasmisorReceptorProducts (props) {
   let productosReceptor = null
-  const productosTransmisor = null
+  let productosTransmisor = null
 
   if (typeof window !== 'undefined') {
     // Perform localStorage action
     productosReceptor = sessionStorage.getItem('Productos_Receptor') || null
-    productosReceptor = sessionStorage.getItem('Productos_Transmisor') || null
+    productosTransmisor = sessionStorage.getItem('Productos_Transmisor') || null
   }
   const _firestore = firestore
   const productsRef = collection(_firestore, 'productos')
@@ -133,7 +133,7 @@ function FirebaseTrasmisorReceptorProducts (props) {
       receptorsData.then((response) => {
         // console.log(response);
         receptors = response
-        parsePrices(receptors)
+        parsePrices(receptors, 'receptors')
       })
     } else {
       receptors = JSON.parse(productosReceptor)
@@ -149,7 +149,7 @@ function FirebaseTrasmisorReceptorProducts (props) {
       })
     } else {
       transmisors = JSON.parse(productosTransmisor)
-      parsePrices(transmisors)
+      parsePrices(transmisors, 'transmisors')
     }
   }
 
@@ -174,10 +174,12 @@ function FirebaseTrasmisorReceptorProducts (props) {
       })
       // setStoreProductsReceptor(productos);
       // console.log(storeProducts)
+      // console.log(clue, productos)
       if (clue === 'receptors') {
         sessionStorage.setItem('Productos_Receptor', JSON.stringify(productos))
         storeProductsReceptor = productos
-      } else if (clue === 'transmisors') {
+      }
+      if (clue === 'transmisors') {
         sessionStorage.setItem('Productos_Transmisor', JSON.stringify(productos))
         storeProductsTransmisor = productos
       }

@@ -140,7 +140,7 @@ const ProductCard = ({ products, category }) => {
               <Link
                 style={classes.imageCentered}
                 href={{
-                  pathname: 'tienda/producto',
+                  pathname: 'producto',
                   query: `id=${productID}&category=${categoria}&marca=${marca}`,
                   state: { product: products }
                 }}

@@ -44,8 +44,8 @@ const styles = (theme) => ({
   }
 })
 
-const Products = (props) => {
-  const shopState = useSelector((store) => store.shop)
+const DroneProducts = (props) => {
+  const shopState = useSelector((store) => store?.shop)
   const { drones, dronesRC } = shopState
 
   const theme = useTheme()
@@ -57,8 +57,10 @@ const Products = (props) => {
   // const state = useSelector((state))
   // const { store } = useContext(ReactReduxContext);
 
-  const [storeProducts] = useState(drones || []) // setStoreProducts
-  const [storeProductsRC] = useState(dronesRC || []) // setStoreProductsRC
+  const [storeProducts] = useState(drones) // setStoreProducts
+  const [storeProductsRC] = useState(dronesRC) // setStoreProductsRC
+
+  // console.log('DroneProducts', drones, dronesRC)
 
   return (
     <>
@@ -69,23 +71,22 @@ const Products = (props) => {
             Kits de Dron FPV:
           </Typography>
           <>
-            {!!storeProducts && storeProducts.length > 0 && (
-              <Suspense
+                <Typography variant="body1" sx={classes.endingTexts}>
+                  Descubre los mejores kits de Dron FPV listos para vuelo.
+                </Typography>
+                <Suspense
                 fallback={
                   <Box sx={{ display: 'flex' }}>
                     <CircularProgress />
                   </Box>
                 }
               >
-                <Typography variant="body1" sx={classes.endingTexts}>
-                  Descubre los mejores kits de Dron FPV listos para vuelo.
-                </Typography>
                 <Grid
                   container
                   spacing={2}
                   sx={{ justifyContent: 'space-around' }}
                 >
-                  {storeProducts.map((product, k) => {
+                  {storeProducts.length > 1 && storeProducts.map((product, k) => {
                     return (
                       <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
                         <ProductCard
@@ -98,6 +99,7 @@ const Products = (props) => {
                     )
                   })}
                 </Grid>
+                </Suspense>
                 <br />
                 <br />
                 <Typography variant="h5" sx={classes.spacingTexts}>
@@ -115,8 +117,15 @@ const Products = (props) => {
                   Ready To Fly: Esta es la versión completa, puede funcionar
                   desde el momento que lo recibes.
                 </Typography>
+                <Suspense
+                fallback={
+                  <Box sx={{ display: 'flex' }}>
+                    <CircularProgress />
+                  </Box>
+                }
+              >
                 <Grid container spacing={2}>
-                  {storeProductsRC.map((product, k) => {
+                  {storeProductsRC.length > 1 && storeProductsRC.map((product, k) => {
                     return (
                       <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
                         <ProductCard
@@ -130,7 +139,6 @@ const Products = (props) => {
                   })}
                 </Grid>
               </Suspense>
-            )}
           </>
         </Box>
       </Box>
@@ -146,4 +154,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, null)(withRoot(Products))
+export default connect(mapStateToProps, null)(withRoot(DroneProducts))

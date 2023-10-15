@@ -7,8 +7,8 @@ export const initialShop = {
   googles: [{}],
   radioControl: [{}],
   accesorios: [{}],
-  receptores: [{}],
-  trasnmisores: [{}]
+  receptors: [{}],
+  transmisors: [{}]
 }
 
 // Slice

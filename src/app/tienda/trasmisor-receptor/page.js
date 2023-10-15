@@ -44,16 +44,12 @@ const styles = (theme) => ({
 
 const TrasmisorReceptor = (props) => {
   // const { classes } = props;
-  const shopState = useSelector((store) => store.shop)
-  const { transmisores, receptores } = shopState
+  const shopState = useSelector((store) => store?.shop)
+  const { transmisors, receptors } = shopState
 
   const classes = styles(theme)
-  const [storeProductsTransmisor] = useState(
-    transmisores || []
-  )
-  const [storeProductsReceptor] = useState(
-    receptores || []
-  )
+  const [storeProductsTransmisor] = useState(transmisors)
+  const [storeProductsReceptor] = useState(receptors)
 
   return (
     <>
@@ -82,7 +78,7 @@ const TrasmisorReceptor = (props) => {
                 return (
                   <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
                     <ProductCard
-                      category="receptores"
+                      category="transmisors"
                       className="d-flex mb-2"
                       products={product}
                       productID={k}
@@ -115,7 +111,7 @@ const TrasmisorReceptor = (props) => {
                 return (
                   <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
                     <ProductCard
-                      category="receptores"
+                      category="receptors"
                       className="d-flex mb-2"
                       products={product}
                       productID={k}
@@ -134,7 +130,8 @@ const TrasmisorReceptor = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    storeProductsReceptor: state.receptores
+    storeProductsReceptor: state.receptors,
+    storeProductsTransmisor: state.transmisors
   }
 }
 

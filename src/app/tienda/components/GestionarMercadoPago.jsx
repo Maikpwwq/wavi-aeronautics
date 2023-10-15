@@ -15,7 +15,7 @@ import withRoot from '@/modules/withRoot'
 import theme from '@/app/tienda/innerTheme'
 // import { styled } from '@mui/material/styles'
 // import mercadopago from "mercadopago";
-const mercadopago = require('mercadopago')
+import { MercadoPago, Payment } from 'mercadopago'
 
 const styles = (theme) => ({
   checkout: {
@@ -31,7 +31,7 @@ const styles = (theme) => ({
   }
 })
 
-const MercadoPago = (props) => {
+const GestionarMercadoPago = (props) => {
   const classes = styles(theme)
   const user = auth.currentUser || {}
   const userID = user.uid || null
@@ -67,9 +67,25 @@ const MercadoPago = (props) => {
   // v1/checkout/preferences
   // v1/payments/
   // process.env.MERCADOPAGOS_URL
-  mercadopago.configure({
-    access_token: accessToken
+  // Initialize the client object
+  const client = new MercadoPago({
+    access_token: accessToken,
+    options: { timeout: 5000, idempotencyKey: 'abc' }
   })
+  // Initialize the API object
+  const payment = new Payment(client)
+  // Step 4: Create the request object
+  // const body = {
+  //   transaction_amount: 12.34,
+  //   description: '<DESCRIPTION>',
+  //   payment_method_id: '<PAYMENT_METHOD_ID>',
+  //   payer: {
+  //     email: '<EMAIL>'
+  //   },
+  // };
+
+  // Step 5: Make the request
+  payment.create({ }).then(console.log).catch(console.log)
 
   // var preference = {
   //   items: [
@@ -199,4 +215,4 @@ const MercadoPago = (props) => {
   )
 }
 
-export default withRoot(MercadoPago)
+export default withRoot(GestionarMercadoPago)
