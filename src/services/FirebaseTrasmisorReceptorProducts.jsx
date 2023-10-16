@@ -137,7 +137,7 @@ function FirebaseTrasmisorReceptorProducts (props) {
       })
     } else {
       receptors = JSON.parse(productosReceptor)
-      parsePrices(receptors, 'receptors')
+      // parsePrices(receptors, 'receptors')
     }
     if (!productosTransmisor) {
       // console.log(productosReceptor);
@@ -149,7 +149,7 @@ function FirebaseTrasmisorReceptorProducts (props) {
       })
     } else {
       transmisors = JSON.parse(productosTransmisor)
-      parsePrices(transmisors, 'transmisors')
+      // parsePrices(transmisors, 'transmisors')
     }
   }
 
