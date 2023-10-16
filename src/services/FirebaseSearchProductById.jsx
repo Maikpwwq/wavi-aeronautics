@@ -14,6 +14,10 @@ const FirebaseSearchProductById = (searchId, category, marca) => {
   const KitRefRC = collection(productsDoc, 'RC')
   const productsGooglesDoc = doc(productsRef, 'Googles')
   const productsRCDoc = doc(productsRef, 'radio_control')
+  const productsDigitalVTX = doc(productsRef, 'digital_vtx')
+  // consultar VTX
+  const VTXDJI = collection(productsDigitalVTX, 'DJI')
+  const VTXCADDX = collection(productsDigitalVTX, 'CADDX')
   // consultar Googles
   const GooglesDJI = collection(productsGooglesDoc, 'DJI')
   const GooglesBetafpv = collection(productsGooglesDoc, 'Betafpv')
@@ -83,6 +87,15 @@ const FirebaseSearchProductById = (searchId, category, marca) => {
   // se usa cada colleccion para construir una query que filtre drones
   const queryRef = query(KitRef, where('productID', '==', searchIde))
   const queryRefRC = query(KitRefRC, where('productID', '==', searchIde))
+  // query Digitla VTX
+  const queryVTXDJI = query(
+    VTXDJI,
+    where('productID', '==', searchIde)
+  )
+  const queryVTXCADDX = query(
+    VTXCADDX,
+    where('productID', '==', searchIde)
+  )
   // query Google
   const queryGooglesDJI = query(
     GooglesDJI,
@@ -275,6 +288,18 @@ const FirebaseSearchProductById = (searchId, category, marca) => {
         queryGooglesDJI, queryGooglesBetafpv, queryGooglesEmaxusa, queryGooglesFatShark, queryGooglesWalksnail, queryGooglesIflightRc
       ]
       for (const product of collectionsGooglesFpv) {
+        const colectionData = await getDocs(product)
+        colectionData.forEach((DOC) => {
+          productos.push(DOC.data())
+        })
+      }
+    } else if (
+      categoryIde === 'digitalVTX') {
+      // Googles collection
+      const collectionsDigitalVTX = [
+        queryVTXDJI, queryVTXCADDX
+      ]
+      for (const product of collectionsDigitalVTX) {
         const colectionData = await getDocs(product)
         colectionData.forEach((DOC) => {
           productos.push(DOC.data())

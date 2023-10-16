@@ -4,7 +4,8 @@ import {
   getAllAccesoriosProduct,
   getAllGoogles,
   getAllRadioControl,
-  getAllTrasmisorReceptor
+  getAllTrasmisorReceptor,
+  getAllDigitalVTX
   // getAllShoppingCart
 } from '@/services/sharedServices'
 
@@ -88,10 +89,19 @@ const initialState = () => {
       }
     }
   })
+  const subscription6$ = getAllDigitalVTX
+  subscription6$.subscribe((response) => {
+    if (response) {
+      const { storeDigitalVTX } = response
+      if (storeDigitalVTX) {
+        shop.digitalVTX = storeDigitalVTX
+      }
+    }
+  })
 
   // console.log("shoppingCart", shoppingCart);
 
-  if (shop.receptors) {
+  if (shop.digitalVTX) {
     return {
       user: {},
       shoppingCart,

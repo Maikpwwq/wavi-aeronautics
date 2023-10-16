@@ -8,7 +8,8 @@ export const initialShop = {
   radioControl: [{}],
   accesorios: [{}],
   receptors: [{}],
-  transmisors: [{}]
+  transmisors: [{}],
+  digitalVTX: [{}]
 }
 
 // Slice

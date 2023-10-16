@@ -5,6 +5,7 @@ import FirebaseDroneProducts from './FirebaseDroneProducts.jsx'
 import FirebaseGooglesProducts from './FirebaseGooglesProducts.jsx'
 import FirebaseRadioControlProducts from './FirebaseRadioControlProducts.jsx'
 import FirebaseTrasmisorReceptorProducts from './FirebaseTrasmisorReceptorProducts.jsx'
+import FirebaseDigitalVTXProducts from './FirebaseDigitalVTXProducts.jsx'
 import FirebaseAccesoriosProducts from './FirebaseAccesoriosProducts.jsx'
 import FirebaseLoadShoppingCart from './FirebaseLoadShoppingCart.jsx'
 import FirebaseSubscribe from './FirebaseSubscribe.jsx'
@@ -69,6 +70,17 @@ const getAllRadioControl = new Observable((subscriber) => {
 
 const getAllTrasmisorReceptor = new Observable((subscriber) => {
   const response = FirebaseTrasmisorReceptorProducts()
+  // console.log("firebaseResponse", response);
+  try {
+    subscriber.next(response)
+    // subscriber.complete();
+  } catch (err) {
+    subscriber.error(err)
+  }
+})
+
+const getAllDigitalVTX = new Observable((subscriber) => {
+  const response = FirebaseDigitalVTXProducts()
   // console.log("firebaseResponse", response);
   try {
     subscriber.next(response)
@@ -210,6 +222,7 @@ export {
   getAllRadioControl,
   getObservableRadioControl,
   getAllTrasmisorReceptor,
+  getAllDigitalVTX,
   getObservableTrasmisorReceptor,
   getAllShoppingCart,
   getShoppingCart,

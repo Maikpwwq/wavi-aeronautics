@@ -112,14 +112,17 @@ function Header (props) {
       case 'trasmisor-receptor':
         setValue(3)
         break
-      case 'accesorios':
+      case 'digital-vtx':
         setValue(4)
         break
-      case 'software':
+      case 'accesorios':
         setValue(5)
         break
-      case 'escuela':
+      case 'software':
         setValue(6)
+        break
+      case 'escuela':
+        setValue(7)
         break
     }
   }, [activeTab])
@@ -159,10 +162,12 @@ function Header (props) {
     } else if (newValue === 3) {
       navigate.push('trasmisor-receptor', { replace: true })
     } else if (newValue === 4) {
-      navigate.push('accesorios', { replace: true })
+      navigate.push('digital-vtx', { replace: true })
     } else if (newValue === 5) {
-      navigate.push('software', { replace: true })
+      navigate.push('accesorios', { replace: true })
     } else if (newValue === 6) {
+      navigate.push('software', { replace: true })
+    } else if (newValue === 7) {
       navigate.push('escuela', { replace: true })
     }
   }
@@ -343,29 +348,38 @@ function Header (props) {
             />
             <Tab
               textColor="inherit"
-              label="Accesorios"
+              label="Digital VTX"
               value={4}
               component="a"
-              href="/tienda/accesorios/"
+              href="/tienda/digital-vtx/"
               onClick={() => setValue(4)}
               style={classes.blueLink}
             />
             <Tab
               textColor="inherit"
-              label="Software"
+              label="Accesorios"
               value={5}
               component="a"
-              href="/tienda/software/"
+              href="/tienda/accesorios/"
               onClick={() => setValue(5)}
               style={classes.blueLink}
             />
             <Tab
               textColor="inherit"
-              label="Escuela"
+              label="Software"
               value={6}
               component="a"
-              href="/tienda/escuela/"
+              href="/tienda/software/"
               onClick={() => setValue(6)}
+              style={classes.blueLink}
+            />
+            <Tab
+              textColor="inherit"
+              label="Escuela"
+              value={7}
+              component="a"
+              href="/tienda/escuela/"
+              onClick={() => setValue(7)}
               style={classes.blueLink}
             />
           </Tabs>
