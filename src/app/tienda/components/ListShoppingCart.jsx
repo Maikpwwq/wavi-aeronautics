@@ -125,7 +125,7 @@ const ListShoppingCart = (props) => {
     console.log('productsCart', productsCart)
     sessionStorage.setItem('cartUpdated', 'detalles-envio')
     updateShowCart(false)
-    navigate.push('tienda/detalles-envio', {
+    navigate.push('detalles-envio', {
       // state: { productsCart: productsCart },
     })
   }
@@ -134,7 +134,7 @@ const ListShoppingCart = (props) => {
     e.preventDefault()
     sessionStorage.setItem('cartUpdated', 'ver-carrito')
     updateShowCart(false)
-    navigate.push('tienda/ver-carrito', {
+    navigate.push('ver-carrito', {
       // state: {
       //   makeVisible: shoppingCart.show,
       //   makeUpdated: updated,
