@@ -44,11 +44,12 @@ const initialState = () => {
   const subscription$ = getAllDroneProduct
   subscription$.subscribe((response) => {
     if (response) {
-      const { storeProducts, storeProductsRC } = response
-      if (storeProducts && storeProductsRC) {
+      const { storeProductsKits, storeProductsRC, storeProductsHD } = response
+      if (storeProductsKits && storeProductsRC && storeProductsHD) {
         // console.log('subscription drone products', storeProducts, storeProductsRC)
-        shop.drones = storeProducts
+        shop.dronesKit = storeProductsKits
         shop.dronesRC = storeProductsRC
+        shop.dronesHD =storeProductsHD
       }
     }
   })

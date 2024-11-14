@@ -12,6 +12,7 @@ const FirebaseSearchProductById = (searchId, category, marca) => {
   const productsDoc = doc(productsRef, 'dron')
   const KitRef = collection(productsDoc, 'kit_fpv_dron')
   const KitRefRC = collection(productsDoc, 'RC')
+  const GEPRCFPVHD = collection(productsDoc, 'geprc')
   const productsGooglesDoc = doc(productsRef, 'Googles')
   const productsRCDoc = doc(productsRef, 'radio_control')
   const productsDigitalVTX = doc(productsRef, 'digital_vtx')
@@ -87,6 +88,7 @@ const FirebaseSearchProductById = (searchId, category, marca) => {
   // se usa cada colleccion para construir una query que filtre drones
   const queryRef = query(KitRef, where('productID', '==', searchIde))
   const queryRefRC = query(KitRefRC, where('productID', '==', searchIde))
+  const queryGEPRCFPVHD = query(GEPRCFPVHD, where('productID', '==', searchIde))
   // query Digitla VTX
   const queryVTXDJI = query(
     VTXDJI,
@@ -270,15 +272,22 @@ const FirebaseSearchProductById = (searchId, category, marca) => {
     const productos = []
     if (
       categoryIde === 'tienda' ||
-      categoryIde === 'drones' ||
-      categoryIde === 'dronesRC'
+      categoryIde === 'dronesKits' ||
+      categoryIde === 'dronesRC' ||
+      categoryIde === 'FPV HD' ||
+      categoryIde === 'FPV analógico' ||
+      categoryIde === 'Sin VTX'
     ) {
       const searchDrone = await getDocs(queryRef)
       const searchRC = await getDocs(queryRefRC)
+      const searchGEPRCHD = await getDocs(queryGEPRCFPVHD)
       searchDrone.forEach((DOC) => {
         productos.push(DOC.data())
       })
       searchRC.forEach((DOC) => {
+        productos.push(DOC.data())
+      })
+      searchGEPRCHD.forEach((DOC) => {
         productos.push(DOC.data())
       })
     } else if (

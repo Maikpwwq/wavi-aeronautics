@@ -100,29 +100,35 @@ function Header (props) {
   useEffect(() => {
     console.log('pathname', activeTab)
     switch (activeTab) {
-      case 'drones':
+      case 'Kits drones':
         setValue(0)
         break
-      case 'googles':
+      case 'drones HD':
         setValue(1)
         break
-      case 'radio-control':
+      case 'drones RC':
         setValue(2)
         break
-      case 'trasmisor-receptor':
+      case 'googles':
         setValue(3)
         break
-      case 'digital-vtx':
+      case 'radio-control':
         setValue(4)
         break
-      case 'accesorios':
+      case 'trasmisor-receptor':
         setValue(5)
         break
-      case 'software':
+      case 'digital-vtx':
         setValue(6)
         break
-      case 'escuela':
+      case 'accesorios':
         setValue(7)
+        break
+      case 'software':
+        setValue(8)
+        break
+      case 'escuela':
+        setValue(9)
         break
     }
   }, [activeTab])
@@ -154,20 +160,24 @@ function Header (props) {
     setValue(newValue)
     // in SSR navigate is not well supported
     if (newValue === 0) {
-      navigate.push('drones', { replace: true })
+      navigate.push('kit-drones', { replace: true })
     } else if (newValue === 1) {
-      navigate.push('googles', { replace: true })
+      navigate.push('drones-fpv-hd', { replace: true })
     } else if (newValue === 2) {
-      navigate.push('radio-control', { replace: true })
+      navigate.push('drones', { replace: true })
     } else if (newValue === 3) {
-      navigate.push('trasmisor-receptor', { replace: true })
+      navigate.push('googles', { replace: true })
     } else if (newValue === 4) {
-      navigate.push('digital-vtx', { replace: true })
+      navigate.push('radio-control', { replace: true })
     } else if (newValue === 5) {
-      navigate.push('accesorios', { replace: true })
+      navigate.push('trasmisor-receptor', { replace: true })
     } else if (newValue === 6) {
-      navigate.push('software', { replace: true })
+      navigate.push('digital-vtx', { replace: true })
     } else if (newValue === 7) {
+      navigate.push('accesorios', { replace: true })
+    } else if (newValue === 8) {
+      navigate.push('software', { replace: true })
+    } else if (newValue === 9) {
       navigate.push('escuela', { replace: true })
     }
   }
@@ -312,74 +322,92 @@ function Header (props) {
           >
             <Tab
               textColor="inherit"
-              label="Drones"
+              label="Kit's Drones"
               value={0}
               component="a"
-              href="/tienda/drones/"
+              href="/tienda/kit-drones/"
               onClick={() => setValue(0)}
               style={classes.blueLink}
             ></Tab>
             <Tab
               textColor="inherit"
-              label="Googles"
+              label="Drones HD"
               value={1}
               component="a"
-              href="/tienda/googles/"
+              href="/tienda/drones-fpv-hd/"
               onClick={() => setValue(1)}
               style={classes.blueLink}
-            />
+            ></Tab>
             <Tab
               textColor="inherit"
-              label="Radio Control"
+              label="Drones RC"
               value={2}
               component="a"
-              href="/tienda/radio-control/"
+              href="/tienda/drones/"
               onClick={() => setValue(2)}
               style={classes.blueLink}
-            />
+            ></Tab>
             <Tab
               textColor="inherit"
-              label="Transmisión/Recepción"
+              label="Googles"
               value={3}
               component="a"
-              href="/tienda/trasmisor-receptor/"
+              href="/tienda/googles/"
               onClick={() => setValue(3)}
               style={classes.blueLink}
             />
             <Tab
               textColor="inherit"
-              label="Digital VTX"
+              label="Radio Control"
               value={4}
               component="a"
-              href="/tienda/digital-vtx/"
+              href="/tienda/radio-control/"
               onClick={() => setValue(4)}
               style={classes.blueLink}
             />
             <Tab
               textColor="inherit"
-              label="Accesorios"
+              label="Transmisión/Recepción"
               value={5}
               component="a"
-              href="/tienda/accesorios/"
+              href="/tienda/trasmisor-receptor/"
               onClick={() => setValue(5)}
               style={classes.blueLink}
             />
             <Tab
               textColor="inherit"
-              label="Software"
+              label="Digital VTX"
               value={6}
               component="a"
-              href="/tienda/software/"
+              href="/tienda/digital-vtx/"
               onClick={() => setValue(6)}
               style={classes.blueLink}
             />
             <Tab
               textColor="inherit"
-              label="Escuela"
+              label="Accesorios"
               value={7}
               component="a"
-              href="/tienda/escuela/"
+              href="/tienda/accesorios/"
               onClick={() => setValue(7)}
+              style={classes.blueLink}
+            />
+            <Tab
+              textColor="inherit"
+              label="Software"
+              value={8}
+              component="a"
+              href="/tienda/software/"
+              onClick={() => setValue(8)}
+              style={classes.blueLink}
+            />
+            <Tab
+              textColor="inherit"
+              label="Escuela"
+              value={9}
+              component="a"
+              href="/tienda/escuela/"
+              onClick={() => setValue(9)}
               style={classes.blueLink}
             />
           </Tabs>

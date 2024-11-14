@@ -3,66 +3,83 @@ import { firestore } from '@/firebase/firebaseClient'
 import { collection, doc, getDocs } from 'firebase/firestore'
 
 function FirebaseDroneProducts (props) {
-  let productosDrones = null
+  let productosDronesKits = null
   let productosDronesRC = null
+  let productosDronesHD = null
   if (typeof window !== 'undefined') {
     // Perform localStorage action
-    productosDrones = sessionStorage.getItem('Productos_Drones') || null
+    productosDronesKits = sessionStorage.getItem('Productos_Drones_Kits') || null
     productosDronesRC = sessionStorage.getItem('Productos_DronesRC') || null
+    productosDronesHD = sessionStorage.getItem('Productos_DronesHD') || null
   }
   const _firestore = firestore
   // const productsRef = collection(_firestore, "productos/dron/kit_fpv_dron")
   const productsRef = collection(_firestore, 'productos')
   const productsDoc = doc(productsRef, 'dron')
-  const productsCollection = collection(productsDoc, 'kit_fpv_dron')
+  const productsCollectionKits = collection(productsDoc, 'kit_fpv_dron')
   const productsCollectionRC = collection(productsDoc, 'RC')
+  const productsColGEPRC = collection(productsDoc, 'geprc')
+  // const productsColIFLIGHT = collection(productsDoc, 'iflight')
+  // const productsColFLYWOO = collection(productsDoc, 'flywoo')
+  // const productsColEMAXUSA = collection(productsDoc, 'emaxusa')
+  // const productsColEACHINE = collection(productsDoc, 'eachine')
+  // const productsColBETAFPV = collection(productsDoc, 'betafpv')
 
   // const [storeProducts, setStoreProducts] = useState([]);
   // const [storeProductsRC, setStoreProductsRC] = useState([]);
 
-  let storeProducts = []
+  let storeProductsKits = []
   let storeProductsRC = []
+  let storeProductsHD = []
 
   // Lectura del catalogo de productos desde firestore
   const productsFromFirestore = async () => {
-    const productData = await getDocs(productsCollection)
+    const productDataKits = await getDocs(productsCollectionKits)
     const productDataRC = await getDocs(productsCollectionRC)
-    const productos = []
+    const productDronesGeprc = await getDocs(productsColGEPRC)
+    const productosKits = []
     const productosRC = []
-    productData.forEach((DOC) => {
-      productos.push(DOC.data())
+    const productosHD = []
+    productDataKits.forEach((DOC) => {
+      productosKits.push(DOC.data())
     })
     productDataRC.forEach((DOC) => {
       productosRC.push(DOC.data())
     })
-    return [productos, productosRC]
+    productDronesGeprc.forEach((DOC) => {
+      productosHD.push(DOC.data())
+    })
+    return [productosKits, productosRC, productosHD]
   }
 
   const productosToSessionStore = () => {
     let productData
-    let productos = []
+    let productosKits = []
     let productosRC = []
-    if (!productosDrones || !productosDronesRC) {
+    let productosHD = []
+    if (!productosDronesKits || !productosDronesRC || !productosDronesHD) {
       // console.log(productosDrones, productosDronesRC);
       productData = productsFromFirestore()
       productData.then((response) => {
         // console.log(response[0], response[1]);
-        productos = response[0]
+        productosKits = response[0]
         productosRC = response[1]
-        parsePrices(productos, productosRC)
+        productosHD = response[2]
+        parsePrices(productosKits, productosRC, productosHD)
       })
     } else {
-      productos = JSON.parse(productosDrones)
+      productosKits = JSON.parse(productosDronesKits)
       productosRC = JSON.parse(productosDronesRC)
-      parsePrices(productos, productosRC)
+      productosHD = JSON.parse(productosDronesHD)
+      parsePrices(productosKits, productosRC, productosHD)
     }
   }
 
-  const parsePrices = (productos, productosRC) => {
+  const parsePrices = (productosKits, productosRC, productosHD) => {
     // console.log(productos, productosRC);
-    if (productos && productos.length > 0 && typeof window !== 'undefined') {
-      sessionStorage.setItem('Productos_Drones', JSON.stringify(productos))
-      productos.map((product, index, array) => {
+    if (productosKits && productosKits.length > 0 && typeof window !== 'undefined') {
+      sessionStorage.setItem('Productos_Drones_Kits', JSON.stringify(productosKits))
+      productosKits.map((product, index, array) => {
         // console.log(product.precio);
         if (
           typeof parseInt(product.precio) === 'number' &&
@@ -78,7 +95,7 @@ function FirebaseDroneProducts (props) {
           )
         }
       })
-      storeProducts = productos
+      storeProductsKits = productosKits
     }
     if (
       productosRC &&
@@ -103,11 +120,35 @@ function FirebaseDroneProducts (props) {
       })
       storeProductsRC = productosRC
     }
+    // Productos_DronesHD
+    if (
+      productosHD &&
+      productosHD.length > 0 &&
+      typeof window !== 'undefined'
+    ) {
+      sessionStorage.setItem('Productos_DronesHD', JSON.stringify(productosHD))
+      productosHD.map((product, index, array) => {
+        if (
+          typeof parseInt(product.precio) === 'number' &&
+          product.precio !== 'Agotado'
+        ) {
+          const dolarPrice = 4250 // 02-05-2023
+          const trasportBase = 30 // USD
+          const factorImportation = 1.5
+          const dolarToCop = (parseInt(product.precio) + trasportBase) * factorImportation * dolarPrice
+          array[index].precio = dolarToCop.toLocaleString(
+            'es-CO',
+            { style: 'currency', currency: 'COP' }
+          )
+        }
+      })
+      storeProductsHD = productosHD
+    }
   }
 
   productosToSessionStore()
-  if (storeProducts.length > 0 && storeProductsRC.length > 0) {
-    const response = { storeProducts, storeProductsRC }
+  if (storeProductsKits.length > 0 && storeProductsRC.length > 0 && storeProductsHD.length > 0) {
+    const response = { storeProductsKits, storeProductsRC, storeProductsHD }
     return response
   }
 }

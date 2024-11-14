@@ -46,7 +46,7 @@ const styles = (theme) => ({
 
 const DroneProducts = (props) => {
   const shopState = useSelector((store) => store?.shop);
-  const { dronesRC } = shopState;
+  const { dronesKit } = shopState;
 
   const theme = useTheme();
   const classes = styles(theme);
@@ -57,30 +57,21 @@ const DroneProducts = (props) => {
   // const state = useSelector((state))
   // const { store } = useContext(ReactReduxContext);
 
-  const [storeProductsRC] = useState(dronesRC); // setStoreProductsRC
+  const [storeProductsKits] = useState(dronesKit); // setStoreProducts
 
-  // console.log('DroneProducts', drones, dronesRC)
+  // console.log('DroneKitss', drones)
 
   return (
     <>
       <Box sx={classes.productShowcase}>
         <FiltroProducto />
         <Box sx={classes.presentationProducts}>
+          <Typography variant="h5" sx={classes.spacingTexts}>
+            Kits de Dron FPV:
+          </Typography>
           <>
-            <Typography variant="h5" sx={classes.spacingTexts}>
-              Drones a control remoto BNF/PNP/RTF.{" "}
-            </Typography>
-            <Typography variant="body1">
-              Bind aNd Fly: Esta versión es la que viene con todo menos con el
-              transmisor y el radio control.
-            </Typography>
-            <Typography variant="body1">
-              Plug aNd Play: Esta es la versión incluye todo menos el
-              transmisor, el radio control, el receptor, batería y cargador.
-            </Typography>
             <Typography variant="body1" sx={classes.endingTexts}>
-              Ready To Fly: Esta es la versión completa, puede funcionar desde
-              el momento que lo recibes.
+              Descubre los mejores kits de Dron FPV listos para vuelo.
             </Typography>
             <Suspense
               fallback={
@@ -89,14 +80,18 @@ const DroneProducts = (props) => {
                 </Box>
               }
             >
-              <Grid container spacing={2}>
-                {storeProductsRC.length > 1 &&
-                  storeProductsRC.map((product, k) => {
+              <Grid
+                container
+                spacing={2}
+                sx={{ justifyContent: "space-around" }}
+              >
+                {storeProductsKits.length > 1 &&
+                  storeProductsKits.map((product, k) => {
                     return (
                       <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
                         <ProductCard
-                          className="d-flex mb-2"
-                          category="dronesRC"
+                          sx="d-flex mb-2"
+                          category="drones"
                           products={product}
                           productID={k}
                         ></ProductCard>
@@ -105,6 +100,8 @@ const DroneProducts = (props) => {
                   })}
               </Grid>
             </Suspense>
+            <br />
+            <br />            
           </>
         </Box>
       </Box>
@@ -115,7 +112,7 @@ const DroneProducts = (props) => {
 const mapStateToProps = (state) => {
   // console.log("state", state);
   return {
-    storeProductsRC: state.dronesRC,
+    storeProductsKits: state.dronesKit,
   };
 };
 

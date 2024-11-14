@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 export const initialShop = {
-  drones: [{}],
+  dronesKit: [{}],
+  dronesHD: [{}],
   dronesRC: [{}],
   baterias: [{}],
   googles: [{}],
