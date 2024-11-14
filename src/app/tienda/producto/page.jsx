@@ -11,7 +11,7 @@ function PostPage () {
             <CircularProgress />
           </Box>
         }
-      >       
+      >
       <ProductDetail />
     </Suspense>
   )
