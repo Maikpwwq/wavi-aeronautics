@@ -149,7 +149,7 @@ const DroneProducts = (props) => {
 const mapStateToProps = (state) => {
   // console.log("state", state);
   return {
-    storeProductsHD: state.dronesHD,
+    storeProductsHD: state.dronesHD
     // storeProductsRC: state.dronesRC
   }
 }
