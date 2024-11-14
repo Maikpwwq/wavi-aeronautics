@@ -24,6 +24,11 @@ const initialState = () => {
   //   }
   // });
 
+  const dolarPrice = process.env.NEXT_PUBLIC_DOLARTOCOP
+  if (dolarPrice > 0 ) {
+    shop.dolarPrice = parseInt(dolarPrice)
+  }
+
   const productData = sharingInformationService.getSubject()
   productData.subscribe((data) => {
     if (data) {

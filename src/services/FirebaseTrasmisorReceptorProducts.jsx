@@ -162,7 +162,7 @@ function FirebaseTrasmisorReceptorProducts (props) {
           typeof parseInt(product.precio) === 'number' &&
           product.precio !== 'Agotado'
         ) {
-          const dolarPrice = 4250 // 02-05-2023
+          const dolarPrice = parseInt(process.env.NEXT_PUBLIC_DOLARTOCOP)
           const trasportBase = 30 // USD
           const factorImportation = 1.5
           const dolarToCop = (parseInt(product.precio) + trasportBase) * factorImportation * dolarPrice

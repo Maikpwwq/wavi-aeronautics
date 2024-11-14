@@ -10,7 +10,8 @@ export const initialShop = {
   accesorios: [{}],
   receptors: [{}],
   transmisors: [{}],
-  digitalVTX: [{}]
+  digitalVTX: [{}],
+  dolarPrice: 0
 }
 
 // Slice
