@@ -49,7 +49,7 @@ const initialState = () => {
         // console.log('subscription drone products', storeProducts, storeProductsRC)
         shop.dronesKit = storeProductsKits
         shop.dronesRC = storeProductsRC
-        shop.dronesHD =storeProductsHD
+        shop.dronesHD = storeProductsHD
       }
     }
   })

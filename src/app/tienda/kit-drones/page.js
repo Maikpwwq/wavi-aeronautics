@@ -1,22 +1,22 @@
-"use client";
-import React, { Suspense, useState } from "react";
-import { connect, useSelector } from "react-redux";
-import { useTheme } from "@mui/material/styles";
-import withRoot from "@/modules/withRoot";
+"use client"
+import React, { Suspense, useState } from "react"
+import { connect, useSelector } from "react-redux"
+import { useTheme } from "@mui/material/styles"
+import withRoot from "@/modules/withRoot"
 // import theme from '../innerTheme'
 
-// import "sessionstorage-polyfill";
-// import "localstorage-polyfill";
-// global.sessionstorage;
-// global.localStorage;
+// import "sessionstorage-polyfill"
+// import "localstorage-polyfill"
+// global.sessionstorage
+// global.localStorage
 
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Typography from "@/modules/components/Typography";
+import Box from "@mui/material/Box"
+import Grid from "@mui/material/Grid"
+import Typography from "@/modules/components/Typography"
 
-import ProductCard from "@/app/tienda/components/ProductCard";
-import CircularProgress from "@mui/material/CircularProgress";
-import FiltroProducto from "@/app/tienda/components/FiltroProducto";
+import ProductCard from "@/app/tienda/components/ProductCard"
+import CircularProgress from "@mui/material/CircularProgress"
+import FiltroProducto from "@/app/tienda/components/FiltroProducto"
 
 const styles = (theme) => ({
   presentationProducts: {
@@ -42,22 +42,22 @@ const styles = (theme) => ({
       flexDirection: "column",
     },
   },
-});
+})
 
 const DroneProducts = (props) => {
-  const shopState = useSelector((store) => store?.shop);
-  const { dronesKit } = shopState;
+  const shopState = useSelector((store) => store?.shop)
+  const { dronesKit } = shopState
 
-  const theme = useTheme();
-  const classes = styles(theme);
-  // const user = auth.currentUser || {};
-  // const userID = user.uid || null;
+  const theme = useTheme()
+  const classes = styles(theme)
+  // const user = auth.currentUser || {}
+  // const userID = user.uid || null
 
-  // const dispatch = useDispatch();
+  // const dispatch = useDispatch()
   // const state = useSelector((state))
-  // const { store } = useContext(ReactReduxContext);
+  // const { store } = useContext(ReactReduxContext)
 
-  const [storeProductsKits] = useState(dronesKit); // setStoreProducts
+  const [storeProductsKits] = useState(dronesKit) // setStoreProducts
 
   // console.log('DroneKitss', drones)
 
@@ -96,24 +96,24 @@ const DroneProducts = (props) => {
                           productID={k}
                         ></ProductCard>
                       </Grid>
-                    );
+                    )
                   })}
               </Grid>
             </Suspense>
             <br />
-            <br />            
+            <br />
           </>
         </Box>
       </Box>
     </>
-  );
-};
+  )
+}
 
 const mapStateToProps = (state) => {
-  // console.log("state", state);
+  // console.log("state", state)
   return {
     storeProductsKits: state.dronesKit,
-  };
-};
+  }
+}
 
-export default connect(mapStateToProps, null)(withRoot(DroneProducts));
+export default connect(mapStateToProps, null)(withRoot(DroneProducts))
