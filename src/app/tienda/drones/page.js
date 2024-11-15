@@ -11,7 +11,7 @@ import withRoot from '@/modules/withRoot'
 // global.localStorage
 
 import Box from '@mui/material/Box'
-import Grid2 from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid2'
 import Typography from '@/modules/components/Typography'
 
 import ProductCard from '@/app/tienda/components/ProductCard'
@@ -89,21 +89,26 @@ const DroneProducts = (props) => {
                 </Box>
               }
             >
-              <Grid2 container spacing={2}>
+              <Grid 
+                container 
+                spacing={2}
+                // size={{ xs: 12, sm: 4, md: 4 }}
+                // sm={12} xs={12} md={5} lg={4} xl={3}
+                > 
                 {storeProductsRC.length > 1 &&
                   storeProductsRC.map((product, k) => {
                     return (
-                      <Grid2 item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
+                      <Grid item key={k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
                         <ProductCard
                           className='d-flex mb-2'
                           category='dronesRC'
                           products={product}
                           productID={k}
                         ></ProductCard>
-                      </Grid2>
+                      </Grid>
                     )
                   })}
-              </Grid2>
+              </Grid>
             </Suspense>
           </>
         </Box>

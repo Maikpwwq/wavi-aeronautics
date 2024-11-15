@@ -3,7 +3,7 @@ import Image from 'next/image'
 // import PropTypes from 'prop-types'
 import withRoot from '../withRoot'
 import theme from '../theme'
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/Grid2'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '../components/Typography'
@@ -119,7 +119,7 @@ function ProductMarcas (props) {
             {marcas.map((marca, i) => {
               // console.log(marca);
               return (
-                <Grid item xs={12} md={3} key={i}>
+                <Grid item size={{ xs: 12, md: 3 }} key={i}>
                   <Box
                     component="img"
                     src={marca}

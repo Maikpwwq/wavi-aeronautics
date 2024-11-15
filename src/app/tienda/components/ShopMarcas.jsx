@@ -2,7 +2,7 @@ import React from 'react'
 // import PropTypes from 'prop-types'
 import withRoot from '@/modules/withRoot'
 import theme from '../innerTheme'
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/Grid2'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@/modules/components/Typography'
@@ -114,10 +114,7 @@ function ShopMarcas (props) {
               return (
                 <Grid
                   item
-                  sm={3}
-                  xs={6}
-                  md={2}
-                  lg={2}
+                  size={{ xs: 6, sm: 3, md: 2, lg: 2, xl: 2 }}              
                   key={i}
                   sx={classes.logos}
                 >

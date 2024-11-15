@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { styled } from '@mui/material/styles'
 import withRoot from '../withRoot'
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/Grid2'
 import Container from '@mui/material/Container'
 import Typography from '../components/Typography'
 // import TextField from '../components/TextField'
@@ -99,7 +99,7 @@ function AppFooter (props) {
         }}
       >
         <Grid container spacing={5}>
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid item size={{ xs: 12, sm: 6, md: 4 }}>
             <Grid
               container
               direction="column"
@@ -139,7 +139,7 @@ function AppFooter (props) {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid item size={{ xs: 12, sm: 6, md: 4 }}>
             <Typography
               className="textWhite"
               sx={classes.link}

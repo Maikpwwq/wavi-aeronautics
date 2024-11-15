@@ -137,6 +137,7 @@ function FirebaseTrasmisorReceptorProducts (props) {
       })
     } else {
       receptors = JSON.parse(productosReceptor)
+      storeProductsReceptor = receptors
       // parsePrices(receptors, 'receptors')
     }
     if (!productosTransmisor) {
@@ -149,6 +150,7 @@ function FirebaseTrasmisorReceptorProducts (props) {
       })
     } else {
       transmisors = JSON.parse(productosTransmisor)
+      storeProductsTransmisor = transmisors
       // parsePrices(transmisors, 'transmisors')
     }
   }
@@ -188,6 +190,7 @@ function FirebaseTrasmisorReceptorProducts (props) {
 
   productosToSessionStore()
   if (storeProductsReceptor.length > 0 && storeProductsTransmisor.length > 0) {
+    console.log('productosToSessionStore', storeProductsTransmisor, storeProductsReceptor)
     return { storeProductsReceptor, storeProductsTransmisor }
   }
 }

@@ -9,7 +9,7 @@ import ProductCard from '@/app/tienda/components/ProductCard'
 // global.localStorage;
 
 import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/Grid2'
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@/modules/components/Typography'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
@@ -49,18 +49,20 @@ const TrasmisorReceptor = (props) => {
 
   const classes = styles(theme)
   const [storeProductsTransmisor] = useState(transmisors)
-  const [storeProductsReceptor] = useState(receptors)
+  const [storeProductsReceptor] = useState(receptors) 
+  console.log('TrasmisorReceptor', storeProductsTransmisor, storeProductsReceptor)
 
   return (
     <>
+    {/* {!!storeProductsTransmisor && storeProductsTransmisor.length > 0 && ()}
+    {!!storeProductsReceptor && storeProductsReceptor.length > 0 && ()} */}
     <Box sx={classes.productShowcase}>
         <FiltroProducto />
       <Box sx={classes.presentationProducts}>
         {/* Seccion de Transmisoras */}
         <Typography variant="h5" sx={classes.spacingTexts}>
           Transmisores para drone.
-        </Typography>
-        {!!storeProductsTransmisor && storeProductsTransmisor.length > 0 && (
+        </Typography>        
           <Suspense
             fallback={
               <Box sx={{ display: 'flex' }}>
@@ -72,11 +74,11 @@ const TrasmisorReceptor = (props) => {
               Transmisores para cada necesidad en potencia y distacia de vuelo.
             </Typography>
             <Grid container spacing={2}>
-              {storeProductsTransmisor.map((product, k) => {
+              {!!storeProductsTransmisor && storeProductsTransmisor.length > 0 && storeProductsTransmisor.map((product, k) => {
                 // console.log(product, k);
                 // productID
                 return (
-                  <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
+                  <Grid item key={k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
                     <ProductCard
                       category="transmisors"
                       className="d-flex mb-2"
@@ -88,12 +90,10 @@ const TrasmisorReceptor = (props) => {
               })}
             </Grid>
           </Suspense>
-        )}
         {/* Seccion de Receptoras */}
         <Typography variant="h5" sx={classes.spacingTexts}>
           Receptor para drone.
-        </Typography>
-        {!!storeProductsReceptor && storeProductsReceptor.length > 0 && (
+        </Typography>        
           <Suspense
             fallback={
               <Box sx={{ display: 'flex' }}>
@@ -105,11 +105,11 @@ const TrasmisorReceptor = (props) => {
               Receptor para cada necesidad en potencia y distacia de vuelo.
             </Typography>
             <Grid container spacing={2}>
-              {storeProductsReceptor.map((product, k) => {
+              {!!storeProductsReceptor && storeProductsReceptor.length > 0 && storeProductsReceptor.map((product, k) => {
                 // console.log(product, k);
                 // productID
                 return (
-                  <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
+                  <Grid item key={k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
                     <ProductCard
                       category="receptors"
                       className="d-flex mb-2"
@@ -120,8 +120,7 @@ const TrasmisorReceptor = (props) => {
                 )
               })}
             </Grid>
-          </Suspense>
-        )}
+          </Suspense>        
       </Box>
       </Box>
     </>
@@ -129,7 +128,7 @@ const TrasmisorReceptor = (props) => {
 }
 
 const mapStateToProps = (state) => {
-  return {
+  return { 
     storeProductsReceptor: state.receptors,
     storeProductsTransmisor: state.transmisors
   }

@@ -11,7 +11,7 @@ import withRoot from '@/modules/withRoot'
 // global.localStorage
 
 import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/Grid2'
 import Typography from '@/modules/components/Typography'
 
 import ProductCard from '@/app/tienda/components/ProductCard'
@@ -88,7 +88,7 @@ const DroneProducts = (props) => {
                 {storeProductsKits.length > 1 &&
                   storeProductsKits.map((product, k) => {
                     return (
-                      <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
+                      <Grid item key={k}  size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
                         <ProductCard
                           sx='d-flex mb-2'
                           category='drones'

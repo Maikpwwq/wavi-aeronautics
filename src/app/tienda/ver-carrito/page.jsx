@@ -12,7 +12,7 @@ import CardMedia from '@mui/material/CardMedia'
 import CancelIcon from '@mui/icons-material/Cancel'
 import IconButton from '@mui/material/IconButton'
 import CircularProgress from '@mui/material/CircularProgress'
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/Grid2'
 import withRoot from '@/modules/withRoot'
 import theme from '../innerTheme'
 
@@ -70,11 +70,7 @@ function ShowCartPage () {
           <Grid container spacing={2}>
             <Grid
               item
-              sm={12}
-              xs={12}
-              md={6}
-              lg={8}
-              xl={10}
+              size={{ xs: 12, sm: 12, md: 6, lg: 8, xl: 10 }}
               sx={classes.cartList}
             >
               <Box className="">

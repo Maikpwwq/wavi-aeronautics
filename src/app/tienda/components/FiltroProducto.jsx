@@ -2,7 +2,7 @@
 import React from 'react'
 import { useTheme } from '@mui/material/styles'
 import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/Grid2'
 import Typography from '@/modules/components/Typography'
 import TextField from '@/modules/components/TextField'
 
@@ -101,7 +101,7 @@ const FiltroProducto = (props) => {
           <Typography variant="h5" align="center" sx={classes.spacingTexts}>
             Filtros
           </Typography>
-          <Grid item xs={6} sm={8} md={4}>
+          <Grid item size={{ xs: 6, sm: 8, md: 4 }}>
             <Typography variant="h6" marked="left" gutterBottom>
               Precio
             </Typography>
@@ -119,7 +119,7 @@ const FiltroProducto = (props) => {
               ))}
             </TextField>
           </Grid>{' '}
-          <Grid item xs={6} sm={8} md={4}>
+          <Grid item  size={{ xs: 6, sm: 8, md: 4 }}>
             <Typography variant="h6" marked="left" gutterBottom>
               Marca
             </Typography>

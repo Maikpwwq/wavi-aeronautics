@@ -17,7 +17,7 @@ import AppBar from '@mui/material/AppBar'
 // import HelpIcon from '@mui/icons-material/Help'
 // import MenuIcon from '@mui/icons-material/Menu'
 // import NotificationsIcon from '@mui/icons-material/Notifications'
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/Grid2'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import IconButton from '@mui/material/IconButton'
@@ -249,8 +249,9 @@ function Header (props) {
         elevation={0}
       >
         <Toolbar>
-          <Grid container alignItems="center" spacing={1}>
-            <Grid item xs>
+          {/* sx={{width: 100}} */}
+          <Grid container alignItems="center" spacing={1} sx={{width: '100%'}}>
+            <Grid item size={{ xs: 12, sm: 8, md: 9, lg: 9, xl: 10 }} xs>
               <Typography color="inherit" variant="h5" component="h1">
                 Tienda
               </Typography>
@@ -273,11 +274,11 @@ function Header (props) {
                 Favoritos
               </Link>
             </Grid> */}
-            <Grid item>
+            <Grid item size={{ xs: 3, sm: 3, md: 2, lg: 2, xl: 1 }} >
               {shoppingCart.items} Productos.
               <br />$ {shoppingCart.suma} COP
             </Grid>
-            <Grid item>
+            <Grid item size={{ xs: 3, sm: 1, md: 1, lg: 1, xl: 1 }}>
               <Tooltip title="Carrito">
                 <IconButton
                   color="inherit"

@@ -90,6 +90,7 @@ const initialState = () => {
     if (response) {
       const { storeProductsReceptor, storeProductsTransmisor } = response
       if (storeProductsReceptor && storeProductsTransmisor) {
+        console.log('subscription5', storeProductsReceptor, storeProductsTransmisor)
         shop.receptors = storeProductsReceptor
         shop.transmisors = storeProductsTransmisor
       }

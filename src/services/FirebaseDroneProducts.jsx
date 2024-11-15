@@ -132,8 +132,7 @@ function FirebaseDroneProducts (props) {
           typeof parseInt(product.precio) === 'number' &&
           product.precio !== 'Agotado'
         ) {
-          const dolarPrice = process.env.NEXT_PUBLIC_DOLARTOCOP
-          console.log('dollar', dolarPrice, parseInt(dolarPrice))
+          const dolarPrice = parseInt(process.env.NEXT_PUBLIC_DOLARTOCOP)
           const trasportBase = 30 // USD
           const factorImportation = 1.5
           const dolarToCop = (parseInt(product.precio) + trasportBase) * factorImportation * dolarPrice

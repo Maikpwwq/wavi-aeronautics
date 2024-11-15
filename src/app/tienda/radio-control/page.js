@@ -8,7 +8,7 @@ import { useSelector, connect } from 'react-redux'
 
 import ProductCard from '@/app/tienda/components/ProductCard'
 import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/Grid2'
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@/modules/components/Typography'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
@@ -57,7 +57,7 @@ export const RadioContol = (props) => {
         <Typography variant="h5" sx={classes.spacingTexts}>
           Dispositivos de Control Remoto.
         </Typography>
-        {!!storeProductsRC && storeProductsRC.length > 0 && (
+         {/* {!!storeProductsRC && storeProductsRC.length > 0 && ()} */}
           <Suspense
               fallback={
                 <Box sx={{ display: 'flex' }}>
@@ -69,11 +69,11 @@ export const RadioContol = (props) => {
                 Controles remotos para volar Drones de RadioContol.
               </Typography>
               <Grid container spacing={2}>
-                {storeProductsRC.map((product, k) => {
+                {storeProductsRC.length > 0 && storeProductsRC.map((product, k) => {
                   // console.log(product, k);
                   // productID
                   return (
-                    <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
+                    <Grid item key={k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
                       <ProductCard
                         category="radioControl"
                         className="d-flex mb-2"
@@ -85,7 +85,6 @@ export const RadioContol = (props) => {
                 })}
               </Grid>
           </Suspense>
-        )}
       </Box>
       </Box>
     </>

@@ -16,7 +16,7 @@ import { sharingInformationService } from '@/services/sharing-information'
 
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/Grid2'
 import withRoot from '@/modules/withRoot'
 import theme from '../innerTheme'
 
@@ -74,7 +74,7 @@ const ShoppingCart = (props) => {
 
   return (
     <>
-      {cart === []
+      { typeof(cart) === 'object'
         ? (<Box sx={{ display: 'flex' }}>
           <CircularProgress />
         </Box>)
@@ -93,11 +93,7 @@ const ShoppingCart = (props) => {
           <Grid
             item
             // key={k}
-            sm={12}
-            xs={12}
-            md={5}
-            lg={4}
-            xl={3}
+            size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}
             sx={classes.cartList}
           >
             <ListShoppingCart

@@ -6,7 +6,7 @@ import {
 // import PropTypes from 'prop-types'
 import withRoot from '@/modules/withRoot'
 import theme from '../innerTheme'
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/Grid2'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -114,11 +114,7 @@ function ProductosDestacados (props) {
                     <Grid
                       item
                       key={k}
-                      sm={12}
-                      xs={12}
-                      md={5}
-                      lg={4}
-                      xl={3}
+                      size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}
                       sx={classes.logos}>
                       <ProductItem
                         sx="d-flex mb-2"

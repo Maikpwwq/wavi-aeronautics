@@ -8,7 +8,7 @@ import theme from '@/modules/theme'
 import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/Grid2'
 import Typography from '../components/Typography'
 import TextField from '../components/TextField'
 import Snackbar from '../components/Snackbar'
@@ -104,7 +104,7 @@ function ProductCTA (props) {
   return (
     <Container sx={classes.root} component="section">
       <Grid container>
-        <Grid item xs={12} md={6} sx={classes.cardWrapper}>
+        <Grid item sx={classes.cardWrapper} size={{ xs: 12, md: 6 }}>
           <Box sx={classes.card}>
             {/* onSubmit={handleSubmit} */}
             <Form sx={classes.cardContent}>
@@ -133,7 +133,7 @@ function ProductCTA (props) {
             </Form>
           </Box>
         </Grid>
-        <Grid item xs={12} md={6} sx={classes.imagesWrapper}>
+        <Grid item sx={classes.imagesWrapper} size={{ xs: 12, md: 6 }}>
           <Box sx={{ display: { xs: 'none', md: 'block' } }}>
             <Box sx={classes.imageDots} />
             <Image

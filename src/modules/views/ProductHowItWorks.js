@@ -5,7 +5,7 @@ import Image from 'next/image'
 import withRoot from '../withRoot'
 import theme from '../theme'
 import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/Grid2'
 import Container from '@mui/material/Container'
 import Button from '../components/Button'
 import Typography from '../components/Typography'
@@ -88,7 +88,7 @@ function ProductHowItWorks (props) {
         </Typography>
         <Box sx={classes.beneficios}>
           <Grid container spacing={5}>
-            <Grid item xs={12} md={4}>
+            <Grid item size={{ xs: 12, md: 4 }}>
               <Box sx={classes.item}>
                 <Box sx={classes.number}>1.</Box>
                 <Image
@@ -104,7 +104,7 @@ function ProductHowItWorks (props) {
                 </Typography>
               </Box>
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item size={{ xs: 12, md: 4 }}>
               <Box sx={classes.item}>
                 <Box sx={classes.number}>2.</Box>
                 <Image
@@ -122,7 +122,7 @@ function ProductHowItWorks (props) {
                 </Typography>
               </Box>
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item size={{ xs: 12, md: 4 }}>
               <Box sx={classes.item}>
                 <Box sx={classes.number}>3.</Box>
                 <Image

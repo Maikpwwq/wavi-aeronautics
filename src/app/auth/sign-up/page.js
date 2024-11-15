@@ -9,7 +9,7 @@ import SnackBarAlert from '@/app/components/SnackBarAlert'
 // import "localstorage-polyfill";
 // global.sessionstorage;
 // global.localStorage;
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/Grid2'
 import { Field, Form, FormSpy } from 'react-final-form'
 import Typography from '@/modules/components/Typography'
 import AppFooter from '@/modules/views/AppFooter'
@@ -180,7 +180,7 @@ const SignUpForm = () => {
             noValidate
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item size={{ xs: 12, sm: 6 }}>
                 <Field
                   autoFocus
                   component={RFTextField}
@@ -192,7 +192,7 @@ const SignUpForm = () => {
                   required
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item size={{ xs: 12, sm: 6 }}>
                 <Field
                   component={RFTextField}
                   autoComplete="lname"
