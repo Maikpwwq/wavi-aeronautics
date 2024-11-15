@@ -121,12 +121,12 @@ const routes = [
     label: 'Software',
     value: 8,
     href: '/tienda/software/'
-  },  
+  },
   {
     label: 'Escuela',
     value: 9,
     href: '/tienda/escuela/'
-  }           
+  }     
 ]
 
 function Header (props) {
@@ -385,7 +385,7 @@ function Header (props) {
                 onClick={() => setValue(value)}
                 style={classes.blueLink}
               ></Tab>
-            ))}            
+            ))}
           </Tabs>
           {/* </Grid>
           </Grid> */}

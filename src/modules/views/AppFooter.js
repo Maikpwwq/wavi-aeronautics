@@ -134,7 +134,7 @@ function AppFooter (props) {
                     priority
                   />
                 </SocialIcons>
-              </Grid>              
+              </Grid>
             </Grid>
           </Grid>
           <Grid item size={{ xs: 12, sm: 6, md: 4 }}>
