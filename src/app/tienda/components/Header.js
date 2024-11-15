@@ -250,7 +250,7 @@ function Header (props) {
       >
         <Toolbar>
           {/* sx={{width: 100}} */}
-          <Grid container alignItems="center" spacing={1} sx={{width: '100%'}}>
+          <Grid container alignItems="center" spacing={1} sx={{ width: '100%' }}>
             <Grid item size={{ xs: 12, sm: 8, md: 9, lg: 9, xl: 10 }} xs>
               <Typography color="inherit" variant="h5" component="h1">
                 Tienda

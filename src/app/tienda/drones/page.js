@@ -89,12 +89,12 @@ const DroneProducts = (props) => {
                 </Box>
               }
             >
-              <Grid 
-                container 
+              <Grid
+                container
                 spacing={2}
                 // size={{ xs: 12, sm: 4, md: 4 }}
                 // sm={12} xs={12} md={5} lg={4} xl={3}
-                > 
+                >
                 {storeProductsRC.length > 1 &&
                   storeProductsRC.map((product, k) => {
                     return (

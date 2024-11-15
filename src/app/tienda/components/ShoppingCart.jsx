@@ -74,7 +74,7 @@ const ShoppingCart = (props) => {
 
   return (
     <>
-      { typeof(cart) === 'object'
+      { typeof cart === 'object'
         ? (<Box sx={{ display: 'flex' }}>
           <CircularProgress />
         </Box>)

@@ -49,7 +49,7 @@ const TrasmisorReceptor = (props) => {
 
   const classes = styles(theme)
   const [storeProductsTransmisor] = useState(transmisors)
-  const [storeProductsReceptor] = useState(receptors) 
+  const [storeProductsReceptor] = useState(receptors)
   console.log('TrasmisorReceptor', storeProductsTransmisor, storeProductsReceptor)
 
   return (
@@ -62,7 +62,7 @@ const TrasmisorReceptor = (props) => {
         {/* Seccion de Transmisoras */}
         <Typography variant="h5" sx={classes.spacingTexts}>
           Transmisores para drone.
-        </Typography>        
+        </Typography>
           <Suspense
             fallback={
               <Box sx={{ display: 'flex' }}>
@@ -93,7 +93,7 @@ const TrasmisorReceptor = (props) => {
         {/* Seccion de Receptoras */}
         <Typography variant="h5" sx={classes.spacingTexts}>
           Receptor para drone.
-        </Typography>        
+        </Typography>
           <Suspense
             fallback={
               <Box sx={{ display: 'flex' }}>
@@ -120,7 +120,7 @@ const TrasmisorReceptor = (props) => {
                 )
               })}
             </Grid>
-          </Suspense>        
+          </Suspense>
       </Box>
       </Box>
     </>
@@ -128,7 +128,7 @@ const TrasmisorReceptor = (props) => {
 }
 
 const mapStateToProps = (state) => {
-  return { 
+  return {
     storeProductsReceptor: state.receptors,
     storeProductsTransmisor: state.transmisors
   }

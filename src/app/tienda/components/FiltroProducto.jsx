@@ -119,7 +119,7 @@ const FiltroProducto = (props) => {
               ))}
             </TextField>
           </Grid>{' '}
-          <Grid item  size={{ xs: 6, sm: 8, md: 4 }}>
+          <Grid item size={{ xs: 6, sm: 8, md: 4 }}>
             <Typography variant="h6" marked="left" gutterBottom>
               Marca
             </Typography>

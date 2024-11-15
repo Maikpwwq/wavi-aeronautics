@@ -73,7 +73,7 @@ export const DigitalVTX = (props) => {
                   // console.log(product, k);
                   // productID
                   return (
-                    <Grid item key={k}  size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
+                    <Grid item key={k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
                       <ProductCard
                         category="digitalVTX"
                         className="d-flex mb-2"
