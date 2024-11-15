@@ -103,8 +103,8 @@ function ProductCTA (props) {
 
   return (
     <Container sx={classes.root} component="section">
-      <Grid container>
-        <Grid item sx={classes.cardWrapper} size={{ xs: 12, md: 6 }}>
+      <Grid container sx={{ width: '100%' }}>
+        <Grid item sx={classes.cardWrapper} size={{ xs: 12, md: 6, lg: 5 }}>
           <Box sx={classes.card}>
             {/* onSubmit={handleSubmit} */}
             <Form sx={classes.cardContent}>
@@ -133,7 +133,7 @@ function ProductCTA (props) {
             </Form>
           </Box>
         </Grid>
-        <Grid item sx={classes.imagesWrapper} size={{ xs: 12, md: 6 }}>
+        <Grid item sx={classes.imagesWrapper} size={{ xs: 12, md: 6, lg: 7 }}>
           <Box sx={{ display: { xs: 'none', md: 'block' } }}>
             <Box sx={classes.imageDots} />
             <Image

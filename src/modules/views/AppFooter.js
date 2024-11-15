@@ -95,11 +95,12 @@ function AppFooter (props) {
         sx={{
           marginTop: 8,
           marginBottom: 8,
+          marginLeft: 8,
           display: 'flex'
         }}
       >
-        <Grid container spacing={5}>
-          <Grid item size={{ xs: 12, sm: 6, md: 4 }}>
+        <Grid container spacing={5} sx={{ alignItems: 'flex-end' }}>
+          <Grid item size={{ xs: 12, sm: 6, md: 6, lg: 8 }}>
             <Grid
               container
               direction="column"
@@ -133,10 +134,7 @@ function AppFooter (props) {
                     priority
                   />
                 </SocialIcons>
-              </Grid>
-              <Grid item>
-                <Copyright />
-              </Grid>
+              </Grid>              
             </Grid>
           </Grid>
           <Grid item size={{ xs: 12, sm: 6, md: 4 }}>
@@ -209,6 +207,9 @@ function AppFooter (props) {
               </Link>
             </Typography>
           </Grid> */}
+          <Grid item>
+                <Copyright />
+              </Grid>
         </Grid>
       </Container>
     </Typography>

@@ -274,6 +274,7 @@ const FirebaseSearchProductById = (searchId, category, marca) => {
       categoryIde === 'tienda' ||
       categoryIde === 'dronesKits' ||
       categoryIde === 'dronesRC' ||
+      categoryIde === 'dronesHD' ||
       categoryIde === 'FPV HD' ||
       categoryIde === 'FPV analógico' ||
       categoryIde === 'Sin VTX'

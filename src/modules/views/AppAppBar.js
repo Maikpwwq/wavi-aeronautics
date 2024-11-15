@@ -168,7 +168,7 @@ function AppAppBar (props) {
             color="inherit"
             variant="h6"
             underline="none"
-            href="/tienda/drones"
+            href="/tienda/kit-drones"
           >
             {'Tienda'} <ShoppingCartIcon fontSize="large" />
           </StyledNavLink>

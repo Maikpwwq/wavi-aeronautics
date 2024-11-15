@@ -76,6 +76,59 @@ const styles = (theme) => ({
   }
 })
 
+const routes = [
+  {
+    label: "Kit's Drones",
+    value: 0,
+    href: '/tienda/kit-drones/'
+  },
+  {
+    label: 'Drones HD',
+    value: 1,
+    href: '/tienda/drones-fpv-hd/'
+  },
+  {
+    label: 'Drones RC',
+    value: 2,
+    href: '/tienda/drones/'
+  },
+  {
+    label: 'Googles',
+    value: 3,
+    href: '/tienda/googles/'
+  },
+  {
+    label: 'Radio Control',
+    value: 4,
+    href: '/tienda/radio-control/'
+  },
+  {
+    label: 'Transmisión/Recepción',
+    value: 5,
+    href: '/tienda/trasmisor-receptor/'
+  },
+  {
+    label: 'Digital VTX',
+    value: 6,
+    href: '/tienda/digital-vtx/'
+  },
+  {
+    label: 'Accesorios',
+    value: 7,
+    href: '/tienda/accesorios/'
+  },
+  {
+    label: 'Software',
+    value: 8,
+    href: '/tienda/software/'
+  },  
+  {
+    label: 'Escuela',
+    value: 9,
+    href: '/tienda/escuela/'
+  }           
+]
+
 function Header (props) {
   // const { onDrawerToggle } = props
 
@@ -321,96 +374,18 @@ function Header (props) {
             textColor="inherit"
             sx={classes.productTabs}
           >
-            <Tab
-              textColor="inherit"
-              label="Kit's Drones"
-              value={0}
-              component="a"
-              href="/tienda/kit-drones/"
-              onClick={() => setValue(0)}
-              style={classes.blueLink}
-            ></Tab>
-            <Tab
-              textColor="inherit"
-              label="Drones HD"
-              value={1}
-              component="a"
-              href="/tienda/drones-fpv-hd/"
-              onClick={() => setValue(1)}
-              style={classes.blueLink}
-            ></Tab>
-            <Tab
-              textColor="inherit"
-              label="Drones RC"
-              value={2}
-              component="a"
-              href="/tienda/drones/"
-              onClick={() => setValue(2)}
-              style={classes.blueLink}
-            ></Tab>
-            <Tab
-              textColor="inherit"
-              label="Googles"
-              value={3}
-              component="a"
-              href="/tienda/googles/"
-              onClick={() => setValue(3)}
-              style={classes.blueLink}
-            />
-            <Tab
-              textColor="inherit"
-              label="Radio Control"
-              value={4}
-              component="a"
-              href="/tienda/radio-control/"
-              onClick={() => setValue(4)}
-              style={classes.blueLink}
-            />
-            <Tab
-              textColor="inherit"
-              label="Transmisión/Recepción"
-              value={5}
-              component="a"
-              href="/tienda/trasmisor-receptor/"
-              onClick={() => setValue(5)}
-              style={classes.blueLink}
-            />
-            <Tab
-              textColor="inherit"
-              label="Digital VTX"
-              value={6}
-              component="a"
-              href="/tienda/digital-vtx/"
-              onClick={() => setValue(6)}
-              style={classes.blueLink}
-            />
-            <Tab
-              textColor="inherit"
-              label="Accesorios"
-              value={7}
-              component="a"
-              href="/tienda/accesorios/"
-              onClick={() => setValue(7)}
-              style={classes.blueLink}
-            />
-            <Tab
-              textColor="inherit"
-              label="Software"
-              value={8}
-              component="a"
-              href="/tienda/software/"
-              onClick={() => setValue(8)}
-              style={classes.blueLink}
-            />
-            <Tab
-              textColor="inherit"
-              label="Escuela"
-              value={9}
-              component="a"
-              href="/tienda/escuela/"
-              onClick={() => setValue(9)}
-              style={classes.blueLink}
-            />
+            {routes.map(({ id, label, value, href }) => (
+              <Tab
+                key={id}
+                textColor="inherit"
+                label={label}
+                value={value}
+                component="a"
+                href={href}
+                onClick={() => setValue(value)}
+                style={classes.blueLink}
+              ></Tab>
+            ))}            
           </Tabs>
           {/* </Grid>
           </Grid> */}
