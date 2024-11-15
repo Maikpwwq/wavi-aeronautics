@@ -114,7 +114,7 @@ function ShopMarcas (props) {
               return (
                 <Grid
                   item
-                  size={{ xs: 6, sm: 3, md: 2, lg: 2, xl: 2 }}    
+                  size={{ xs: 6, sm: 3, md: 2, lg: 2, xl: 2 }}
                   key={i}
                   sx={classes.logos}
                 >
