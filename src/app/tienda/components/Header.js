@@ -126,7 +126,7 @@ const routes = [
     label: 'Escuela',
     value: 9,
     href: '/tienda/escuela/'
-  }     
+  }
 ]
 
 function Header (props) {
