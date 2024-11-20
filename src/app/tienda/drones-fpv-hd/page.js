@@ -70,76 +70,35 @@ const DroneProducts = (props) => {
           <Typography variant="h5" sx={classes.spacingTexts}>
             Drones FPV digital HD:
           </Typography>
-          <>
-                <Typography variant="body1" sx={classes.endingTexts}>
-                  Descubre los mejores Drones FPV con transmisión digital de video en HD y preparate para filmar.
-                </Typography>
-                <Suspense
-                fallback={
-                  <Box sx={{ display: 'flex' }}>
-                    <CircularProgress />
-                  </Box>
-                }
-              >
-                <Grid
-                  container
-                  spacing={2}
-                  sx={{ justifyContent: 'space-around' }}
-                >
-                  {storeProductsHD.length > 1 && storeProductsHD.map((product, k) => {
-                    return (
-                      <Grid item key={k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
-                        <ProductCard
-                          sx="d-flex mb-2"
-                          category="dronesHD"
-                          products={product}
-                          productID={k}
-                        ></ProductCard>
-                      </Grid>
-                    )
-                  })}
-                </Grid>
-                </Suspense>
-                <br />
-                <br />
-                {/* <Typography variant="h5" sx={classes.spacingTexts}>
-                  Drones a control remoto BNF/PNP/RTF.{' '}
-                </Typography>
-                <Typography variant="body1">
-                  Bind aNd Fly: Esta versión es la que viene con todo menos con
-                  el transmisor y el radio control.
-                </Typography>
-                <Typography variant="body1">
-                  Plug aNd Play: Esta es la versión incluye todo menos el
-                  transmisor, el radio control, el receptor, batería y cargador.
-                </Typography>
-                <Typography variant="body1" sx={classes.endingTexts}>
-                  Ready To Fly: Esta es la versión completa, puede funcionar
-                  desde el momento que lo recibes.
-                </Typography>
-                <Suspense
-                fallback={
-                  <Box sx={{ display: 'flex' }}>
-                    <CircularProgress />
-                  </Box>
-                }
-              >
-                <Grid container spacing={2}>
-                  {storeProductsRC.length > 1 && storeProductsRC.map((product, k) => {
-                    return (
-                      <Grid item key={k} sm={12} xs={12} md={5} lg={4} xl={3}>
-                        <ProductCard
-                          className="d-flex mb-2"
-                          category="dronesRC"
-                          products={product}
-                          productID={k}
-                        ></ProductCard>
-                      </Grid>
-                    )
-                  })}
-                </Grid>
-              </Suspense> */}
-          </>
+          <Typography variant="body1" sx={classes.endingTexts}>
+            Descubre los mejores Drones FPV con transmisión digital de video en HD y preparate para filmar.
+          </Typography>
+          <Suspense
+            fallback={
+              <Box sx={{ display: 'flex' }}>
+                <CircularProgress />
+              </Box>
+            }
+          >
+            <Grid
+              container
+              spacing={2}
+              sx={{ justifyContent: 'space-around' }}
+            >
+              {storeProductsHD.length > 1 && storeProductsHD.map((product, k) => {
+                return (
+                  <Grid item key={k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
+                    <ProductCard
+                      sx="d-flex mb-2"
+                      category="dronesHD"
+                      products={product}
+                      productID={k}
+                    ></ProductCard>
+                  </Grid>
+                )
+              })}
+            </Grid>
+          </Suspense>
         </Box>
       </Box>
     </>
@@ -150,7 +109,6 @@ const mapStateToProps = (state) => {
   // console.log("state", state);
   return {
     storeProductsHD: state.dronesHD
-    // storeProductsRC: state.dronesRC
   }
 }
 
