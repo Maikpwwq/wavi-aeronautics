@@ -1,11 +1,12 @@
 'use client'
 // import { collection, doc, setDoc } from 'firebase/firestore'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, Suspense } from 'react'
 import { useRouter } from 'next/navigation'
 // import { firestore } from '@/firebase/firebaseClient'
 import withRoot from '@/modules/withRoot'
 import theme from '../innerTheme'
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
+import CircularProgress from '@mui/material/CircularProgress'
 
 // import "localstorage-polyfill";
 // import "sessionstorage-polyfill";
@@ -54,7 +55,7 @@ const styles = (theme) => ({
 const ListShoppingCart = (props) => {
   const { shoppingCart, updateShowCart, updateCart } =
     useContext(ShowCartContext)
-  // console.log('ShowCartContext ListShoppingCart', shoppingCart)
+  console.log('ShowCartContext ListShoppingCart', shoppingCart.productos)
 
   let shoppingCartID = null
   useEffect(() => {
@@ -145,59 +146,63 @@ const ListShoppingCart = (props) => {
   return (
     <>
       <Box className="" maxWidth="sm" style={classes.productBox}>
-        {shoppingCart.productos &&
-          shoppingCart.productos.map(
-            ({ titulo, precio, imagenes, productID, cantidad }, index) => (
-              <Card style={classes.card} key={index}>
-                {/* <CardActionArea onClick={handleClick}></CardActionArea> */}
-                <Typography
-                  variant="h6"
-                  gutterBottom
-                  marked="center"
-                  align="center"
-                  style={classes.cantidad}
-                >
-                  {cantidad} X
-                </Typography>
-                <CardMedia
-                  sx={classes.image}
-                  component="img"
-                  image={imagenes[0]}
-                  alt={titulo}
-                ></CardMedia>
+        <Suspense fallback={
+          <CircularProgress />
+        }>        
+          {shoppingCart.productos &&
+            shoppingCart.productos.map(
+              ({ titulo, precio, imagenes, productID, cantidad }, index) => (
+                <Card style={classes.card} key={index}>
+                  {/* <CardActionArea onClick={handleClick}></CardActionArea> */}
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    marked="center"
+                    align="center"
+                    style={classes.cantidad}
+                  >
+                    {cantidad} X
+                  </Typography>
+                  <CardMedia
+                    sx={classes.image}
+                    component="img"
+                    image={imagenes[0]}
+                    alt={titulo}
+                  ></CardMedia>
 
-                <CardHeader
-                  title={titulo}
-                  subheader={precio}
-                  // action={
-                  //   <IconButton color="inherit" onClick={() => handleCancel}>
-                  //     <CancelIcon fontSize="large" />
-                  //   </IconButton>
-                  // }
-                ></CardHeader>
-              </Card>
-            )
-          )}
-        {shoppingCart.productos && shoppingCart.productos.length >= 1 && (
-          <Box className="" maxWidth="sm">
-            <Button
-              variant="contained"
-              color="primary"
-              style={classes.buttons}
-              onClick={(e) => handleCheckout(e)}
-            >
-              Finalizar compra
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              style={classes.buttons}
-              onClick={(e) => handleShoppingCart(e)}
-            >
-              Ver carrito
-            </Button>
-          </Box>
-        )}
+                  <CardHeader
+                    title={titulo}
+                    subheader={precio}
+                    // action={
+                    //   <IconButton color="inherit" onClick={() => handleCancel}>
+                    //     <CancelIcon fontSize="large" />
+                    //   </IconButton>
+                    // }
+                  ></CardHeader>
+                </Card>
+              )
+            )}
+            {shoppingCart.productos && shoppingCart.productos.length >= 1 && (
+              <Box className="" maxWidth="sm">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={classes.buttons}
+                  onClick={(e) => handleCheckout(e)}
+                >
+                  Finalizar compra
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  style={classes.buttons}
+                  onClick={(e) => handleShoppingCart(e)}
+                >
+                  Ver carrito
+                </Button>
+              </Box>
+            )}
+        </Suspense>
       </Box>
     </>
   )

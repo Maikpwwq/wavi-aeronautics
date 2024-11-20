@@ -45,6 +45,7 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
   // Dron
   const storeKitRef = collection(_firestore, 'productos/dron/kit_fpv_dron')
   const storeRCRef = collection(_firestore, 'productos/dron/RC')
+  const storeGepRCHDRef = collection(_firestore, 'productos/dron/geprc')
   // Googles
   const storeGooglesBetafpv = collection(_firestore, 'productos/Googles/Betafpv')
   const storeGooglesDJI = collection(_firestore, 'productos/Googles/DJI')
@@ -267,6 +268,7 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
   const productsFromFirestore = async () => {
     // console.log(shoppingsRef, userID);
     const collectionsWavi = [
+      storeGepRCHDRef,
       storeRCRef,
       storeKitRef,
       storeGooglesBetafpv, storeGooglesDJI, storeGooglesEmaxusa, storeGooglesFatShark, storeGooglesIflightRc, storeGooglesWalksnail,
@@ -374,7 +376,7 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
           }
         }
       })
-      if (cardProductos !== [] && cardProductos.length > 0) {
+      if ( typeof cardProductos === 'object' && cardProductos.length > 0) {
         // console.log('cardProductos', cardProductos)
         shoppingCart.productos = cardProductos
         // Se determina la cantidad de objetos agregados al carrito de compras

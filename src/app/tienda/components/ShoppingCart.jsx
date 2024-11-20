@@ -1,10 +1,11 @@
 'use client'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, Suspense } from 'react'
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
 import ListShoppingCart from './ListShoppingCart'
 import FirebaseCompareShoppingCartIds from '@/services/FirebaseCompareShoppingCartIds'
 import { getAllShoppingCart } from '@/services/sharedServices'
 import { sharingInformationService } from '@/services/sharing-information'
+import CircularProgress from '@mui/material/CircularProgress'
 
 // import PropTypes from 'prop-types'
 // import { useSelector } from 'react-redux'
@@ -15,10 +16,11 @@ import { sharingInformationService } from '@/services/sharing-information'
 // global.localStorage;
 
 import Box from '@mui/material/Box'
-import CircularProgress from '@mui/material/CircularProgress'
+// import CircularProgress from '@mui/material/CircularProgress'
 import Grid from '@mui/material/Grid2'
 import withRoot from '@/modules/withRoot'
 import theme from '../innerTheme'
+import { Typography } from '@mui/material'
 
 const styles = (theme) => ({
   cartList: {
@@ -37,10 +39,10 @@ const styles = (theme) => ({
 const ShoppingCart = (props) => {
   const { shoppingCart, updateCart } =
     useContext(ShowCartContext)
-  console.log('ShowCartContext ShoppingCart', shoppingCart)
   // const shoppingCart = useSelector((store) => store.shoppingCart);
   const cart = shoppingCart.productos
   const classes = styles(theme)
+  console.log('ShowCartContext ShoppingCart', shoppingCart, typeof cart)
 
   const subscription$ = getAllShoppingCart
   const productData = sharingInformationService.getSubject()
@@ -58,7 +60,7 @@ const ShoppingCart = (props) => {
         const { cart, userID } = data
         console.log('Detail productCard', cart, userID)
         if (userID && shoppingCart.cartID === null) {
-          // Se usa el id para asignarlo al carrito de compras
+          // Se usa el id del usuario autenticado para asignar el mismo al carrito de compras actual
           updateCart({ cartID: userID })
         }
         if (cart && cart.length > 0) {
@@ -67,43 +69,62 @@ const ShoppingCart = (props) => {
         }
       }
     })
-  }, [shoppingCart])
+  }, [shoppingCart.updated])
 
   // useEffect(() => {
   // }, [shoppingCart]) // productData
 
   return (
     <>
-      { typeof cart === 'object'
-        ? (<Box sx={{ display: 'flex' }}>
+
+      {typeof cart !== 'object' && (<Box
+        sx={{ display: 'flex', top: '230%' }}
+        style={{
+          position: 'absolute',
+          right: '5%',
+          visibility: shoppingCart.show === true ? 'visible' : 'hidden'
+        }}
+      >
+        <Typography variant='body1' color='black' align='center'>
+          No hay articulos cargados en el carrito de compras
+        </Typography>
+      </Box>)}
+      <Suspense fallback=
+        {<Box sx={{ display: 'flex' }}>
           <CircularProgress />
-        </Box>)
-        : (<Grid
-          container
-          spacing={2}
-          style={{
-            position: 'absolute',
-            visibility: shoppingCart.show ? 'visible' : 'hidden'
-          }}
-        >
-          {/* {cart.productos &&
-            cartInfo.productos.map((product, k) => {
-              // console.log("product", product);
-              return ( */}
+        </Box>}
+      >
+        {typeof cart === 'object' && (
           <Grid
-            item
-            // key={k}
-            size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}
-            sx={classes.cartList}
+            container
+            spacing={2}
+            style={{
+              position: 'relative',
+              top: '33%',
+              // right: '-84px',
+              visibility: shoppingCart.show === true ? 'visible' : 'hidden'
+            }}
+            sx={{ right: { xs: '84px', sm: '-84px' } }}
           >
-            <ListShoppingCart
-              className="d-flex mb-2"
-            ></ListShoppingCart>
+            {/* {cart.productos &&
+                cartInfo.productos.map((product, k) => {
+                  // console.log("product", product);
+                  return ( */}
+            <Grid
+              item
+              // key={k}
+              size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}
+              sx={classes.cartList}
+            >
+              <ListShoppingCart
+                className="d-flex mb-2"
+              ></ListShoppingCart>
+            </Grid>
+            {/* );
+                })} */}
           </Grid>
-          {/* );
-            })} */}
-        </Grid>
-          )}
+        )}
+      </Suspense>
     </>
   )
 }

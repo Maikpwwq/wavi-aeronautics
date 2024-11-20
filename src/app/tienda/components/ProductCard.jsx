@@ -5,6 +5,7 @@ import Link from 'next/link'
 import FirebaseAddToCart from '@/services/FirebaseAddToCart'
 import { loadDetail } from '@/store/states/product'
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
+import AddProduct from '@/app/tienda/components/AddProduct'
 
 // import "sessionstorage-polyfill";
 // import "localstorage-polyfill";
@@ -16,8 +17,6 @@ import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import CardMedia from '@mui/material/CardMedia'
 import { CardActionArea } from '@mui/material'
-import IconButton from '@mui/material/IconButton'
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 import PropTypes from 'prop-types'
 
 // import { useQuery } from "react-query";
@@ -39,7 +38,7 @@ const ProductCard = ({ products, category }) => {
   const categoria = category || 'tienda'
   const producto = products
   const { titulo, precio, imagenes, productID, marca } = producto
-  const { shoppingCart, updateShoppingCart } = useContext(ShowCartContext)
+  const { shoppingCart } = useContext(ShowCartContext)
 
   // const storedCart = useSelector((store) => store.shoppingCart);
   // let cart = storedCart || [];
@@ -62,7 +61,7 @@ const ProductCard = ({ products, category }) => {
   // Solo activar
   useEffect(() => {
     storeToFirebaseCart()
-  }, [shoppingCart, shoppingCart.productos])
+  }, [shoppingCart.updated, shoppingCart.productos])
 
   const storeToFirebaseCart = () => {
     // const cardProductos = {};
@@ -81,53 +80,6 @@ const ProductCard = ({ products, category }) => {
     if (cardProductos.length > 0) {
       // Servicio que permite al usuario guardar elementos en el carrito de firebase
       FirebaseAddToCart({ productos: cardProductos })
-    }
-  }
-
-  const handleAddCard = (e, producto) => {
-    e.preventDefault()
-    readData(producto)
-    // TODO: leer carrito firebase enviar luego a FirebaseCompareShoppingCartIds
-    // storeToFirebaseCart()
-  }
-
-  const readData = (producto) => {
-    //   shoppingsFromFirestore().then((snapshot) => {
-    let included = true
-    const cardProductos = []
-    if (shoppingCart.productos) {
-      // Se cargan los productos previos del context
-      shoppingCart.productos.map((product, n) => {
-        cardProductos.push(product)
-      })
-      // Se compara el Id de producto para aumentar cantidad del mismo articulo
-      cardProductos.map((product, n) => {
-        const { productID } = product
-        console.log(
-          "compare product's ID",
-          product.productID,
-          producto.productID
-        )
-        if (productID === producto.productID) {
-          // TODO aumentar cantidad en 1
-          product.cantidad++
-          // determina que no se debe incluir de nuevo
-          included = false
-        }
-      })
-      // este articulo debe ser incluido con cantidad de uno
-      if (included) {
-        producto.cantidad = 1
-        cardProductos.push(producto)
-        console.log('cardProductos', included, cardProductos)
-      }
-    }
-    console.log('readData', cardProductos)
-    // setShoppingCart productos:
-    if (cardProductos.length > 0) {
-      updateShoppingCart(cardProductos)
-      // setShoppingCart({ productos: cardProductos });
-      console.log('shoppingCart', shoppingCart)
     }
   }
 
@@ -159,12 +111,7 @@ const ProductCard = ({ products, category }) => {
             title={titulo}
             subheader={precio}
             action={
-              <IconButton
-                color="inherit"
-                onClick={(e) => handleAddCard(e, producto)}
-              >
-                <AddShoppingCartIcon fontSize="large" />
-              </IconButton>
+              <AddProduct product={producto}/>
             }
           ></CardHeader>
         </Card>

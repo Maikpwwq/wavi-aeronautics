@@ -1,5 +1,5 @@
 'use client'
-import React, { useContext } from 'react'
+import React, { useContext, Suspense } from 'react'
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -59,14 +59,15 @@ function ShowCartPage () {
 
   return (
     <>
-      {cart === []
-        ? (
-        <Box sx={{ display: 'flex' }}>
-          <CircularProgress />
-        </Box>
-          )
-        : (
-        <Box sx={{ display: 'flex' }}>
+      <Suspense fallback=
+        {
+          <Box sx={{ display: 'flex' }}>
+            <CircularProgress />
+          </Box>
+        }
+        >
+          { typeof cart === 'object' && (
+          <Box sx={{ display: 'flex' }}>
           <Grid container spacing={2}>
             <Grid
               item
@@ -119,7 +120,8 @@ function ShowCartPage () {
             </Grid>
           </Grid>
         </Box>
-          )}
+        )}
+      </Suspense>
     </>
   )
 }
