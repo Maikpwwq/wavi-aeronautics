@@ -95,7 +95,7 @@ const DroneProducts = (props) => {
                 // size={{ xs: 12, sm: 4, md: 4 }}
                 // sm={12} xs={12} md={5} lg={4} xl={3}
                 >
-                {storeProductsRC.length > 1 && 
+                {storeProductsRC.length > 1 &&
                   storeProductsRC.map((product, k) => {
                     return (
                       <Grid item key={k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>

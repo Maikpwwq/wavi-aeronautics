@@ -368,13 +368,13 @@ function Header (props) {
             spacing={1}
           >
             <Grid item xs> */}
-          
+
           <Tabs
             onChange={handleChange}
             value={value}
             textColor="inherit"
             sx={classes.productTabs}
-            
+
           >
             {routes.map(({ label, value, href }) => (
               <Tab
@@ -389,7 +389,7 @@ function Header (props) {
               ></Tab>
             ))}
           </Tabs>
-        
+
           {/* </Grid>
           </Grid> */}
         </Toolbar>

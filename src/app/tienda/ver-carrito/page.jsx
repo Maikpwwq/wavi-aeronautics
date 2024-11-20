@@ -120,7 +120,7 @@ function ShowCartPage () {
             </Grid>
           </Grid>
         </Box>
-        )}
+          )}
       </Suspense>
     </>
   )

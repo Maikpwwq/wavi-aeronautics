@@ -376,7 +376,7 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
           }
         }
       })
-      if ( typeof cardProductos === 'object' && cardProductos.length > 0) {
+      if (typeof cardProductos === 'object' && cardProductos.length > 0) {
         // console.log('cardProductos', cardProductos)
         shoppingCart.productos = cardProductos
         // Se determina la cantidad de objetos agregados al carrito de compras

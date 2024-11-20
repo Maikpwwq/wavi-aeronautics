@@ -148,7 +148,7 @@ const ListShoppingCart = (props) => {
       <Box className="" maxWidth="sm" style={classes.productBox}>
         <Suspense fallback={
           <CircularProgress />
-        }>        
+        }>
           {shoppingCart.productos &&
             shoppingCart.productos.map(
               ({ titulo, precio, imagenes, productID, cantidad }, index) => (
