@@ -359,6 +359,7 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
     // comparar productos por ids
     if (productData && productData.length > 0) {
       // console.log('productData', productData, productos)
+      console.log('compareProductsIDs selected products', productData)
       productos = productData
       let counter = 0
       productos.map((DOC) => {
@@ -369,6 +370,23 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
           if (iD === codigo) {
             // Se identifica por ID que producto representa para ser añadido
             cardProductos.push(DOC)
+            // se desarrolla un parsePrices del catalogo de todos los productos para añadirlos formateados al Context del ShoppingCard
+            cardProductos.map((product, index, array) => {
+              // console.log(product.precio);
+              if (
+                typeof parseInt(product.precio) === 'number' &&
+                product.precio !== 'Agotado'
+              ) {
+                const dolarPrice = parseInt(process.env.NEXT_PUBLIC_DOLARTOCOP)
+                const trasportBase = 30 // USD
+                const factorImportation = 1.5
+                const dolarToCop = (parseInt(product.precio) + trasportBase) * factorImportation * dolarPrice
+                array[index].precio = dolarToCop.toLocaleString(
+                  'es-CO',
+                  { style: 'currency', currency: 'COP' }
+                )
+              }
+            })
             // Se hace uso de las cantidades asginadas en el carrito de compras
             cardProductos[counter].cantidad = productosCantidades[counter]
             // Nuestra marca para identificar el producto en el array
@@ -376,22 +394,23 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
           }
         }
       })
-      if (typeof cardProductos === 'object' && cardProductos.length > 0) {
-        // console.log('cardProductos', cardProductos)
-        shoppingCart.productos = cardProductos
-        // Se determina la cantidad de objetos agregados al carrito de compras
-        // cardProductos.length;
-        let totalCantidades = 0
-        productosCantidades.map((cantidad) => {
-          totalCantidades += cantidad
-        })
-        shoppingCart.items = totalCantidades
-        // console.log('compareProductAmounts', shoppingCart, totalCantidades)
-        sessionStorage.setItem('cartUpdated', 'filterItems')
-        sessionStorage.setItem('cartProducts', totalCantidades)
-        // Se envia listado de productos para calcular el valor del carrito de compras
-        calculateCartAmount(cardProductos)
-      }
+    }
+    if (typeof cardProductos === 'object' && cardProductos.length > 0) {
+      // console.log('cardProductos', cardProductos)
+      shoppingCart.productos = cardProductos
+      shoppingCart.updated = true
+      // Se determina la cantidad de objetos agregados al carrito de compras
+      // cardProductos.length;
+      let totalCantidades = 0
+      productosCantidades.map((cantidad) => {
+        totalCantidades += cantidad
+      })
+      shoppingCart.items = totalCantidades
+      console.log('compareProductAmounts', shoppingCart, totalCantidades)
+      sessionStorage.setItem('cartUpdated', 'filterItems')
+      sessionStorage.setItem('cartProducts', totalCantidades)
+      // Se envia listado de productos para calcular el valor del carrito de compras
+      calculateCartAmount(cardProductos)
     }
   }
 
@@ -415,8 +434,9 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
       // sessionStorage.removeItem("cartUpdated");
       // console.log('service', shoppingCart)
       if (shoppingCart.productos) {
-        // console.log('service', shoppingCart)
+        console.log('FirebaseCompareShoppingCartIds', shoppingCart)
         updateCart(shoppingCart)
+        sessionStorage.setItem('cartUpdated', 'actualizados-productos-context')
         // sharingInformationService.setSubject({shoppingCart});
       }
     }
@@ -432,7 +452,8 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
 }
 
 FirebaseCompareShoppingCartIds.propTypes = {
-  products: PropTypes.array.isRequired
+  products: PropTypes.array.isRequired,
+  updateCart: PropTypes.func.isRequired
 }
 
 export default FirebaseCompareShoppingCartIds

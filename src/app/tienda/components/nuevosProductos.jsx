@@ -82,10 +82,12 @@ function NuevosProductos (props) {
   // const { classes } = props;
   const classes = styles(theme)
   const shopState = useSelector((store) => store.shop)
-  const { drones } = shopState
-
-  const [featuredProducts] = useState(drones || []) // setStoreProducts
-
+  const { dronesHD } = shopState
+  let productosDronesHD = []
+  if (typeof window !== 'undefined') {
+    productosDronesHD = JSON.parse(sessionStorage.getItem('Productos_DronesHD'))
+  }
+  const [featuredProducts] = useState(dronesHD || productosDronesHD)
   return (
     <Box sx={classes.root}>
       <Container fluid sx={classes.container}>
@@ -142,7 +144,7 @@ NuevosProductos.propTypes = {
 const mapStateToProps = (state) => {
   // console.log("state", state);
   return {
-    featuredProducts: state.drones
+    featuredProducts: state.dronesHD
   }
 }
 

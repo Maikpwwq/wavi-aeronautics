@@ -57,7 +57,12 @@ const DroneProducts = (props) => {
   // const state = useSelector((state))
   // const { store } = useContext(ReactReduxContext)
 
-  const [storeProductsKits] = useState(dronesKit) // setStoreProducts
+  let productosDronesKit = []
+  if (typeof window !== 'undefined') {
+    productosDronesKit = JSON.parse(sessionStorage.getItem('Productos_Drones_Kits'))
+  }
+
+  const [storeProductsKits] = useState(dronesKit || productosDronesKit) // setStoreProducts
 
   // console.log('DroneKitss', drones)
 

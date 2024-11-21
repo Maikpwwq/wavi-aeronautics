@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 const AddProduct = ({ product }) => {
   const addProduct = product
 
-  const { shoppingCart, updateShoppingCart } = useContext(ShowCartContext)
+  const { shoppingCart, updateCart, updateShowCart } = useContext(ShowCartContext) // updateShoppingCart
 
   const handleAddCard = (e, producto) => {
     e.preventDefault()
@@ -41,7 +41,7 @@ const AddProduct = ({ product }) => {
           included = false
         }
       })
-      // este articulo debe ser incluido con cantidad de uno
+      // la información de este articulo debe ser incluido en el Context con cantidad de uno
       if (included) {
         producto.cantidad = 1
         cardProductos.push(producto)
@@ -51,9 +51,13 @@ const AddProduct = ({ product }) => {
     console.log('readData', cardProductos)
     // setShoppingCart productos:
     if (cardProductos.length > 0) {
-      updateShoppingCart(cardProductos)
+      // Actualiza el listados de productos con todos sus campos y cantidades, se da señal para actualizar el carrito de compras
+      // updateShoppingCart(cardProductos)
+      updateCart({ updated: true, productos: cardProductos })
+      sessionStorage.setItem('cartUpdated', 'listado-productos-context')
+      updateShowCart(true)
       // setShoppingCart({ productos: cardProductos });
-      console.log('shoppingCart', shoppingCart)
+      console.log('shoppingCart', shoppingCart, cardProductos)
     }
   }
 

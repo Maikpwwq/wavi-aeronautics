@@ -38,7 +38,7 @@ const styles = (theme) => ({
 
 const ShoppingCart = (props) => {
   const { shoppingCart, updateCart } =
-    useContext(ShowCartContext)
+    useContext(ShowCartContext) // setShoppingCart
   // const shoppingCart = useSelector((store) => store.shoppingCart);
   const cart = shoppingCart.productos
   const classes = styles(theme)
@@ -77,7 +77,7 @@ const ShoppingCart = (props) => {
   return (
     <>
 
-      {typeof cart !== 'object' && (<Box
+      {typeof cart === 'object' && cart.length < 1 && (<Box
         sx={{ display: 'flex', top: '230%' }}
         style={{
           position: 'absolute',
