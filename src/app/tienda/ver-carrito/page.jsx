@@ -12,7 +12,7 @@ import CardMedia from '@mui/material/CardMedia'
 import CancelIcon from '@mui/icons-material/Cancel'
 import IconButton from '@mui/material/IconButton'
 import CircularProgress from '@mui/material/CircularProgress'
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid'
 import withRoot from '@/modules/withRoot'
 import theme from '../innerTheme'
 

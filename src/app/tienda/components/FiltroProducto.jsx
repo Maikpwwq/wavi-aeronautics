@@ -2,7 +2,7 @@
 import React from 'react'
 import { useTheme } from '@mui/material/styles'
 import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid'
 import Typography from '@/modules/components/Typography'
 import TextField from '@/modules/components/TextField'
 

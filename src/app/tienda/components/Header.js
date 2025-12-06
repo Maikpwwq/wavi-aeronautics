@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, memo } from 'react'
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
 import { useRouter, usePathname } from 'next/navigation'
 import ShoppingCart from './ShoppingCart'
@@ -17,7 +17,7 @@ import AppBar from '@mui/material/AppBar'
 // import HelpIcon from '@mui/icons-material/Help'
 // import MenuIcon from '@mui/icons-material/Menu'
 // import NotificationsIcon from '@mui/icons-material/Notifications'
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import IconButton from '@mui/material/IconButton'
@@ -129,7 +129,7 @@ const routes = [
   }
 ]
 
-function Header (props) {
+const Header = (props)  => {
   // const { onDrawerToggle } = props
 
   const { shoppingCart, updateShowCart } = useContext(ShowCartContext)
@@ -234,6 +234,55 @@ function Header (props) {
       navigate.push('escuela', { replace: true })
     }
   }
+
+  const CategoriesBar = memo(() => {
+    return (
+    <AppBar
+        component="div"
+        style={classes.secondaryBar}
+        sx={{ zIndex: 0 }}
+        color="primary"
+        position="static"
+        elevation={0}
+      >
+        <Toolbar className="p-0">
+          {/* <Grid
+            container
+            className="p-2 pb-0"
+            alignItems="center"
+            spacing={1}
+          >
+            <Grid item xs> */}
+
+          <Tabs
+            onChange={handleChange}
+            value={value}
+            textColor="inherit"
+            sx={classes.productTabs}
+
+          >
+            {routes.map(({ label, value, href }) => (
+              <Tab
+                key={value}
+                textColor="inherit"
+                label={label}
+                value={value}
+                component="a"
+                href={href}
+                onClick={() => setValue(value)}
+                style={classes.blueLink}
+              ></Tab>
+            ))}
+          </Tabs>
+
+          {/* </Grid>
+          </Grid> */}
+        </Toolbar>
+      </AppBar>
+      )
+  })
+
+  CategoriesBar.displayName = 'CategoriesBar'
 
   return (
     <React.Fragment>
@@ -352,48 +401,7 @@ function Header (props) {
           {/* hidden */}
         </Toolbar>
       </AppBar>
-      <AppBar
-        component="div"
-        style={classes.secondaryBar}
-        sx={{ zIndex: 0 }}
-        color="primary"
-        position="static"
-        elevation={0}
-      >
-        <Toolbar className="p-0">
-          {/* <Grid
-            container
-            className="p-2 pb-0"
-            alignItems="center"
-            spacing={1}
-          >
-            <Grid item xs> */}
-
-          <Tabs
-            onChange={handleChange}
-            value={value}
-            textColor="inherit"
-            sx={classes.productTabs}
-
-          >
-            {routes.map(({ label, value, href }) => (
-              <Tab
-                key={value}
-                textColor="inherit"
-                label={label}
-                value={value}
-                component="a"
-                href={href}
-                onClick={() => setValue(value)}
-                style={classes.blueLink}
-              ></Tab>
-            ))}
-          </Tabs>
-
-          {/* </Grid>
-          </Grid> */}
-        </Toolbar>
-      </AppBar>
+      <CategoriesBar/>
     </React.Fragment>
   )
 }

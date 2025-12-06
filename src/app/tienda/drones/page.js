@@ -11,7 +11,7 @@ import withRoot from '@/modules/withRoot'
 // global.localStorage
 
 import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid'
 import Typography from '@/modules/components/Typography'
 
 import ProductCard from '@/app/tienda/components/ProductCard'

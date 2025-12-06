@@ -17,7 +17,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 import Box from '@mui/material/Box'
 // import CircularProgress from '@mui/material/CircularProgress'
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid'
 import withRoot from '@/modules/withRoot'
 import theme from '../innerTheme'
 import { Typography } from '@mui/material'

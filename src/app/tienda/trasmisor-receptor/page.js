@@ -9,7 +9,7 @@ import ProductCard from '@/app/tienda/components/ProductCard'
 // global.localStorage;
 
 import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@/modules/components/Typography'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'

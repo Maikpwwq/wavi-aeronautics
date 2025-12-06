@@ -9,7 +9,7 @@ import SnackBarAlert from '@/app/components/SnackBarAlert'
 // import "localstorage-polyfill";
 // global.sessionstorage;
 // global.localStorage;
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid'
 import { Field, Form, FormSpy } from 'react-final-form'
 import Typography from '@/modules/components/Typography'
 import AppFooter from '@/modules/views/AppFooter'

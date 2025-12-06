@@ -9,7 +9,7 @@ const fetchComments = async (id) => {
 }
 
 async function CommentsPage ({ params }) {
-  const { id } = params
+  const { id } = await params
   const comments = await fetchComments(id)
 
   return (

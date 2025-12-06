@@ -8,7 +8,7 @@ const fetchSinglePost = (id) => {
 }
 
 async function PostPage ({ children, params }) {
-  const { id } = params
+  const { id } = await params
   const post = await fetchSinglePost(id)
   const { title, body } = post
   return (

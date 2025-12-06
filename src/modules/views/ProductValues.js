@@ -4,7 +4,7 @@ import Image from 'next/image'
 import withRoot from '../withRoot'
 import theme from '../theme'
 import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid'
 import Container from '@mui/material/Container'
 import Typography from '../components/Typography'
 

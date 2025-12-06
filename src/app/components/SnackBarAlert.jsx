@@ -3,12 +3,7 @@ import PropTypes from 'prop-types'
 import Snackbar from '@mui/material/Snackbar'
 import Alert from '@mui/material/Alert'
 
-// const Alert = (props) => {
-//     const { ...other } = props
-//     console.log(props, ref)
-//     // React.forwardRef (<HTMLDivElement, AlertProps>)
-//     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
-// }
+
 
 const SnackBarAlert = ({ message, onClose, severity }) => {
   return (
