@@ -1,13 +1,12 @@
+'use client'
 import PropTypes from 'prop-types'
-import parsePrices from '@/utilities/parse-money'
 import { firestore } from '@/firebase/firebaseClient'
 import { collection, doc, getDocs, query, where } from 'firebase/firestore'
-
 import { sharingInformationService } from '@/services/sharing-information'
+import { parseProductPrices } from '@/utilities/priceUtils'
 
-const FirebaseSearchProductById = (searchId, category, marca) => {
+const FirebaseSearchProductById = async (searchId, category, marca) => {
   const _firestore = firestore
-  // consultar colecciones en busca de drones
   const productsRef = collection(_firestore, 'productos')
   const productsDoc = doc(productsRef, 'dron')
   const KitRef = collection(productsDoc, 'kit_fpv_dron')
@@ -80,8 +79,6 @@ const FirebaseSearchProductById = (searchId, category, marca) => {
   const KitTeamblacksheep6 = collection(productsRCDoc, 'team-blacksheep/receptor/Tracer-Nano-Rx')
   // Uruav
   const KitUruav = collection(productsRCDoc, 'uruav/baterias/1S-250mAh')
-
-  let currentProduct = []
 
   const searchIde = searchId || ''
   const categoryIde = category || 'tienda'
@@ -268,8 +265,9 @@ const FirebaseSearchProductById = (searchId, category, marca) => {
   // Uruav
   const queryRefUruav = query(KitUruav, where('productID', '==', searchIde))
 
-  const productSearchFirestore = async () => {
-    const productos = []
+  try {
+    let productos = []
+
     if (
       categoryIde === 'tienda' ||
       categoryIde === 'dronesKits' ||
@@ -279,42 +277,30 @@ const FirebaseSearchProductById = (searchId, category, marca) => {
       categoryIde === 'FPV analógico' ||
       categoryIde === 'Sin VTX'
     ) {
-      const searchDrone = await getDocs(queryRef)
-      const searchRC = await getDocs(queryRefRC)
-      const searchGEPRCHD = await getDocs(queryGEPRCFPVHD)
-      searchDrone.forEach((DOC) => {
-        productos.push(DOC.data())
-      })
-      searchRC.forEach((DOC) => {
-        productos.push(DOC.data())
-      })
-      searchGEPRCHD.forEach((DOC) => {
-        productos.push(DOC.data())
-      })
-    } else if (
-      categoryIde === 'Googles') {
-      // Googles collection
-      const collectionsGooglesFpv = [
-        queryGooglesDJI, queryGooglesBetafpv, queryGooglesEmaxusa, queryGooglesFatShark, queryGooglesWalksnail, queryGooglesIflightRc
+      const [searchDrone, searchRC, searchGEPRCHD] = await Promise.all([
+        getDocs(queryRef),
+        getDocs(queryRefRC),
+        getDocs(queryGEPRCFPVHD)
+      ])
+      
+      searchDrone.forEach(doc => productos.push(doc.data()))
+      searchRC.forEach(doc => productos.push(doc.data()))
+      searchGEPRCHD.forEach(doc => productos.push(doc.data()))
+
+    } else if (categoryIde === 'Googles') {
+      const queries = [
+        queryGooglesDJI, queryGooglesBetafpv, queryGooglesEmaxusa, 
+        queryGooglesFatShark, queryGooglesWalksnail, queryGooglesIflightRc
       ]
-      for (const product of collectionsGooglesFpv) {
-        const colectionData = await getDocs(product)
-        colectionData.forEach((DOC) => {
-          productos.push(DOC.data())
-        })
-      }
-    } else if (
-      categoryIde === 'digitalVTX') {
-      // Googles collection
-      const collectionsDigitalVTX = [
-        queryVTXDJI, queryVTXCADDX
-      ]
-      for (const product of collectionsDigitalVTX) {
-        const colectionData = await getDocs(product)
-        colectionData.forEach((DOC) => {
-          productos.push(DOC.data())
-        })
-      }
+      
+      const snapshots = await Promise.all(queries.map(q => getDocs(q)))
+      snapshots.forEach(snap => snap.forEach(doc => productos.push(doc.data())))
+
+    } else if (categoryIde === 'digitalVTX') {
+      const queries = [queryVTXDJI, queryVTXCADDX]
+      const snapshots = await Promise.all(queries.map(q => getDocs(q)))
+      snapshots.forEach(snap => snap.forEach(doc => productos.push(doc.data())))
+
     } else if (
       categoryIde === 'radioControl' ||
       categoryIde === 'receptors' ||
@@ -322,183 +308,70 @@ const FirebaseSearchProductById = (searchId, category, marca) => {
       categoryIde === 'baterias' ||
       categoryIde === 'cargadores'
     ) {
-      console.log('productSearchFirestore', categoryIde, searchIde, marca)
+      let queries = []
 
-      // Betafpv
-      const collectionsBetafpv = [
-        queryRefBetafpv, queryRefBetafpv2, queryRefBetafpv3, queryRefBetafpv4, queryRefBetafpv5
-      ]
-      // Eachine
-      const collectionsEachine = [queryRefEachine, queryRefEachine2, queryRefEachine3, queryRefEachine4]
-      // Emaxusa
-      const collectionsEmaxusa = [queryRefEmaxusa, queryRefEmaxusa2, queryRefEmaxusa3, queryRefEmaxusa4]
-      // Flysky
-      const collectionsFlysky = [queryRefFlysky, queryRefFlysky2]
-      // Flywoo
-      const collectionsFlywoo = [queryRefFlywoo, queryRefFlywoo2, queryRefFlywoo3, queryRefFlywoo4, queryRefFlywoo5]
-      // Frsky
-      const collectionsFrsky = [queryRefFrsky, queryRefFrsky2]
-      // Geprc
-      const collectionsGeprc = [queryRefGeprc, queryRefGeprc2]
-      // Iflightrc
-      const collectionsIflightrc = [queryRefIflightrc, queryRefIflightrc2, queryRefIflightrc3, queryRefIflightrc4, queryRefIflightrc5]
-      // Radiomaster
-      const collectionsRadioMaster = [queryRefRadiomaster, queryRefRadiomaster2, queryRefRadiomaster3, queryRefRadiomaster4, queryRefRadiomaster5, queryRefRadiomaster6]
-      // Teamblacksheep
-      const collectionsTeamblacksheep = [queryRefTeamblacksheep, queryRefTeamblacksheep2, queryRefTeamblacksheep3, queryRefTeamblacksheep4, queryRefTeamblacksheep5, queryRefTeamblacksheep6]
-      // Uruav
-      const searchUruav = await getDocs(queryRefUruav)
+      // Switch logic for 'marca'
       switch (marca) {
         case 'betafpv':
-          // Betafpv
-          // Se almacenan los documentos encontrados por el filtrado en un listado de productos
-          for (const product of collectionsBetafpv) {
-            const colectionData = await getDocs(product)
-            colectionData.forEach((DOC) => {
-              productos.push(DOC.data())
-            })
-          }
+          queries = [queryRefBetafpv, queryRefBetafpv2, queryRefBetafpv3, queryRefBetafpv4, queryRefBetafpv5]
           break
         case 'eachine':
-          // Eachine
-          // Se almacenan los documentos encontrados por el filtrado en un listado de productos
-          for (const product of collectionsEachine) {
-            const colectionData = await getDocs(product)
-            colectionData.forEach((DOC) => {
-              productos.push(DOC.data())
-            })
-          }
+          queries = [queryRefEachine, queryRefEachine2, queryRefEachine3, queryRefEachine4]
           break
         case 'emax-usa':
-          // Emaxusa
-          // Se almacenan los documentos encontrados por el filtrado en un listado de productos
-          for (const product of collectionsEmaxusa) {
-            const colectionData = await getDocs(product)
-            colectionData.forEach((DOC) => {
-              productos.push(DOC.data())
-            })
-          }
+          queries = [queryRefEmaxusa, queryRefEmaxusa2, queryRefEmaxusa3, queryRefEmaxusa4]
           break
         case 'flysky':
-          // Flysky
-          // Se almacenan los documentos encontrados por el filtrado en un listado de productos
-          for (const product of collectionsFlysky) {
-            const colectionData = await getDocs(product)
-            colectionData.forEach((DOC) => {
-              productos.push(DOC.data())
-            })
-          }
+          queries = [queryRefFlysky, queryRefFlysky2]
           break
         case 'flywoo':
-          // Flywoo
-          // Se almacenan los documentos encontrados por el filtrado en un listado de productos
-          for (const product of collectionsFlywoo) {
-            const colectionData = await getDocs(product)
-            colectionData.forEach((DOC) => {
-              productos.push(DOC.data())
-            })
-          }
+          queries = [queryRefFlywoo, queryRefFlywoo2, queryRefFlywoo3, queryRefFlywoo4, queryRefFlywoo5]
           break
         case 'frsky':
-          // Frsky
-          // Se almacenan los documentos encontrados por el filtrado en un listado de productos
-          for (const product of collectionsFrsky) {
-            const colectionData = await getDocs(product)
-            colectionData.forEach((DOC) => {
-              productos.push(DOC.data())
-            })
-          }
+          queries = [queryRefFrsky, queryRefFrsky2]
           break
         case 'geprc':
-          // Geprc
-          // Se almacenan los documentos encontrados por el filtrado en un listado de productos
-          for (const product of collectionsGeprc) {
-            const colectionData = await getDocs(product)
-            colectionData.forEach((DOC) => {
-              productos.push(DOC.data())
-            })
-          }
+          queries = [queryRefGeprc, queryRefGeprc2]
           break
         case 'iflight-rc':
-          // Iflightrc
-          // Se almacenan los documentos encontrados por el filtrado en un listado de productos
-          for (const product of collectionsIflightrc) {
-            const colectionData = await getDocs(product)
-            colectionData.forEach((DOC) => {
-              productos.push(DOC.data())
-            })
-          }
+          queries = [queryRefIflightrc, queryRefIflightrc2, queryRefIflightrc3, queryRefIflightrc4, queryRefIflightrc5]
           break
         case 'RadioMaster':
-          // Radiomaster
-          // Se almacenan los documentos encontrados por el filtrado en un listado de productos
-          for (const product of collectionsRadioMaster) {
-            const colectionData = await getDocs(product)
-            colectionData.forEach((DOC) => {
-              productos.push(DOC.data())
-            })
-          }
+          queries = [queryRefRadiomaster, queryRefRadiomaster2, queryRefRadiomaster3, queryRefRadiomaster4, queryRefRadiomaster5, queryRefRadiomaster6]
           break
         case 'team-blacksheep':
-          // Teamblacksheep
-          // Se almacenan los documentos encontrados por el filtrado en un listado de productos
-          for (const product of collectionsTeamblacksheep) {
-            const colectionData = await getDocs(product)
-            colectionData.forEach((DOC) => {
-              productos.push(DOC.data())
-            })
-          }
+          queries = [queryRefTeamblacksheep, queryRefTeamblacksheep2, queryRefTeamblacksheep3, queryRefTeamblacksheep4, queryRefTeamblacksheep5, queryRefTeamblacksheep6]
           break
         case 'uruav':
-          // Uruav
-          // Se almacenan los documentos encontrados por el filtrado en un listado de productos
-          searchUruav.forEach((DOC) => {
-            productos.push(DOC.data())
-          })
+           // Uruav is single query
+           const snap = await getDocs(queryRefUruav)
+           snap.forEach(doc => productos.push(doc.data()))
+           break
+        default:
+          // Fallback or generic search
+          break
+      }
+
+      if(queries.length > 0) {
+        const snapshots = await Promise.all(queries.map(q => getDocs(q)))
+        snapshots.forEach(snap => snap.forEach(doc => productos.push(doc.data())))
       }
     }
+
     if (productos.length > 0) {
-      console.log('productos', productos)
-      return productos
+      parseProductPrices(productos)
+      
+      // Update subject (side effect from original code)
+      sharingInformationService.setSubject({ products: productos })
+      
+      return { currentProduct: productos }
     }
-  }
+    
+    return { currentProduct: [] }
 
-  const productoSearchStore = () => {
-    let productos = []
-    const productData = productSearchFirestore()
-    productData.then((response) => {
-      productos = parsePrices(response)
-      if (productos && productos.length > 0) {
-        console.log('compare productos', productos)
-        currentProduct = productos
-        sharingInformationService.setSubject({ productos })
-        return productos
-      }
-    })
-  }
-
-  // Se actualiza la importancion desde utilities
-  // const parsePrices = (productos) => {
-  //   if (!!productos) {
-  //     productos.map((product, index, array) => {
-  //       if (
-  //         typeof parseInt(product.precio) === "number" &&
-  //         product.precio !== "Agotado"
-  //       ) {
-  //         array[index].precio = parseInt(product.precio).toLocaleString(
-  //           "es-CO",
-  //           { style: "currency", currency: "COP" }
-  //         );
-  //       }
-  //     });
-  //     return productos;
-  //   }
-  // };
-
-  productoSearchStore()
-  if (currentProduct.length > 0) {
-    const response = { currentProduct }
-    return response
+  } catch (error) {
+    console.error("Error searching product by ID:", error)
+    return { currentProduct: [] }
   }
 }
 
