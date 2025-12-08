@@ -15,17 +15,14 @@ const nextConfig = {
     ]
   },
   // webpack5: true,
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.resolve.fallback = {
-        net: false,
-        fs: false,
-        tls: false
-      }
-    }
-
-    return config
-  }
+  turbo: {
+    resolveAlias: {
+      canvas: './src/utilities/emptyModule.js',
+      net: './src/utilities/emptyModule.js',
+      fs: './src/utilities/emptyModule.js',
+      tls: './src/utilities/emptyModule.js',
+    },
+  },
 }
 
 module.exports = nextConfig

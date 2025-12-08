@@ -8,6 +8,7 @@ import ShoppingCartProvider from '@/app/tienda/providers/ShoppingCartProvider'
 import ConfigureAppStore from '@/store/store'
 import initialState from '@/store/initialState'
 import React, { useState } from 'react'
+import DataInitializer from '@/app/components/DataInitializer'
 
 export default function Providers ({ children }) {
   const [queryClient] = useState(() => new QueryClient())
@@ -16,6 +17,7 @@ export default function Providers ({ children }) {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <DataInitializer />
       {/* contextSharing={true} */}
       <Provider store={store}>
         <ShoppingCartProvider>

@@ -83,11 +83,20 @@ function NuevosProductos (props) {
   const classes = styles(theme)
   const shopState = useSelector((store) => store.shop)
   const { dronesHD } = shopState
-  let productosDronesHD = []
-  if (typeof window !== 'undefined') {
-    productosDronesHD = JSON.parse(sessionStorage.getItem('Productos_DronesHD'))
+  
+  // Use Redux state primarily, fallback to sessionStorage if Redux is empty (e.g. hydration lag)
+  // But strictly speaking, if DataInitializer dispatches, Redux will update.
+  // We avoid useState here to ensure reactivity.
+  let featuredProducts = dronesHD && dronesHD.length > 1 ? dronesHD : []
+
+  if (typeof window !== 'undefined' && featuredProducts.length <= 1) {
+     // Fallback to reading storage directly if Redux is empty but storage has data
+     // This covers the case where storage was already populated but Redux not yet
+     const stored = sessionStorage.getItem('Productos_DronesHD')
+     if (stored) {
+       featuredProducts = JSON.parse(stored)
+     }
   }
-  const [featuredProducts] = useState(dronesHD || productosDronesHD)
   return (
     <Box sx={classes.root}>
       <Container fluid sx={classes.container}>

@@ -2,12 +2,16 @@ import './globals.css'
 import Providers from './providers'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1
+}
+
 export const metadata = {
   title: 'Wavi Aeronautics',
   description: 'Manufacture, distribution and maintenance of Drones. Get updated with the latest trends in technology and advanced VToL equipment.',
   keywords: 'drone, pilotos fpv, fpv, controladora, receptora, baterias para drone, googles, gafas fpv, props, hélices, Kits FPV, Drones RC, Control remoto',
   authors: [{ name: 'Wavi Aeronautics' }],
-  viewport: 'width=device-width, initial-scale=1',
   other: {
     'X-UA-Compatible': 'IE=edge',
     'msapplication-TileColor': '#ffffff',
