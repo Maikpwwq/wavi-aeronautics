@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
+import { formatCurrency } from '@/utilities/priceUtils'
 import ShoppingCart from '../ShoppingCart'
 
 const styles = {
@@ -44,7 +45,7 @@ const StoreBanner = () => {
             </Grid>
             <Grid item size={{ xs: 3, sm: 3, md: 2, lg: 2, xl: 1 }} >
               {shoppingCart.items} Productos.
-              <br />$ {shoppingCart.suma} COP
+              <br />{formatCurrency(shoppingCart.suma)} COP
             </Grid>
             <Grid item size={{ xs: 3, sm: 1, md: 1, lg: 1, xl: 1 }}>
               <Tooltip title="Carrito">
