@@ -47,7 +47,7 @@ export const DigitalVTX = (props) => {
   const shopState = useSelector((store) => store?.shop)
   const { digitalVTX } = shopState
   const classes = styles(theme)
-  const [storeDigitalVTX] = useState(digitalVTX)
+  const [storeDigitalVTX] = useState(digitalVTX || [])
 
   return (
     <>

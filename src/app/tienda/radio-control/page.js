@@ -47,7 +47,7 @@ export const RadioContol = (props) => {
   const shopState = useSelector((store) => store?.shop)
   const { radioControl } = shopState
   const classes = styles(theme)
-  const [storeProductsRC] = useState(radioControl)
+  const [storeProductsRC] = useState(radioControl || [])
 
   return (
     <>

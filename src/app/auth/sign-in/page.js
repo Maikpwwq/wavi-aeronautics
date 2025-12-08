@@ -1,23 +1,20 @@
 'use client'
 import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { sharingInformationService } from '@/services/sharing-information'
 import Link from 'next/link'
 import { Field, Form, FormSpy } from 'react-final-form'
+import { styled } from '@mui/material/styles'
 
 import SnackBarAlert from '@/app/components/SnackBarAlert'
-import Typography from '@/modules/components/Typography'
-import AppFooter from '@/modules/views/AppFooter'
-import AppAppBar from '@/modules/views/AppAppBar'
-import AppForm from '@/modules/views/AppForm'
 import { email, required } from '@/modules/form/validation'
 import RFTextField from '@/modules/form/RFTextField'
 import FormButton from '@/modules/form/FormButton'
 import FormFeedback from '@/modules/form/FormFeedback'
-
-import withRoot from '@/modules/withRoot'
+import Typography from '@/modules/components/Typography'
 import theme from '@/modules/theme'
-import { styled } from '@mui/material/styles'
+
+import AuthLayout from '../components/AuthLayout'
+import authService from '@/services/authService'
+import useAuthForm from '../hooks/useAuthForm'
 
 const styles = (theme) => ({
   button: {
@@ -43,109 +40,37 @@ const LinkTo = styled(Link)({
   textDecoration: 'none !important',
   color: 'black !important'
 })
+
 const SignInForm = () => {
   const classes = styles(theme)
-  const router = useRouter()
+  
+  // Custom hook for state and alerts
+  const { 
+    sent, 
+    alert, 
+    handleCloseAlert, 
+    handleSuccess, 
+    handleError 
+  } = useAuthForm()
 
-  const [sent, setSent] = useState(false)
-  const [event, setEvent] = useState({ email: '', password: '' })
-  const [alert, setAlert] = useState({
-    open: false,
-    message: '',
-    severity: 'success'
-  })
-
-  const handleAlert = (message, severity) => {
-    setAlert({ ...alert, open: true, message, severity })
-  }
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      console.log(reason, event)
-    } else {
-      setAlert({ ...alert, open: false, message: '' })
-    }
-  }
-
-  // TODO: Set Alerts
   const validate = (values) => {
     const errors = required(['email', 'password'], values)
-
     if (!errors.email) {
       const emailError = email(values.email, values)
-      if (emailError) {
-        errors.email = email(values.email, values)
-      }
+      if (emailError) errors.email = emailError
     }
-
     return errors
   }
 
-  const fetchSignIn = async (event) => {
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
-    // throw new Error('Error al cargar los comentarios')
-    const response = await fetch('http://localhost:3000/api/sign-in', {
-      method: 'POST',
-      redirect: 'follow',
-      body: JSON.stringify(event),
-      next: { revalidate: 60 }
-    }).then((res) => {
-      if (!res.ok) {
-        // throw new Error("Custom Error message", res);
-        console.log('Custom Error message', res)
-      }
-      // if (res.redirected) {
-      //   window.location.href = response.url;
-      // }
-      // console.log("fetchSignIn", res, res.body);
-      return res.json()
-      // router.push("/tienda/drones");
-    })
-    return response
-    // .then((data) => console.log("fetch", data));
-  }
-
-  // const handleSubmit = (e) => {
-  //   // e.preventDefault();
-  //   console.log('submit', e)
-  // }
-
-  const onSubmit = async (e) => {
-    // e.preventDefault();
-    console.log('submit', e)
-    handleChange(e)
-    await fetchSignIn(e).then((res) => {
-      const { userID, errorCode, errorMessage } = res
-      console.log('submit userID', res, userID)
-      sharingInformationService.setSubject({ userID })
-      if (typeof window !== 'undefined' && !!userID) {
-        // Perform localStorage action
-        setSent(true)
-        handleAlert('Se ha iniciado una nueva sesión.', 'success')
-        sessionStorage.setItem('cartID', userID)
-        console.log('shoppingCartID', userID)
-        router.push('/tienda/drones')
-      }
-      if (!!errorCode && !!errorMessage) {
-        setSent(false)
-        if (
-          errorCode === 'auth/wrong-password' ||
-          errorCode === 'auth/user-not-found'
-        ) {
-          handleAlert('Estas credenciales son incorrectas.', 'error')
-        } else if (errorCode === 'auth/missing-email') {
-          handleAlert('Falta un correo.', 'error')
-        } else {
-          console.log('errorCode', errorCode)
-          handleAlert('Ha sucedido un error intente de nuevo.', 'error')
-        }
-      }
-    })
-  }
-
-  const handleChange = (e) => {
-    setEvent({ email: e.email, password: e.password })
-    console.log('signIn', event)
+  const onSubmit = async (values) => {
+    // console.log('submit', values)
+    const { userID, errorCode, errorMessage } = await authService.signIn(values)
+    
+    if (!!userID) {
+        handleSuccess(userID, 'Se ha iniciado una nueva sesión.')
+    } else {
+        handleError(errorCode, errorMessage)
+    }
   }
 
   return (
@@ -153,8 +78,8 @@ const SignInForm = () => {
       {alert.open && (
         <SnackBarAlert
           message={alert.message}
-          onClose={handleClose}
-          severity={alert.severity} // success, error, warning, info, default
+          onClose={handleCloseAlert}
+          severity={alert.severity}
           open={alert.open}
         />
       )}
@@ -173,8 +98,6 @@ const SignInForm = () => {
             method="post"
           >
             <Field
-              // onChange={() => handleChange}
-              // value={event.value}
               autoComplete="email"
               autoFocus
               component={RFTextField}
@@ -190,8 +113,6 @@ const SignInForm = () => {
               size="large"
             />
             <Field
-              // onChange={() => handleChange}
-              // value={event.value}
               fullWidth
               size="large"
               component={RFTextField}
@@ -217,15 +138,11 @@ const SignInForm = () => {
             </FormSpy>
             <FormButton
               sx={classes.button}
-              // className="navlink"
               disabled={submitting || sent}
               mounted={!sent}
               size="large"
               type="submit"
-              value="Submit"
               color="secondary"
-              // onClick={refetch}
-              // onClick={handleSubmit}
               fullWidth
             >
               {submitting || sent ? 'En progreso…' : 'Iniciar sesión'}
@@ -237,39 +154,32 @@ const SignInForm = () => {
   )
 }
 
-function SignIn (props) {
-  // const { classes } = props;
+function SignIn () {
   const classes = styles(theme)
 
+  const subtitle = (
+      <>
+        {'¿No eres miembro aun?, '}
+        <LinkTo
+          className={classes.link}
+          href="/auth/sign-up/"
+          underline="always"
+        >
+          {'Registrarse'}
+        </LinkTo>
+      </>
+  )
+
   return (
-    <React.Fragment>
-      <AppAppBar />
-      <AppForm>
-        <React.Fragment>
-          <Typography variant="h3" gutterBottom marked="center" align="center">
-            {'Iniciar sesión'}
-          </Typography>
-          <Typography variant="body2" align="center">
-            {'¿No eres miembro aun?, '}
-            <LinkTo
-              className={classes.link}
-              href="auth/sign-up/"
-              underline="always"
-            >
-              {'Registrarse'}
-            </LinkTo>
-          </Typography>
-        </React.Fragment>
+    <AuthLayout title="Iniciar sesión" subtitle={subtitle}>
         <SignInForm />
         <Typography align="center">
-          <LinkTo className="mt-2" href="auth/forgot-password/">
+          <LinkTo className="mt-2" href="/auth/forgot-password/">
             {'Recordar password'}
           </LinkTo>
         </Typography>
-      </AppForm>
-      <AppFooter />
-    </React.Fragment>
+    </AuthLayout>
   )
 }
 
-export default withRoot(SignIn)
+export default SignIn

@@ -62,7 +62,7 @@ const DroneProducts = (props) => {
     productosDronesKit = JSON.parse(sessionStorage.getItem('Productos_Drones_Kits'))
   }
 
-  const [storeProductsKits] = useState(dronesKit || productosDronesKit) // setStoreProducts
+  const [storeProductsKits] = useState(dronesKit || productosDronesKit || []) // setStoreProducts
 
   // console.log('DroneKitss', drones)
 

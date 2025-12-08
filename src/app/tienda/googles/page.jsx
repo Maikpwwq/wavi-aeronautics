@@ -49,7 +49,7 @@ const Googles = (props) => {
   const classes = styles(theme)
 
   // setStoreProductsGoogles
-  const [storeProductsGoogles] = useState(googles)
+  const [storeProductsGoogles] = useState(googles || [])
 
   return (
     <>

@@ -48,8 +48,8 @@ const TrasmisorReceptor = (props) => {
   const { transmisors, receptors } = shopState
 
   const classes = styles(theme)
-  const [storeProductsTransmisor] = useState(transmisors)
-  const [storeProductsReceptor] = useState(receptors)
+  const [storeProductsTransmisor] = useState(transmisors || [])
+  const [storeProductsReceptor] = useState(receptors || [])
   console.log('TrasmisorReceptor', storeProductsTransmisor, storeProductsReceptor)
 
   return (

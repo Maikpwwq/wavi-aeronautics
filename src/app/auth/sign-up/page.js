@@ -1,26 +1,20 @@
 'use client'
-import withRoot from '@/modules/withRoot'
-// --- Post bootstrap -----
-import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import React from 'react'
 import Link from 'next/link'
-import SnackBarAlert from '@/app/components/SnackBarAlert'
-// import "sessionstorage-polyfill";
-// import "localstorage-polyfill";
-// global.sessionstorage;
-// global.localStorage;
-import Grid from '@mui/material/Grid'
 import { Field, Form, FormSpy } from 'react-final-form'
-import Typography from '@/modules/components/Typography'
-import AppFooter from '@/modules/views/AppFooter'
-import AppAppBar from '@/modules/views/AppAppBar'
-import AppForm from '@/modules/views/AppForm'
+import { styled } from '@mui/material/styles'
+import Grid from '@mui/material/Grid'
+
+import SnackBarAlert from '@/app/components/SnackBarAlert'
 import { email, required } from '@/modules/form/validation'
 import RFTextField from '@/modules/form/RFTextField'
 import FormButton from '@/modules/form/FormButton'
 import FormFeedback from '@/modules/form/FormFeedback'
 import theme from '@/modules/theme'
-import { styled } from '@mui/material/styles'
+
+import AuthLayout from '../components/AuthLayout'
+import authService from '@/services/authService'
+import useAuthForm from '../hooks/useAuthForm'
 
 const styles = (theme) => ({
   button: {
@@ -42,43 +36,16 @@ const LinkTo = styled(Link)({
   color: 'black !important'
 })
 
-const fetchSignUp = async (event) => {
-  const response = await fetch('http://localhost:3000/api/sign-up', {
-    method: 'POST',
-    body: JSON.stringify(event),
-    next: { revalidate: 60 }
-  }).then((res) => {
-    if (!res.ok) {
-      // throw new Error("Custom Error message", res);
-      console.log('Custom Error message', res)
-    }
-    return res.json()
-  })
-  return response
-}
-
 const SignUpForm = () => {
   const classes = styles(theme)
-  const router = useRouter()
-
-  const [signupInfo, setSignupInfo] = useState({
-    userEmail: null,
-    userPassword: null,
-    userFirstName: null,
-    userLastName: null
-  })
-
-  const [sent, setSent] = useState(false)
-
-  const [alert, setAlert] = useState({
-    open: false,
-    message: '',
-    severity: 'success'
-  })
-
-  const handleAlert = (message, severity) => {
-    setAlert({ ...alert, open: true, message, severity })
-  }
+  
+  const { 
+    sent, 
+    alert, 
+    handleCloseAlert, 
+    handleSuccess, 
+    handleError 
+  } = useAuthForm()
 
   const validate = (values) => {
     const errors = required(
@@ -88,79 +55,38 @@ const SignUpForm = () => {
 
     if (!errors.email) {
       const emailError = email(values.email, values)
-      if (emailError) {
-        errors.email = email(values.email, values)
-      }
+      if (emailError) errors.email = emailError
     }
-
     return errors
   }
 
-  const onSubmit = async (e) => {
-    // e.preventDefault();
-    // console.log("submit", e);
-    handleChange(e)
-    await fetchSignUp(e).then((res) => {
-      const { userID, errorCode, errorMessage } = res
-      // console.log("submit userID", res, userID);
-      if (typeof window !== 'undefined' && !!userID) {
-        // Perform localStorage action
-        setSent(true)
-        handleAlert('Se ha registrado un nuevo usuario de forma exitosa.', 'success')
-        sessionStorage.setItem('cartID', userID)
-        sessionStorage.setItem('cartUpdated', 'new id')
-        console.log('shoppingCartID', userID)
-        router.push('/tienda/drones')
+  const onSubmit = async (values) => {
+      // console.log("submit", values);
+      // Map form values to API expected payload if needed
+      // const payload = { 
+      //   userEmail: values.email, 
+      //   userPassword: values.password,
+      //   userFirstName: values.firstName, 
+      //   userLastName: values.lastName
+      // } 
+      // Original code just passed 'e' which was the values object
+      
+      const { userID, errorCode, errorMessage } = await authService.signUp(values)
+
+      if (!!userID) {
+          handleSuccess(userID, 'Se ha registrado un nuevo usuario de forma exitosa.')
+      } else {
+          handleError(errorCode, errorMessage)
       }
-      if (!!errorCode && !!errorMessage) {
-        setSent(false)
-        if (
-          errorCode === 'auth/wrong-password' ||
-          errorCode === 'auth/user-not-found'
-        ) {
-          handleAlert('Estas credenciales son incorrectas.', 'error')
-        } else if (errorCode === 'auth/weak-password') {
-          handleAlert('Password muy debil.', 'error')
-        } else if (errorCode === 'auth/missing-email') {
-          handleAlert('Falta un correo.', 'error')
-        } else {
-          console.log('errorCode', errorCode)
-          handleAlert('Ha sucedido un error intente de nuevo.', 'error')
-        }
-      }
-    })
   }
-
-  const handleChange = (e) => {
-    setSignupInfo({
-      userEmail: e.email,
-      userPassword: e.password,
-      userFirstName: e.firstName,
-      userLastName: e.lastName
-    })
-    console.log('SignUp', signupInfo)
-  }
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      console.log(reason, event)
-    } else {
-      setAlert({ ...alert, open: false, message: '' })
-    }
-  }
-
-  // const handleSubmit = (e) => {
-  //   console.log('submit', e)
-  //   e.preventDefault()
-  // }
 
   return (
     <>
       {alert.open && (
         <SnackBarAlert
           message={alert.message}
-          onClose={handleClose}
-          severity={alert.severity} // success, error, warning, info, default
+          onClose={handleCloseAlert}
+          severity={alert.severity}
           open={alert.open}
         />
       )}
@@ -170,7 +96,6 @@ const SignUpForm = () => {
         subscription={{ submitting: true }}
         validate={validate}
         method="post"
-        // render
       >
         {({ handleSubmit, submitting }) => (
           <SubForm
@@ -241,13 +166,11 @@ const SignUpForm = () => {
             </FormSpy>
             <FormButton
               sx={classes.button}
-              // className="navlink"
               disabled={submitting || sent}
               mounted={!sent}
               type="submit"
               color="secondary"
               fullWidth
-              // onClick={handleSubmit}
             >
               {submitting || sent ? 'En progreso…' : 'Registrarse'}
             </FormButton>
@@ -259,38 +182,20 @@ const SignUpForm = () => {
 }
 
 function SignUp () {
-  // const classes = styles(theme)
-
-  // const readInputs = () => {
-  //   setSignupInfo({
-  //     ...userSignupInfo,
-  //     userEmail: document.getElementById("emailText").value,
-  //     userPassword: document.getElementById("passwordText").value,
-  //     userFirstName: document.getElementById("firstName").value,
-  //     userLastName: document.getElementById("lastName").value,
-  //   });
-  // };
-
-  return (
-    <React.Fragment>
-      <AppAppBar />
-      <AppForm>
-        <React.Fragment>
-          <Typography variant="h3" gutterBottom marked="center" align="center">
-            Registrarse
-          </Typography>
-          <Typography variant="body2" align="center">
+    const subtitle = (
+        <>
             ¿Ya tienes una cuenta?,
-            <LinkTo href="auth/sign-in/" underline="always">
+            <LinkTo href="/auth/sign-in/" underline="always">
               {' Iniciar sesión aquí'}
             </LinkTo>
-          </Typography>
-        </React.Fragment>
+        </>
+    )
+
+  return (
+    <AuthLayout title="Registrarse" subtitle={subtitle}>
         <SignUpForm />
-      </AppForm>
-      <AppFooter />
-    </React.Fragment>
+    </AuthLayout>
   )
 }
 
-export default withRoot(SignUp)
+export default SignUp

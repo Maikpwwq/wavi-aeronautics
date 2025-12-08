@@ -57,7 +57,7 @@ const DroneProducts = (props) => {
   // const state = useSelector((state))
   // const { store } = useContext(ReactReduxContext)
 
-  const [storeProductsRC] = useState(dronesRC) // setStoreProductsRC
+  const [storeProductsRC] = useState(dronesRC || []) // setStoreProductsRC
 
   // console.log('DroneProducts', drones, dronesRC)
 

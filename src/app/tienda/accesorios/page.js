@@ -50,7 +50,7 @@ const Accesorios = (props) => {
   const classes = styles(theme)
 
   // setStoreProductsBaterias
-  const [storeProductsBaterias] = useState(baterias)
+  const [storeProductsBaterias] = useState(baterias || [])
 
   return (
     <>
