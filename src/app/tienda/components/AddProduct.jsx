@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
-
 import IconButton from '@mui/material/IconButton'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 import PropTypes from 'prop-types'
+import FirebaseCompareShoppingCartIds from '@/services/FirebaseCompareShoppingCartIds'
 
 const AddProduct = ({ product }) => {
   const addProduct = product
@@ -59,12 +59,10 @@ const AddProduct = ({ product }) => {
     console.log('readData', cardProductos)
     // setShoppingCart productos:
     if (cardProductos.length > 0) {
-      // Actualiza el listados de productos con todos sus campos y cantidades, se da señal para actualizar el carrito de compras
-      // updateShoppingCart(cardProductos)
-      updateCart({ updated: true, productos: cardProductos })
-      sessionStorage.setItem('cartUpdated', 'listado-productos-context')
+      // Recalculate totals and update cart via service
+      FirebaseCompareShoppingCartIds({ products: cardProductos, updateCart })
+      
       updateShowCart(true)
-      // setShoppingCart({ productos: cardProductos });
       console.log('shoppingCart', shoppingCart, cardProductos)
     }
   }
