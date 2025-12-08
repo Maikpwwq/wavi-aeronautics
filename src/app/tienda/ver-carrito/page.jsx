@@ -40,7 +40,6 @@ function ShowCartPage () {
   const navigate = useRouter()
   const { shoppingCart, updateShowCart } =
     useContext(ShowCartContext)
-  console.log('ShowCartContext ShoppingCart', shoppingCart)
   const cart = shoppingCart.productos
   const classes = styles(theme)
 

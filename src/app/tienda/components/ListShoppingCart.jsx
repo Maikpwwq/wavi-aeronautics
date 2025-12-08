@@ -55,7 +55,6 @@ const styles = (theme) => ({
 const ListShoppingCart = (props) => {
   const { shoppingCart, updateShowCart, updateCart } =
     useContext(ShowCartContext)
-  console.log('ShowCartContext ListShoppingCart', shoppingCart.productos)
 
   let shoppingCartID = null
   useEffect(() => {

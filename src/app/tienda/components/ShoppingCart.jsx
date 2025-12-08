@@ -41,7 +41,6 @@ const ShoppingCart = (props) => {
   // const shoppingCart = useSelector((store) => store.shoppingCart);
   const cart = shoppingCart.productos
   const classes = styles(theme)
-  console.log('ShowCartContext ShoppingCart', shoppingCart, typeof cart)
 
   // const subscription$ = getAllShoppingCart
   const productData = sharingInformationService.getSubject()
