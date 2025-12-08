@@ -1,13 +1,6 @@
 'use client'
 import { firestore, auth } from '@/firebase/firebaseClient'
 import { calculateCopPrice } from '@/utilities/priceUtils'
-import { collection, getDocs } from 'firebase/firestore'
-// import { sharingInformationService } from "./sharing-information";
-import PropTypes from 'prop-types'
-
-'use client'
-import { firestore, auth } from '@/firebase/firebaseClient'
-import { calculateCopPrice } from '@/utilities/priceUtils'
 import { collection, getDocs, query, where, documentId } from 'firebase/firestore'
 import PropTypes from 'prop-types'
 
@@ -210,6 +203,7 @@ export const FirebaseCompareShoppingCartIds = async ({ products, updateCart }) =
     console.error("Error in FirebaseCompareShoppingCartIds:", error);
   }
 };
+
 
 FirebaseCompareShoppingCartIds.propTypes = {
   products: PropTypes.array.isRequired,
