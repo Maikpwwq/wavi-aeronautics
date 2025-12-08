@@ -58,14 +58,7 @@ const ProductCard = ({ products, category }) => {
 
   // TODO: Separar la acción de agregar al carrito para usarla dentro del detalle de producto
   // Solo activar
-  const handleSelect = () => {
-    console.log('producto', producto)
-    try {
-      dispatch(loadDetail({ producto }))
-    } catch (e) {
-      return console.error(e.message)
-    }
-  }
+
 
   return (
     <>
