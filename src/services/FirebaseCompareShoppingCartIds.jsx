@@ -1,5 +1,6 @@
 'use client'
 import { firestore, auth } from '@/firebase/firebaseClient'
+import { calculateCopPrice } from '@/utilities/priceUtils'
 import { collection, getDocs } from 'firebase/firestore'
 // import { sharingInformationService } from "./sharing-information";
 import PropTypes from 'prop-types'
@@ -377,14 +378,7 @@ export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
                 typeof parseInt(product.precio) === 'number' &&
                 product.precio !== 'Agotado'
               ) {
-                const dolarPrice = parseInt(process.env.NEXT_PUBLIC_DOLARTOCOP)
-                const trasportBase = 30 // USD
-                const factorImportation = 1.5
-                const dolarToCop = (parseInt(product.precio) + trasportBase) * factorImportation * dolarPrice
-                array[index].precio = dolarToCop.toLocaleString(
-                  'es-CO',
-                  { style: 'currency', currency: 'COP' }
-                )
+                array[index].precio = calculateCopPrice(product.precio)
               }
             })
             // Se hace uso de las cantidades asginadas en el carrito de compras

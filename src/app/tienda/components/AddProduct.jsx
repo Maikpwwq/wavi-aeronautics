@@ -17,7 +17,10 @@ const AddProduct = ({ product }) => {
     // storeToFirebaseCart()
   }
 
-  const readData = (producto) => {
+  const readData = (productInput) => {
+    // Create a shallow copy to avoid mutating Redux state directly
+    const producto = { ...productInput }
+    
     //   shoppingsFromFirestore().then((snapshot) => {
     let included = true
     const cardProductos = []
@@ -47,7 +50,12 @@ const AddProduct = ({ product }) => {
         cardProductos.push(producto)
         console.log('cardProductos', included, cardProductos)
       }
+    } else {
+      // If shoppingCart.productos is undefined, initialize and add
+      producto.cantidad = 1
+      cardProductos.push(producto)
     }
+
     console.log('readData', cardProductos)
     // setShoppingCart productos:
     if (cardProductos.length > 0) {
