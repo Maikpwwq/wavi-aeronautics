@@ -211,8 +211,6 @@ export const FirebaseCompareShoppingCartIds = async ({ products, updateCart }) =
   }
 };
 
-export default FirebaseCompareShoppingCartIds;
-
 FirebaseCompareShoppingCartIds.propTypes = {
   products: PropTypes.array.isRequired,
   updateCart: PropTypes.func.isRequired
