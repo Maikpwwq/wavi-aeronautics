@@ -1,12 +1,6 @@
 // import { HttpClient } from 'http';
 import { Observable } from 'rxjs' // Subject, BehaviorSubject
 import FirebaseSearchProductById from './FirebaseSearchProductById'
-import FirebaseDroneProducts from './FirebaseDroneProducts.jsx'
-import FirebaseGooglesProducts from './FirebaseGooglesProducts.jsx'
-import FirebaseRadioControlProducts from './FirebaseRadioControlProducts.jsx'
-import FirebaseTrasmisorReceptorProducts from './FirebaseTrasmisorReceptorProducts.jsx'
-import FirebaseDigitalVTXProducts from './FirebaseDigitalVTXProducts.jsx'
-import FirebaseAccesoriosProducts from './FirebaseAccesoriosProducts.jsx'
 import FirebaseLoadShoppingCart from './FirebaseLoadShoppingCart.jsx'
 import FirebaseSubscribe from './FirebaseSubscribe.jsx'
 
@@ -35,72 +29,6 @@ const getProductById = (searchId, category, marca) =>
     }
   })
 
-const getAllDroneProduct = new Observable((subscriber) => {
-  const response = FirebaseDroneProducts()
-  // console.log("firebaseResponse", response);
-  try {
-    subscriber.next(response)
-    // subscriber.complete();
-  } catch (err) {
-    subscriber.error(err)
-  }
-})
-
-const getAllGoogles = new Observable((subscriber) => {
-  const response = FirebaseGooglesProducts()
-  // console.log("firebaseResponse", response);
-  try {
-    subscriber.next(response)
-    // subscriber.complete();
-  } catch (err) {
-    subscriber.error(err)
-  }
-})
-
-const getAllRadioControl = new Observable((subscriber) => {
-  const response = FirebaseRadioControlProducts()
-  // console.log("firebaseResponse", response);
-  try {
-    subscriber.next(response)
-    // subscriber.complete();
-  } catch (err) {
-    subscriber.error(err)
-  }
-})
-
-const getAllTrasmisorReceptor = new Observable((subscriber) => {
-  const response = FirebaseTrasmisorReceptorProducts()
-  // console.log("firebaseResponse", response);
-  try {
-    subscriber.next(response)
-    // subscriber.complete();
-  } catch (err) {
-    subscriber.error(err)
-  }
-})
-
-const getAllDigitalVTX = new Observable((subscriber) => {
-  const response = FirebaseDigitalVTXProducts()
-  // console.log("firebaseResponse", response);
-  try {
-    subscriber.next(response)
-    // subscriber.complete();
-  } catch (err) {
-    subscriber.error(err)
-  }
-})
-
-const getAllAccesoriosProduct = new Observable((subscriber) => {
-  const response = FirebaseAccesoriosProducts()
-  // console.log("firebaseResponse", response);
-  try {
-    subscriber.next(response)
-    // subscriber.complete();
-  } catch (err) {
-    subscriber.error(err)
-  }
-})
-
 const getAllShoppingCart = new Observable((subscriber) => {
   const response = FirebaseLoadShoppingCart()
   console.log('FirebaseShoppingCart', response)
@@ -128,26 +56,6 @@ const getObservableProductId = () => {
   return getProductById
 }
 
-const getObservableDrone = () => {
-  return getAllDroneProduct
-}
-
-const getObservableRadioControl = () => {
-  return getAllRadioControl
-}
-
-const getObservableGoogles = () => {
-  return getAllGoogles
-}
-
-const getObservableTrasmisorReceptor = () => {
-  return getAllTrasmisorReceptor
-}
-
-const getObservableAccesorios = () => {
-  return getAllAccesoriosProduct
-}
-
 const getShoppingCart = () => {
   return getAllShoppingCart
 }
@@ -155,19 +63,6 @@ const getShoppingCart = () => {
 const getSubscribe = (suscribeMail) => {
   return subscribeToWavi(suscribeMail)
 }
-
-// const getAllDroneProduct = () => {
-//     new Observable(function subscribe(subscriber) {
-//       try {
-//         let response = FirebaseDroneProducts();
-//         console.log(response);
-//         subscriber.next(response);
-//         subscriber.complete();
-//       } catch (err) {
-//         subscriber.error(err); // delivers an error if it caught one
-//       }
-//     });
-//   };
 
 // all asynchronous or callback-based code in a single, composable function
 const SharedService = () => {
@@ -213,17 +108,6 @@ export {
   getProductById,
   getObservableProductId,
   SharedService,
-  getAllDroneProduct,
-  getObservableDrone,
-  getAllAccesoriosProduct,
-  getObservableAccesorios,
-  getAllGoogles,
-  getObservableGoogles,
-  getAllRadioControl,
-  getObservableRadioControl,
-  getAllTrasmisorReceptor,
-  getAllDigitalVTX,
-  getObservableTrasmisorReceptor,
   getAllShoppingCart,
   getShoppingCart,
   subscribeToWavi,
