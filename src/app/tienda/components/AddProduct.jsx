@@ -6,76 +6,53 @@ import PropTypes from 'prop-types'
 import FirebaseCompareShoppingCartIds from '@/services/FirebaseCompareShoppingCartIds'
 
 const AddProduct = ({ product }) => {
-  const addProduct = product
+  const { shoppingCart, updateCart, updateShowCart } = useContext(ShowCartContext)
 
-  const { shoppingCart, updateCart, updateShowCart } = useContext(ShowCartContext) // updateShoppingCart
-
-  const handleAddCard = (e, producto) => {
+  const handleAddToCart = (e) => {
     e.preventDefault()
-    readData(producto)
-    // TODO: leer carrito firebase enviar luego a FirebaseCompareShoppingCartIds
-    // storeToFirebaseCart()
-  }
-
-  const readData = (productInput) => {
-    // Create a shallow copy to avoid mutating Redux state directly
-    const producto = { ...productInput }
     
-    //   shoppingsFromFirestore().then((snapshot) => {
-    let included = true
-    const cardProductos = []
-    if (shoppingCart.productos) {
-      // Se cargan los productos previos del context
-      shoppingCart.productos.map((product, n) => {
-        cardProductos.push(product)
-      })
-      // Se compara el Id de producto para aumentar cantidad del mismo articulo
-      cardProductos.map((product, n) => {
-        const { productID } = product
-        console.log(
-          "compare product's ID",
-          product.productID,
-          producto.productID
-        )
-        if (productID === producto.productID) {
-          // TODO aumentar cantidad en 1
-          product.cantidad++
-          // determina que no se debe incluir de nuevo
-          included = false
-        }
-      })
-      // la información de este articulo debe ser incluido en el Context con cantidad de uno
-      if (included) {
-        producto.cantidad = 1
-        cardProductos.push(producto)
-        console.log('cardProductos', included, cardProductos)
+    // Create a working copy of the cart items or empty array
+    const currentItems = shoppingCart.productos ? [...shoppingCart.productos] : []
+    
+    // Check if product already exists
+    const existingProductIndex = currentItems.findIndex(p => p.productID === product.productID)
+
+    if (existingProductIndex >= 0) {
+      // Update quantity safely
+      currentItems[existingProductIndex] = {
+        ...currentItems[existingProductIndex],
+        cantidad: (currentItems[existingProductIndex].cantidad || 0) + 1
       }
     } else {
-      // If shoppingCart.productos is undefined, initialize and add
-      producto.cantidad = 1
-      cardProductos.push(producto)
+      // Add new product with initial quantity
+      currentItems.push({
+        ...product,
+        cantidad: 1
+      })
     }
 
-    console.log('readData', cardProductos)
-    // setShoppingCart productos:
-    if (cardProductos.length > 0) {
-      // Recalculate totals and update cart via service
-      FirebaseCompareShoppingCartIds({ products: cardProductos, updateCart })
+    // Update local state and sync with backend/calculations
+    if (currentItems.length > 0) {
+      // Optimistic update to context first (optional, but good for UI responsiveness)
+      updateCart({ updated: true, productos: currentItems })
+      sessionStorage.setItem('cartUpdated', 'listado-productos-context')
       
+      // Calculate totals and deep sync
+      FirebaseCompareShoppingCartIds({ products: currentItems, updateCart })
+      
+      // Show cart drawer
       updateShowCart(true)
-      console.log('shoppingCart', shoppingCart, cardProductos)
     }
   }
 
   return (
-        <>
-            <IconButton
-                color="inherit"
-                onClick={(e) => handleAddCard(e, addProduct)}
-            >
-                <AddShoppingCartIcon fontSize="large" />
-            </IconButton>
-        </>
+    <IconButton
+      color="inherit"
+      onClick={handleAddToCart}
+      aria-label="Agregar al carrito"
+    >
+      <AddShoppingCartIcon fontSize="large" />
+    </IconButton>
   )
 }
 
