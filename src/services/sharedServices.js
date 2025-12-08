@@ -1,7 +1,6 @@
 // import { HttpClient } from 'http';
 import { Observable } from 'rxjs' // Subject, BehaviorSubject
 import FirebaseSearchProductById from './FirebaseSearchProductById'
-import FirebaseLoadShoppingCart from './FirebaseLoadShoppingCart.jsx'
 import FirebaseSubscribe from './FirebaseSubscribe.jsx'
 
 // const urlsPrivate = {
@@ -29,17 +28,6 @@ const getProductById = (searchId, category, marca) =>
     }
   })
 
-const getAllShoppingCart = new Observable((subscriber) => {
-  const response = FirebaseLoadShoppingCart()
-  console.log('FirebaseShoppingCart', response)
-  try {
-    subscriber.next(response)
-    // subscriber.complete();
-  } catch (err) {
-    subscriber.error(err)
-  }
-})
-
 const subscribeToWavi = (suscribeMail) =>
   new Observable(async (subscriber) => {
     const response = await FirebaseSubscribe(suscribeMail)
@@ -54,10 +42,6 @@ const subscribeToWavi = (suscribeMail) =>
 
 const getObservableProductId = () => {
   return getProductById
-}
-
-const getShoppingCart = () => {
-  return getAllShoppingCart
 }
 
 const getSubscribe = (suscribeMail) => {
@@ -108,8 +92,6 @@ export {
   getProductById,
   getObservableProductId,
   SharedService,
-  getAllShoppingCart,
-  getShoppingCart,
   subscribeToWavi,
   getSubscribe
 }

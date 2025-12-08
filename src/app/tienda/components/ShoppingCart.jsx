@@ -3,7 +3,6 @@ import React, { useContext, useEffect, Suspense } from 'react'
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
 import ListShoppingCart from './ListShoppingCart'
 import FirebaseCompareShoppingCartIds from '@/services/FirebaseCompareShoppingCartIds'
-import { getAllShoppingCart } from '@/services/sharedServices'
 import { sharingInformationService } from '@/services/sharing-information'
 import CircularProgress from '@mui/material/CircularProgress'
 
@@ -44,17 +43,17 @@ const ShoppingCart = (props) => {
   const classes = styles(theme)
   console.log('ShowCartContext ShoppingCart', shoppingCart, typeof cart)
 
-  const subscription$ = getAllShoppingCart
+  // const subscription$ = getAllShoppingCart
   const productData = sharingInformationService.getSubject()
 
   useEffect(() => {
-    subscription$.subscribe((response) => {
-      if (response) {
-        console.log('subscription getAllShoppingCart', response)
-        // const { cart } = response;
-        // shoppingCart.productos = cart;
-      }
-    })
+    // subscription$.subscribe((response) => {
+    //   if (response) {
+    //     console.log('subscription getAllShoppingCart', response)
+    //     // const { cart } = response;
+    //     // shoppingCart.productos = cart;
+    //   }
+    // })
     productData.subscribe((data) => {
       if (data) {
         const { cart, userID } = data
