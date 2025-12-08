@@ -1,14 +1,8 @@
 'use client'
-import React, { Suspense, useState } from 'react'
-import { connect, useSelector } from 'react-redux'
+import React, { Suspense } from 'react'
+import { useSelector } from 'react-redux'
 import { useTheme } from '@mui/material/styles'
 import withRoot from '@/modules/withRoot'
-// import theme from '../innerTheme'
-
-// import 'sessionstorage-polyfill'
-// import 'localstorage-polyfill'
-// global.sessionstorage
-// global.localStorage
 
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
@@ -44,27 +38,13 @@ const styles = (theme) => ({
   }
 })
 
-const DroneProducts = (props) => {
+const DroneProducts = () => {
   const shopState = useSelector((store) => store?.shop)
-  const { dronesKit } = shopState
+  // Ensure dronesKit is always an array
+  const dronesKit = shopState?.dronesKit || []
 
   const theme = useTheme()
   const classes = styles(theme)
-  // const user = auth.currentUser || {}
-  // const userID = user.uid || null
-
-  // const dispatch = useDispatch()
-  // const state = useSelector((state))
-  // const { store } = useContext(ReactReduxContext)
-
-  let productosDronesKit = []
-  if (typeof window !== 'undefined') {
-    productosDronesKit = JSON.parse(sessionStorage.getItem('Productos_Drones_Kits'))
-  }
-
-  const [storeProductsKits] = useState(dronesKit || productosDronesKit || []) // setStoreProducts
-
-  // console.log('DroneKitss', drones)
 
   return (
     <>
@@ -90,19 +70,22 @@ const DroneProducts = (props) => {
                 spacing={2}
                 sx={{ justifyContent: 'space-around' }}
               >
-                {storeProductsKits.length > 1 &&
-                  storeProductsKits.map((product, k) => {
-                    return (
-                      <Grid item key={k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
-                        <ProductCard
-                          sx='d-flex mb-2'
-                          category='dronesKits'
-                          products={product}
-                          productID={k}
-                        ></ProductCard>
-                      </Grid>
-                    )
-                  })}
+                {dronesKit.length > 0 ? (
+                  dronesKit.map((product, k) => (
+                    <Grid item key={k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
+                      <ProductCard
+                        sx='d-flex mb-2'
+                        category='dronesKits'
+                        products={product}
+                        productID={k}
+                      />
+                    </Grid>
+                  ))
+                ) : (
+                  <Typography variant="body2" sx={{ m: 2 }}>
+                    Cargando productos...
+                  </Typography>
+                )}
               </Grid>
             </Suspense>
             <br />
@@ -114,11 +97,4 @@ const DroneProducts = (props) => {
   )
 }
 
-const mapStateToProps = (state) => {
-  // console.log('state', state)
-  return {
-    storeProductsKits: state.dronesKit
-  }
-}
-
-export default connect(mapStateToProps, null)(withRoot(DroneProducts))
+export default withRoot(DroneProducts)

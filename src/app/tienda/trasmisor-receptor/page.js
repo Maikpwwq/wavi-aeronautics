@@ -1,12 +1,7 @@
 'use client'
-import React, { Suspense, useState } from 'react'
-import { useSelector, connect } from 'react-redux'
+import React, { Suspense } from 'react'
+import { useSelector } from 'react-redux'
 import ProductCard from '@/app/tienda/components/ProductCard'
-
-// import "sessionstorage-polyfill";
-// import "localstorage-polyfill";
-// global.sessionstorage;
-// global.localStorage;
 
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
@@ -14,7 +9,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@/modules/components/Typography'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
 import withRoot from '@/modules/withRoot'
-import theme from '../innerTheme'
+import { useTheme } from '@mui/material/styles'
 
 const styles = (theme) => ({
   presentationProducts: {
@@ -42,27 +37,24 @@ const styles = (theme) => ({
   }
 })
 
-const TrasmisorReceptor = (props) => {
-  // const { classes } = props;
+const TrasmisorReceptor = () => {
   const shopState = useSelector((store) => store?.shop)
-  const { transmisors, receptors } = shopState
+  // Ensure we have arrays
+  const transmisors = shopState?.transmisors || []
+  const receptors = shopState?.receptors || []
 
+  const theme = useTheme()
   const classes = styles(theme)
-  const [storeProductsTransmisor] = useState(transmisors || [])
-  const [storeProductsReceptor] = useState(receptors || [])
-  console.log('TrasmisorReceptor', storeProductsTransmisor, storeProductsReceptor)
 
   return (
     <>
-    {/* {!!storeProductsTransmisor && storeProductsTransmisor.length > 0 && ()}
-    {!!storeProductsReceptor && storeProductsReceptor.length > 0 && ()} */}
-    <Box sx={classes.productShowcase}>
+      <Box sx={classes.productShowcase}>
         <FiltroProducto />
-      <Box sx={classes.presentationProducts}>
-        {/* Seccion de Transmisoras */}
-        <Typography variant="h5" sx={classes.spacingTexts}>
-          Transmisores para drone.
-        </Typography>
+        <Box sx={classes.presentationProducts}>
+          {/* Seccion de Transmisoras */}
+          <Typography variant="h5" sx={classes.spacingTexts}>
+            Transmisores para drone.
+          </Typography>
           <Suspense
             fallback={
               <Box sx={{ display: 'flex' }}>
@@ -74,26 +66,29 @@ const TrasmisorReceptor = (props) => {
               Transmisores para cada necesidad en potencia y distacia de vuelo.
             </Typography>
             <Grid container spacing={2}>
-              {!!storeProductsTransmisor && storeProductsTransmisor.length > 0 && storeProductsTransmisor.map((product, k) => {
-                // console.log(product, k);
-                // productID
-                return (
+              {transmisors.length > 0 ? (
+                transmisors.map((product, k) => (
                   <Grid item key={k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
                     <ProductCard
                       category="transmisors"
                       className="d-flex mb-2"
                       products={product}
                       productID={k}
-                    ></ProductCard>
+                    />
                   </Grid>
-                )
-              })}
+                ))
+              ) : (
+                <Typography variant="body2" sx={{ m: 2 }}>
+                  Cargando productos...
+                </Typography>
+              )}
             </Grid>
           </Suspense>
-        {/* Seccion de Receptoras */}
-        <Typography variant="h5" sx={classes.spacingTexts}>
-          Receptor para drone.
-        </Typography>
+
+          {/* Seccion de Receptoras */}
+          <Typography variant="h5" sx={classes.spacingTexts}>
+            Receptor para drone.
+          </Typography>
           <Suspense
             fallback={
               <Box sx={{ display: 'flex' }}>
@@ -105,33 +100,28 @@ const TrasmisorReceptor = (props) => {
               Receptor para cada necesidad en potencia y distacia de vuelo.
             </Typography>
             <Grid container spacing={2}>
-              {!!storeProductsReceptor && storeProductsReceptor.length > 0 && storeProductsReceptor.map((product, k) => {
-                // console.log(product, k);
-                // productID
-                return (
+              {receptors.length > 0 ? (
+                receptors.map((product, k) => (
                   <Grid item key={k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
                     <ProductCard
                       category="receptors"
                       className="d-flex mb-2"
                       products={product}
                       productID={k}
-                    ></ProductCard>
+                    />
                   </Grid>
-                )
-              })}
+                ))
+              ) : (
+                <Typography variant="body2" sx={{ m: 2 }}>
+                  Cargando productos...
+                </Typography>
+              )}
             </Grid>
           </Suspense>
-      </Box>
+        </Box>
       </Box>
     </>
   )
 }
 
-const mapStateToProps = (state) => {
-  return {
-    storeProductsReceptor: state.receptors,
-    storeProductsTransmisor: state.transmisors
-  }
-}
-
-export default connect(mapStateToProps, null)(withRoot(TrasmisorReceptor))
+export default withRoot(TrasmisorReceptor)

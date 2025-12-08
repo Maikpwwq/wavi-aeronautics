@@ -1,10 +1,8 @@
 'use client'
-import React, { Suspense, useState } from 'react'
-import { useSelector, connect } from 'react-redux'
-// import "sessionstorage-polyfill";
-// import "localstorage-polyfill";
-// global.sessionstorage;
-// global.localStorage;
+import React, { Suspense } from 'react'
+import { useSelector } from 'react-redux'
+import { useTheme } from '@mui/material/styles'
+import withRoot from '@/modules/withRoot'
 
 import ProductCard from '@/app/tienda/components/ProductCard'
 import Box from '@mui/material/Box'
@@ -12,9 +10,6 @@ import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@/modules/components/Typography'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
-import withRoot from '@/modules/withRoot'
-import theme from '../innerTheme'
-// import { styled } from '@mui/material/styles'
 
 const styles = (theme) => ({
   presentationProducts: {
@@ -42,60 +37,55 @@ const styles = (theme) => ({
   }
 })
 
-export const DigitalVTX = (props) => {
-  // const { classes } = props;
+export const DigitalVTX = () => {
   const shopState = useSelector((store) => store?.shop)
-  const { digitalVTX } = shopState
+  // Ensure digitalVTX is always an array
+  const digitalVTX = shopState?.digitalVTX || []
+  
+  const theme = useTheme()
   const classes = styles(theme)
-  const [storeDigitalVTX] = useState(digitalVTX || [])
 
   return (
     <>
-    <Box sx={classes.productShowcase}>
+      <Box sx={classes.productShowcase}>
         <FiltroProducto />
-      <Box sx={classes.presentationProducts}>
-        <Typography variant="h5" sx={classes.spacingTexts}>
-          Video transmisión digital HD - VTX.
-        </Typography>
-        {!!storeDigitalVTX && storeDigitalVTX.length > 0 && (
+        <Box sx={classes.presentationProducts}>
+          <Typography variant="h5" sx={classes.spacingTexts}>
+            Video transmisión digital HD - VTX.
+          </Typography>
           <Suspense
-              fallback={
-                <Box sx={{ display: 'flex' }}>
-                  <CircularProgress />
-                </Box>
-              }
-            >
-              <Typography variant="body1" sx={classes.endingTexts}>
-                Módulos de soporte para video transmisor digital HD - VTX.
-              </Typography>
-              <Grid container spacing={2}>
-                {storeDigitalVTX.map((product, k) => {
-                  // console.log(product, k);
-                  // productID
-                  return (
-                    <Grid item key={k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
-                      <ProductCard
-                        category="digitalVTX"
-                        className="d-flex mb-2"
-                        products={product}
-                        productID={k}
-                      ></ProductCard>
-                    </Grid>
-                  )
-                })}
-              </Grid>
+            fallback={
+              <Box sx={{ display: 'flex' }}>
+                <CircularProgress />
+              </Box>
+            }
+          >
+            <Typography variant="body1" sx={classes.endingTexts}>
+              Módulos de soporte para video transmisor digital HD - VTX.
+            </Typography>
+            <Grid container spacing={2}>
+              {digitalVTX.length > 0 ? (
+                digitalVTX.map((product, k) => (
+                  <Grid item key={k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
+                    <ProductCard
+                      category="digitalVTX"
+                      className="d-flex mb-2"
+                      products={product}
+                      productID={k}
+                    />
+                  </Grid>
+                ))
+              ) : (
+                <Typography variant="body2" sx={{ m: 2 }}>
+                  Cargando productos...
+                </Typography>
+              )}
+            </Grid>
           </Suspense>
-        )}
-      </Box>
+        </Box>
       </Box>
     </>
   )
 }
 
-const mapStateToProps = (state) => {
-  return {
-    storeDigitalVTX: state.digitalVTX
-  }
-}
-
-export default connect(mapStateToProps, null)(withRoot(DigitalVTX))
+export default withRoot(DigitalVTX)

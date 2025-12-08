@@ -1,10 +1,8 @@
 'use client'
-import React, { Suspense, useState } from 'react'
-import { useSelector, connect } from 'react-redux'
-// import "sessionstorage-polyfill";
-// import "localstorage-polyfill";
-// global.sessionstorage;
-// global.localStorage;
+import React, { Suspense } from 'react'
+import { useSelector } from 'react-redux'
+import { useTheme } from '@mui/material/styles'
+import withRoot from '@/modules/withRoot'
 
 import ProductCard from '@/app/tienda/components/ProductCard'
 import Box from '@mui/material/Box'
@@ -12,9 +10,6 @@ import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@/modules/components/Typography'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
-import withRoot from '@/modules/withRoot'
-import theme from '../innerTheme'
-// import { styled } from '@mui/material/styles'
 
 const styles = (theme) => ({
   presentationProducts: {
@@ -42,62 +37,55 @@ const styles = (theme) => ({
   }
 })
 
-const Googles = (props) => {
-  // const { classes } = props;
+const Googles = () => {
   const shopState = useSelector((store) => store?.shop)
-  const { googles } = shopState
+  // Ensure googles is always an array
+  const googles = shopState?.googles || []
+  
+  const theme = useTheme()
   const classes = styles(theme)
-
-  // setStoreProductsGoogles
-  const [storeProductsGoogles] = useState(googles || [])
 
   return (
     <>
-    <Box sx={classes.productShowcase}>
+      <Box sx={classes.productShowcase}>
         <FiltroProducto />
-      <Box sx={classes.presentationProducts}>
-        <Typography variant="h5" sx={classes.spacingTexts}>
-          Googles para drone.
-        </Typography>
-        {!!storeProductsGoogles && storeProductsGoogles.length > 0 && (
+        <Box sx={classes.presentationProducts}>
+          <Typography variant="h5" sx={classes.spacingTexts}>
+            Googles para drone.
+          </Typography>
           <Suspense
-              fallback={
-                <Box sx={{ display: 'flex' }}>
-                  <CircularProgress />
-                </Box>
-              }
+            fallback={
+              <Box sx={{ display: 'flex' }}>
+                <CircularProgress />
+              </Box>
+            }
           >
             <Typography variant="body1" sx={classes.endingTexts}>
               Googles para cada necesidad en potencia y tiempo de vuelo.
             </Typography>
             <Grid container spacing={2}>
-              {storeProductsGoogles.map((product, k) => {
-                // console.log(product, k)
-                // productID
-                return (
+              {googles.length > 0 ? (
+                googles.map((product, k) => (
                   <Grid item key={k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
                     <ProductCard
                       className="d-flex mb-2"
                       products={product}
-                      category="Googles"
+                      category="googles"
                       productID={k}
-                    ></ProductCard>
+                    />
                   </Grid>
-                )
-              })}
+                ))
+              ) : (
+                <Typography variant="body2" sx={{ m: 2 }}>
+                  Cargando productos...
+                </Typography>
+              )}
             </Grid>
           </Suspense>
-        )}
-      </Box>
+        </Box>
       </Box>
     </>
   )
 }
 
-const mapStateToProps = (state) => {
-  return {
-    storeProductsGoogles: state.googles
-  }
-}
-
-export default connect(mapStateToProps, null)(withRoot(Googles))
+export default withRoot(Googles)

@@ -1,10 +1,8 @@
 'use client'
-import React, { Suspense, useState } from 'react'
-import { useSelector, connect } from 'react-redux'
-// import "sessionstorage-polyfill";
-// import "localstorage-polyfill";
-// global.sessionstorage;
-// global.localStorage;
+import React, { Suspense } from 'react'
+import { useSelector } from 'react-redux'
+import { useTheme } from '@mui/material/styles'
+import withRoot from '@/modules/withRoot'
 
 import ProductCard from '@/app/tienda/components/ProductCard'
 import Box from '@mui/material/Box'
@@ -12,9 +10,6 @@ import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@/modules/components/Typography'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
-import withRoot from '@/modules/withRoot'
-import theme from '../innerTheme'
-// import { styled } from '@mui/material/styles'
 
 const styles = (theme) => ({
   presentationProducts: {
@@ -42,40 +37,35 @@ const styles = (theme) => ({
   }
 })
 
-const Accesorios = (props) => {
-  // const { classes } = props;
+const Accesorios = () => {
   const shopState = useSelector((store) => store?.shop)
-  const { baterias } = shopState
-
+  // Ensure baterias is always an array
+  const baterias = shopState?.baterias || []
+  
+  const theme = useTheme()
   const classes = styles(theme)
-
-  // setStoreProductsBaterias
-  const [storeProductsBaterias] = useState(baterias || [])
 
   return (
     <>
-    <Box sx={classes.productShowcase}>
+      <Box sx={classes.productShowcase}>
         <FiltroProducto />
-      <Box sx={classes.presentationProducts}>
-        <Typography variant="h5" sx={classes.spacingTexts}>
-          Baterias para drone.
-        </Typography>
-        {!!storeProductsBaterias && storeProductsBaterias.length > 0 && (
+        <Box sx={classes.presentationProducts}>
+          <Typography variant="h5" sx={classes.spacingTexts}>
+            Baterias para drone.
+          </Typography>
           <Suspense
-              fallback={
-                <Box sx={{ display: 'flex' }}>
-                  <CircularProgress />
-                </Box>
-              }
+            fallback={
+              <Box sx={{ display: 'flex' }}>
+                <CircularProgress />
+              </Box>
+            }
           >
             <Typography variant="body1" sx={classes.endingTexts}>
               Baterias para cada necesidad en potencia y tiempo de vuelo.
             </Typography>
             <Grid container spacing={2}>
-              {storeProductsBaterias.map((product, k) => {
-                // console.log(product, k);
-                // productID
-                return (
+              {baterias.length > 0 ? (
+                baterias.map((product, k) => (
                   <Grid
                     item
                     key={k}
@@ -86,23 +76,20 @@ const Accesorios = (props) => {
                       products={product}
                       category="baterias"
                       productID={k}
-                    ></ProductCard>
+                    />
                   </Grid>
-                )
-              })}
+                ))
+              ) : (
+                <Typography variant="body2" sx={{ m: 2 }}>
+                  Cargando productos...
+                </Typography>
+              )}
             </Grid>
           </Suspense>
-        )}
-      </Box>
+        </Box>
       </Box>
     </>
   )
 }
 
-const mapStateToProps = (state) => {
-  return {
-    storeProductsBaterias: state.baterias
-  }
-}
-
-export default connect(mapStateToProps, null)(withRoot(Accesorios))
+export default withRoot(Accesorios)
