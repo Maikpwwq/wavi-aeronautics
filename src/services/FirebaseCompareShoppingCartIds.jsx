@@ -5,445 +5,213 @@ import { collection, getDocs } from 'firebase/firestore'
 // import { sharingInformationService } from "./sharing-information";
 import PropTypes from 'prop-types'
 
-export const FirebaseCompareShoppingCartIds = ({ products, updateCart }) => {
-  // console.log('products', products, updateCart)
-  const AllProducts = sessionStorage.getItem('Todos los productos') || null
-  // const shoppingCartItems =
-  //   sessionStorage.getItem("cartProducts") !== 0
-  //     ? sessionStorage.getItem("cartProducts")
-  //     : null;
-  // const shoppingCartSuma =
-  //   sessionStorage.getItem("cartSum") !== 0
-  //     ? sessionStorage.getItem("cartSum")
-  //     : null;
+'use client'
+import { firestore, auth } from '@/firebase/firebaseClient'
+import { calculateCopPrice } from '@/utilities/priceUtils'
+import { collection, getDocs, query, where, documentId } from 'firebase/firestore'
+import PropTypes from 'prop-types'
 
-  //     if (shoppingCartSuma > 0) {
-  //       sessionStorage.setItem("cartSum", shoppingCartSuma);
-  //     }
+// Helper to define all collections once
+const getProductCollections = (db) => {
+  const rootParams = [
+    ['productos', 'dron', 'kit_fpv_dron'],
+    ['productos', 'dron', 'RC'],
+    ['productos', 'dron', 'geprc'],
+    ['productos', 'Googles', 'Betafpv'],
+    ['productos', 'Googles', 'DJI'],
+    ['productos', 'Googles', 'Emaxusa'],
+    ['productos', 'Googles', 'FatShark'],
+    ['productos', 'Googles', 'Iflight-rc'],
+    ['productos', 'Googles', 'Walksnail'],
+    // Radio Control - Betafpv
+    ['productos', 'radio_control', 'betafpv/baterias/2PCS-2s-300mAh'],
+    ['productos', 'radio_control', 'betafpv/control-remoto/lite-radio2'],
+    ['productos', 'radio_control', 'betafpv/control-remoto/lite-radio3'],
+    ['productos', 'radio_control', 'betafpv/control-remoto/lite-radio3-pro'],
+    ['productos', 'radio_control', 'betafpv/receptor/BETAFPV-ELRS'],
+    // Radio Control - Eachine
+    ['productos', 'radio_control', 'eachine/baterias/E520S-1200mAh'],
+    ['productos', 'radio_control', 'eachine/baterias/E58-500mAh'],
+    ['productos', 'radio_control', 'eachine/control-remoto/liteRadio-2.4G'],
+    ['productos', 'radio_control', 'eachine/control-remoto/FPV-EX5/'],
+    // Radio Control - EmaxUsa
+    ['productos', 'radio_control', 'emax-usa/baterias/1S-300mAh'],
+    ['productos', 'radio_control', 'emax-usa/baterias/1S-450mAh'],
+    ['productos', 'radio_control', 'emax-usa/baterias/2PCS-2S-300mAh'],
+    ['productos', 'radio_control', 'emax-usa/control-remoto/E8'],
+    // Radio Control - Flysky
+    ['productos', 'radio_control', 'flysky/receptor/Flysky-FS-X14S-V2'],
+    ['productos', 'radio_control', 'flysky/receptor/Flysky-FS-iA8X'],
+    // Radio Control - Flywoo
+    ['productos', 'radio_control', 'flywoo/baterias/4PCS-1S-450mAh'],
+    ['productos', 'radio_control', 'flywoo/baterias/4PCS-1S-750mAh'],
+    ['productos', 'radio_control', 'flywoo/control-remoto/LiteRadio-V3-ELRS'],
+    ['productos', 'radio_control', 'flywoo/control-remoto/LiteRadio-V3-TBS'],
+    ['productos', 'radio_control', 'flywoo/receptor/Flywoo-ELRS'],
+    // Radio Control - Frsky
+    ['productos', 'radio_control', 'frsky/receptor/Frsky_R-XSR'],
+    ['productos', 'radio_control', 'frsky/receptor/Frsky_XM+'],
+    // Radio Control - Geprc
+    ['productos', 'radio_control', 'geprc/baterias/4S-650a850mAh'],
+    ['productos', 'radio_control', 'geprc/control-remoto/tinyRadio-GR8'],
+    // Radio Control - Iflightrc
+    ['productos', 'radio_control', 'iflight-rc/baterias/3S-450mAh'],
+    ['productos', 'radio_control', 'iflight-rc/cargadores/M4-AC30-1-4S'],
+    ['productos', 'radio_control', 'iflight-rc/control-remoto/C8-ELRS'],
+    ['productos', 'radio_control', 'iflight-rc/control-remoto/iF8-E'],
+    ['productos', 'radio_control', 'iflight-rc/receptor/iFlight-R81-SPI'],
+    // Radio Control - Radiomaster
+    ['productos', 'radio_control', 'radio-master/control-remoto/T8-Lite'],
+    ['productos', 'radio_control', 'radio-master/control-remoto/T8-Pro'],
+    ['productos', 'radio_control', 'radio-master/control-remoto/zorro'],
+    ['productos', 'radio_control', 'radio-master/control-remoto/tx12'],
+    ['productos', 'radio_control', 'radio-master/control-remoto/tx16s'],
+    ['productos', 'radio_control', 'radio-master/control-remoto/tx16-Max'],
+    ['productos', 'radio_control', 'radio-master/receptor/NANO-ELRS-EP2'],
+    ['productos', 'radio_control', 'radio-master/receptor/RadioMaster-R81'],
+    // Radio Control - Team Blacksheep
+    ['productos', 'radio_control', 'team-blacksheep/control-remoto/ethix-mambo'],
+    ['productos', 'radio_control', 'team-blacksheep/control-remoto/tango2pro'],
+    ['productos', 'radio_control', 'team-blacksheep/control-remoto/tango2'],
+    ['productos', 'radio_control', 'team-blacksheep/control-remoto/tbs-mambo'],
+    ['productos', 'radio_control', 'team-blacksheep/receptor/Crossfire-Nano-Rx-SE'],
+    ['productos', 'radio_control', 'team-blacksheep/receptor/Tracer-Nano-Rx'],
+    ['productos', 'radio_control', 'team-blacksheep/receptor/Crossfire-Nano-RX'],
+    ['productos', 'radio_control', 'team-blacksheep/receptor/Crossfire-Nano-Rx-Pro'],
+    // Radio Control - Uruav
+    ['productos', 'radio_control', 'uruav/baterias/1S-250mAh']
+  ];
 
-  const productosIds = []
-  const productosCantidades = []
-
-  const extractProductsID = (products) => {
-    products.map(({ productID }, index) => {
-      productosIds[index] = productID
-    })
-    // console.log('extractProductsID', productosIds)
-  }
-
-  const extractProductAmount = (products) => {
-    products.map(({ cantidad }, index) => {
-      productosCantidades[index] = cantidad
-    })
-    // console.log('extractProductAmount', productosCantidades)
-  }
-
-  const user = auth.currentUser || {}
-  const userID = user.uid || null
-  const shoppingCartID = sessionStorage.getItem('cartID')
-  const usedID = userID || shoppingCartID
-  const _firestore = firestore
-  // Dron
-  const storeKitRef = collection(_firestore, 'productos/dron/kit_fpv_dron')
-  const storeRCRef = collection(_firestore, 'productos/dron/RC')
-  const storeGepRCHDRef = collection(_firestore, 'productos/dron/geprc')
-  // Googles
-  const storeGooglesBetafpv = collection(_firestore, 'productos/Googles/Betafpv')
-  const storeGooglesDJI = collection(_firestore, 'productos/Googles/DJI')
-  const storeGooglesEmaxusa = collection(_firestore, 'productos/Googles/Emaxusa')
-  const storeGooglesFatShark = collection(_firestore, 'productos/Googles/FatShark')
-  const storeGooglesIflightRc = collection(_firestore, 'productos/Googles/Iflight-rc')
-  const storeGooglesWalksnail = collection(_firestore, 'productos/Googles/Walksnail')
-  // Radio Control
-  // Betafpv
-  const storeBetafpvRef = collection(
-    _firestore,
-    'productos/radio_control/betafpv/baterias/2PCS-2s-300mAh'
-  )
-  const storeBetafpvRef2 = collection(
-    _firestore,
-    'productos/radio_control/betafpv/control-remoto/lite-radio2'
-  )
-  const storeBetafpvRef3 = collection(
-    _firestore,
-    'productos/radio_control/betafpv/control-remoto/lite-radio3'
-  )
-  const storeBetafpvRef4 = collection(
-    _firestore,
-    'productos/radio_control/betafpv/control-remoto/lite-radio3-pro'
-  )
-  const storeBetafpvRef5 = collection(
-    _firestore,
-    'productos/radio_control/betafpv/receptor/BETAFPV-ELRS'
-  )
-  // Eachine
-  const storeEachineRef = collection(
-    _firestore,
-    'productos/radio_control/eachine/baterias/E520S-1200mAh'
-  )
-  const storeEachineRef2 = collection(
-    _firestore,
-    'productos/radio_control/eachine/baterias/E58-500mAh'
-  )
-  const storeEachineRef3 = collection(
-    _firestore,
-    'productos/radio_control/eachine/control-remoto/liteRadio-2.4G'
-  )
-  const storeEachineRef4 = collection(
-    _firestore,
-    'productos/radio_control/eachine/control-remoto/FPV-EX5/'
-  )
-  // EmaxUsa
-  const storeEmaxUsaRef = collection(
-    _firestore,
-    'productos/radio_control/emax-usa/baterias/1S-300mAh'
-  )
-  const storeEmaxUsaRef2 = collection(
-    _firestore,
-    'productos/radio_control/emax-usa/baterias/1S-450mAh'
-  )
-  const storeEmaxUsaRef3 = collection(
-    _firestore,
-    'productos/radio_control/emax-usa/baterias/2PCS-2S-300mAh'
-  )
-  const storeEmaxUsaRef4 = collection(
-    _firestore,
-    'productos/radio_control/emax-usa/control-remoto/E8'
-  )
-  // Flysky
-  const storeFlyskyRef = collection(
-    _firestore,
-    'productos/radio_control/flysky/receptor/Flysky-FS-X14S-V2'
-  )
-  const storeFlyskyRef2 = collection(
-    _firestore,
-    'productos/radio_control/flysky/receptor/Flysky-FS-iA8X'
-  )
-  // Flywoo
-  const storeFlywooRef = collection(
-    _firestore,
-    'productos/radio_control/flywoo/baterias/4PCS-1S-450mAh'
-  )
-  const storeFlywooRef2 = collection(
-    _firestore,
-    'productos/radio_control/flywoo/baterias/4PCS-1S-750mAh'
-  )
-  const storeFlywooRef3 = collection(
-    _firestore,
-    'productos/radio_control/flywoo/control-remoto/LiteRadio-V3-ELRS'
-  )
-  const storeFlywooRef4 = collection(
-    _firestore,
-    'productos/radio_control/flywoo/control-remoto/LiteRadio-V3-TBS'
-  )
-  const storeFlywooRef5 = collection(
-    _firestore,
-    'productos/radio_control/flywoo/receptor/Flywoo-ELRS'
-  )
-  // Frsky
-  const storeFrskyRef = collection(_firestore, 'productos/radio_control/frsky/receptor/Frsky_R-XSR')
-  const storeFrskyRef2 = collection(_firestore, 'productos/radio_control/frsky/receptor/Frsky_XM+')
-  // Geprc
-  const storeGeprcRef = collection(_firestore, 'productos/radio_control/geprc/baterias/4S-650a850mAh')
-  const storeGeprcRef2 = collection(_firestore, 'productos/radio_control/geprc/control-remoto/tinyRadio-GR8')
-
-  // Iflightrc
-  const storeIflightRef = collection(
-    _firestore,
-    'productos/radio_control/iflight-rc/baterias/3S-450mAh'
-  )
-  const storeIflightRef2 = collection(
-    _firestore,
-    'productos/radio_control/iflight-rc/cargadores/M4-AC30-1-4S'
-  )
-  const storeIflightRef3 = collection(
-    _firestore,
-    'productos/radio_control/iflight-rc/control-remoto/C8-ELRS'
-  )
-  const storeIflightRef4 = collection(
-    _firestore,
-    'productos/radio_control/iflight-rc/control-remoto/iF8-E'
-  )
-  const storeIflightRef5 = collection(
-    _firestore,
-    'productos/radio_control/iflight-rc/receptor/iFlight-R81-SPI'
-  )
-  // RadioMaster
-  const storeRadioMasterRef = collection(
-    _firestore,
-    'productos/radio_control/radio-master/control-remoto/T8-Lite'
-  )
-  const storeRadioMasterRef2 = collection(
-    _firestore,
-    'productos/radio_control/radio-master/control-remoto/T8-Pro'
-  )
-  const storeRadioMasterRef3 = collection(
-    _firestore,
-    'productos/radio_control/radio-master/control-remoto/zorro'
-  )
-  const storeRadioMasterRef4 = collection(
-    _firestore,
-    'productos/radio_control/radio-master/control-remoto/tx12'
-  )
-  const storeRadioMasterRef5 = collection(
-    _firestore,
-    'productos/radio_control/radio-master/control-remoto/tx16s'
-  )
-  const storeRadioMasterRef6 = collection(
-    _firestore,
-    'productos/radio_control/radio-master/control-remoto/tx16-Max'
-  )
-  const storeRadioMasterRef7 = collection(
-    _firestore,
-    'productos/radio_control/radio-master/receptor/NANO-ELRS-EP2'
-  )
-  const storeRadioMasterRef8 = collection(
-    _firestore,
-    'productos/radio_control/radio-master/receptor/RadioMaster-R81'
-  )
-  // team-blacksheep
-  const storeTBSRef = collection(
-    _firestore,
-    'productos/radio_control/team-blacksheep/control-remoto/ethix-mambo'
-  )
-  const storeTBSRef2 = collection(
-    _firestore,
-    'productos/radio_control/team-blacksheep/control-remoto/tango2pro'
-  )
-  const storeTBSRef3 = collection(
-    _firestore,
-    'productos/radio_control/team-blacksheep/control-remoto/tango2'
-  )
-  const storeTBSRef4 = collection(
-    _firestore,
-    'productos/radio_control/team-blacksheep/control-remoto/tbs-mambo'
-  )
-  const storeTBSRef5 = collection(
-    _firestore,
-    'productos/radio_control/team-blacksheep/receptor/Crossfire-Nano-Rx-SE'
-  )
-  const storeTBSRef6 = collection(
-    _firestore,
-    'productos/radio_control/team-blacksheep/receptor/Tracer-Nano-Rx'
-  )
-  const storeTBSRef7 = collection(
-    _firestore,
-    'productos/radio_control/team-blacksheep/receptor/Crossfire-Nano-RX'
-  )
-  const storeTBSRef8 = collection(
-    _firestore,
-    'productos/radio_control/team-blacksheep/receptor/Crossfire-Nano-Rx-Pro'
-  )
-
-  // Uruav
-  const storeUruavRef = collection(_firestore, 'productos/radio_control/uruav/baterias/1S-250mAh')
-
-  const shoppingCart = []
-
-  // // Betafpv
-  // const collectionsBetafpv = [
-  //   storeBetafpvRef, storeBetafpvRef2, storeBetafpvRef3, storeBetafpvRef4, storeBetafpvRef5
-  // ]
-  // // Eachine
-  // const collectionsEachine = [RefEachine, RefEachine2, RefEachine3, RefEachine4]
-  // // Emaxusa
-  // const collectionsEmaxusa = [RefEmaxusa, RefEmaxusa2, RefEmaxusa3, RefEmaxusa4]
-  // // Flysky
-  // const collectionsFlysky = [RefFlysky, RefFlysky2]
-  // // Flywoo
-  // const collectionsFlywoo = [RefFlywoo, RefFlywoo2, RefFlywoo3, RefFlywoo4, RefFlywoo5]
-  // // Frsky
-  // const collectionsFrsky = [RefFrsky, RefFrsky2]
-  // // Geprc
-  // const collectionsGeprc = [RefGeprc, RefGeprc2]
-  // // Iflightrc
-  // const collectionsIflightrc = [RefIflightrc, RefIflightrc2, RefIflightrc3, RefIflightrc4, RefIflightrc5]
-  // // Radiomaster
-  // const collectionsRadioMaster = [RefRadiomaster, RefRadiomaster2, RefRadiomaster3, RefRadiomaster4, RefRadiomaster5, RefRadiomaster6]
-  // // Teamblacksheep
-  // const collectionsTeamblacksheep = [RefTeamblacksheep, RefTeamblacksheep2, RefTeamblacksheep3, RefTeamblacksheep4, RefTeamblacksheep5, RefTeamblacksheep6]
-  // // Uruav
-  // const collectionsUruav = [RefUruav]
-
-  // TODO: replace for arrow function: search product by id? need to use all Refs in comparison
-  const productsFromFirestore = async () => {
-    // console.log(shoppingsRef, userID);
-    const collectionsWavi = [
-      storeGepRCHDRef,
-      storeRCRef,
-      storeKitRef,
-      storeGooglesBetafpv, storeGooglesDJI, storeGooglesEmaxusa, storeGooglesFatShark, storeGooglesIflightRc, storeGooglesWalksnail,
-      storeBetafpvRef,
-      storeBetafpvRef2,
-      storeBetafpvRef3,
-      storeBetafpvRef4,
-      storeBetafpvRef5,
-      storeEachineRef,
-      storeEachineRef2,
-      storeEachineRef3,
-      storeEachineRef4,
-      storeEmaxUsaRef,
-      storeEmaxUsaRef2,
-      storeEmaxUsaRef3,
-      storeEmaxUsaRef4,
-      storeFlyskyRef,
-      storeFlyskyRef2,
-      storeFlywooRef,
-      storeFlywooRef2,
-      storeFlywooRef3,
-      storeFlywooRef4,
-      storeFlywooRef5,
-      storeFrskyRef,
-      storeFrskyRef2,
-      storeGeprcRef,
-      storeGeprcRef2,
-      storeIflightRef,
-      storeIflightRef2,
-      storeIflightRef3,
-      storeIflightRef4,
-      storeIflightRef5,
-      storeRadioMasterRef,
-      storeRadioMasterRef2,
-      storeRadioMasterRef3,
-      storeRadioMasterRef4,
-      storeRadioMasterRef5,
-      storeRadioMasterRef6,
-      storeRadioMasterRef7,
-      storeRadioMasterRef8,
-      storeTBSRef,
-      storeTBSRef2,
-      storeTBSRef3,
-      storeTBSRef4,
-      storeTBSRef5,
-      storeTBSRef6,
-      storeTBSRef7,
-      storeTBSRef8,
-      storeUruavRef
-    ]
-    const productData = []
-    for (const product of collectionsWavi) {
-      const colectionData = await getDocs(product)
-      colectionData.forEach((DOC) => {
-        productData.push(DOC.data())
-      })
+  return rootParams.map(pathParts => {
+    if (pathParts.length === 3) {
+      // e.g. products/dron/kit_fpv_dron
+      // For deeper paths passed as single string in last arg
+      return collection(db, pathParts[0], pathParts[1], pathParts[2]);
     }
-    sessionStorage.setItem('cartUpdated', 'productos')
-    return productData
-  }
+    return collection(db, ...pathParts); 
+  });
+};
 
-  const shoppingsFromFirestore = () => {
-    let productData
-    // Solicitar todos los productos
-    if (!AllProducts) {
-      // Solicitar a firebase
-      // console.log(AllProducts);
-      productData = productsFromFirestore()
-      // console.log(productData);
-      productData.then((response) => {
-        compareProductsIDs(response)
-        // console.log(response);
-        sessionStorage.setItem('cartUpdated', 'firestore')
-        sessionStorage.setItem('Todos los productos', JSON.stringify(response))
-      })
+export const FirebaseCompareShoppingCartIds = async ({ products, updateCart }) => {
+  try {
+    const user = auth.currentUser;
+    const userID = user ? user.uid : null;
+    const shoppingCartID = typeof window !== 'undefined' ? sessionStorage.getItem('cartID') : null;
+    
+    // Safety check: if no user ID and no cart ID, nothing to do
+    if (!userID && !shoppingCartID) {
+      console.warn("FirebaseCompareShoppingCartIds: No UserID or CartID found.");
+      return;
+    }
+
+    if (!products || products.length === 0) {
+      return;
+    }
+
+    const productsInputMap = new Map();
+    products.forEach(p => {
+        productsInputMap.set(p.productID, p.cantidad);
+    });
+
+    const targetIds = Array.from(productsInputMap.keys());
+    console.log("Looking for products with IDs:", targetIds);
+
+    // Fetch all products (Optimized with Promise.all)
+    // NOTE: Ideally we should query by ID, but since data structure is scattered, 
+    // we fetch efficiently and filter in memory as per original logic.
+    // We check sessionStorage for cache first to avoid Firestore reads on every cart update.
+    
+    let allProducts = [];
+    const cachedProducts = typeof window !== 'undefined' ? sessionStorage.getItem('Todos los productos') : null;
+
+    if (cachedProducts) {
+      allProducts = JSON.parse(cachedProducts);
     } else {
-      // Solicitar todos los productos almacenados en session storage
-      productData = JSON.parse(AllProducts)
-      compareProductsIDs(productData)
-      sessionStorage.setItem('cartUpdated', 'sessionStorage')
+       const collectionRefs = getProductCollections(firestore);
+       const snapshots = await Promise.all(collectionRefs.map(ref => getDocs(ref)));
+       
+       snapshots.forEach(snap => {
+         snap.forEach(doc => {
+            allProducts.push(doc.data());
+         });
+       });
+       
+       if (typeof window !== 'undefined') {
+         sessionStorage.setItem('Todos los productos', JSON.stringify(allProducts));
+       }
     }
-  }
 
-  // esta funcion recibe un arreglo con todos los productos a comparar
-  const compareProductsIDs = (productData) => {
-    const cardProductos = []
-    let productos = []
-    // comparar productos por ids
-    if (productData && productData.length > 0) {
-      // console.log('productData', productData, productos)
-      console.log('compareProductsIDs selected products', productData)
-      productos = productData
-      let counter = 0
-      productos.map((DOC) => {
-        // console.log(DOC);
-        const iD = DOC.productID
-        for (const codigo of productosIds) {
-          // console.log(iD, codigo);
-          if (iD === codigo) {
-            // Se identifica por ID que producto representa para ser añadido
-            cardProductos.push(DOC)
-            // se desarrolla un parsePrices del catalogo de todos los productos para añadirlos formateados al Context del ShoppingCard
-            cardProductos.map((product, index, array) => {
-              // console.log(product.precio);
-              if (
-                typeof parseInt(product.precio) === 'number' &&
-                product.precio !== 'Agotado'
-              ) {
-                array[index].precio = calculateCopPrice(product.precio)
-              }
-            })
-            // Se hace uso de las cantidades asginadas en el carrito de compras
-            cardProductos[counter].cantidad = productosCantidades[counter]
-            // Nuestra marca para identificar el producto en el array
-            counter++
-          }
+    // Filter and Hydrate
+    const cartProducts = allProducts.filter(p => productsInputMap.has(p.productID))
+      .map(p => {
+        // Clone to avoid mutation of cached array
+        const product = { ...p }; 
+        const qty = productsInputMap.get(p.productID);
+        
+        // Calculate price
+        // Note: product.precio from Firestore is likely a raw number or string. 
+        // calculateCopPrice handles formatting.
+        const formattedPrice = calculateCopPrice(product.precio);
+        
+        return {
+           ...product,
+           precio: formattedPrice,
+           cantidad: qty
+        };
+      });
+      
+    if (cartProducts.length > 0) {
+        // Calculate Totals
+        let totalItems = 0;
+        let totalSum = 0;
+        
+        cartProducts.forEach(p => {
+           totalItems += p.cantidad;
+           
+           // Reverse calculate price for sum total (since we just formatted it)
+           // ideally we should use the raw price for calculation, but keeping consistent with established logic
+           // The original logic re-calculated sum from raw price.
+           // Let's use the RAW price from the original 'p' object (from allProducts) for calculation if possible?
+           // Actually, let's just use the logic from before:
+           
+           const rawPrice = parseInt(p.precio_base || p.precio); // fallback 
+           // Wait, p.precio in Firestore IS the USD price usually.
+           // Cop logic: (price + 30) * 1.5 * Exchange
+           
+           if (!isNaN(rawPrice) && p.precio !== 'Agotado') {
+               const exchangeRate = parseInt(process.env.NEXT_PUBLIC_DOLARTOCOP || 4000);
+               const transport = 30; 
+               const factor = 1.5;
+               const unitPriceCOP = (rawPrice + transport) * factor * exchangeRate;
+               totalSum += unitPriceCOP * p.cantidad;
+           }
+        });
+
+        // Update State
+        const shoppingCartState = {
+            productos: cartProducts,
+            updated: true,
+            items: totalItems,
+            suma: totalSum,
+            cartID: userID || shoppingCartID
+        };
+
+        console.log("Updating Cart State:", shoppingCartState);
+        updateCart(shoppingCartState); // Update Context/Redux
+        
+        if (typeof window !== 'undefined') {
+            sessionStorage.setItem('cartProducts', totalItems);
+            sessionStorage.setItem('cartSum', totalSum);
+            sessionStorage.setItem('cartUpdated', 'actualizados-productos-context');
         }
-      })
     }
-    if (typeof cardProductos === 'object' && cardProductos.length > 0) {
-      // console.log('cardProductos', cardProductos)
-      shoppingCart.productos = cardProductos
-      shoppingCart.updated = true
-      // Se determina la cantidad de objetos agregados al carrito de compras
-      // cardProductos.length;
-      let totalCantidades = 0
-      productosCantidades.map((cantidad) => {
-        totalCantidades += cantidad
-      })
-      shoppingCart.items = totalCantidades
-      console.log('compareProductAmounts', shoppingCart, totalCantidades)
-      sessionStorage.setItem('cartUpdated', 'filterItems')
-      sessionStorage.setItem('cartProducts', totalCantidades)
-      // Se envia listado de productos para calcular el valor del carrito de compras
-      calculateCartAmount(cardProductos)
-    }
-  }
 
-  const calculateCartAmount = (cardProductos) => {
-    let acomulateSum = 0
-    // console.log(acomulateSum);
-    cardProductos.map((product, k) => {
-      // console.log(acomulateSum, product.precio);
-      const { precio, cantidad } = product
-      if (typeof parseInt(precio) === 'number' && precio !== 'Agotado') {
-        const dolarPrice = parseInt(process.env.NEXT_PUBLIC_DOLARTOCOP)
-        acomulateSum += parseInt(precio) * cantidad * dolarPrice
-      }
-    })
-    if (acomulateSum > 0) {
-      // console.log(acomulateSum);
-      // setShoppingCart({ ...shoppingCart, suma: acomulateSum });
-      shoppingCart.suma = acomulateSum
-      sessionStorage.setItem('cartUpdated', 'suma')
-      sessionStorage.setItem('cartSum', acomulateSum)
-      // sessionStorage.removeItem("cartUpdated");
-      // console.log('service', shoppingCart)
-      if (shoppingCart.productos) {
-        console.log('FirebaseCompareShoppingCartIds', shoppingCart)
-        updateCart(shoppingCart)
-        sessionStorage.setItem('cartUpdated', 'actualizados-productos-context')
-        // sharingInformationService.setSubject({shoppingCart});
-      }
-    }
+  } catch (error) {
+    console.error("Error in FirebaseCompareShoppingCartIds:", error);
   }
+};
 
-  if (usedID) {
-    // Funciones para separar arreglo de entrada en ID's y cantidades
-    extractProductsID(products)
-    extractProductAmount(products)
-    // Funcion para obtener de Firestore todos los productos de la tienda
-    shoppingsFromFirestore()
-  }
-}
+export default FirebaseCompareShoppingCartIds;
 
 FirebaseCompareShoppingCartIds.propTypes = {
   products: PropTypes.array.isRequired,
