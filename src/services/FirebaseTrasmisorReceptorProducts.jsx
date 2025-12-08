@@ -1,197 +1,75 @@
+'use client'
 import { firestore } from '@/firebase/firebaseClient'
 import { collection, doc, getDocs } from 'firebase/firestore'
+import { parseProductPrices } from '@/utilities/priceUtils'
 
-function FirebaseTrasmisorReceptorProducts (props) {
-  let productosReceptor = null
-  let productosTransmisor = null
+async function FirebaseTrasmisorReceptorProducts() {
+  let storeProductsReceptor = []
+  let storeProductsTransmisor = []
 
   if (typeof window !== 'undefined') {
-    // Perform localStorage action
-    productosReceptor = sessionStorage.getItem('Productos_Receptor') || null
-    productosTransmisor = sessionStorage.getItem('Productos_Transmisor') || null
+    const cachedReceptor = sessionStorage.getItem('Productos_Receptor')
+    const cachedTransmisor = sessionStorage.getItem('Productos_Transmisor')
+    if (cachedReceptor && cachedTransmisor) {
+      storeProductsReceptor = JSON.parse(cachedReceptor)
+      storeProductsTransmisor = JSON.parse(cachedTransmisor)
+      
+      parseProductPrices(storeProductsReceptor)
+      parseProductPrices(storeProductsTransmisor)
+      
+      return { storeProductsReceptor, storeProductsTransmisor }
+    }
   }
+
   const _firestore = firestore
   const productsRef = collection(_firestore, 'productos')
   const productsDoc = doc(productsRef, 'radio_control')
 
-  let storeProductsReceptor = []
-  let storeProductsTransmisor = []
-
-  const collectionBetafpvReceptor = collection(
-    productsDoc,
-    'betafpv/receptor/BETAFPV-ELRS'
-  )
-  const collectionFlyskyReceptor = collection(
-    productsDoc,
-    'flysky/receptor/Flysky-FS-X14S-V2'
-  )
-  const collectionFlyskyReceptor2 = collection(
-    productsDoc,
-    'flysky/receptor/Flysky-FS-iA8X'
-  )
-  const collectionFlywooReceptor = collection(
-    productsDoc,
-    'flywoo/receptor/Flywoo-ELRS'
-  )
-  const collectionFrskyReceptor = collection(
-    productsDoc,
-    'frsky/receptor/Frsky_R-XSR'
-  )
-  const collectionFrskyReceptor2 = collection(
-    productsDoc,
-    'frsky/receptor/Frsky_XM+'
-  )
-  const collectioniFlightReceptor = collection(
-    productsDoc,
-    'iflight-rc/receptor/iFlight-R81-SPI'
-  )
-  const collectionRadioMasterReceptor = collection(
-    productsDoc,
-    'radio-master/receptor/NANO-ELRS-EP2'
-  )
-  const collectionRadioMasterReceptor2 = collection(
-    productsDoc,
-    'radio-master/receptor/RadioMaster-R81'
-  )
-  const collectionTeamBlacksheepReceptor = collection(
-    productsDoc,
-    'team-blacksheep/receptor/Crossfire-Nano-RX'
-  )
-  const collectionTeamBlacksheepReceptor2 = collection(
-    productsDoc,
-    'team-blacksheep/receptor/Crossfire-Nano-RX-Pro'
-  )
-  const collectionTeamBlacksheepReceptor3 = collection(
-    productsDoc,
-    'team-blacksheep/receptor/Crossfire-Nano-RX-SE'
-  )
-  const collectionTeamBlacksheepReceptor4 = collection(
-    productsDoc,
+  const receptorPaths = [
+    'betafpv/receptor/BETAFPV-ELRS',
+    'flysky/receptor/Flysky-FS-X14S-V2',
+    'flysky/receptor/Flysky-FS-iA8X',
+    'flywoo/receptor/Flywoo-ELRS',
+    'frsky/receptor/Frsky_R-XSR',
+    'frsky/receptor/Frsky_XM+',
+    'iflight-rc/receptor/iFlight-R81-SPI',
+    'radio-master/receptor/NANO-ELRS-EP2',
+    'radio-master/receptor/RadioMaster-R81',
+    'team-blacksheep/receptor/Crossfire-Nano-RX',
+    'team-blacksheep/receptor/Crossfire-Nano-RX-Pro',
+    'team-blacksheep/receptor/Crossfire-Nano-RX-SE',
     'team-blacksheep/receptor/Traser-Nano-RX'
-  )
+  ]
 
-  const collectionTeamBlacksheepTransmisor = collection(
-    productsDoc,
-    'team-blacksheep/transmisor/Crossfire-Nano-Tx'
-  )
-  const collectionBetafpvTransmisor = collection(
-    productsDoc,
+  const transmisorPaths = [
+    'team-blacksheep/transmisor/Crossfire-Nano-Tx',
     'betafpv/transmisor/ELRS-Nano-TX'
-  )
+  ]
 
-  const receptorsFromFirestore = async () => {
-    const collectionReceptor = [
-      collectionBetafpvReceptor,
-      collectionFlyskyReceptor,
-      collectionFlyskyReceptor2,
-      collectionFlywooReceptor,
-      collectionFrskyReceptor,
-      collectionFrskyReceptor2,
-      collectioniFlightReceptor,
-      collectionRadioMasterReceptor,
-      collectionRadioMasterReceptor2,
-      collectionTeamBlacksheepReceptor,
-      collectionTeamBlacksheepReceptor2,
-      collectionTeamBlacksheepReceptor3,
-      collectionTeamBlacksheepReceptor4
-    ]
-    const productosReceptor = []
-    for (const product of collectionReceptor) {
-      // console.log(product, collectionReceptor)
-      const productDataReceptor = await getDocs(product)
-      productDataReceptor.forEach((DOC) => {
-        productosReceptor.push(DOC.data())
-      })
-    }
-    return productosReceptor
-  }
+  try {
+    const receptorRefs = receptorPaths.map(path => collection(productsDoc, path))
+    const transmisorRefs = transmisorPaths.map(path => collection(productsDoc, path))
+    
+    // Fetch all
+    const snapshotsReceptor = await Promise.all(receptorRefs.map(ref => getDocs(ref)))
+    const snapshotsTransmisor = await Promise.all(transmisorRefs.map(ref => getDocs(ref)))
 
-  const transmisorsFromFirestore = async () => {
-    const collectionTransmisor = [
-      collectionBetafpvTransmisor,
-      collectionTeamBlacksheepTransmisor
-    ]
-    const productosTransmisor = []
-    for (const transmisor of collectionTransmisor) {
-      // console.log(transmisor, collectionTransmisor)
-      const productDataTransmisor = await getDocs(transmisor)
-      productDataTransmisor.forEach((DOC) => {
-        productosTransmisor.push(DOC.data())
-      })
-    }
-    return productosTransmisor
-  }
+    storeProductsReceptor = snapshotsReceptor.flatMap(snap => snap.docs.map(doc => doc.data()))
+    storeProductsTransmisor = snapshotsTransmisor.flatMap(snap => snap.docs.map(doc => doc.data()))
 
-  const productosToSessionStore = () => {
-    let receptorsData
-    let receptors = []
-    let transmisorsData
-    let transmisors = []
-    if (!productosReceptor) {
-      // console.log(productosReceptor);
-      receptorsData = receptorsFromFirestore()
-      receptorsData.then((response) => {
-        // console.log(response);
-        receptors = response
-        parsePrices(receptors, 'receptors')
-      })
-    } else {
-      receptors = JSON.parse(productosReceptor)
-      storeProductsReceptor = receptors
-      // parsePrices(receptors, 'receptors')
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('Productos_Receptor', JSON.stringify(storeProductsReceptor))
+      sessionStorage.setItem('Productos_Transmisor', JSON.stringify(storeProductsTransmisor))
     }
-    if (!productosTransmisor) {
-      // console.log(productosReceptor);
-      transmisorsData = transmisorsFromFirestore()
-      transmisorsData.then((response) => {
-        // console.log(response);
-        transmisors = response
-        parsePrices(transmisors, 'transmisors')
-      })
-    } else {
-      transmisors = JSON.parse(productosTransmisor)
-      storeProductsTransmisor = transmisors
-      // parsePrices(transmisors, 'transmisors')
-    }
-  }
 
-  const parsePrices = (productos, clue) => {
-    // console.log(productos);
-    if (productos && productos.length > 0 && typeof window !== 'undefined') {
-      productos.map((product, index, array) => {
-        // console.log(product.precio);
-        if (
-          typeof parseInt(product.precio) === 'number' &&
-          product.precio !== 'Agotado'
-        ) {
-          const dolarPrice = parseInt(process.env.NEXT_PUBLIC_DOLARTOCOP)
-          const trasportBase = 30 // USD
-          const factorImportation = 1.5
-          const dolarToCop = (parseInt(product.precio) + trasportBase) * factorImportation * dolarPrice
-          array[index].precio = dolarToCop.toLocaleString(
-            'es-CO',
-            { style: 'currency', currency: 'COP' }
-          )
-        }
-      })
-      // setStoreProductsReceptor(productos);
-      // console.log(storeProducts)
-      // console.log(clue, productos)
-      if (clue === 'receptors') {
-        sessionStorage.setItem('Productos_Receptor', JSON.stringify(productos))
-        storeProductsReceptor = productos
-      }
-      if (clue === 'transmisors') {
-        sessionStorage.setItem('Productos_Transmisor', JSON.stringify(productos))
-        storeProductsTransmisor = productos
-      }
-    }
-  }
+    parseProductPrices(storeProductsReceptor)
+    parseProductPrices(storeProductsTransmisor)
 
-  productosToSessionStore()
-  if (storeProductsReceptor.length > 0 && storeProductsTransmisor.length > 0) {
-    console.log('productosToSessionStore', storeProductsTransmisor, storeProductsReceptor)
     return { storeProductsReceptor, storeProductsTransmisor }
+
+  } catch (error) {
+    console.error("Error fetching Transmisor/Receptor products:", error)
+    return { storeProductsReceptor: [], storeProductsTransmisor: [] }
   }
 }
 

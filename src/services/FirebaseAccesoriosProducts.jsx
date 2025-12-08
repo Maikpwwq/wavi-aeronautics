@@ -1,135 +1,58 @@
+'use client'
+import { firestore } from '@/firebase/firebaseClient'
 import { collection, doc, getDocs } from 'firebase/firestore'
-import { firestore } from '@/firebase/firebaseClient' // storage
+import { parseProductPrices } from '@/utilities/priceUtils'
 
-function FirebaseAccesoriosProducts (props) {
-  // let shoppingCartID = null
-  let productosBaterias = null
-  if (typeof window !== 'undefined') {
-    // Perform localStorage action
-    // shoppingCartID = sessionStorage.getItem('cartID') || null
-    productosBaterias = sessionStorage.getItem('Productos_Baterias') || null
-  }
-  // const _storage = storage
-  const _firestore = firestore
-  const productsRef = collection(_firestore, 'productos')
-  const productsDoc = doc(productsRef, 'radio_control')
+async function FirebaseAccesoriosProducts() {
   let productsBaterias = []
 
-  const collectionBetafpvBaterias = collection(
-    productsDoc,
-    'betafpv/baterias/2PCS-2s-300mAh'
-  )
-  const collectionEachineBaterias = collection(
-    productsDoc,
-    'eachine/baterias/E520S-1200mAh'
-  )
-  const collectionEachineBaterias2 = collection(
-    productsDoc,
-    'eachine/baterias/E58-500mAh'
-  )
-  const collectionEmaxUsaBaterias = collection(
-    productsDoc,
-    'emax-usa/baterias/1S-300mAh'
-  )
-  const collectionEmaxUsaBaterias2 = collection(
-    productsDoc,
-    'emax-usa/baterias/1S-450mAh'
-  )
-  const collectionEmaxUsaBaterias3 = collection(
-    productsDoc,
-    'emax-usa/baterias/2PCS-2S-300mAh'
-  )
-  const collectionFlywooBaterias = collection(
-    productsDoc,
-    'flywoo/baterias/4PCS-1S-450mAh'
-  )
-  const collectionFlywooBaterias2 = collection(
-    productsDoc,
-    'flywoo/baterias/4PCS-1S-750mAh'
-  )
-  const collectionGeprcBaterias = collection(
-    productsDoc,
-    'geprc/baterias/4S-650a850mAh'
-  )
-  const collectionIflightBaterias = collection(
-    productsDoc,
-    'iflight-rc/baterias/3S-450mAh'
-  )
-  const collectionUruavBaterias = collection(
-    productsDoc,
+  if (typeof window !== 'undefined') {
+    const cachedBaterias = sessionStorage.getItem('Productos_Baterias')
+    if (cachedBaterias) {
+      productsBaterias = JSON.parse(cachedBaterias)
+      parseProductPrices(productsBaterias)
+      return { productsBaterias }
+    }
+  }
+
+  const _firestore = firestore
+  const productsRef = collection(_firestore, 'productos')
+  const productsDoc = doc(productsRef, 'radio_control') // Warning: Accesorios seems to read from radio_control? Copy-paste error in original?
+  // Checking original file: "const productsDoc = doc(productsRef, 'radio_control')"
+  // But collections inside are "betafpv/baterias/...", "emax-usa/baterias/..."
+  // If this path worked before, it should work now. 
+  
+  const collectionPaths = [
+    'betafpv/baterias/2PCS-2s-300mAh',
+    'eachine/baterias/E520S-1200mAh',
+    'eachine/baterias/E58-500mAh',
+    'emax-usa/baterias/1S-300mAh',
+    'emax-usa/baterias/1S-450mAh',
+    'emax-usa/baterias/2PCS-2S-300mAh',
+    'flywoo/baterias/4PCS-1S-450mAh',
+    'flywoo/baterias/4PCS-1S-750mAh',
+    'geprc/baterias/4S-650a850mAh',
+    'iflight-rc/baterias/3S-450mAh',
     'uruav/baterias/1S-250mAh'
-  )
+  ]
 
-  const productsFromFirestore = async () => {
-    const collectionBaterias = [
-      collectionBetafpvBaterias,
-      collectionEachineBaterias,
-      collectionEachineBaterias2,
-      collectionEmaxUsaBaterias,
-      collectionEmaxUsaBaterias2,
-      collectionEmaxUsaBaterias3,
-      collectionFlywooBaterias,
-      collectionFlywooBaterias2,
-      collectionGeprcBaterias,
-      collectionIflightBaterias,
-      collectionUruavBaterias
-    ] // new Array(
-    const productosBaterias = []
-    for (const product of collectionBaterias) {
-      // console.log(product, collectionBaterias)
-      const productDataBaterias = await getDocs(product)
-      productDataBaterias.forEach((DOC) => {
-        productosBaterias.push(DOC.data())
-      })
-    }
-    return productosBaterias
-  }
+  try {
+    const refs = collectionPaths.map(path => collection(productsDoc, path))
+    const snapshots = await Promise.all(refs.map(ref => getDocs(ref)))
+    
+    productsBaterias = snapshots.flatMap(snap => snap.docs.map(doc => doc.data()))
 
-  const productosToSessionStore = () => {
-    let productData
-    let productos = []
-    if (!productosBaterias) {
-      // console.log(productosBaterias);
-      productData = productsFromFirestore()
-      productData.then((response) => {
-        // console.log(response);
-        productos = response
-        parsePrices(productos)
-      })
-    } else {
-      productos = JSON.parse(productosBaterias)
-      parsePrices(productos)
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('Productos_Baterias', JSON.stringify(productsBaterias))
     }
-  }
 
-  const parsePrices = (productos) => {
-    // console.log(productos);
-    if (productos && productos.length > 0 && typeof window !== 'undefined') {
-      sessionStorage.setItem('Productos_Baterias', JSON.stringify(productos))
-      productos.map((product, index, array) => {
-        // console.log(product.precio);
-        if (
-          typeof parseInt(product.precio) === 'number' &&
-          product.precio !== 'Agotado'
-        ) {
-          const dolarPrice = parseInt(process.env.NEXT_PUBLIC_DOLARTOCOP)
-          const trasportBase = 30 // USD
-          const factorImportation = 1.5
-          const dolarToCop = (parseInt(product.precio) + trasportBase) * factorImportation * dolarPrice
-          array[index].precio = dolarToCop.toLocaleString(
-            'es-CO',
-            { style: 'currency', currency: 'COP' }
-          )
-        }
-      })
-      // setStoreProductsBaterias(productos);
-      // console.log(storeProducts)
-      productsBaterias = productos
-    }
-  }
-  productosToSessionStore()
-  if (productsBaterias.length > 0) {
+    parseProductPrices(productsBaterias)
+    
     return { productsBaterias }
+
+  } catch (error) {
+    console.error("Error fetching Accesorios products:", error)
+    return { productsBaterias: [] }
   }
 }
 
