@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import Link from 'next/link'
 // import { getAllShoppingCart } from "@/services/sharedServices";
-import FirebaseAddToCart from '@/services/FirebaseAddToCart'
 import { loadDetail } from '@/store/states/product'
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
 import AddProduct from '@/app/tienda/components/AddProduct'
@@ -59,27 +58,12 @@ const ProductCard = ({ products, category }) => {
 
   // TODO: Separar la acción de agregar al carrito para usarla dentro del detalle de producto
   // Solo activar
-  useEffect(() => {
-    storeToFirebaseCart()
-  }, [shoppingCart.updated, shoppingCart.productos])
-
-  const storeToFirebaseCart = () => {
-    // const cardProductos = {};
-    const cardProductos = []
-    let cart = []
-    // copia de los productos agregados al carrito de compras
-    cart = shoppingCart.productos
-    console.log('shoppingCart', shoppingCart)
-    cart.map((product, n) => {
-      const { productID, cantidad } = product
-      // cardProductos[n] = productID;
-      // Se almacena como items del carrito; id de producto y cantidad solicitada
-      cardProductos.push({ productID, cantidad })
-    })
-    console.log('cardProductos', cardProductos)
-    if (cardProductos.length > 0) {
-      // Servicio que permite al usuario guardar elementos en el carrito de firebase
-      FirebaseAddToCart({ productos: cardProductos })
+  const handleSelect = () => {
+    console.log('producto', producto)
+    try {
+      dispatch(loadDetail({ producto }))
+    } catch (e) {
+      return console.error(e.message)
     }
   }
 
