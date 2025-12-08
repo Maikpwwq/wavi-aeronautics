@@ -1,5 +1,5 @@
 export { default as FirebaseAccesoriosProducts } from './FirebaseAccesoriosProducts'
-export { default as FirebaseAddToCart } from './FirebaseAddToCart'
+export * from './shoppingCartService'
 export { default as FirebaseCompareShoppingCartIds } from './FirebaseCompareShoppingCartIds'
 export * from './FirebaseDeleteFromCart'
 export { default as FirebaseDroneProducts } from './FirebaseDroneProducts'
