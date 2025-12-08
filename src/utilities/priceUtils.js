@@ -55,6 +55,22 @@ export const parseCopCurrency = (priceStr) => {
 };
 
 /**
+ * Formats a numeric price into COP currency string (e.g. 2000000 -> "$ 2.000.000")
+ * @param {number} amount - The numeric amount to format
+ * @returns {string} The formatted string
+ */
+export const formatCurrency = (amount) => {
+  if (isNaN(amount)) return '$ 0';
+  
+  return amount.toLocaleString('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  });
+};
+
+/**
  * Mutates an array of products to update their price to COP.
  * @param {Array} products - Array of product objects
  */
