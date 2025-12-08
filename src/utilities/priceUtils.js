@@ -40,6 +40,21 @@ export const calculateCopPrice = (priceInUsd) => {
 };
 
 /**
+ * Parses a COP currency string (e.g. "$ 2.212.650") back to a number.
+ * @param {string|number} priceStr - The price string or number
+ * @returns {number} The numeric value
+ */
+export const parseCopCurrency = (priceStr) => {
+  if (typeof priceStr === 'number') return priceStr;
+  if (!priceStr) return 0;
+  
+  // Remove non-numeric characters (except possible minus sign if needed, but price is usually positive)
+  const numericString = priceStr.replace(/[^0-9]/g, '');
+  const parsed = parseInt(numericString, 10);
+  return isNaN(parsed) ? 0 : parsed;
+};
+
+/**
  * Mutates an array of products to update their price to COP.
  * @param {Array} products - Array of product objects
  */
