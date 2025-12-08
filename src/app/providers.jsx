@@ -11,20 +11,30 @@ import React, { useState } from 'react'
 import DataInitializer from '@/app/components/DataInitializer'
 
 export default function Providers ({ children }) {
-  const [queryClient] = useState(() => new QueryClient())
-  const preloadState = initialState()
-  const store = ConfigureAppStore(preloadState)
+  const [client] = useState(
+    new QueryClient({
+      defaultOptions: {
+        queries: {
+          staleTime: 5000,
+          refetchOnWindowFocus: false
+        }
+      }
+    })
+  )
+
+  const store = ConfigureAppStore(initialState())
+
+  if (!store) {
+     return <>{children}</> // Fallback if store fails, though it shouldn't
+  }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <DataInitializer />
-      {/* contextSharing={true} */}
+    <QueryClientProvider client={client}>
       <Provider store={store}>
         <ShoppingCartProvider>
-          {/* <Hydrate state={pageProps.dehydratedState}></Hydrate> */}
+          <DataInitializer />
           {children}
           <ReactQueryDevtools />
-          {/* initialIsOpen */}
         </ShoppingCartProvider>
       </Provider>
     </QueryClientProvider>
