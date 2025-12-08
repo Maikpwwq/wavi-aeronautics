@@ -1,20 +1,16 @@
 import { auth, firestore } from '@/firebase/firebaseClient'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { collection, doc, setDoc } from 'firebase/firestore'
+import { saveCartToFirestore } from '../../services/shoppingCartService'
 
 // SignUpAuth
 export default async function handler (req, res) {
   const { firstName, lastName, email, password } = JSON.parse(req.body)
   const _firestore = firestore
-  const shoppingsRef = collection(_firestore, 'shoppingCart')
   const usersRef = collection(_firestore, 'users')
 
   const userToFirestore = async (updateInfo, userID) => {
     await setDoc(doc(usersRef, userID), updateInfo, { merge: true })
-  }
-
-  const shoppingsToFirestore = async (updateInfo, userRef) => {
-    await setDoc(doc(shoppingsRef, userRef), updateInfo, { merge: true })
   }
 
   if (
@@ -44,7 +40,7 @@ export default async function handler (req, res) {
           const usedId = user.uid
           if (usedId) {
             // Instancia un carrito de compras vacio
-            shoppingsToFirestore({ productos: [] }, usedId).then(() => {
+            saveCartToFirestore(usedId, []).then(() => {
               console.log('Instancia un carrito de compras vacio', usedId)
             })
             userToFirestore(data, usedId).then(() => {
