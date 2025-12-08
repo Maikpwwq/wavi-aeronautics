@@ -2,106 +2,60 @@
 import { v4 as uuidv4 } from 'uuid'
 import { firestore, auth } from '@/firebase/firebaseClient'
 import { collection, doc, getDoc, setDoc } from 'firebase/firestore'
-import { sharingInformationService } from './sharing-information'
-// import { createCart } from "../store/states/shopping_cart";
-// import store from "../../ssr/renderApp.js";
-// import { connect, useStore } from "react-redux";
 
-const FirebaseLoadShoppingCart = () => {
-  // { dispatch }
-  // console.log("props", createCart);
-  const user = auth?.currentUser || {}
-  const userID = user?.uid || null
-  let shoppingCartID = null
-  const _firestore = firestore
-  const shoppingsRef = collection(_firestore, 'shoppingCart')
-
-  let shoppingCart = []
-
-  const shoppingsToFirestore = async (updateInfo, userRef) => {
-    await setDoc(doc(shoppingsRef, userRef), updateInfo, { merge: true })
+// Helper to save cart (exported for use in other files)
+export const saveCartToFirestore = async (cartID, products) => {
+  if (!cartID) return;
+  try {
+    const shoppingsRef = collection(firestore, 'shoppingCart');
+    await setDoc(doc(shoppingsRef, cartID), { productos: products }, { merge: true });
+    console.log("Cart saved to Firestore:", cartID);
+  } catch (error) {
+    console.error("Error saving cart to Firestore:", error);
   }
+};
 
-  const newShoppingCart = () => {
-    const shoppingsId = uuidv4()
+const FirebaseLoadShoppingCart = async () => {
+    // 1. Get User/Cart ID
+    const user = auth?.currentUser;
+    const userID = user?.uid;
+    
+    let shoppingCartID = null;
     if (typeof window !== 'undefined') {
-      console.log('NewShoppingCartID', shoppingsId)
-      shoppingsToFirestore({ productos: [] }, shoppingsId)
-      shoppingCartID = shoppingsId
-      sessionStorage.setItem('cartID', shoppingsId)
-      sessionStorage.setItem('cartUpdated', 'id')
-    }
-  }
-
-  if (typeof window !== 'undefined') {
-    // Perform localStorage action
-    shoppingCartID = sessionStorage.getItem('cartID') || null
-    console.log('shoppingCartID', shoppingCartID)
-    if (!shoppingCartID) {
-      newShoppingCart()
-    }
-  }
-
-  // useEffect(() => {
-
-  // }, [shoppingCartID]);
-
-  // const shoppingUpdatedItems = sessionStorage.getItem("cartUpdated");
-  const usedID = userID || shoppingCartID
-  console.log('usedID load:', usedID)
-
-  const shoppingsFromFirestore = async () => {
-    const cardProductos = []
-    const productData = await getDoc(doc(shoppingsRef, usedID))
-    if (productData.data()) {
-      const productos = productData.data().productos
-      console.log('shoppingsFromFirestore', productos)
-      for (const index in productos) {
-        console.log('shoppingsFromFirestore', productos[index])
-        if (productos[index]) {
-          cardProductos.push(productos[index])
+        shoppingCartID = sessionStorage.getItem('cartID');
+        
+        // If no ID exists, create one
+        if (!shoppingCartID && !userID) {
+            shoppingCartID = uuidv4();
+            sessionStorage.setItem('cartID', shoppingCartID);
+            // Initialize empty cart in DB
+            await saveCartToFirestore(shoppingCartID, []);
         }
-      }
     }
 
-    if (cardProductos && cardProductos.length !== 0) {
-      shoppingCart = cardProductos
-      console.log('store', cardProductos, shoppingCart)
+    const usedID = userID || shoppingCartID;
+    console.log('FirebaseLoadShoppingCart loading for ID:', usedID);
+
+    if (!usedID) return [];
+
+    try {
+        const shoppingsRef = collection(firestore, 'shoppingCart');
+        const docRef = doc(shoppingsRef, usedID);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            console.log("Firestore Cart Data:", data);
+            return data.productos || [];
+        } else {
+            console.log("No cart found in Firestore for this ID");
+            return [];
+        }
+    } catch (error) {
+        console.error("Error loading cart from Firestore:", error);
+        return [];
     }
-  }
-
-  if (usedID) {
-    shoppingsFromFirestore().then(() => {
-      // store.dispatch(createCard(shoppingCart));
-      // dispatch.createCart(shoppingCart);
-
-      console.log('shoppingCart', shoppingCart)
-      // { cargaBase: true }
-      sharingInformationService.setSubject({ cart: shoppingCart })
-      return shoppingCart
-    })
-    // if (shoppingCart.length > 0) {
-    //   console.log("shoppingCart", shoppingCart);
-    //   return shoppingCart;
-    // }
-  }
 }
 
-// const mapStateToProps = {}
-
-// const mapDispatchToProps = (dispatch) => {
-//    dispatching plain actions
-// createCart,
-// return {
-// ...bindActionCreators({ createCart }, dispatch)
-// createCart: (shoppingCart) => dispatch.createCart(shoppingCart),
-// createCart,
-// dispatch,
-//   };
-// };
-
 export default FirebaseLoadShoppingCart
-// export default connect(
-//   mapStateToProps,
-//   null //mapDispatchToProps
-// )(FirebaseLoadShoppingCart);
+
