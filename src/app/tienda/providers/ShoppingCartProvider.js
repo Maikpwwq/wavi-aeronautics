@@ -1,5 +1,6 @@
 import React, { useState, createContext, useEffect } from 'react'
 import FirebaseLoadShoppingCart from '@/services/FirebaseLoadShoppingCart'
+import { calculateCopPrice } from '@/utilities/priceUtils'
 
 export const ShowCartContext = createContext()
 
@@ -42,6 +43,7 @@ const ShoppingCartProvider = ({ children }) => {
               .filter(p => cartIdsMap.has(p.productID))
               .map(p => ({
                 ...p,
+                precio: calculateCopPrice(p.precio),
                 cantidad: cartIdsMap.get(p.productID) || 1
               }));
             
