@@ -54,11 +54,17 @@ const AddProduct = ({ product }) => {
       
       // Persist to Firestore - save minimal structure (productID + cantidad)
       const cartID = sessionStorage.getItem('cartID')
+      const cartToSave = currentItems.map(item => ({
+        productID: item.productID,
+        cantidad: item.cantidad
+      }))
+      
+      // Save to sessionStorage for quick restore on refresh
+      sessionStorage.setItem('cartProducts', JSON.stringify(cartToSave))
+      sessionStorage.setItem('cartItems', totalItems.toString())
+      sessionStorage.setItem('cartSum', totalSum.toString())
+      
       if (cartID) {
-        const cartToSave = currentItems.map(item => ({
-          productID: item.productID,
-          cantidad: item.cantidad
-        }))
         saveCartToFirestore(cartID, cartToSave)
       }
       

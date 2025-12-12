@@ -16,56 +16,53 @@ const ShoppingCartProvider = ({ children }) => {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedCartID = sessionStorage.getItem('cartID')
+      const storedProducts = sessionStorage.getItem('cartProducts')
+      const storedItems = sessionStorage.getItem('cartItems')
+      const storedSum = sessionStorage.getItem('cartSum')
       
+      // Quick restore from sessionStorage for immediate UI
       if (storedCartID) {
-         // Restore ID
-         setShoppingCart(prev => ({
-           ...prev,
-           cartID: storedCartID,
-           updated: !prev.updated
-         }))
+        setShoppingCart(prev => ({
+          ...prev,
+          cartID: storedCartID,
+          productos: storedProducts ? JSON.parse(storedProducts) : [],
+          items: storedItems ? parseInt(storedItems, 10) : 0,
+          suma: storedSum ? parseInt(storedSum, 10) : 0,
+          updated: !prev.updated
+        }))
 
-         // Fetch items
-         const loadCartItems = async () => {
-             try {
-                 const items = await FirebaseLoadShoppingCart()
-                 console.log("Loaded Cart Items:", items);
-                 
-                 if (items && Array.isArray(items)) {
-                     // Recalculate totals from loaded items
-                     // Ideally we should move this calculation to a shared helper or the load service?
-                     // For now, let's keep it simple or import priceUtils if needed.
-                     // Actually, let's just update the list. The banner might show 0 temporarily until something triggers an update?
-                     // Or we calculate it right here.
-                     
-                     // Import helper (we can't easily import inside useEffect, assuming helper imports aren't available unless top-level)
-                     // Let's just sum it up simple for now to restore state.
-                     const totalItems = items.reduce((acc, item) => acc + (item.cantidad || 0), 0);
-                     // We need to parse price if it's a string, or just use raw if it's there.
-                     // The items from DB should have the same structure as what we saved.
-                     
-                     setShoppingCart(prev => ({
-                         ...prev,
-                         productos: items,
-                         items: totalItems,
-                         // We might miss total sum here if we don't recalculate it.
-                         // But at least products are back.
-                         // Let's rely on AddProduct or other logic for now, or just set items.
-                     }))
-                 }
-             } catch (e) {
-                 console.error("Failed to load cart items", e)
-             }
-         }
-         loadCartItems()
+        // Then fetch from Firestore to sync/hydrate full product data
+        const loadCartItems = async () => {
+          try {
+            const items = await FirebaseLoadShoppingCart()
+            console.log("Loaded Cart Items from Firestore:", items);
+            
+            if (items && Array.isArray(items) && items.length > 0) {
+              const totalItems = items.reduce((acc, item) => acc + (item.cantidad || 0), 0);
+              
+              setShoppingCart(prev => ({
+                ...prev,
+                productos: items,
+                items: totalItems,
+              }))
+            }
+          } catch (e) {
+            console.error("Failed to load cart items from Firestore", e)
+          }
+        }
+        loadCartItems()
       } else {
-        // No ID? Trigger load anyway to potentially create one?
-        // logic in FirebaseLoadShoppingCart handles creation if missing.
-         FirebaseLoadShoppingCart().then(items => {
-             if (items && items.length > 0) {
-                 // Update state if we got a new cart with items (unlikely but possible if logic changes)
-             }
-         });
+        // No ID? Create one via FirebaseLoadShoppingCart
+        FirebaseLoadShoppingCart().then(() => {
+          // After creation, store the new ID
+          const newCartID = sessionStorage.getItem('cartID')
+          if (newCartID) {
+            setShoppingCart(prev => ({
+              ...prev,
+              cartID: newCartID
+            }))
+          }
+        });
       }
     }
   }, [])
