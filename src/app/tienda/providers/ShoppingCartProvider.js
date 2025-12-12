@@ -78,6 +78,7 @@ const ShoppingCartProvider = ({ children }) => {
                   .filter(p => cartIdsMap.has(p.productID))
                   .map(p => ({
                     ...p,
+                    precio: calculateCopPrice(p.precio),
                     cantidad: cartIdsMap.get(p.productID) || 1
                   }));
                 
