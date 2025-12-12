@@ -1,6 +1,6 @@
 'use client'
 import { firestore, auth } from '@/firebase/firebaseClient'
-import { calculateCopPrice } from '@/utilities/priceUtils'
+import { calculateCopPrice, parseCopCurrency } from '@/utilities/priceUtils'
 import { collection, getDocs, query, where, documentId } from 'firebase/firestore'
 import PropTypes from 'prop-types'
 
@@ -77,8 +77,6 @@ const getProductCollections = (db) => {
 
   return rootParams.map(pathParts => {
     if (pathParts.length === 3) {
-      // e.g. products/dron/kit_fpv_dron
-      // For deeper paths passed as single string in last arg
       return collection(db, pathParts[0], pathParts[1], pathParts[2]);
     }
     return collection(db, ...pathParts); 
@@ -91,7 +89,6 @@ export const FirebaseCompareShoppingCartIds = async ({ products, updateCart }) =
     const userID = user ? user.uid : null;
     const shoppingCartID = typeof window !== 'undefined' ? sessionStorage.getItem('cartID') : null;
     
-    // Safety check: if no user ID and no cart ID, nothing to do
     if (!userID && !shoppingCartID) {
       console.warn("FirebaseCompareShoppingCartIds: No UserID or CartID found.");
       return;
@@ -109,11 +106,6 @@ export const FirebaseCompareShoppingCartIds = async ({ products, updateCart }) =
     const targetIds = Array.from(productsInputMap.keys());
     console.log("Looking for products with IDs:", targetIds);
 
-    // Fetch all products (Optimized with Promise.all)
-    // NOTE: Ideally we should query by ID, but since data structure is scattered, 
-    // we fetch efficiently and filter in memory as per original logic.
-    // We check sessionStorage for cache first to avoid Firestore reads on every cart update.
-    
     let allProducts = [];
     const cachedProducts = typeof window !== 'undefined' ? sessionStorage.getItem('Todos los productos') : null;
 
@@ -137,13 +129,8 @@ export const FirebaseCompareShoppingCartIds = async ({ products, updateCart }) =
     // Filter and Hydrate
     const cartProducts = allProducts.filter(p => productsInputMap.has(p.productID))
       .map(p => {
-        // Clone to avoid mutation of cached array
         const product = { ...p }; 
         const qty = productsInputMap.get(p.productID);
-        
-        // Calculate price
-        // Note: product.precio from Firestore is likely a raw number or string. 
-        // calculateCopPrice handles formatting.
         const formattedPrice = calculateCopPrice(product.precio);
         
         return {
@@ -161,21 +148,9 @@ export const FirebaseCompareShoppingCartIds = async ({ products, updateCart }) =
         cartProducts.forEach(p => {
            totalItems += p.cantidad;
            
-           // Reverse calculate price for sum total (since we just formatted it)
-           // ideally we should use the raw price for calculation, but keeping consistent with established logic
-           // The original logic re-calculated sum from raw price.
-           // Let's use the RAW price from the original 'p' object (from allProducts) for calculation if possible?
-           // Actually, let's just use the logic from before:
-           
-           const rawPrice = parseInt(p.precio_base || p.precio); // fallback 
-           // Wait, p.precio in Firestore IS the USD price usually.
-           // Cop logic: (price + 30) * 1.5 * Exchange
-           
-           if (!isNaN(rawPrice) && p.precio !== 'Agotado') {
-               const exchangeRate = parseInt(process.env.NEXT_PUBLIC_DOLARTOCOP || 4000);
-               const transport = 30; 
-               const factor = 1.5;
-               const unitPriceCOP = (rawPrice + transport) * factor * exchangeRate;
+           // Use parseCopCurrency to correctly parse the formatted price (e.g., "$ 2.212.650")
+           if (p.precio && p.precio !== 'Agotado') {
+               const unitPriceCOP = parseCopCurrency(p.precio);
                totalSum += unitPriceCOP * p.cantidad;
            }
         });
