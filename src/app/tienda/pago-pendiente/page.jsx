@@ -1,11 +1,12 @@
 'use client'
-import React from 'react'
+import React, { Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import withRoot from '@/modules/withRoot'
 import Typography from '@/modules/components/Typography'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty'
+import CircularProgress from '@mui/material/CircularProgress'
 import Button from '@mui/material/Button'
 import Link from 'next/link'
 
@@ -29,38 +30,49 @@ const styles = {
   }
 }
 
-const PagoPendiente = () => {
+const PagoPendienteContent = () => {
   const searchParams = useSearchParams()
   const paymentId = searchParams.get('payment_id') || searchParams.get('collection_id')
 
   return (
+    <>
+      <HourglassEmptyIcon sx={styles.icon} />
+      <Typography variant="h4" gutterBottom>
+        Pago Pendiente
+      </Typography>
+      <Typography variant="body1" color="textSecondary">
+        Tu pago está siendo procesado.
+        Recibirás una notificación cuando se confirme.
+      </Typography>
+      {paymentId && (
+        <Typography variant="body2" sx={{ mt: 2 }}>
+          ID de Pago: {paymentId}
+        </Typography>
+      )}
+      <Button
+        component={Link}
+        href="/tienda"
+        variant="contained"
+        color="primary"
+        sx={styles.button}
+      >
+        Volver a la Tienda
+      </Button>
+    </>
+  )
+}
+
+const PagoPendiente = () => {
+  return (
     <Box sx={{ backgroundColor: '#eaeff1', minHeight: '100vh' }}>
       <Container maxWidth="sm" sx={styles.container}>
-        <HourglassEmptyIcon sx={styles.icon} />
-        <Typography variant="h4" gutterBottom>
-          Pago Pendiente
-        </Typography>
-        <Typography variant="body1" color="textSecondary">
-          Tu pago está siendo procesado.
-          Recibirás una notificación cuando se confirme.
-        </Typography>
-        {paymentId && (
-          <Typography variant="body2" sx={{ mt: 2 }}>
-            ID de Pago: {paymentId}
-          </Typography>
-        )}
-        <Button
-          component={Link}
-          href="/tienda"
-          variant="contained"
-          color="primary"
-          sx={styles.button}
-        >
-          Volver a la Tienda
-        </Button>
+        <Suspense fallback={<CircularProgress />}>
+          <PagoPendienteContent />
+        </Suspense>
       </Container>
     </Box>
   )
 }
 
 export default withRoot(PagoPendiente)
+
