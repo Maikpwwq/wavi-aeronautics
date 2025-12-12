@@ -44,7 +44,7 @@ const TrasmisorReceptor = () => {
   const transmisors = shopState?.transmisors || []
   const receptors = shopState?.receptors || []
   const loadedCategories = shopState?.loadedCategories || []
-  const isLoading = shopState?.loading ?? false
+
 
   const theme = useTheme()
   const classes = styles(theme)
@@ -56,7 +56,7 @@ const TrasmisorReceptor = () => {
     }
   }, [dispatch, loadedCategories])
 
-  const showSkeleton = isLoading || (transmisors.length === 0 && receptors.length === 0 && !loadedCategories.includes('transmisors'))
+  const showSkeleton = !loadedCategories.includes('transmisors') && transmisors.length === 0 && receptors.length === 0
 
   return (
     <>

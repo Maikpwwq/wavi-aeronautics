@@ -43,7 +43,7 @@ export const RadioContol = () => {
   const shopState = useSelector((store) => store?.shop)
   const radioControl = shopState?.radioControl || []
   const loadedCategories = shopState?.loadedCategories || []
-  const isLoading = shopState?.loading ?? false
+
 
   const theme = useTheme()
   const classes = styles(theme)
@@ -55,7 +55,7 @@ export const RadioContol = () => {
     }
   }, [dispatch, loadedCategories])
 
-  const showSkeleton = isLoading || (radioControl.length === 0 && !loadedCategories.includes('radioControl'))
+  const showSkeleton = !loadedCategories.includes('radioControl') && radioControl.length === 0
 
   return (
     <>

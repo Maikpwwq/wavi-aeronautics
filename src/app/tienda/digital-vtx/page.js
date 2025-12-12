@@ -43,7 +43,7 @@ export const DigitalVTX = () => {
   const shopState = useSelector((store) => store?.shop)
   const digitalVTX = shopState?.digitalVTX || []
   const loadedCategories = shopState?.loadedCategories || []
-  const isLoading = shopState?.loading ?? false
+
   
   const theme = useTheme()
   const classes = styles(theme)
@@ -55,7 +55,7 @@ export const DigitalVTX = () => {
     }
   }, [dispatch, loadedCategories])
 
-  const showSkeleton = isLoading || (digitalVTX.length === 0 && !loadedCategories.includes('digitalVTX'))
+  const showSkeleton = !loadedCategories.includes('digitalVTX') && digitalVTX.length === 0
 
   return (
     <>

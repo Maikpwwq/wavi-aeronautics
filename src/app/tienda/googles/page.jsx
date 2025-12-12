@@ -43,7 +43,7 @@ const Googles = () => {
   const shopState = useSelector((store) => store?.shop)
   const googles = shopState?.googles || []
   const loadedCategories = shopState?.loadedCategories || []
-  const isLoading = shopState?.loading ?? false
+
   
   const theme = useTheme()
   const classes = styles(theme)
@@ -55,7 +55,7 @@ const Googles = () => {
     }
   }, [dispatch, loadedCategories])
 
-  const showSkeleton = isLoading || (googles.length === 0 && !loadedCategories.includes('googles'))
+  const showSkeleton = !loadedCategories.includes('googles') && googles.length === 0
 
   return (
     <>

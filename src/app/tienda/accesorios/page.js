@@ -43,7 +43,7 @@ const Accesorios = () => {
   const shopState = useSelector((store) => store?.shop)
   const baterias = shopState?.baterias || []
   const loadedCategories = shopState?.loadedCategories || []
-  const isLoading = shopState?.loading ?? false
+
   
   const theme = useTheme()
   const classes = styles(theme)
@@ -55,7 +55,7 @@ const Accesorios = () => {
     }
   }, [dispatch, loadedCategories])
 
-  const showSkeleton = isLoading || (baterias.length === 0 && !loadedCategories.includes('accesorios'))
+  const showSkeleton = !loadedCategories.includes('accesorios') && baterias.length === 0
 
   return (
     <>
