@@ -10,7 +10,8 @@ const styles = {
     minHeight: 420
   },
   image: {
-    height: 330
+    height: 330,
+    width: '100%'
   },
   content: {
     padding: '16px'
