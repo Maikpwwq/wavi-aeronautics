@@ -77,13 +77,13 @@ function NuevosProductos() {
   const classes = styles(theme)
   const shopState = useSelector((store) => store?.shop)
   const dronesHD = shopState?.dronesHD || []
-  const isLoading = shopState?.loading ?? false
+  const loadedCategories = shopState?.loadedCategories || []
   
   // Use Redux state primarily, fallback to sessionStorage if Redux is empty
   let featuredProducts = dronesHD.length > 0 ? dronesHD : []
 
-  // Fallback to sessionStorage if Redux is empty but storage has data
-  if (typeof window !== 'undefined' && featuredProducts.length === 0 && !isLoading) {
+  // Fallback to sessionStorage if Redux is empty but category was loaded
+  if (typeof window !== 'undefined' && featuredProducts.length === 0) {
     const stored = sessionStorage.getItem('Productos_DronesHD')
     if (stored) {
       try {
@@ -94,7 +94,8 @@ function NuevosProductos() {
     }
   }
 
-  const showSkeleton = isLoading || (featuredProducts.length === 0 && typeof window === 'undefined')
+  // Show skeleton if drones category hasn't been loaded yet
+  const showSkeleton = !loadedCategories.includes('drones') && featuredProducts.length === 0
 
   return (
     <Box sx={classes.root}>

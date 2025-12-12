@@ -41,7 +41,10 @@ const styles = (theme) => ({
 const DroneProducts = () => {
   const shopState = useSelector((store) => store?.shop)
   const dronesKit = shopState?.dronesKit || []
-  const isLoading = shopState?.loading ?? dronesKit.length === 0
+  const loadedCategories = shopState?.loadedCategories || []
+  
+  // Show skeleton until drones category is loaded
+  const showSkeleton = !loadedCategories.includes('drones') && dronesKit.length === 0
 
   const theme = useTheme()
   const classes = styles(theme)
@@ -58,7 +61,7 @@ const DroneProducts = () => {
             Descubre los mejores kits de Dron FPV listos para vuelo.
           </Typography>
           <Suspense fallback={<ProductSkeleton count={4} />}>
-            {isLoading ? (
+            {showSkeleton ? (
               <ProductSkeleton count={4} />
             ) : dronesKit.length > 0 ? (
               <Grid

@@ -40,9 +40,11 @@ const styles = (theme) => ({
 
 const DroneProducts = () => {
   const shopState = useSelector((store) => store?.shop)
-  // Ensure dronesHD is always an array to prevent errors
   const dronesHD = shopState?.dronesHD || []
-  const isLoading = shopState?.loading ?? dronesHD.length === 0
+  const loadedCategories = shopState?.loadedCategories || []
+  
+  // Show skeleton until drones category is loaded
+  const showSkeleton = !loadedCategories.includes('drones') && dronesHD.length === 0
 
   const theme = useTheme()
   const classes = styles(theme)
@@ -59,7 +61,7 @@ const DroneProducts = () => {
             Descubre los mejores Drones FPV con transmisión digital de video en HD y preparate para filmar.
           </Typography>
           <Suspense fallback={<ProductSkeleton count={4} />}>
-            {isLoading ? (
+            {showSkeleton ? (
               <ProductSkeleton count={4} />
             ) : dronesHD.length > 0 ? (
               <Grid

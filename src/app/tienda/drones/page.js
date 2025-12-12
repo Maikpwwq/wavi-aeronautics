@@ -41,7 +41,10 @@ const styles = (theme) => ({
 const DroneProducts = () => {
   const shopState = useSelector((store) => store?.shop)
   const dronesRC = shopState?.dronesRC || []
-  const isLoading = shopState?.loading ?? dronesRC.length === 0
+  const loadedCategories = shopState?.loadedCategories || []
+  
+  // Show skeleton until drones category is loaded
+  const showSkeleton = !loadedCategories.includes('drones') && dronesRC.length === 0
 
   const theme = useTheme()
   const classes = styles(theme)
@@ -67,7 +70,7 @@ const DroneProducts = () => {
             el momento que lo recibes.
           </Typography>
           <Suspense fallback={<ProductSkeleton count={4} />}>
-            {isLoading ? (
+            {showSkeleton ? (
               <ProductSkeleton count={4} />
             ) : dronesRC.length > 0 ? (
               <Grid container spacing={2}>
