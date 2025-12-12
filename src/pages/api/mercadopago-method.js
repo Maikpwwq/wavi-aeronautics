@@ -68,7 +68,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const accessToken = process.env.MERCADOPAGO_ACCESS_TOKEN;
+  const accessToken = process.env.NEXT_PUBLIC_MERCADOPAGOS_ACCESS_TOKEN;
   
   if (!accessToken) {
     console.error("MERCADOPAGO_ACCESS_TOKEN not configured");
