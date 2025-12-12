@@ -49,7 +49,7 @@ function ShowCartPage () {
     console.log('productsCart', productsCart)
     sessionStorage.setItem('cartUpdated', 'detalles-envio')
     updateShowCart(false)
-    navigate.push('tienda/detalles-envio', {
+    navigate.push('detalles-envio', {
       // state: { productsCart: productsCart },
     })
   }
