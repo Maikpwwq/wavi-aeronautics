@@ -1,9 +1,10 @@
 'use client'
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import withRoot from '@/modules/withRoot'
 import theme from '../innerTheme'
 import GestionarMercadoPago from '../components/GestionarMercadoPago'
 import Typography from '@/modules/components/Typography'
+import { auth } from '@/firebase/firebaseClient'
 
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
 
@@ -59,6 +60,7 @@ const DetallesEnvio = (props) => {
   const { shoppingCart } = useContext(ShowCartContext)
   const productsCart = shoppingCart?.productos
   console.log('DetallesEnvio', productsCart)
+  
   const [userInfo, setUserInfo] = useState({
     userName: '',
     userMail: '',
@@ -71,6 +73,19 @@ const DetallesEnvio = (props) => {
     shippingBarrio: '',
     shippingPostalCode: ''
   })
+
+  // Pre-fill form with logged-in user data
+  useEffect(() => {
+    const user = auth.currentUser
+    if (user) {
+      setUserInfo(prev => ({
+        ...prev,
+        userName: user.displayName || prev.userName,
+        userMail: user.email || prev.userMail,
+        userPhone: user.phoneNumber || prev.userPhone
+      }))
+    }
+  }, [])
 
   const handlePersonalInfo = (event) => {
     setUserInfo({
