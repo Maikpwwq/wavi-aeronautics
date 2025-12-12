@@ -3,6 +3,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import withRoot from '@/modules/withRoot'
 import theme from '../innerTheme'
 import GestionarMercadoPago from '../components/GestionarMercadoPago'
+import GestionarPSE from '../components/GestionarPSE'
 import Typography from '@/modules/components/Typography'
 import { auth } from '@/firebase/firebaseClient'
 
@@ -269,6 +270,10 @@ const DetallesEnvio = (props) => {
                 </Table>
               </Box>
               <GestionarMercadoPago
+                shippingInfo={shippingInfo}
+                userInfo={userInfo}
+              />
+              <GestionarPSE
                 shippingInfo={shippingInfo}
                 userInfo={userInfo}
               />
