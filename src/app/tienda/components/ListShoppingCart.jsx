@@ -162,12 +162,14 @@ const ListShoppingCart = (props) => {
                   >
                     {cantidad} X
                   </Typography>
-                  <CardMedia
-                    sx={classes.image}
-                    component="img"
-                    image={imagenes[0]}
-                    alt={titulo}
-                  ></CardMedia>
+                  {imagenes && imagenes.length > 0 && (
+                    <CardMedia
+                      sx={classes.image}
+                      component="img"
+                      image={imagenes[0]}
+                      alt={titulo}
+                    ></CardMedia>
+                  )}
 
                   <CardHeader
                     title={titulo}

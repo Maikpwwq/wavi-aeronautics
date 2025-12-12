@@ -74,7 +74,7 @@ const ProductDetail = (props) => {
   const [activeStep, setActiveStep] = useState(0)
   const [productInfo, setProductInfo] = useState(product)
   console.log('store product', product)
-  const maxSteps = product ? product.imagenes.length : 0
+  const maxSteps = product && product.imagenes ? product.imagenes.length : 0
 
   // const router = useRouter()
   // console.log("router", router);
@@ -99,7 +99,7 @@ const ProductDetail = (props) => {
     currentProduct.subscribe((data) => {
       if (data) {
         const { productos } = data
-        if (productos) {
+        if (productos && productos.length > 0) {
           console.log('currentProduct', productos[0], productInfo)
           setProductInfo(productos[0])
         }
