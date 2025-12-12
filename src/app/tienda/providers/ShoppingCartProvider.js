@@ -19,40 +19,76 @@ const ShoppingCartProvider = ({ children }) => {
       const storedProducts = sessionStorage.getItem('cartProducts')
       const storedItems = sessionStorage.getItem('cartItems')
       const storedSum = sessionStorage.getItem('cartSum')
+      const cachedAllProducts = sessionStorage.getItem('Todos los productos')
       
-      // Quick restore from sessionStorage for immediate UI
+      // Quick restore from sessionStorage
       if (storedCartID) {
-        let parsedProducts = [];
+        let parsedCartItems = [];
         try {
-          parsedProducts = storedProducts ? JSON.parse(storedProducts) : [];
+          parsedCartItems = storedProducts ? JSON.parse(storedProducts) : [];
         } catch (e) {
           console.error("Failed to parse cartProducts from sessionStorage", e);
-          parsedProducts = [];
+          parsedCartItems = [];
+        }
+        
+        // Hydrate cart items with full product data from cache
+        let hydratedProducts = parsedCartItems;
+        if (cachedAllProducts && parsedCartItems.length > 0) {
+          try {
+            const allProducts = JSON.parse(cachedAllProducts);
+            const cartIdsMap = new Map(parsedCartItems.map(p => [p.productID, p.cantidad]));
+            
+            hydratedProducts = allProducts
+              .filter(p => cartIdsMap.has(p.productID))
+              .map(p => ({
+                ...p,
+                cantidad: cartIdsMap.get(p.productID) || 1
+              }));
+            
+            console.log("Hydrated cart products:", hydratedProducts);
+          } catch (e) {
+            console.error("Failed to hydrate cart products", e);
+          }
         }
         
         setShoppingCart(prev => ({
           ...prev,
           cartID: storedCartID,
-          productos: parsedProducts,
+          productos: hydratedProducts,
           items: storedItems ? parseInt(storedItems, 10) : 0,
           suma: storedSum ? parseInt(storedSum, 10) : 0,
           updated: !prev.updated
         }))
 
-        // Then fetch from Firestore to sync/hydrate full product data
+        // Also fetch from Firestore to sync (in case local cache is stale)
         const loadCartItems = async () => {
           try {
             const items = await FirebaseLoadShoppingCart()
             console.log("Loaded Cart Items from Firestore:", items);
             
             if (items && Array.isArray(items) && items.length > 0) {
-              const totalItems = items.reduce((acc, item) => acc + (item.cantidad || 0), 0);
-              
-              setShoppingCart(prev => ({
-                ...prev,
-                productos: items,
-                items: totalItems,
-              }))
+              // These are just IDs, need to hydrate
+              if (cachedAllProducts) {
+                const allProducts = JSON.parse(cachedAllProducts);
+                const cartIdsMap = new Map(items.map(p => [p.productID, p.cantidad]));
+                
+                const hydratedFromFirestore = allProducts
+                  .filter(p => cartIdsMap.has(p.productID))
+                  .map(p => ({
+                    ...p,
+                    cantidad: cartIdsMap.get(p.productID) || 1
+                  }));
+                
+                if (hydratedFromFirestore.length > 0) {
+                  const totalItems = hydratedFromFirestore.reduce((acc, item) => acc + (item.cantidad || 0), 0);
+                  
+                  setShoppingCart(prev => ({
+                    ...prev,
+                    productos: hydratedFromFirestore,
+                    items: totalItems,
+                  }))
+                }
+              }
             }
           } catch (e) {
             console.error("Failed to load cart items from Firestore", e)
@@ -62,7 +98,6 @@ const ShoppingCartProvider = ({ children }) => {
       } else {
         // No ID? Create one via FirebaseLoadShoppingCart
         FirebaseLoadShoppingCart().then(() => {
-          // After creation, store the new ID
           const newCartID = sessionStorage.getItem('cartID')
           if (newCartID) {
             setShoppingCart(prev => ({
