@@ -9,7 +9,7 @@ import Grid from '@mui/material/Grid'
 import Typography from '@/modules/components/Typography'
 
 import ProductCard from '@/app/tienda/components/ProductCard'
-import CircularProgress from '@mui/material/CircularProgress'
+import ProductSkeleton from '@/app/tienda/components/ProductSkeleton'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
 
 const styles = (theme) => ({
@@ -42,6 +42,7 @@ const DroneProducts = () => {
   const shopState = useSelector((store) => store?.shop)
   // Ensure dronesHD is always an array to prevent errors
   const dronesHD = shopState?.dronesHD || []
+  const isLoading = shopState?.loading ?? dronesHD.length === 0
 
   const theme = useTheme()
   const classes = styles(theme)
@@ -57,20 +58,16 @@ const DroneProducts = () => {
           <Typography variant="body1" sx={classes.endingTexts}>
             Descubre los mejores Drones FPV con transmisión digital de video en HD y preparate para filmar.
           </Typography>
-          <Suspense
-            fallback={
-              <Box sx={{ display: 'flex' }}>
-                <CircularProgress />
-              </Box>
-            }
-          >
-            <Grid
-              container
-              spacing={2}
-              sx={{ justifyContent: 'space-around' }}
-            >
-              {dronesHD.length > 0 ? (
-                dronesHD.map((product, k) => (
+          <Suspense fallback={<ProductSkeleton count={4} />}>
+            {isLoading ? (
+              <ProductSkeleton count={4} />
+            ) : dronesHD.length > 0 ? (
+              <Grid
+                container
+                spacing={2}
+                sx={{ justifyContent: 'space-around' }}
+              >
+                {dronesHD.map((product, k) => (
                   <Grid item key={k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
                     <ProductCard
                       sx="d-flex mb-2"
@@ -79,13 +76,13 @@ const DroneProducts = () => {
                       productID={k}
                     />
                   </Grid>
-                ))
-              ) : (
-                <Typography variant="body2" sx={{ m: 2 }}>
-                  Cargando productos...
-                </Typography>
-              )}
-            </Grid>
+                ))}
+              </Grid>
+            ) : (
+              <Typography variant="body2" sx={{ m: 2 }}>
+                No hay productos disponibles en esta categoría.
+              </Typography>
+            )}
           </Suspense>
         </Box>
       </Box>
@@ -94,3 +91,4 @@ const DroneProducts = () => {
 }
 
 export default withRoot(DroneProducts)
+
