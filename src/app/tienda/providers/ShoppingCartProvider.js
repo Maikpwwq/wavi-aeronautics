@@ -22,10 +22,18 @@ const ShoppingCartProvider = ({ children }) => {
       
       // Quick restore from sessionStorage for immediate UI
       if (storedCartID) {
+        let parsedProducts = [];
+        try {
+          parsedProducts = storedProducts ? JSON.parse(storedProducts) : [];
+        } catch (e) {
+          console.error("Failed to parse cartProducts from sessionStorage", e);
+          parsedProducts = [];
+        }
+        
         setShoppingCart(prev => ({
           ...prev,
           cartID: storedCartID,
-          productos: storedProducts ? JSON.parse(storedProducts) : [],
+          productos: parsedProducts,
           items: storedItems ? parseInt(storedItems, 10) : 0,
           suma: storedSum ? parseInt(storedSum, 10) : 0,
           updated: !prev.updated

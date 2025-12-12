@@ -52,7 +52,7 @@ const ProductCard = ({ products, category }) => {
       <Box className="" maxWidth="sm" style={{ height: '100%' }}>
         <Card style={{ height: '100%' }}>
           <CardActionArea>
-            {producto !== undefined && imagenes && (
+            {producto !== undefined && imagenes && imagenes.length > 0 && (
               <Link
                 style={classes.imageCentered}
                 href={{
