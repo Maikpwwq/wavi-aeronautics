@@ -151,6 +151,9 @@ const shopSlice = createSlice({
       state.dronesKit = action.payload.dronesKit
       state.dronesRC = action.payload.dronesRC
       state.dronesHD = action.payload.dronesHD
+      if (!Array.isArray(state.loadedCategories)) {
+        state.loadedCategories = []
+      }
       state.loadedCategories.push('drones')
     })
     builder.addCase(fetchDronesProducts.rejected, (state) => {
@@ -164,18 +167,27 @@ const shopSlice = createSlice({
     builder.addCase(fetchGooglesProducts.fulfilled, (state, action) => {
       state.loading = false
       state.googles = action.payload.googles
+      if (!Array.isArray(state.loadedCategories)) {
+        state.loadedCategories = []
+      }
       state.loadedCategories.push('googles')
     })
 
     // Radio Control
     builder.addCase(fetchRadioControlProducts.fulfilled, (state, action) => {
       state.radioControl = action.payload.radioControl
+      if (!Array.isArray(state.loadedCategories)) {
+        state.loadedCategories = []
+      }
       state.loadedCategories.push('radioControl')
     })
 
     // Accesorios
     builder.addCase(fetchAccesoriosProducts.fulfilled, (state, action) => {
       state.baterias = action.payload.baterias
+      if (!Array.isArray(state.loadedCategories)) {
+        state.loadedCategories = []
+      }
       state.loadedCategories.push('accesorios')
     })
 
@@ -183,12 +195,18 @@ const shopSlice = createSlice({
     builder.addCase(fetchTransmisorsProducts.fulfilled, (state, action) => {
       state.receptors = action.payload.receptors
       state.transmisors = action.payload.transmisors
+      if (!Array.isArray(state.loadedCategories)) {
+        state.loadedCategories = []
+      }
       state.loadedCategories.push('transmisors')
     })
 
     // Digital VTX
     builder.addCase(fetchDigitalVTXProducts.fulfilled, (state, action) => {
       state.digitalVTX = action.payload.digitalVTX
+      if (!Array.isArray(state.loadedCategories)) {
+        state.loadedCategories = []
+      }
       state.loadedCategories.push('digitalVTX')
     })
 
