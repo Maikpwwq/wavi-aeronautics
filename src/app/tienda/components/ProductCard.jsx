@@ -1,9 +1,7 @@
-import React, { useContext, useEffect } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux'
 import Link from 'next/link'
-// import { getAllShoppingCart } from "@/services/sharedServices";
 import { loadDetail } from '@/store/states/product'
-import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
 import AddProduct from '@/app/tienda/components/AddProduct'
 
 // import "sessionstorage-polyfill";
@@ -37,15 +35,6 @@ const ProductCard = ({ products, category }) => {
   const categoria = category || 'tienda'
   const producto = products
   const { titulo, precio, imagenes, productID, marca } = producto
-  const { shoppingCart } = useContext(ShowCartContext)
-
-  // const storedCart = useSelector((store) => store.shoppingCart);
-  // let cart = storedCart || [];
-  // console.log("cart products", cart);
-
-  // const [thisShoppingCart, setShoppingCart] = useState({
-  //   productos: shoppingCart,
-  // });
 
   const handleSelect = () => {
     console.log('producto', producto)
@@ -56,8 +45,6 @@ const ProductCard = ({ products, category }) => {
     }
   }
 
-  // TODO: Separar la acción de agregar al carrito para usarla dentro del detalle de producto
-  // Solo activar
 
 
   return (

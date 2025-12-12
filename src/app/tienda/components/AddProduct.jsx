@@ -5,6 +5,7 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 import PropTypes from 'prop-types'
 import FirebaseCompareShoppingCartIds from '@/services/FirebaseCompareShoppingCartIds'
 import { parseCopCurrency } from '@/utilities/priceUtils'
+import { saveCartToFirestore } from '@/services/shoppingCartService'
 
 const AddProduct = ({ product }) => {
   const { shoppingCart, updateCart, updateShowCart } = useContext(ShowCartContext)
@@ -40,21 +41,26 @@ const AddProduct = ({ product }) => {
       const totalSum = currentItems.reduce((acc, item) => {
         // Use the centralized parser to handle "$ 2.000.000" or raw numbers
         let price = parseCopCurrency(item.precio);
-        
-        // If parsing returned 0 but we have a raw price that is a number, use it?
-        // parseCopCurrency handles numbers too.
-        
         return acc + (price * (item.cantidad || 0));
       }, 0)
 
-      // Optimistic update to context first (optional, but good for UI responsiveness)
+      // Optimistic update to context first
       updateCart({ 
           updated: true, 
           productos: currentItems,
           items: totalItems,
           suma: totalSum
       })
-      sessionStorage.setItem('cartUpdated', 'listado-productos-context')
+      
+      // Persist to Firestore - save minimal structure (productID + cantidad)
+      const cartID = sessionStorage.getItem('cartID')
+      if (cartID) {
+        const cartToSave = currentItems.map(item => ({
+          productID: item.productID,
+          cantidad: item.cantidad
+        }))
+        saveCartToFirestore(cartID, cartToSave)
+      }
       
       // Calculate totals and deep sync with backend
       FirebaseCompareShoppingCartIds({ products: currentItems, updateCart })
