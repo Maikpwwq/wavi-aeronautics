@@ -151,7 +151,7 @@ const ListShoppingCart = (props) => {
           {shoppingCart.productos &&
             shoppingCart.productos.map(
               ({ titulo, precio, imagenes, productID, cantidad }, index) => (
-                <Card style={[classes.card, { width: '100%' }]} key={index}>
+                <Card style={{ ...classes.card, width: '100%' }} key={index}>
                   {/* <CardActionArea onClick={handleClick}></CardActionArea> */}
                   <Typography
                     variant="h6"
