@@ -1,26 +1,21 @@
-import React, { Suspense, useState } from 'react'
-import {
-  connect,
-  useSelector
-} from 'react-redux'
-// import PropTypes from 'prop-types'
+import React, { Suspense } from 'react'
+import { useSelector } from 'react-redux'
 import withRoot from '@/modules/withRoot'
 import theme from '@/app/tienda/innerTheme'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
-import CircularProgress from '@mui/material/CircularProgress'
 
 import Typography from '@/modules/components/Typography'
 import ProductItem from '@/app/tienda/components/ProductItem'
+import ProductSkeleton from '@/app/tienda/components/ProductSkeleton'
 
 const styles = (theme) => ({
   root: {
     display: 'flex',
     backgroundColor: '#eaeff1',
-    // backgroundImage: `url(${})`,
     overflow: 'hidden',
-    with: '100%',
+    width: '100%',
     justifyContent: 'center'
   },
   container: {
@@ -32,7 +27,7 @@ const styles = (theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     textAlign: 'center',
-    with: '100%'
+    width: '100%'
   },
   productsWraper: {
     flexWrap: 'nowrap',
@@ -78,28 +73,32 @@ const styles = (theme) => ({
   }
 })
 
-function NuevosProductos (props) {
-  // const { classes } = props;
+function NuevosProductos() {
   const classes = styles(theme)
-  const shopState = useSelector((store) => store.shop)
-  const { dronesHD } = shopState
+  const shopState = useSelector((store) => store?.shop)
+  const dronesHD = shopState?.dronesHD || []
+  const isLoading = shopState?.loading ?? false
   
-  // Use Redux state primarily, fallback to sessionStorage if Redux is empty (e.g. hydration lag)
-  // But strictly speaking, if DataInitializer dispatches, Redux will update.
-  // We avoid useState here to ensure reactivity.
-  let featuredProducts = dronesHD && dronesHD.length > 1 ? dronesHD : []
+  // Use Redux state primarily, fallback to sessionStorage if Redux is empty
+  let featuredProducts = dronesHD.length > 0 ? dronesHD : []
 
-  if (typeof window !== 'undefined' && featuredProducts.length <= 1) {
-     // Fallback to reading storage directly if Redux is empty but storage has data
-     // This covers the case where storage was already populated but Redux not yet
-     const stored = sessionStorage.getItem('Productos_DronesHD')
-     if (stored) {
-       featuredProducts = JSON.parse(stored)
-     }
+  // Fallback to sessionStorage if Redux is empty but storage has data
+  if (typeof window !== 'undefined' && featuredProducts.length === 0 && !isLoading) {
+    const stored = sessionStorage.getItem('Productos_DronesHD')
+    if (stored) {
+      try {
+        featuredProducts = JSON.parse(stored)
+      } catch (e) {
+        console.error('Error parsing stored products:', e)
+      }
+    }
   }
+
+  const showSkeleton = isLoading || (featuredProducts.length === 0 && typeof window === 'undefined')
+
   return (
     <Box sx={classes.root}>
-      <Container fluid sx={classes.container}>
+      <Container sx={classes.container}>
         <Typography
           variant="h4"
           marked="center"
@@ -111,50 +110,39 @@ function NuevosProductos (props) {
         <Typography variant="body1" sx={classes.endingTexts}>
           Descubre lo ultimo en Drones y productos recién llegados.
         </Typography>
-          <Grid container spacing={3} sx={classes.logosContainer}>
-          {!!featuredProducts && featuredProducts.length > 0 && (
-            <Suspense
-              fallback={
-                <Box sx={{ display: 'flex' }}>
-                  <CircularProgress />
-                </Box>
-              }
-            >
+        <Grid container spacing={3} sx={classes.logosContainer}>
+          <Suspense fallback={<ProductSkeleton count={4} />}>
+            {showSkeleton ? (
+              <ProductSkeleton count={4} />
+            ) : featuredProducts.length > 0 ? (
               <Grid sx={classes.productsWraper} container spacing={2}>
-                {featuredProducts.map((product, k) => {
-                  return (
-                    <Grid
-                      item
-                      key={k}
-                      size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}
-                      sx={classes.logos}>
-                      <ProductItem
-                        sx="d-flex mb-2"
-                        category="drones"
-                        products={product}
-                        productID={k}
-                      ></ProductItem>
-                    </Grid>
-                  )
-                })}
+                {featuredProducts.map((product, k) => (
+                  <Grid
+                    item
+                    key={product.productID || k}
+                    size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}
+                    sx={classes.logos}
+                  >
+                    <ProductItem
+                      sx="d-flex mb-2"
+                      category="drones"
+                      products={product}
+                      productID={k}
+                    />
+                  </Grid>
+                ))}
               </Grid>
-            </Suspense>
-          )}
-          </Grid>
+            ) : (
+              <Typography variant="body2" sx={{ m: 2 }}>
+                No hay productos disponibles.
+              </Typography>
+            )}
+          </Suspense>
+        </Grid>
       </Container>
     </Box>
   )
 }
 
-NuevosProductos.propTypes = {
-  // classes: PropTypes.object.isRequired,
-}
+export default withRoot(NuevosProductos)
 
-const mapStateToProps = (state) => {
-  // console.log("state", state);
-  return {
-    featuredProducts: state.dronesHD
-  }
-}
-
-export default connect(mapStateToProps, null)(withRoot(NuevosProductos))

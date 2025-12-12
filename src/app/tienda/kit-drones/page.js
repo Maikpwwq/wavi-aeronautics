@@ -9,7 +9,7 @@ import Grid from '@mui/material/Grid'
 import Typography from '@/modules/components/Typography'
 
 import ProductCard from '@/app/tienda/components/ProductCard'
-import CircularProgress from '@mui/material/CircularProgress'
+import ProductSkeleton from '@/app/tienda/components/ProductSkeleton'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
 
 const styles = (theme) => ({
@@ -40,8 +40,8 @@ const styles = (theme) => ({
 
 const DroneProducts = () => {
   const shopState = useSelector((store) => store?.shop)
-  // Ensure dronesKit is always an array
   const dronesKit = shopState?.dronesKit || []
+  const isLoading = shopState?.loading ?? dronesKit.length === 0
 
   const theme = useTheme()
   const classes = styles(theme)
@@ -54,43 +54,35 @@ const DroneProducts = () => {
           <Typography variant='h5' sx={classes.spacingTexts}>
             Kits de Dron FPV:
           </Typography>
-          <>
-            <Typography variant='body1' sx={classes.endingTexts}>
-              Descubre los mejores kits de Dron FPV listos para vuelo.
-            </Typography>
-            <Suspense
-              fallback={
-                <Box sx={{ display: 'flex' }}>
-                  <CircularProgress />
-                </Box>
-              }
-            >
+          <Typography variant='body1' sx={classes.endingTexts}>
+            Descubre los mejores kits de Dron FPV listos para vuelo.
+          </Typography>
+          <Suspense fallback={<ProductSkeleton count={4} />}>
+            {isLoading ? (
+              <ProductSkeleton count={4} />
+            ) : dronesKit.length > 0 ? (
               <Grid
                 container
                 spacing={2}
                 sx={{ justifyContent: 'space-around' }}
               >
-                {dronesKit.length > 0 ? (
-                  dronesKit.map((product, k) => (
-                    <Grid item key={k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
-                      <ProductCard
-                        sx='d-flex mb-2'
-                        category='dronesKits'
-                        products={product}
-                        productID={k}
-                      />
-                    </Grid>
-                  ))
-                ) : (
-                  <Typography variant="body2" sx={{ m: 2 }}>
-                    Cargando productos...
-                  </Typography>
-                )}
+                {dronesKit.map((product, k) => (
+                  <Grid item key={product.productID || k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
+                    <ProductCard
+                      sx='d-flex mb-2'
+                      category='dronesKits'
+                      products={product}
+                      productID={k}
+                    />
+                  </Grid>
+                ))}
               </Grid>
-            </Suspense>
-            <br />
-            <br />
-          </>
+            ) : (
+              <Typography variant="body2" sx={{ m: 2 }}>
+                No hay productos disponibles en esta categoría.
+              </Typography>
+            )}
+          </Suspense>
         </Box>
       </Box>
     </>
@@ -98,3 +90,4 @@ const DroneProducts = () => {
 }
 
 export default withRoot(DroneProducts)
+

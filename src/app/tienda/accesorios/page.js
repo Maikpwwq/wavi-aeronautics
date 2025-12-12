@@ -1,13 +1,14 @@
 'use client'
-import React, { Suspense } from 'react'
-import { useSelector } from 'react-redux'
+import React, { Suspense, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { useTheme } from '@mui/material/styles'
 import withRoot from '@/modules/withRoot'
+import { fetchAccesoriosProducts } from '@/store/states/shop'
 
 import ProductCard from '@/app/tienda/components/ProductCard'
+import ProductSkeleton from '@/app/tienda/components/ProductSkeleton'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
-import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@/modules/components/Typography'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
 
@@ -38,12 +39,23 @@ const styles = (theme) => ({
 })
 
 const Accesorios = () => {
+  const dispatch = useDispatch()
   const shopState = useSelector((store) => store?.shop)
-  // Ensure baterias is always an array
   const baterias = shopState?.baterias || []
+  const loadedCategories = shopState?.loadedCategories || []
+  const isLoading = shopState?.loading ?? false
   
   const theme = useTheme()
   const classes = styles(theme)
+
+  // Lazy load accesorios products when component mounts
+  useEffect(() => {
+    if (!loadedCategories.includes('accesorios')) {
+      dispatch(fetchAccesoriosProducts())
+    }
+  }, [dispatch, loadedCategories])
+
+  const showSkeleton = isLoading || (baterias.length === 0 && !loadedCategories.includes('accesorios'))
 
   return (
     <>
@@ -53,22 +65,18 @@ const Accesorios = () => {
           <Typography variant="h5" sx={classes.spacingTexts}>
             Baterias para drone.
           </Typography>
-          <Suspense
-            fallback={
-              <Box sx={{ display: 'flex' }}>
-                <CircularProgress />
-              </Box>
-            }
-          >
-            <Typography variant="body1" sx={classes.endingTexts}>
-              Baterias para cada necesidad en potencia y tiempo de vuelo.
-            </Typography>
-            <Grid container spacing={2}>
-              {baterias.length > 0 ? (
-                baterias.map((product, k) => (
+          <Typography variant="body1" sx={classes.endingTexts}>
+            Baterias para cada necesidad en potencia y tiempo de vuelo.
+          </Typography>
+          <Suspense fallback={<ProductSkeleton count={4} />}>
+            {showSkeleton ? (
+              <ProductSkeleton count={4} />
+            ) : baterias.length > 0 ? (
+              <Grid container spacing={2}>
+                {baterias.map((product, k) => (
                   <Grid
                     item
-                    key={k}
+                    key={product.productID || k}
                     size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}
                   >
                     <ProductCard
@@ -78,13 +86,13 @@ const Accesorios = () => {
                       productID={k}
                     />
                   </Grid>
-                ))
-              ) : (
-                <Typography variant="body2" sx={{ m: 2 }}>
-                  Cargando productos...
-                </Typography>
-              )}
-            </Grid>
+                ))}
+              </Grid>
+            ) : (
+              <Typography variant="body2" sx={{ m: 2 }}>
+                No hay productos disponibles en esta categoría.
+              </Typography>
+            )}
           </Suspense>
         </Box>
       </Box>
@@ -93,3 +101,4 @@ const Accesorios = () => {
 }
 
 export default withRoot(Accesorios)
+

@@ -1,11 +1,12 @@
 'use client'
-import React, { Suspense } from 'react'
-import { useSelector } from 'react-redux'
+import React, { Suspense, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import ProductCard from '@/app/tienda/components/ProductCard'
+import ProductSkeleton from '@/app/tienda/components/ProductSkeleton'
+import { fetchTransmisorsProducts } from '@/store/states/shop'
 
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
-import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@/modules/components/Typography'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
 import withRoot from '@/modules/withRoot'
@@ -38,13 +39,24 @@ const styles = (theme) => ({
 })
 
 const TrasmisorReceptor = () => {
+  const dispatch = useDispatch()
   const shopState = useSelector((store) => store?.shop)
-  // Ensure we have arrays
   const transmisors = shopState?.transmisors || []
   const receptors = shopState?.receptors || []
+  const loadedCategories = shopState?.loadedCategories || []
+  const isLoading = shopState?.loading ?? false
 
   const theme = useTheme()
   const classes = styles(theme)
+
+  // Lazy load transmisors/receptors when component mounts
+  useEffect(() => {
+    if (!loadedCategories.includes('transmisors')) {
+      dispatch(fetchTransmisorsProducts())
+    }
+  }, [dispatch, loadedCategories])
+
+  const showSkeleton = isLoading || (transmisors.length === 0 && receptors.length === 0 && !loadedCategories.includes('transmisors'))
 
   return (
     <>
@@ -55,20 +67,16 @@ const TrasmisorReceptor = () => {
           <Typography variant="h5" sx={classes.spacingTexts}>
             Transmisores para drone.
           </Typography>
-          <Suspense
-            fallback={
-              <Box sx={{ display: 'flex' }}>
-                <CircularProgress />
-              </Box>
-            }
-          >
-            <Typography variant="body1" sx={classes.endingTexts}>
-              Transmisores para cada necesidad en potencia y distacia de vuelo.
-            </Typography>
-            <Grid container spacing={2}>
-              {transmisors.length > 0 ? (
-                transmisors.map((product, k) => (
-                  <Grid item key={k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
+          <Typography variant="body1" sx={classes.endingTexts}>
+            Transmisores para cada necesidad en potencia y distacia de vuelo.
+          </Typography>
+          <Suspense fallback={<ProductSkeleton count={4} />}>
+            {showSkeleton ? (
+              <ProductSkeleton count={4} />
+            ) : transmisors.length > 0 ? (
+              <Grid container spacing={2}>
+                {transmisors.map((product, k) => (
+                  <Grid item key={product.productID || k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
                     <ProductCard
                       category="transmisors"
                       className="d-flex mb-2"
@@ -76,33 +84,29 @@ const TrasmisorReceptor = () => {
                       productID={k}
                     />
                   </Grid>
-                ))
-              ) : (
-                <Typography variant="body2" sx={{ m: 2 }}>
-                  Cargando productos...
-                </Typography>
-              )}
-            </Grid>
+                ))}
+              </Grid>
+            ) : (
+              <Typography variant="body2" sx={{ m: 2 }}>
+                No hay transmisores disponibles.
+              </Typography>
+            )}
           </Suspense>
 
           {/* Seccion de Receptoras */}
           <Typography variant="h5" sx={classes.spacingTexts}>
             Receptor para drone.
           </Typography>
-          <Suspense
-            fallback={
-              <Box sx={{ display: 'flex' }}>
-                <CircularProgress />
-              </Box>
-            }
-          >
-            <Typography variant="body1" sx={classes.endingTexts}>
-              Receptor para cada necesidad en potencia y distacia de vuelo.
-            </Typography>
-            <Grid container spacing={2}>
-              {receptors.length > 0 ? (
-                receptors.map((product, k) => (
-                  <Grid item key={k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
+          <Typography variant="body1" sx={classes.endingTexts}>
+            Receptor para cada necesidad en potencia y distacia de vuelo.
+          </Typography>
+          <Suspense fallback={<ProductSkeleton count={4} />}>
+            {showSkeleton ? (
+              <ProductSkeleton count={4} />
+            ) : receptors.length > 0 ? (
+              <Grid container spacing={2}>
+                {receptors.map((product, k) => (
+                  <Grid item key={product.productID || k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
                     <ProductCard
                       category="receptors"
                       className="d-flex mb-2"
@@ -110,13 +114,13 @@ const TrasmisorReceptor = () => {
                       productID={k}
                     />
                   </Grid>
-                ))
-              ) : (
-                <Typography variant="body2" sx={{ m: 2 }}>
-                  Cargando productos...
-                </Typography>
-              )}
-            </Grid>
+                ))}
+              </Grid>
+            ) : (
+              <Typography variant="body2" sx={{ m: 2 }}>
+                No hay receptores disponibles.
+              </Typography>
+            )}
           </Suspense>
         </Box>
       </Box>
@@ -125,3 +129,4 @@ const TrasmisorReceptor = () => {
 }
 
 export default withRoot(TrasmisorReceptor)
+

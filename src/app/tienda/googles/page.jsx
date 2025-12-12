@@ -1,13 +1,14 @@
 'use client'
-import React, { Suspense } from 'react'
-import { useSelector } from 'react-redux'
+import React, { Suspense, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { useTheme } from '@mui/material/styles'
 import withRoot from '@/modules/withRoot'
+import { fetchGooglesProducts } from '@/store/states/shop'
 
 import ProductCard from '@/app/tienda/components/ProductCard'
+import ProductSkeleton from '@/app/tienda/components/ProductSkeleton'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
-import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@/modules/components/Typography'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
 
@@ -38,12 +39,23 @@ const styles = (theme) => ({
 })
 
 const Googles = () => {
+  const dispatch = useDispatch()
   const shopState = useSelector((store) => store?.shop)
-  // Ensure googles is always an array
   const googles = shopState?.googles || []
+  const loadedCategories = shopState?.loadedCategories || []
+  const isLoading = shopState?.loading ?? false
   
   const theme = useTheme()
   const classes = styles(theme)
+
+  // Lazy load googles when component mounts if not already loaded
+  useEffect(() => {
+    if (!loadedCategories.includes('googles')) {
+      dispatch(fetchGooglesProducts())
+    }
+  }, [dispatch, loadedCategories])
+
+  const showSkeleton = isLoading || (googles.length === 0 && !loadedCategories.includes('googles'))
 
   return (
     <>
@@ -53,20 +65,16 @@ const Googles = () => {
           <Typography variant="h5" sx={classes.spacingTexts}>
             Googles para drone.
           </Typography>
-          <Suspense
-            fallback={
-              <Box sx={{ display: 'flex' }}>
-                <CircularProgress />
-              </Box>
-            }
-          >
-            <Typography variant="body1" sx={classes.endingTexts}>
-              Googles para cada necesidad en potencia y tiempo de vuelo.
-            </Typography>
-            <Grid container spacing={2}>
-              {googles.length > 0 ? (
-                googles.map((product, k) => (
-                  <Grid item key={k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
+          <Typography variant="body1" sx={classes.endingTexts}>
+            Googles para cada necesidad en potencia y tiempo de vuelo.
+          </Typography>
+          <Suspense fallback={<ProductSkeleton count={4} />}>
+            {showSkeleton ? (
+              <ProductSkeleton count={4} />
+            ) : googles.length > 0 ? (
+              <Grid container spacing={2}>
+                {googles.map((product, k) => (
+                  <Grid item key={product.productID || k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
                     <ProductCard
                       className="d-flex mb-2"
                       products={product}
@@ -74,13 +82,13 @@ const Googles = () => {
                       productID={k}
                     />
                   </Grid>
-                ))
-              ) : (
-                <Typography variant="body2" sx={{ m: 2 }}>
-                  Cargando productos...
-                </Typography>
-              )}
-            </Grid>
+                ))}
+              </Grid>
+            ) : (
+              <Typography variant="body2" sx={{ m: 2 }}>
+                No hay productos disponibles en esta categoría.
+              </Typography>
+            )}
           </Suspense>
         </Box>
       </Box>
@@ -89,3 +97,4 @@ const Googles = () => {
 }
 
 export default withRoot(Googles)
+
