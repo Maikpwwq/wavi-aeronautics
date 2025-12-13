@@ -11,33 +11,30 @@ import FirebaseSubscribe from './FirebaseSubscribe.jsx'
 // }
 
 const getProductById = (searchId, category, marca) =>
-  new Observable(async (subscriber) => {
-    const response = await FirebaseSearchProductById(searchId, category, marca)
-    try {
-      console.log(
-        'firebase-Id-search',
-        searchId,
-        category,
-        response
-        // subscriber
-      )
-      subscriber.next(response)
-      // subscriber.complete();
-    } catch (err) {
-      subscriber.error(err)
-    }
+
+  new Observable((subscriber) => {
+    FirebaseSearchProductById(searchId, category, marca)
+      .then((response) => {
+        console.log('firebase-Id-search', searchId, category, response)
+        subscriber.next(response)
+        subscriber.complete()
+      })
+      .catch((err) => {
+        subscriber.error(err)
+      })
   })
 
 const subscribeToWavi = (suscribeMail) =>
-  new Observable(async (subscriber) => {
-    const response = await FirebaseSubscribe(suscribeMail)
-    console.log('firebaseResponse', response, suscribeMail)
-    try {
-      subscriber.next(response)
-      // subscriber.complete();
-    } catch (err) {
-      subscriber.error(err) // delivers an error if it caught one
-    }
+  new Observable((subscriber) => {
+    FirebaseSubscribe(suscribeMail)
+      .then((response) => {
+        console.log('firebaseResponse', response, suscribeMail)
+        subscriber.next(response)
+        subscriber.complete()
+      })
+      .catch((err) => {
+        subscriber.error(err)
+      })
   })
 
 const getObservableProductId = () => {
