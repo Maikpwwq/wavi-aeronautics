@@ -1,7 +1,7 @@
 import React, { useState, createContext, useEffect } from 'react'
 import FirebaseLoadShoppingCart from '@/services/FirebaseLoadShoppingCart'
 import { saveCartToFirestore } from '@/services/shoppingCartService'
-import { calculateCopPrice } from '@/utilities/priceUtils'
+import { calculateCopPrice, parseCopCurrency } from '@/utilities/priceUtils'
 
 export const ShowCartContext = createContext()
 
@@ -86,10 +86,16 @@ const ShoppingCartProvider = ({ children }) => {
                 if (hydratedFromFirestore.length > 0) {
                   const totalItems = hydratedFromFirestore.reduce((acc, item) => acc + (item.cantidad || 0), 0);
                   
+                  // Recalculate sum properly from fetched items
+                  const totalSum = hydratedFromFirestore.reduce((acc, item) => {
+                     return acc + (parseCopCurrency(item.precio) * (parseInt(item.cantidad) || 1));
+                  }, 0);
+
                   setShoppingCart(prev => ({
                     ...prev,
                     productos: hydratedFromFirestore,
                     items: totalItems,
+                    suma: totalSum // Update sum from Firestore data too
                   }))
                 }
               }
@@ -141,7 +147,11 @@ const ShoppingCartProvider = ({ children }) => {
     setShoppingCart((prev) => {
       const newProductos = prev.productos.filter(item => item.productID !== productID)
       const newItems = newProductos.reduce((acc, item) => acc + (parseInt(item.cantidad) || 0), 0)
-      const newSum = newProductos.reduce((acc, item) => acc + (parseInt(item.precio) * (parseInt(item.cantidad) || 1)), 0)
+      
+      // Fix: Use parseCopCurrency to correctly handle "$ X.XXX.XXX" strings
+      const newSum = newProductos.reduce((acc, item) => {
+         return acc + (parseCopCurrency(item.precio) * (parseInt(item.cantidad) || 1));
+      }, 0)
 
       // Update Session Storage
       if (typeof window !== 'undefined') {
