@@ -107,6 +107,7 @@ const ProductDetail = (props) => {
     })
     
     // lee la información del producto que fue compartida
+    const currentProduct = sharingInformationService.getSubject()
     const infoSub = currentProduct.subscribe((data) => {
       if (data) {
         const { productos } = data
