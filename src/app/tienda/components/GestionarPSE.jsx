@@ -11,6 +11,7 @@ import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
+import Divider from '@mui/material/Divider'
 import withRoot from '@/modules/withRoot'
 import theme from '@/app/tienda/innerTheme'
 import { parseCopCurrency } from '@/utilities/priceUtils'
@@ -152,8 +153,17 @@ const GestionarPSE = (props) => {
 
   return (
     <Box sx={classes.container}>
+      
+      <Box sx={{ width: '100%', my: 2 }}>
+        <Divider>
+          <Typography variant="body2" color="textSecondary">
+            O
+          </Typography>
+        </Divider>
+      </Box>
+
       <Typography variant="h6" gutterBottom>
-        Pagar con PSE
+        PAGAR CON PSE
       </Typography>
       
       <FormControl sx={classes.formControl} size="small">

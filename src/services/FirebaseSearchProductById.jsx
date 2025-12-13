@@ -277,17 +277,51 @@ const FirebaseSearchProductById = async (searchId, category, marca) => {
       categoryIde === 'FPV analógico' ||
       categoryIde === 'Sin VTX'
     ) {
-      const [searchDrone, searchRC, searchGEPRCHD] = await Promise.all([
+  const BetafpvRef = collection(productsDoc, 'betafpv')
+  const queryBetafpvRef = query(BetafpvRef, where('productID', '==', searchIde))
+
+  // ... (inside the if block for drones)
+  const [searchDrone, searchRC, searchGEPRCHD, searchBetafpv] = await Promise.all([
         getDocs(queryRef),
         getDocs(queryRefRC),
-        getDocs(queryGEPRCFPVHD)
+        getDocs(queryGEPRCFPVHD),
+        getDocs(queryBetafpvRef)
       ])
       
       searchDrone.forEach(doc => productos.push(doc.data()))
       searchRC.forEach(doc => productos.push(doc.data()))
       searchGEPRCHD.forEach(doc => productos.push(doc.data()))
+      searchBetafpv.forEach(doc => productos.push(doc.data()))
 
-    } else if (categoryIde === 'Googles') {
+    }
+    
+    // Fallback: If no products found and marca is present, try searching in brand-specific collections
+    if (productos.length === 0 && marca) {
+      // console.log("Fallback search for marca:", marca);
+      let fallbackQueries = [];
+      switch (marca) {
+        case 'betafpv':
+           fallbackQueries = [
+             // Reusing collections defined above for betafpv
+             queryRefBetafpv, queryRefBetafpv2, queryRefBetafpv3, queryRefBetafpv4, queryRefBetafpv5 
+           ];
+           break;
+        case 'geprc':
+           fallbackQueries = [queryRefGeprc, queryRefGeprc2];
+           break;
+        case 'flywoo':
+           fallbackQueries = [queryRefFlywoo, queryRefFlywoo2, queryRefFlywoo3, queryRefFlywoo4, queryRefFlywoo5];
+           break;
+         // Add other cases as needed
+      }
+
+      if (fallbackQueries.length > 0) {
+        const fallbacks = await Promise.all(fallbackQueries.map(q => getDocs(q)));
+        fallbacks.forEach(snap => snap.forEach(doc => productos.push(doc.data())));
+      }
+    }
+
+    if (categoryIde === 'Googles') {
       const queries = [
         queryGooglesDJI, queryGooglesBetafpv, queryGooglesEmaxusa, 
         queryGooglesFatShark, queryGooglesWalksnail, queryGooglesIflightRc

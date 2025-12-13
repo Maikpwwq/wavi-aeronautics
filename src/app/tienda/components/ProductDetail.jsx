@@ -82,30 +82,46 @@ const ProductDetail = (props) => {
   const searchId = searchParams.get('id')
   const category = searchParams.get('category')
   const marca = searchParams.get('marca')
-  const subscription$ = getProductById(searchId, category, marca)
-  console.log('ProductDetail', searchId, category) // router.query,
-
-  const currentProduct = sharingInformationService.getSubject()
+  // Sync local state with Redux state when it changes
+  useEffect(() => {
+    if (product && product.titulo !== 'Producto 1') { // Check if it's not default placeholder if possible, or just strict check
+      setProductInfo(product)
+    } else if (product) {
+       // If Redux has default but we might have better info from fetch later, this is tricky.
+       // Usually Redux state should be authoritative if populated.
+       // Let's just trust Redux if it has content.
+       setProductInfo(product)
+    }
+  }, [product])
 
   useEffect(() => {
+    if (!searchId) return;
+
+    const subscription$ = getProductById(searchId, category, marca)
+    
     // utiliza el servicio para buscar un producto en firebase (searchId, category) y compartir su información
-    subscription$.subscribe((response) => {
+    const productSub = subscription$.subscribe((response) => {
       if (response) {
         console.log('storeProductInfo', response)
-        // const { storeProductInfo } = response;
       }
     })
+    
     // lee la información del producto que fue compartida
-    currentProduct.subscribe((data) => {
+    const infoSub = currentProduct.subscribe((data) => {
       if (data) {
         const { productos } = data
         if (productos && productos.length > 0) {
-          console.log('currentProduct', productos[0], productInfo)
+          console.log('currentProduct', productos[0])
           setProductInfo(productos[0])
         }
       }
     })
-  }, [])
+
+    return () => {
+      productSub.unsubscribe()
+      infoSub.unsubscribe()
+    }
+  }, [searchId, category, marca])
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1)

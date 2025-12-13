@@ -66,7 +66,7 @@ const ProductCard = ({ products, category }) => {
                   style={classes.imageSize}
                   image={imagenes[0]}
                   alt={titulo}
-                  onClick={() => handleSelect}
+                  onClick={handleSelect}
                 />
               </Link>
             )}

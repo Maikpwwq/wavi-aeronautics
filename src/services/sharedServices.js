@@ -1,6 +1,6 @@
 // import { HttpClient } from 'http';
 import { Observable } from 'rxjs' // Subject, BehaviorSubject
-import FirebaseSearchProductById from './FirebaseSearchProductById'
+import FirebaseSearchProductById from './FirebaseSearchProductById.jsx'
 import FirebaseSubscribe from './FirebaseSubscribe.jsx'
 
 // const urlsPrivate = {
