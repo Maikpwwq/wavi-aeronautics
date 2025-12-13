@@ -112,6 +112,9 @@ const GestionarMercadoPago = (props) => {
       console.log('Preference created:', preference)
 
       if (mercadopagoSDK && preference.id) {
+        if (props.onPaymentMethodReady) {
+          props.onPaymentMethodReady()
+        }
         mercadopagoSDK.checkout({
           preference: {
             id: preference.id
@@ -134,16 +137,18 @@ const GestionarMercadoPago = (props) => {
   return (
     <>
       <Box sx={classes.pagoBtn}>
-        <Button
-          variant="contained"
-          color="primary"
-          sx={classes.checkout}
-          style={{ visibility: visibility ? 'visible' : 'hidden' }}
-          onClick={handleCheckout}
-          disabled={isLoading}
-        >
-          {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Confirmar Orden'}
-        </Button>
+        {!props.isOrderConfirmed && (
+          <Button
+            variant="contained"
+            color="primary"
+            sx={classes.checkout}
+            style={{ visibility: visibility ? 'visible' : 'hidden' }}
+            onClick={handleCheckout}
+            disabled={isLoading}
+          >
+            {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Confirmar Orden'}
+          </Button>
+        )}
         {error && (
           <Box sx={{ color: 'error.main', mt: 1, fontSize: '0.875rem' }}>
             {error}

@@ -74,6 +74,8 @@ const DetallesEnvio = (props) => {
     shippingBarrio: '',
     shippingPostalCode: ''
   })
+  // State to control visibility of payment methods
+  const [showPaymentMethods, setShowPaymentMethods] = useState(false)
 
   // Pre-fill form with logged-in user data
   useEffect(() => {
@@ -233,50 +235,66 @@ const DetallesEnvio = (props) => {
               <Typography variant="h5" sx="">
                 Resumen productos:
               </Typography>
-              <Box style={{ display: 'flex', flexDirection: 'column' }}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell></TableCell>
-                      <TableCell>Titulo</TableCell>
-                      <TableCell>Precio</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {productsCart.length > 0 && productsCart.map((producto, index) => {
-                      const { titulo, precio, imagenes } = producto
-                      return (
-                        <TableRow key={index}>
-                          <TableCell>
-                            <Box
-                              component="img"
-                              src={imagenes[0]}
-                              alt={titulo}
-                              sx={{
-                                height: 100,
-                                display: 'block',
-                                maxWidth: 100,
-                                overflow: 'hidden',
-                                width: 'auto'
-                              }}
-                            ></Box>
-                          </TableCell>
-                          <TableCell>{titulo}</TableCell>
-                          <TableCell>{precio}</TableCell>
-                        </TableRow>
-                      )
-                    })}
-                  </TableBody>
-                </Table>
+              <Box sx={{ mt: 3, mb: 3 }}>
+                {productsCart.map((producto, index) => (
+                  <Box 
+                    key={index} 
+                    sx={{ 
+                      display: 'flex', 
+                      justifyContent: 'space-between', 
+                      alignItems: 'center',
+                      borderBottom: '1px solid #e0e0e0',
+                      py: 2
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                       <Box
+                          component="img"
+                          src={producto.imagenes?.[0]}
+                          alt={producto.titulo}
+                          sx={{
+                            width: 60,
+                            height: 60,
+                            objectFit: 'contain',
+                            borderRadius: 1,
+                            backgroundColor: '#fff',
+                            p: 0.5,
+                            border: '1px solid #eee'
+                          }}
+                        />
+                        <Box>
+                          <Typography variant="body1" sx={{ fontWeight: 500, lineHeight: 1.2 }}>
+                            {producto.titulo}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            Cantidad: {producto.cantidad || 1}
+                          </Typography>
+                        </Box>
+                    </Box>
+                    <Typography variant="body1" sx={{ fontWeight: 'bold', minWidth: '100px', textAlign: 'right' }}>
+                      {producto.precio}
+                    </Typography>
+                  </Box>
+                ))}
+                
+                <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end', borderTop: '2px solid #333', pt: 2 }}>
+                   <Typography variant="h6">
+                      Total: {shoppingCart.suma ? `$ ${shoppingCart.suma.toLocaleString('es-CO')}` : 'Calculating...'}
+                   </Typography>
+                </Box>
               </Box>
               <GestionarMercadoPago
                 shippingInfo={shippingInfo}
                 userInfo={userInfo}
+                onPaymentMethodReady={() => setShowPaymentMethods(true)}
+                isOrderConfirmed={showPaymentMethods}
               />
-              <GestionarPSE
-                shippingInfo={shippingInfo}
-                userInfo={userInfo}
-              />
+              {showPaymentMethods && (
+                <GestionarPSE
+                  shippingInfo={shippingInfo}
+                  userInfo={userInfo}
+                />
+              )}
             </Box>
           )}
         </Container>
