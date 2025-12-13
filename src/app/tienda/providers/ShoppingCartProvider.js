@@ -1,5 +1,6 @@
 import React, { useState, createContext, useEffect } from 'react'
 import FirebaseLoadShoppingCart from '@/services/FirebaseLoadShoppingCart'
+import { saveCartToFirestore } from '@/services/shoppingCartService'
 import { calculateCopPrice } from '@/utilities/priceUtils'
 
 export const ShowCartContext = createContext()
@@ -147,6 +148,11 @@ const ShoppingCartProvider = ({ children }) => {
         sessionStorage.setItem('cartProducts', JSON.stringify(newProductos))
         sessionStorage.setItem('cartItems', newItems)
         sessionStorage.setItem('cartSum', newSum)
+      }
+      
+      // Update Firestore
+      if (prev.cartID) {
+         saveCartToFirestore(prev.cartID, newProductos.map(p => ({ productID: p.productID, cantidad: p.cantidad || 1 })));
       }
 
       return {

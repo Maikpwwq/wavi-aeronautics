@@ -27,6 +27,9 @@ import LocationCityIcon from '@mui/icons-material/LocationCity'
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox'
 import PublicIcon from '@mui/icons-material/Public'
 
+import IconButton from '@mui/material/IconButton'
+import DeleteIcon from '@mui/icons-material/Delete'
+
 const styles = (theme) => ({
   root: {
     display: 'flex',
@@ -65,7 +68,7 @@ const styles = (theme) => ({
 
 const DetallesEnvio = (props) => {
   const classes = styles(theme)
-  const { shoppingCart } = useContext(ShowCartContext)
+  const { shoppingCart, removeFromCart } = useContext(ShowCartContext)
   const productsCart = shoppingCart?.productos
   console.log('DetallesEnvio', productsCart)
   
@@ -344,9 +347,22 @@ const DetallesEnvio = (props) => {
                           </Typography>
                         </Box>
                     </Box>
-                    <Typography variant="body1" sx={{ fontWeight: 'bold', minWidth: '100px', textAlign: 'right' }}>
-                      {producto.precio}
-                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                      <Typography variant="body1" sx={{ fontWeight: 'bold', minWidth: '80px', textAlign: 'right' }}>
+                        {producto.precio}
+                      </Typography>
+                      <IconButton 
+                        color="error" 
+                        onClick={() => {
+                          if (window.confirm(`¿Estás seguro de que deseas eliminar "${producto.titulo}" de la orden?`)) {
+                            removeFromCart(producto.productID)
+                          }
+                        }}
+                        aria-label="eliminar"
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Box>
                   </Box>
                 ))}
                 
