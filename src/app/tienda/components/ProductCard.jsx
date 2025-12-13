@@ -39,7 +39,7 @@ const ProductCard = ({ products, category }) => {
   const handleSelect = () => {
     console.log('producto', producto)
     try {
-      dispatch(loadDetail({ producto }))
+      dispatch(loadDetail(producto))
     } catch (e) {
       return console.error(e.message)
     }
