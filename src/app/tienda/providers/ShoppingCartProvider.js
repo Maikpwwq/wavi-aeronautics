@@ -134,9 +134,34 @@ const ShoppingCartProvider = ({ children }) => {
     }))
   }
 
+  const removeFromCart = (productID) => {
+    console.log('removeFromCart', productID)
+    
+    setShoppingCart((prev) => {
+      const newProductos = prev.productos.filter(item => item.productID !== productID)
+      const newItems = newProductos.reduce((acc, item) => acc + (parseInt(item.cantidad) || 0), 0)
+      const newSum = newProductos.reduce((acc, item) => acc + (parseInt(item.precio) * (parseInt(item.cantidad) || 1)), 0)
+
+      // Update Session Storage
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('cartProducts', JSON.stringify(newProductos))
+        sessionStorage.setItem('cartItems', newItems)
+        sessionStorage.setItem('cartSum', newSum)
+      }
+
+      return {
+        ...prev,
+        productos: newProductos,
+        items: newItems,
+        suma: newSum,
+        updated: !prev.updated
+      }
+    })
+  }
+
   return (
     <ShowCartContext.Provider
-      value={{ shoppingCart, updateShoppingCart, updateShowCart, updateCart }}
+      value={{ shoppingCart, updateShoppingCart, updateShowCart, updateCart, removeFromCart }}
     >
       {children}
     </ShowCartContext.Provider>
