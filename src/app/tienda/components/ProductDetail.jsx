@@ -163,7 +163,7 @@ const ProductDetail = (props) => {
                           <Box
                             key={key}
                             component="img"
-                            src={image}
+                            src={typeof image === 'string' ? image : image?.url || ''}
                             alt={productInfo.titulo}
                             sx={{
                               height: 400,
@@ -236,7 +236,7 @@ const ProductDetail = (props) => {
                     <Box
                       key={key}
                       component="img"
-                      src={image}
+                      src={typeof image === 'string' ? image : image?.url || ''}
                       alt={productInfo.titulo}
                       sx={{
                         height: 330,

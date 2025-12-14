@@ -78,7 +78,7 @@ const CategoriesNavigation = () => {
     setValue(newValue)
     const route = routes.find(r => r.value === newValue)
     if (route) {
-        navigate.push(route.slug, { replace: true })
+        navigate.push(route.href)
     }
   }
 
@@ -96,7 +96,6 @@ const CategoriesNavigation = () => {
             onChange={handleChange}
             value={value}
             textColor="inherit"
-            // sx={classes.productTabs}
           >
             {routes.map(({ label, value, href }) => (
               <Tab
@@ -104,14 +103,8 @@ const CategoriesNavigation = () => {
                 textColor="inherit"
                 label={label}
                 value={value}
-                component="a"
-                href={href}
-                onClick={(e) => {
-                    e.preventDefault(); // Prevent default link behavior to allow handle change
-                    handleChange(e, value);
-                }}
                 style={styles.blueLink}
-              ></Tab>
+              />
             ))}
           </Tabs>
         </Toolbar>

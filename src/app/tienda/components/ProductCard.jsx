@@ -56,15 +56,14 @@ const ProductCard = ({ products, category }) => {
               <Link
                 style={classes.imageCentered}
                 href={{
-                  pathname: 'producto',
-                  query: `id=${productID}&category=${categoria}&marca=${marca}`,
-                  state: { product: products }
+                  pathname: '/tienda/producto',
+                  query: { id: productID, category: categoria, marca: marca },
                 }}
               >
                 <CardMedia
                   component="img"
                   style={classes.imageSize}
-                  image={imagenes[0]}
+                  image={typeof imagenes[0] === 'string' ? imagenes[0] : imagenes[0]?.url || ''}
                   alt={titulo}
                   onClick={handleSelect}
                 />
