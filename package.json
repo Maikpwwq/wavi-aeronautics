@@ -100,6 +100,7 @@
       "last 1 safari version"
     ]
   },
+  "packageManager": "pnpm@10.25.0",
   "pnpm": {
     "overrides": {
       "stylis": "4.3.6"
