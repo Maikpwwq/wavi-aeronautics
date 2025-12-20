@@ -10,7 +10,35 @@ import Typography from '@/modules/components/Typography'
 
 import ProductCard from '@/app/tienda/components/ProductCard'
 import ProductSkeleton from '@/app/tienda/components/ProductSkeleton'
+import FiltroProducto from '@/app/tienda/components/FiltroProducto'
 import { useProductFilter } from '@/app/tienda/hooks/useProductFilter'
+
+const styles = (theme) => ({
+  presentationProducts: {
+    margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`,
+    padding: `${theme.spacing(0)} ${theme.spacing(2)} !important`,
+    paddingLeft: `${theme.spacing(6)} !important`,
+    display: 'flex',
+    flexDirection: 'column',
+    [theme.breakpoints.down('sm')]: {
+      paddingLeft: `${theme.spacing(2)} !important`
+    }
+  },
+  spacingTexts: {
+    margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`
+  },
+  endingTexts: {
+    marginBottom: `${theme.spacing(2)} !important`
+  },
+  productShowcase: {
+    display: 'flex',
+    flexDirection: 'row',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column'
+    }
+  }
+})
+
 
 const DroneProducts = () => {
   const shopState = useSelector((store) => store?.shop)
