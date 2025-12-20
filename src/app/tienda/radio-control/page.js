@@ -11,6 +11,7 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Typography from '@/modules/components/Typography'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
+import { useProductFilter } from '@/app/tienda/hooks/useProductFilter'
 
 const styles = (theme) => ({
   presentationProducts: {
@@ -43,7 +44,17 @@ export const RadioContol = () => {
   const shopState = useSelector((store) => store?.shop)
   const radioControl = shopState?.radioControl || []
   const loadedCategories = shopState?.loadedCategories || []
-
+  
+  // Use custom filter hook
+  const {
+    filters,
+    filteredProducts,
+    availableMarcas,
+    toggleMarca,
+    setMinPrice,
+    setMaxPrice,
+    resetFilters
+  } = useProductFilter(radioControl)
 
   const theme = useTheme()
   const classes = styles(theme)
@@ -60,7 +71,14 @@ export const RadioContol = () => {
   return (
     <>
       <Box sx={classes.productShowcase}>
-        <FiltroProducto />
+        <FiltroProducto 
+          filters={filters}
+          availableMarcas={availableMarcas}
+          toggleMarca={toggleMarca}
+          setMinPrice={setMinPrice}
+          setMaxPrice={setMaxPrice}
+          resetFilters={resetFilters}
+        />
         <Box sx={classes.presentationProducts}>
           <Typography variant="h5" sx={classes.spacingTexts}>
             Dispositivos de Control Remoto.
@@ -71,9 +89,9 @@ export const RadioContol = () => {
           <Suspense fallback={<ProductSkeleton count={4} />}>
             {showSkeleton ? (
               <ProductSkeleton count={4} />
-            ) : radioControl.length > 0 ? (
+            ) : filteredProducts.length > 0 ? (
               <Grid container spacing={2}>
-                {radioControl.map((product, k) => (
+                {filteredProducts.map((product, k) => (
                   <Grid item key={product.productID || k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
                     <ProductCard
                       category="radioControl"
@@ -86,7 +104,7 @@ export const RadioContol = () => {
               </Grid>
             ) : (
               <Typography variant="body2" sx={{ m: 2 }}>
-                No hay productos disponibles en esta categoría.
+                No hay productos que coincidan con los filtros seleccionados.
               </Typography>
             )}
           </Suspense>

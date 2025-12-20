@@ -12,6 +12,8 @@ import FiltroProducto from '@/app/tienda/components/FiltroProducto'
 import withRoot from '@/modules/withRoot'
 import { useTheme } from '@mui/material/styles'
 
+import { useProductFilter } from '@/app/tienda/hooks/useProductFilter'
+
 const styles = (theme) => ({
   presentationProducts: {
     margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`,
@@ -38,13 +40,49 @@ const styles = (theme) => ({
   }
 })
 
+// Helper to filter a list based on hook's filter state
+const applyFilters = (products, filters) => {
+  if (!products) return []
+  return products.filter((product) => {
+    // Brand Filter
+    if (filters.marcas.length > 0 && !filters.marcas.includes(product.marca)) {
+      return false
+    }
+    // Price Filter
+    const price = typeof product.precio === 'number' ? product.precio : parseInt(product.precio.replace(/[^0-9]/g, ''), 10) || 0
+    const min = filters.precio.min ? parseInt(filters.precio.min, 10) : 0
+    const max = filters.precio.max ? parseInt(filters.precio.max, 10) : Infinity
+    
+    if (price < min) return false
+    if (max !== Infinity && price > max) return false
+    
+    return true
+  })
+}
+
 const TrasmisorReceptor = () => {
   const dispatch = useDispatch()
   const shopState = useSelector((store) => store?.shop)
   const transmisors = shopState?.transmisors || []
   const receptors = shopState?.receptors || []
   const loadedCategories = shopState?.loadedCategories || []
+  
+  // Combine for filter initialization (to get all brands)
+  const allProducts = [...transmisors, ...receptors]
+  
+  // Use custom filter hook
+  const {
+    filters,
+    availableMarcas,
+    toggleMarca,
+    setMinPrice,
+    setMaxPrice,
+    resetFilters
+  } = useProductFilter(allProducts)
 
+  // Apply filters to each list separately
+  const filteredTransmisors = applyFilters(transmisors, filters)
+  const filteredReceptors = applyFilters(receptors, filters)
 
   const theme = useTheme()
   const classes = styles(theme)
@@ -61,7 +99,14 @@ const TrasmisorReceptor = () => {
   return (
     <>
       <Box sx={classes.productShowcase}>
-        <FiltroProducto />
+        <FiltroProducto 
+          filters={filters}
+          availableMarcas={availableMarcas}
+          toggleMarca={toggleMarca}
+          setMinPrice={setMinPrice}
+          setMaxPrice={setMaxPrice}
+          resetFilters={resetFilters}
+        />
         <Box sx={classes.presentationProducts}>
           {/* Seccion de Transmisoras */}
           <Typography variant="h5" sx={classes.spacingTexts}>
@@ -73,9 +118,9 @@ const TrasmisorReceptor = () => {
           <Suspense fallback={<ProductSkeleton count={4} />}>
             {showSkeleton ? (
               <ProductSkeleton count={4} />
-            ) : transmisors.length > 0 ? (
+            ) : filteredTransmisors.length > 0 ? (
               <Grid container spacing={2}>
-                {transmisors.map((product, k) => (
+                {filteredTransmisors.map((product, k) => (
                   <Grid item key={product.productID || k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
                     <ProductCard
                       category="transmisors"
@@ -88,7 +133,7 @@ const TrasmisorReceptor = () => {
               </Grid>
             ) : (
               <Typography variant="body2" sx={{ m: 2 }}>
-                No hay transmisores disponibles.
+                No hay transmisores que coincidan con los filtros.
               </Typography>
             )}
           </Suspense>
@@ -103,9 +148,9 @@ const TrasmisorReceptor = () => {
           <Suspense fallback={<ProductSkeleton count={4} />}>
             {showSkeleton ? (
               <ProductSkeleton count={4} />
-            ) : receptors.length > 0 ? (
+            ) : filteredReceptors.length > 0 ? (
               <Grid container spacing={2}>
-                {receptors.map((product, k) => (
+                {filteredReceptors.map((product, k) => (
                   <Grid item key={product.productID || k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
                     <ProductCard
                       category="receptors"
@@ -118,7 +163,7 @@ const TrasmisorReceptor = () => {
               </Grid>
             ) : (
               <Typography variant="body2" sx={{ m: 2 }}>
-                No hay receptores disponibles.
+                No hay receptores que coincidan con los filtros.
               </Typography>
             )}
           </Suspense>

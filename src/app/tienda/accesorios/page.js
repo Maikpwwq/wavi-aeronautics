@@ -11,6 +11,7 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Typography from '@/modules/components/Typography'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
+import { useProductFilter } from '@/app/tienda/hooks/useProductFilter'
 
 const styles = (theme) => ({
   presentationProducts: {
@@ -43,7 +44,17 @@ const Accesorios = () => {
   const shopState = useSelector((store) => store?.shop)
   const baterias = shopState?.baterias || []
   const loadedCategories = shopState?.loadedCategories || []
-
+  
+  // Use custom filter hook
+  const {
+    filters,
+    filteredProducts,
+    availableMarcas,
+    toggleMarca,
+    setMinPrice,
+    setMaxPrice,
+    resetFilters
+  } = useProductFilter(baterias)
   
   const theme = useTheme()
   const classes = styles(theme)
@@ -60,7 +71,14 @@ const Accesorios = () => {
   return (
     <>
       <Box sx={classes.productShowcase}>
-        <FiltroProducto />
+        <FiltroProducto 
+          filters={filters}
+          availableMarcas={availableMarcas}
+          toggleMarca={toggleMarca}
+          setMinPrice={setMinPrice}
+          setMaxPrice={setMaxPrice}
+          resetFilters={resetFilters}
+        />
         <Box sx={classes.presentationProducts}>
           <Typography variant="h5" sx={classes.spacingTexts}>
             Baterias para drone.
@@ -71,9 +89,9 @@ const Accesorios = () => {
           <Suspense fallback={<ProductSkeleton count={4} />}>
             {showSkeleton ? (
               <ProductSkeleton count={4} />
-            ) : baterias.length > 0 ? (
+            ) : filteredProducts.length > 0 ? (
               <Grid container spacing={2}>
-                {baterias.map((product, k) => (
+                {filteredProducts.map((product, k) => (
                   <Grid
                     item
                     key={product.productID || k}
@@ -90,7 +108,7 @@ const Accesorios = () => {
               </Grid>
             ) : (
               <Typography variant="body2" sx={{ m: 2 }}>
-                No hay productos disponibles en esta categoría.
+                No hay productos que coincidan con los filtros seleccionados.
               </Typography>
             )}
           </Suspense>

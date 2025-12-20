@@ -1,145 +1,110 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import { useTheme } from '@mui/material/styles'
-import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
 import Typography from '@/modules/components/Typography'
-import TextField from '@/modules/components/TextField'
 
-const styles = (theme) => ({
-  spacingTexts: {
-    margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`
-  },
-  productsFilters: {
-    marginTop: `${theme.spacing(2)} !important`,
-    padding: `${theme.spacing(0)} ${theme.spacing(2)} !important`,
-    borderRight: 'thin solid #d0d0d0',
-    paddingRight: `${theme.spacing(6)} !important`,
-    height: 'fit-content',
-    [theme.breakpoints.down('sm')]: {
-      borderRight: 'none'
-    }
-  },
-  filtrado: {
-    marginBottom: `${theme.spacing(3)} !important`,
-    width: 150
-  }
-})
-
-const MARCAS = [
-  {
-    code: 'default',
-    name: 'Seleccionar'
-  },
-  {
-    code: 'Eachine',
-    name: 'Eachine'
-  },
-  {
-    code: 'Emaxusa',
-    name: 'Emaxusa'
-  },
-  {
-    code: 'Flysky',
-    name: 'Flysky'
-  },
-  {
-    code: 'Flywoo',
-    name: 'Flywoo'
-  },
-  {
-    code: 'Frsky',
-    name: 'Frsky'
-  },
-  {
-    code: 'Geprc',
-    name: 'Geprc'
-  },
-  {
-    code: 'Iflightrc',
-    name: 'Iflightrc'
-  },
-  {
-    code: 'Radiomaster',
-    name: 'Radiomaster'
-  },
-  {
-    code: 'Teamblacksheep',
-    name: 'Teamblacksheep'
-  },
-  {
-    code: 'Uruav',
-    name: 'Uruav'
-  }
-]
-
-const PRECIOS = [
-  {
-    code: 'default',
-    name: 'Seleccionar'
-  },
-  {
-    code: 'down900k',
-    name: 'Hasta $ 900.000'
-  },
-  {
-    code: '900kto2M',
-    name: '$900.000 a $2.000.000'
-  },
-  {
-    code: 'up2M',
-    name: 'Más de $2.000.000'
-  }
-]
+// Icons (optional, using text if icons not available)
+// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+// import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 const FiltroProducto = (props) => {
-  const theme = useTheme()
-  const classes = styles(theme)
+  const {
+    filters,
+    availableMarcas,
+    toggleMarca,
+    setMinPrice,
+    setMaxPrice,
+    resetFilters
+  } = props
+
+  // Collapsible state for mobile
+  const [isOpen, setIsOpen] = useState(true)
+
+  if (!filters) return null
+
   return (
+    <div className="filter-panel">
+      {/* Header - Collapsible Toggler */}
+      <div 
+        className="filter-section-header" 
+        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <Typography variant="h6" sx={{ fontSize: '1.1rem', fontWeight: 700 }}>
+          FILTROS
+        </Typography>
+        <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
+          {isOpen ? '−' : '+'}
+        </span>
+      </div>
+
+      {/* Filter Content */}
+      {isOpen && (
         <>
-<Box sx={classes.productsFilters}>
-          <Typography variant="h5" align="center" sx={classes.spacingTexts}>
-            Filtros
-          </Typography>
-          <Grid item size={{ xs: 6, sm: 8, md: 4 }}>
-            <Typography variant="h6" marked="left" gutterBottom>
-              Precio
-            </Typography>
-            <TextField
-              select
-              SelectProps={{
-                native: true
-              }}
-              sx={classes.filtrado}
-            >
-              {PRECIOS.map((rangoPrecio) => (
-                <option value={rangoPrecio.code} key={rangoPrecio.code}>
-                  {rangoPrecio.name}
-                </option>
-              ))}
-            </TextField>
-          </Grid>{' '}
-          <Grid item size={{ xs: 6, sm: 8, md: 4 }}>
-            <Typography variant="h6" marked="left" gutterBottom>
-              Marca
-            </Typography>
-            <TextField
-              select
-              SelectProps={{
-                native: true
-              }}
-              sx={classes.filtrado}
-            >
-              {MARCAS.map((marca) => (
-                <option value={marca.code} key={marca.code}>
-                  {marca.name}
-                </option>
-              ))}
-            </TextField>
-          </Grid>
-        </Box>
+          {/* Price Section */}
+          <div className="filter-section">
+            <div className="filter-section-title">PRECIO</div>
+            <div className="filter-price-row">
+              <input
+                type="number"
+                placeholder="Mín"
+                value={filters.precio.min}
+                onChange={(e) => setMinPrice(e.target.value)}
+                className="filter-pill"
+                style={{ width: '100%', cursor: 'text' }}
+              />
+              <span style={{ color: '#aaa' }}>—</span>
+              <input
+                type="number"
+                placeholder="Máx"
+                value={filters.precio.max}
+                onChange={(e) => setMaxPrice(e.target.value)}
+                className="filter-pill"
+                style={{ width: '100%', cursor: 'text' }}
+              />
+            </div>
+          </div>
+
+          {/* Brands Section */}
+          <div className="filter-section">
+            <div className="filter-section-title">MARCA</div>
+            <div className="filter-pills">
+              {availableMarcas.length > 0 ? (
+                availableMarcas.map((marca) => (
+                  <div
+                    key={marca}
+                    className={`filter-pill ${filters.marcas.includes(marca) ? 'active' : ''}`}
+                    onClick={() => toggleMarca(marca)}
+                  >
+                    {marca}
+                  </div>
+                ))
+              ) : (
+                <Typography variant="caption" sx={{ color: '#999', fontStyle: 'italic' }}>
+                  No hay marcas disponibles
+                </Typography>
+              )}
+            </div>
+          </div>
+
+          {/* Reset Action */}
+          <button className="filter-reset-btn" onClick={resetFilters}>
+            Limpiar Filtros
+          </button>
         </>
+      )}
+    </div>
   )
+}
+
+FiltroProducto.propTypes = {
+  filters: PropTypes.object.isRequired,
+  availableMarcas: PropTypes.array.isRequired,
+  toggleMarca: PropTypes.func.isRequired,
+  setMinPrice: PropTypes.func.isRequired,
+  setMaxPrice: PropTypes.func.isRequired,
+  resetFilters: PropTypes.func.isRequired
 }
 
 export default FiltroProducto

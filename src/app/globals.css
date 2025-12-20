@@ -154,3 +154,54 @@ a:hover{
 .MuiTabs-flexContainer{
   overflow: auto;
 }
+
+/* ====================================
+   Product Card Image Hover Effect
+   ==================================== */
+
+/* Card container - triggers hover state */
+.product-card {
+  transition: box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Image container - contains overflow during scale */
+.product-card-image-container {
+  overflow: hidden;
+  position: relative;
+  border-radius: inherit;
+}
+
+/* Image - scales on card hover */
+.product-card-image {
+  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: auto;
+}
+
+.product-card:hover .product-card-image {
+  transform: scale(1.06);
+  will-change: transform;
+}
+
+/* Accessibility: Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .product-card {
+    transition: none;
+  }
+  
+  .product-card:hover {
+    box-shadow: none;
+  }
+  
+  .product-card-image {
+    transition: none;
+  }
+  
+  .product-card:hover .product-card-image {
+    transform: none;
+    will-change: auto;
+  }
+}

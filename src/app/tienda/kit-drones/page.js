@@ -11,6 +11,7 @@ import Typography from '@/modules/components/Typography'
 import ProductCard from '@/app/tienda/components/ProductCard'
 import ProductSkeleton from '@/app/tienda/components/ProductSkeleton'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
+import { useProductFilter } from '@/app/tienda/hooks/useProductFilter'
 
 const styles = (theme) => ({
   presentationProducts: {

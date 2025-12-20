@@ -42,7 +42,7 @@ const ProductItem = ({ products, category }) => {
   return (
     <>
       <Box className="" maxWidth="sm" style={{ height: '100%' }}>
-        <Card style={{ height: '100%' }}>
+        <Card className="product-card" style={{ height: '100%' }}>
           <CardActionArea>
             {producto !== undefined && imagenes && imagenes.length > 0 && (
               <Link
@@ -52,13 +52,16 @@ const ProductItem = ({ products, category }) => {
                   query: { id: productID, category: categoria, marca: marca },
                 }}
               >
-                <CardMedia
-                  component="img"
-                  style={classes.imageSize}
-                  image={typeof imagenes[0] === 'string' ? imagenes[0] : imagenes[0]?.url || ''}
-                  alt={titulo}
-                  onClick={() => handleSelect}
-                />
+                <div className="product-card-image-container">
+                  <CardMedia
+                    className="product-card-image"
+                    component="img"
+                    style={classes.imageSize}
+                    image={typeof imagenes[0] === 'string' ? imagenes[0] : imagenes[0]?.url || ''}
+                    alt={titulo}
+                    onClick={() => handleSelect}
+                  />
+                </div>
               </Link>
             )}
           </CardActionArea>
