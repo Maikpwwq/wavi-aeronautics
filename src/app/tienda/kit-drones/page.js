@@ -44,6 +44,17 @@ const DroneProducts = () => {
   const dronesKit = shopState?.dronesKit || []
   const loadedCategories = shopState?.loadedCategories || []
   
+  // Use custom filter hook
+  const {
+    filters,
+    filteredProducts,
+    availableMarcas,
+    toggleMarca,
+    setMinPrice,
+    setMaxPrice,
+    resetFilters
+  } = useProductFilter(dronesKit)
+
   // Show skeleton until drones category is loaded
   const showSkeleton = !loadedCategories.includes('drones') && dronesKit.length === 0
 
@@ -53,7 +64,14 @@ const DroneProducts = () => {
   return (
     <>
       <Box sx={classes.productShowcase}>
-        <FiltroProducto />
+        <FiltroProducto 
+          filters={filters}
+          availableMarcas={availableMarcas}
+          toggleMarca={toggleMarca}
+          setMinPrice={setMinPrice}
+          setMaxPrice={setMaxPrice}
+          resetFilters={resetFilters}
+        />
         <Box sx={classes.presentationProducts}>
           <Typography variant='h5' sx={classes.spacingTexts}>
             Kits de Dron FPV:
@@ -64,13 +82,13 @@ const DroneProducts = () => {
           <Suspense fallback={<ProductSkeleton count={4} />}>
             {showSkeleton ? (
               <ProductSkeleton count={4} />
-            ) : dronesKit.length > 0 ? (
+            ) : filteredProducts.length > 0 ? (
               <Grid
                 container
                 spacing={2}
                 sx={{ justifyContent: 'space-around' }}
               >
-                {dronesKit.map((product, k) => (
+                {filteredProducts.map((product, k) => (
                   <Grid item key={product.productID || k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
                     <ProductCard
                       sx='d-flex mb-2'
@@ -83,7 +101,7 @@ const DroneProducts = () => {
               </Grid>
             ) : (
               <Typography variant="body2" sx={{ m: 2 }}>
-                No hay productos disponibles en esta categoría.
+                No hay productos que coincidan con los filtros seleccionados.
               </Typography>
             )}
           </Suspense>
