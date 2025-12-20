@@ -30,9 +30,13 @@ const FiltroProducto = (props) => {
         className="filter-section-header" 
         style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
         onClick={() => setIsOpen(!isOpen)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setIsOpen(!isOpen) }}
+        aria-expanded={isOpen}
       >
-        <Typography variant="h6" sx={{ fontSize: '1.1rem', fontWeight: 700 }}>
-          FILTROS
+        <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 600, margin: 0 }}>
+          {isOpen ? 'OCULTAR FILTROS' : 'MOSTRAR FILTROS'}
         </Typography>
         <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
           {isOpen ? '−' : '+'}
