@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import Typography from '@/modules/components/Typography'
 
 // Icons (optional, using text if icons not available)
@@ -18,8 +19,19 @@ const FiltroProducto = (props) => {
     resetFilters
   } = props
 
-  // Collapsible state for mobile
-  const [isOpen, setIsOpen] = useState(true)
+  const theme = useTheme()
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'))
+
+  // Collapsible state for mobile (default open on desktop, closed on mobile)
+  const [isOpen, setIsOpen] = useState(false)
+
+  // Sync open state with screen size on mount/change, but allow user override? 
+  // Better: Just set initial based on media query if possible, or use effect.
+  // Since this is client-side, we can use useEffect to set the default once mounted.
+  React.useEffect(() => {
+    setIsOpen(isDesktop)
+  }, [isDesktop])
+
 
   if (!filters) return null
 
@@ -35,7 +47,7 @@ const FiltroProducto = (props) => {
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setIsOpen(!isOpen) }}
         aria-expanded={isOpen}
       >
-        <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 600, margin: 0 }}>
+        <Typography variant="h6" style={{ color: '#eee' }} sx={{ fontSize: '1rem', fontWeight: 600, margin: 0 }}>
           {isOpen ? 'OCULTAR FILTROS' : 'MOSTRAR FILTROS'}
         </Typography>
         <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>

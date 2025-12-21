@@ -115,7 +115,7 @@ function Paperbase ({ children }) {
           </Box>
         </nav> */}
         <Box sx={classes.app}>
-          <Header onDrawerToggle={handleDrawerToggle} />.
+          <Header onDrawerToggle={handleDrawerToggle} />
           <Main>
             {/* <Products /> */}
             {children}
