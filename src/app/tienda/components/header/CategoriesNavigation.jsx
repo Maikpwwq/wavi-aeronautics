@@ -103,7 +103,14 @@ const CategoriesNavigation = () => {
                 textColor="inherit"
                 label={label}
                 value={value}
-                style={styles.blueLink}
+                sx={{
+                  textDecoration: 'none',
+                  color: '#00aCe4',
+                  '&:hover': {
+                    color: '#fff',
+                    textDecoration: 'underline'
+                  }
+                }}
               />
             ))}
           </Tabs>

@@ -200,10 +200,16 @@ a:hover{
     transition: none;
   }
   
+
   .product-card:hover .product-card-image {
     transform: none;
     will-change: auto;
   }
+}
+
+/* Title highlight on card hover */
+.product-card:hover .product-card-title {
+  color: #00aCe4;
 }
 
 /* ====================================

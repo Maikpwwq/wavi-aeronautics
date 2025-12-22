@@ -34,7 +34,7 @@ const StoreBanner = () => {
         elevation={0}
       >
         <Toolbar>
-          <Grid container alignItems="center" spacing={1} sx={{ width: '100%' }}>
+          <Grid container alignItems="center" spacing={1} sx={{ width: '100%', justifyContent: 'space-between' }}>
             <Grid item size={{ xs: 12, sm: 8, md: 9, lg: 9, xl: 10 }} xs>
               <Typography color="inherit" variant="h5" component="h1">
                 Tienda
@@ -43,8 +43,8 @@ const StoreBanner = () => {
                 <LocalShippingIcon sx={{ marginRight: '1rem' }}/> {' '} Envios gratis a toda Colombia!
               </Typography>
             </Grid>
-            <Grid item size={{ xs: 3, sm: 3, md: 2, lg: 2, xl: 1 }} >
-              {shoppingCart.items} Productos.
+            <Grid item size={{ xs: 3, sm: 3, md: 2, lg: 2, xl: 1 }} sx={{ whiteSpace: 'nowrap' }}>
+              {shoppingCart.items} Productos
               <br />{formatCurrency(shoppingCart.suma)} COP
             </Grid>
             <Grid item size={{ xs: 3, sm: 1, md: 1, lg: 1, xl: 1 }}>

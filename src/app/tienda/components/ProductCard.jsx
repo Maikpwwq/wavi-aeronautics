@@ -75,6 +75,13 @@ const ProductCard = ({ products, category }) => {
           </CardActionArea>
           <CardHeader
             title={titulo}
+            titleTypographyProps={{
+              variant: 'h6',
+              className: 'product-card-title',
+              sx: {
+                transition: 'color 0.2s cubic-bezier(0.4, 0, 0.2, 1)' 
+              }
+            }}
             subheader={precio}
             action={
               <AddProduct product={producto}/>
