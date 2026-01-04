@@ -18,16 +18,18 @@ import useAuthForm from '../hooks/useAuthForm'
 
 const styles = (theme) => ({
   button: {
+    marginTop: theme.spacing(2),
     paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(2)
+    paddingBottom: theme.spacing(2),
+    '&:hover': {    
+      color: theme.palette.secondary.light,
+    }
   },
   feedback: {
     paddingTop: theme.spacing(2)
-  },
+  },   
   link: {
-    fontSize: '21px',
-    textDecoration: 'none',
-    color: 'black !important'
+    paddingTop: theme.spacing(2)
   }
 })
 
@@ -36,9 +38,12 @@ const SubForm = styled('form')({
 })
 
 const LinkTo = styled(Link)({
-  fontSize: '15px',
-  textDecoration: 'none !important',
-  color: 'black !important'
+    fontSize: '17px',
+    textDecoration: 'none !important',
+    color: 'black !important',
+    '&:hover': {
+      color: theme.palette.secondary.main + ' !important',
+    }
 })
 
 const SignInForm = () => {
@@ -173,8 +178,8 @@ function SignIn () {
   return (
     <AuthLayout title="Iniciar sesión" subtitle={subtitle}>
         <SignInForm />
-        <Typography align="center">
-          <LinkTo className="mt-2" href="/auth/forgot-password/">
+        <Typography align="center" sx={classes.link}>
+          <LinkTo href="/auth/forgot-password/">
             {'Recordar password'}
           </LinkTo>
         </Typography>

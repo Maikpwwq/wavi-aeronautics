@@ -13,44 +13,24 @@ let firebaseApp
 // Instancia de Firebase
 if (getApps().length < 1) {
   firebaseApp = initializeApp(firebaseClientConfig)
+} else {
+  firebaseApp = getApps()[0]
 }
-/*
-if (typeof window !== 'undefined' && !fb.apps.length) {
-    fb.initializeApp(firebaseClientConfig)
-    fb.auth().setPersistence(fb.auth.Auth.Persistence.SESSION)
-    // window.firebase = fb
-}
-const firebaseApp = fb.app()
-const firebaseApp = !fb.apps.length
-    ? fb.initializeApp(firebaseClientConfig)
-    : fb.app()
-*/
+
 export { firebaseApp }
 
 export const auth = getAuth(firebaseApp)
-// export const currentUser = auth.currentUser
-// console.log(currentUser)
 
-// export const firestore = getFirestore(firebaseApp)
 export const firestore = initializeFirestore(firebaseApp, {
   experimentalAutoDetectLongPolling: true
 })
-// firestore.settings({ timestampsInSnapshots: true })
 
 export const storage = getStorage(firebaseApp)
-
-// export const analytics = getAnalytics(firebaseApp)
-
-// export const db = getDatabase(firebaseApp)
-
-// console.log(db.ref().child('tienda'));
 
 onAuthStateChanged(auth, (user) => {
   // Check for user status
   if (user) {
     console.log('onAuthStateChanged', user)
-    // El Usuario se comparte con el lado del cliente
-    // esto no funciona sharingInformationService.setSubject({ currentUser: user });
   } else {
     // El Usuario no ha iniciado su sesion
     console.log('no hay un usuario registrado')

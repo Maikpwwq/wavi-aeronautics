@@ -18,8 +18,20 @@ import useAuthForm from '../hooks/useAuthForm'
 
 const styles = (theme) => ({
   button: {
+    marginTop: theme.spacing(2),
     paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(2)
+    paddingBottom: theme.spacing(2),
+    '&:hover': {    
+      color: theme.palette.secondary.light,
+    }
+  },
+  buttonDisabled: {
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.secondary.contrastText,
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.main,
+      color: theme.palette.secondary.contrastText
+    }
   },
   feedback: {
     paddingTop: theme.spacing(2)
@@ -31,9 +43,12 @@ const SubForm = styled('form')({
 })
 
 const LinkTo = styled(Link)({
-  fontSize: '15px',
+  fontSize: '17px',
   textDecoration: 'none !important',
-  color: 'black !important'
+  color: 'black !important',
+  '&:hover': {
+    color: theme.palette.secondary.main + ' !important',
+  }
 })
 
 const SignUpForm = () => {
@@ -182,10 +197,11 @@ const SignUpForm = () => {
 }
 
 function SignUp () {
+    const classes = styles(theme)
     const subtitle = (
         <>
             ¿Ya tienes una cuenta?,
-            <LinkTo href="/auth/sign-in/" underline="always">
+            <LinkTo href="/auth/sign-in/" sx={classes.link} underline="always">
               {' Iniciar sesión aquí'}
             </LinkTo>
         </>
