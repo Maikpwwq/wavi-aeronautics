@@ -3,14 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 // const dispatcher = useDispatch();
 
-export const initialUser = {
-  username: 'test',
-  password: 'test*123'
-}
-
-// localStorage.getItem("user")
-//   ? JSON.parse(localStorage.getItem("user"))
-//   : null;
+export const initialUser = null
 
 // Slice
 const userSlice = createSlice({
@@ -18,19 +11,17 @@ const userSlice = createSlice({
   initialState: initialUser,
   reducers: {
     loginSuccess: (state, action) => {
-      state.user = action.payload
-      // localStorage.setItem("user", JSON.stringify(action.payload));
+      // Expecting action.payload to be the serializable user object
+      return action.payload
     },
     signupSuccess: (state, action) => {
-      state.user = action.payload
-      // localStorage.setItem("user", JSON.stringify(action.payload));
+      return action.payload
     },
     modifyUser: (state, action) => {
       return { ...state, ...action.payload }
     },
     logoutSuccess: (state, action) => {
-      state.user = initialUser
-      // localStorage.removeItem("user");
+      return null
     }
   }
 })

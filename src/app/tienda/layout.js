@@ -89,7 +89,7 @@ function Paperbase ({ children }) {
 
   if (typeof window !== 'undefined') {
     // Perform localStorage action
-    console.log('userID', auth.currentUser, userID)
+    // console.log('userID', auth.currentUser, userID)
     // sessionStorage.setItem("cartID", userID);
   }
 

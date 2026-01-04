@@ -9,6 +9,7 @@ import ConfigureAppStore from '@/store/store'
 import initialState from '@/store/initialState'
 import React, { useState } from 'react'
 import DataInitializer from '@/app/components/DataInitializer'
+import AuthListener from '@/app/components/AuthListener'
 
 export default function Providers ({ children }) {
   const [client] = useState(
@@ -32,6 +33,7 @@ export default function Providers ({ children }) {
     <QueryClientProvider client={client}>
       <Provider store={store}>
         <ShoppingCartProvider>
+          <AuthListener />
           <DataInitializer />
           {children}
           <ReactQueryDevtools />

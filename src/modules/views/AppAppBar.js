@@ -7,7 +7,7 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import { signOut } from 'firebase/auth'
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { sharingInformationService } from '@/services/sharing-information'
+import { useSelector } from 'react-redux'
 // let displayName = user.displayName
 // let email = user.email
 // var emailVerified = user.emailVerified
@@ -89,39 +89,20 @@ const styles = (theme) => ({
 function AppAppBar (props) {
   // const { theme } = props;
   const classes = styles(theme)
-  let user = {}
-  const currentUser = sharingInformationService.getSubject()
-  useEffect(() => {
-    currentUser.subscribe((data) => {
-      if (data) {
-        const { currentUser } = data
-        console.log('currentUser', currentUser, data)
-        if (currentUser) {
-          user = currentUser
-        }
-      }
-    })
-  }, [])
-  // const user = auth.currentUser || currentUser || {};
-  const userID = user.uid || null
-  const [userAuth, setUserAuth] = useState(false)
-  console.log('isUserAuth?', currentUser, user)
-  useEffect(() => {
-    if (user && userID) {
-      setUserAuth(true)
-      console.log('userAuth', user, userAuth)
-    }
-    console.log('noUserAuth', user, userAuth)
-  }, [user])
+  
+  // Use Redux state for auth
+  const user = useSelector((state) => state.user)
+  const userAuth = !!user
+  
+  console.log('AppAppBar user:', user, 'userAuth:', userAuth)
 
   const handleSignOut = (e) => {
     e.preventDefault()
     signOut(auth)
       .then(() => {
-        setUserAuth(false)
+        // Redux state will be updated automatically by AuthListener
         localStorage.clear()
-        alert('Cerro su sesión de manera exitosa!')
-        console.log(auth.currentUser)
+        // alert('Cerro su sesión de manera exitosa!')
       })
       .catch((error) => {
         console.log(error)
