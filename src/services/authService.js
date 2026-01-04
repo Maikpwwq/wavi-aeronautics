@@ -1,6 +1,6 @@
 
 import { auth, firestore } from '@/firebase/firebaseClient'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth'
 import { collection, doc, setDoc } from 'firebase/firestore'
 import { saveCartToFirestore } from './shoppingCartService'
 
@@ -65,6 +65,18 @@ const authService = {
       console.log('Se ha registrado un nuevo usuario a Firebase', displayName)
       return { userID: user.uid }
       
+    } catch (error) {
+      return this._handleError(error)
+    }
+  },
+  /**
+   * Send Password Reset Email
+   * @param {string} email
+   */
+  async sendPasswordResetEmail(email) {
+    try {
+      await sendPasswordResetEmail(auth, email)
+      return { success: true }
     } catch (error) {
       return this._handleError(error)
     }

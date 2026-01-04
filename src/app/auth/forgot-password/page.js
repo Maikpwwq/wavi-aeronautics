@@ -14,6 +14,7 @@ import { email, required } from '@/modules/form/validation'
 import RFTextField from '@/modules/form/RFTextField'
 import FormButton from '@/modules/form/FormButton'
 import FormFeedback from '@/modules/form/FormFeedback'
+import authService from '@/services/authService'
 
 import withRoot from '@/modules/withRoot'
 import theme from '@/modules/theme'
@@ -76,64 +77,34 @@ const ForgotPasswordForm = () => {
     return errors
   }
 
-  const fetchForgotPassword = async (event) => {
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
-    // throw new Error('Error al cargar los comentarios')
-    const response = await fetch('http://localhost:3000/api/forgot-password', {
-      method: 'POST',
-      redirect: 'follow',
-      body: JSON.stringify(event),
-      next: { revalidate: 60 }
-    }).then((res) => {
-      if (!res.ok) {
-        // throw new Error("Custom Error message", res);
-        console.log('Custom Error message', res)
-      }
-      // if (res.redirected) {
-      //   window.location.href = response.url;
-      // }
-      // console.log("fetchSignIn", res, res.body);
-      return res.json()
-      // router.push("/tienda/drones");
-    })
-    return response
-    // .then((data) => console.log("fetch", data));
-  }
-
-  // const handleSubmit = (e) => {
-  //   // e.preventDefault();
-  //   console.log('submit', e)
-  // }
-
   const onSubmit = async (e) => {
     // e.preventDefault();
     console.log('submit', e)
     handleChange(e)
-    await fetchForgotPassword(e).then((res) => {
-      const { errorCode, errorMessage } = res
-      // sharingInformationService.setSubject({ userID });
-      if (!!errorCode && !!errorMessage) {
-        setSent(false)
-        if (errorCode === 'auth/user-not-found') {
-          handleAlert('Debe usar un email registrado.', 'error')
-        } else if (errorCode === 'auth/network-request-failed') {
-          handleAlert('Fallo de red para completar la solicitud.', 'error')
-        } else {
-          console.log('errorCode', errorCode)
-          handleAlert('Ha sucedido un error intente de nuevo.', 'error')
-        }
+    
+    // Use authService instead of direct fetch
+    const { errorCode } = await authService.sendPasswordResetEmail(e.email)
+    
+    if (errorCode) {
+      setSent(false)
+      if (errorCode === 'auth/user-not-found') {
+        handleAlert('Debe usar un email registrado.', 'error')
+      } else if (errorCode === 'auth/network-request-failed') {
+        handleAlert('Fallo de red para completar la solicitud.', 'error')
       } else {
-        if (typeof window !== 'undefined') {
-          // Perform localStorage action
-          setSent(true)
-          handleAlert(
-            'Se ha enviado un correo para modificar la contraseña.',
-            'success'
-          )
-          router.push('/auth/sign-in/')
-        }
+        console.log('errorCode', errorCode)
+        handleAlert('Ha sucedido un error intente de nuevo.', 'error')
       }
-    })
+    } else {
+      if (typeof window !== 'undefined') {
+        setSent(true)
+        handleAlert(
+          'Se ha enviado un correo para modificar la contraseña.',
+          'success'
+        )
+        router.push('/auth/sign-in/')
+      }
+    }
   }
 
   const handleChange = (e) => {
