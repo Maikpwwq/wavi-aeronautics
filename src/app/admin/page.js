@@ -14,7 +14,7 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
 import PendingActionsIcon from '@mui/icons-material/PendingActions'
 import { getAdminStats } from '@/services/adminService'
 import { motion } from 'framer-motion'
-import { formatCopCurrency } from '@/utilities/priceUtils'
+import { formatCurrency } from '@/utilities/priceUtils'
 
 const StatCard = ({ title, value, icon, color, delay = 0 }) => (
   <Grid item xs={12} sm={6} md={3}>
@@ -95,7 +95,7 @@ export default function AdminDashboard() {
       <Grid container spacing={3}>
         <StatCard 
           title="Ingresos Totales" 
-          value={formatCopCurrency(stats?.totalIncome || 0)} 
+          value={formatCurrency(stats?.totalIncome || 0)} 
           icon={<TrendingUpIcon />} 
           color="#4caf50" 
           delay={0.1}
