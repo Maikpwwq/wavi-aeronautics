@@ -5,6 +5,7 @@ import { auth } from '@/firebase/firebaseClient'
 import PersonIcon from '@mui/icons-material/Person'
 import SecurityIcon from '@mui/icons-material/Security'
 import ReceiptIcon from '@mui/icons-material/Receipt'
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
 import LoginIcon from '@mui/icons-material/Login'
 import LogoutIcon from '@mui/icons-material/Logout'
 import Avatar from '@mui/material/Avatar'
@@ -72,6 +73,7 @@ const UserDropdown = ({ showLoginLabel = true }) => {
   const classes = styles(theme)
   const user = useSelector((state) => state.user)
   const userAuth = !!user
+  const isAdmin = user?.rol === 'admin'
   
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
@@ -188,6 +190,21 @@ const UserDropdown = ({ showLoginLabel = true }) => {
             Cambiar Contraseña
           </MenuItem>
         </Link>
+
+        {/* Admin Dashboard - Only visible for admin users */}
+        {isAdmin && (
+          <>
+            <Divider sx={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
+            <Link href="/admin" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <MenuItem sx={{ ...classes.menuItem, backgroundColor: 'rgba(255, 215, 0, 0.1)' }}>
+                <ListItemIcon sx={{ color: '#ffd700', minWidth: '36px' }}>
+                  <AdminPanelSettingsIcon fontSize="small" />
+                </ListItemIcon>
+                Panel Admin
+              </MenuItem>
+            </Link>
+          </>
+        )}
 
         <Divider sx={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
         

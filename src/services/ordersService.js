@@ -49,3 +49,24 @@ export const fetchUserOrders = async (userId) => {
     return []
   }
 }
+
+/**
+ * Updates the status of an order
+ * @param {string} orderId - The document ID of the order
+ * @param {string} newStatus - The new status to set
+ * @returns {Promise<void>}
+ */
+export const updateOrderStatus = async (orderId, newStatus) => {
+  try {
+    const { doc, updateDoc } = await import('firebase/firestore')
+    const orderRef = doc(firestore, 'orders', orderId)
+    await updateDoc(orderRef, {
+      status: newStatus,
+      updatedAt: serverTimestamp()
+    })
+    console.log(`Order ${orderId} status updated to ${newStatus}`)
+  } catch (error) {
+    console.error("Error updating order status:", error)
+    throw error
+  }
+}

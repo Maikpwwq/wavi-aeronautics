@@ -76,6 +76,8 @@ const PSEResultadoContent = () => {
             const user = auth.currentUser
             const orderData = {
               userId: user?.uid || 'guest',
+              userEmail: user?.email || searchParams.get('payer_email') || 'guest@example.com',
+              userName: user?.displayName || searchParams.get('payer_name') || 'Invitado',
               paymentId: payment_id,
               externalReference: external_reference,
               items: shoppingCart.productos.map(p => ({

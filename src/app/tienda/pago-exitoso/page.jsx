@@ -52,6 +52,8 @@ const PagoExitosoContent = () => {
           const user = auth.currentUser
           const orderData = {
             userId: user?.uid || 'guest',
+            userEmail: user?.email || searchParams.get('payer_email') || 'guest@example.com',
+            userName: user?.displayName || searchParams.get('payer_name') || 'Invitado',
             paymentId: paymentId,
             externalReference: externalReference,
             items: shoppingCart.productos.map(p => ({
