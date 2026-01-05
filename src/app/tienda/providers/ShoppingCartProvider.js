@@ -1,12 +1,16 @@
 import React, { useState, createContext, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import FirebaseLoadShoppingCart from '@/services/FirebaseLoadShoppingCart'
 import { saveCartToFirestore } from '@/services/shoppingCartService'
-import { FirebaseCompareShoppingCartIds } from '@/services/FirebaseCompareShoppingCartIds'
+import FirebaseCompareShoppingCartIds from '@/services/FirebaseCompareShoppingCartIds'
 import { calculateCopPrice, parseCopCurrency } from '@/utilities/priceUtils'
 
 export const ShowCartContext = createContext()
 
 const ShoppingCartProvider = ({ children }) => {
+  const userState = useSelector(state => state.user)
+  const userID = userState?.uid || null
+
   const [shoppingCart, setShoppingCart] = useState({
     cartID: null,
     productos: [],
@@ -48,8 +52,6 @@ const ShoppingCartProvider = ({ children }) => {
                 precio: calculateCopPrice(p.precio),
                 cantidad: cartIdsMap.get(p.productID) || 1
               }));
-            
-            console.log("Hydrated cart products:", hydratedProducts);
           } catch (e) {
             console.error("Failed to hydrate cart products", e);
           }
@@ -66,36 +68,25 @@ const ShoppingCartProvider = ({ children }) => {
       }
 
       // Initial Load & Subscription
-      const initializeCart = async () => {
-        let activeCartID = storedCartID;
+      let unsubscribe = null;
 
-        // Note: In a real app we might want to dependency inject the user ID here or read from Redux
-        // But for this provider which wraps the app, we might rely on the side-effects of AuthListener
-        // updating Redux/SessionStorage.
-        // Let's rely on sessionStorage for the user ID if available as "wavi_user"
-        const storedUser = sessionStorage.getItem('wavi_user');
-        if (storedUser) {
-             const u = JSON.parse(storedUser);
-             if (u.uid) activeCartID = u.uid;
-        }
+      const initializeCartSubscription = async () => {
+        // Priority: Logged in user ID > storedCartID
+        let activeCartID = userID || storedCartID;
 
+        // If no ID yet, wait for FirebaseLoadShoppingCart to create a guest session
         if (!activeCartID) {
-           // Create new Guest ID
            await FirebaseLoadShoppingCart(); 
            activeCartID = sessionStorage.getItem('cartID');
         }
-
 
         if (activeCartID) {
             setShoppingCart(prev => ({ ...prev, cartID: activeCartID }));
             
             // Subscribe to Firestore changes
             const { subscribeToCart } = await import('@/services/shoppingCartService');
-            const unsubscribe = subscribeToCart(activeCartID, (items) => {
-                
+            unsubscribe = subscribeToCart(activeCartID, (items) => {
                 if (items.length > 0) {
-                    // Use FirebaseCompareShoppingCartIds to hydrate cart with full product data
-                    // This function fetches from cache or Firestore and updates the cart state
                     FirebaseCompareShoppingCartIds({
                         products: items,
                         updateCart: (cartState) => {
@@ -107,7 +98,6 @@ const ShoppingCartProvider = ({ children }) => {
                         }
                     });
                 } else {
-                    // Empty cart
                     setShoppingCart(prev => ({
                         ...prev,
                         productos: [],
@@ -117,20 +107,16 @@ const ShoppingCartProvider = ({ children }) => {
                     }));
                 }
             });
-
-            return unsubscribe; // Cleanup needs to be handled
         }
       };
 
-      // We need to manage the cleanup of the subscription
-      let unsub = () => {};
-      initializeCart().then(fn => { if(fn) unsub = fn; });
+      initializeCartSubscription();
       
       return () => {
-          unsub();
+          if (unsubscribe) unsubscribe();
       }
     }
-  }, []);
+  }, [userID]);
   const updateShoppingCart = (newProductos) => {
     console.log('updateShoppingCart', newProductos)
     setShoppingCart((shoppingCart) => ({
