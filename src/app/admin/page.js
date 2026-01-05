@@ -46,6 +46,7 @@ const StatCard = ({ title, value, icon, color, delay = 0 }) => (
           <Box 
             sx={{ 
                 p: 1.5, 
+                ml: 1,
                 borderRadius: 3, 
                 backgroundColor: `${color}15`, 
                 color: color,

@@ -1,120 +1,89 @@
 'use client'
-import React, { useEffect, useState } from 'react'
-// import { useLocation } from "react-router-dom";
-// import { useRouter } from 'next/navigation'
-import { useSearchParams } from 'next/navigation'
-import { useSelector, connect } from 'react-redux'
+
+import React, { useEffect, useState, useMemo } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
+import { useSelector } from 'react-redux'
+import { 
+  Box, 
+  Container, 
+  Grid, 
+  Typography, 
+  Button, 
+  Breadcrumbs, 
+  Link, 
+  Divider, 
+  Stack, 
+  Paper,
+  CircularProgress,
+  IconButton,
+  Tooltip
+} from '@mui/material'
+import { motion, AnimatePresence } from 'framer-motion'
+import { 
+  NavigateBefore, 
+  NavigateNext, 
+  ChevronRight, 
+  ArrowBack,
+  Speed,
+  Straighten,
+  MonitorWeight,
+  BatteryChargingFull,
+  SettingsInputAntenna,
+  Security
+} from '@mui/icons-material'
 
 import { getProductById } from '@/services/sharedServices'
 import { sharingInformationService } from '@/services/sharing-information'
+import AddProduct from './AddProduct'
+import { calculateCopPrice } from '@/utilities/priceUtils'
 
-// import PropTypes from 'prop-types'
-import { useTheme } from '@mui/material/styles'
-import Button from '@mui/material/Button'
-import Box from '@mui/material/Box'
-import Container from '@mui/material/Container'
-import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
-import CardMedia from '@mui/material/CardMedia'
-import CardContent from '@mui/material/CardContent'
-import MobileStepper from '@mui/material/MobileStepper'
-import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft'
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'
-import CircularProgress from '@mui/material/CircularProgress'
+const SpecItem = ({ icon: Icon, label, value }) => (
+  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+    <Box 
+      sx={{ 
+        p: 1, 
+        borderRadius: 2, 
+        bgcolor: 'rgba(0, 188, 212, 0.1)', 
+        color: '#00bcd4',
+        mr: 2,
+        display: 'flex'
+      }}
+    >
+      <Icon fontSize="small" />
+    </Box>
+    <Box>
+      <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 'bold', display: 'block', textTransform: 'uppercase' }}>
+        {label}
+      </Typography>
+      <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+        {value}
+      </Typography>
+    </Box>
+  </Box>
+)
 
-import SwipeableViews from 'react-swipeable-views'
-import Typography from '@/modules/components/Typography'
-import { autoPlay } from 'react-swipeable-views-utils'
-import withRoot from '@/modules/withRoot'
-// import theme from "../innerTheme";
-// import { styled } from "@mui/material/styles";
-
-const styles = (theme) => ({
-  onSmallCol: {
-    display: 'flex',
-    flexDirection: 'row',
-    margin: `${theme.spacing(2)} ${theme.spacing(0)}`,
-    [theme.breakpoints.down('md')]: {
-      flexDirection: 'column !important'
-    }
-  },
-  infoProduct: {
-    marginLeft: `${theme.spacing(2)}`
-  },
-  detailProduct: {
-    margin: `${theme.spacing(2)} ${theme.spacing(2)}`
-  },
-  moreImgs: {
-    flexWrap: 'wrap !important',
-    display: 'flex !important',
-    margin: `${theme.spacing(2)} ${theme.spacing(2)}`
-  }
-})
-
-const AutoPlaySwipeableViews = autoPlay(SwipeableViews)
-
-const ProductDetail = (props) => {
-  // const { state } = router;
-  const theme = useTheme()
-  const classes = styles(theme)
-  // const location = useLocation();
-  // const { search } = location;
-  // const category = search.split("=")[1];
-  // console.log("location", location);
-  // console.log("category", category);
-  // console.log("thisstate", props.state);
-  // router.state, router.search, router.query["id"], router.query["category"]
-
-  // se carga del store el initial state de un producto ejemplo
-  const shopState = useSelector((store) => store.product)
-  const product = shopState || []
-  // const { titulo, precio, descripcion, especificaciones, incluye, imagenes } =
-  //   shopState;
-
-  const [activeStep, setActiveStep] = useState(0)
-  const [productInfo, setProductInfo] = useState(product)
-  console.log('store product', product)
-  const maxSteps = product && product.imagenes ? product.imagenes.length : 0
-
-  // const router = useRouter()
-  // console.log("router", router);
+const ProductDetail = () => {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const searchId = searchParams.get('id')
   const category = searchParams.get('category')
   const marca = searchParams.get('marca')
-  // Sync local state with Redux state when it changes
-  useEffect(() => {
-    if (product && product.titulo !== 'Producto 1') { // Check if it's not default placeholder if possible, or just strict check
-      setProductInfo(product)
-    } else if (product) {
-       // If Redux has default but we might have better info from fetch later, this is tricky.
-       // Usually Redux state should be authoritative if populated.
-       // Let's just trust Redux if it has content.
-       setProductInfo(product)
-    }
-  }, [product])
+
+  const reduxProduct = useSelector((state) => state.product)
+  const [product, setProduct] = useState(null)
+  const [activeImage, setActiveImage] = useState(0)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!searchId) return;
+    if (!searchId) return
 
     const subscription$ = getProductById(searchId, category, marca)
+    const productSub = subscription$.subscribe()
     
-    // utiliza el servicio para buscar un producto en firebase (searchId, category) y compartir su información
-    const productSub = subscription$.subscribe((response) => {
-      if (response) {
-        console.log('storeProductInfo', response)
-      }
-    })
-    
-    // lee la información del producto que fue compartida
-    const currentProduct = sharingInformationService.getSubject()
-    const infoSub = currentProduct.subscribe((data) => {
-      if (data) {
-        const { productos } = data
-        if (productos && productos.length > 0) {
-          console.log('currentProduct', productos[0])
-          setProductInfo(productos[0])
-        }
+    const infoSub = sharingInformationService.getSubject().subscribe((data) => {
+      if (data?.productos?.[0]) {
+        setProduct(data.productos[0])
+        setLoading(false)
       }
     })
 
@@ -124,150 +93,213 @@ const ProductDetail = (props) => {
     }
   }, [searchId, category, marca])
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1)
-  }
+  // Fallback to Redux if direct fetch hasn't completed but Redux has it
+  useEffect(() => {
+    if (reduxProduct && reduxProduct.id === searchId) {
+      setProduct(reduxProduct)
+      setLoading(false)
+    }
+  }, [reduxProduct, searchId])
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1)
-  }
+  const images = useMemo(() => {
+    if (!product?.imagenes) return []
+    return product.imagenes.map(img => typeof img === 'string' ? img : img.url || '')
+  }, [product])
 
-  const handleStepChange = (step) => {
-    console.log('step', step)
-    setActiveStep(step)
+  if (loading || !product) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+        <CircularProgress />
+      </Box>
+    )
   }
 
   return (
-    <>
-      <Container fixed>
-        {!!product && product
-          ? (
-          <Box sx={{ pt: 8, pb: 6 }}>
-            <Card>
-              <CardHeader
-                title={productInfo.titulo}
-                subheader={productInfo.precio}
-                sx={classes.detailProduct}
-              ></CardHeader>
-              <CardContent>
-                <Box sx={classes.onSmallCol}>
-                  <Box sx={{ maxWidth: 400, flexGrow: 1 }}>
-                    <AutoPlaySwipeableViews
-                      axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                      index={activeStep}
-                      onChangeIndex={(e) => handleStepChange(e)}
-                      enableMouseEvents
-                    >
-                      {!!productInfo.imagenes &&
-                        productInfo.imagenes.map((image, key) => (
-                          <Box
-                            key={key}
-                            component="img"
-                            src={typeof image === 'string' ? image : image?.url || ''}
-                            alt={productInfo.titulo}
-                            sx={{
-                              height: 400,
-                              display: 'block',
-                              maxWidth: 400,
-                              overflow: 'hidden',
-                              width: '100%'
-                            }}
-                          ></Box>
-                        ))}
-                    </AutoPlaySwipeableViews>
-                    <MobileStepper
-                      steps={maxSteps}
-                      position="static"
-                      activeStep={activeStep}
-                      nextButton={
-                        <Button
-                          size="small"
-                          onClick={() => handleNext()}
-                          disabled={activeStep === maxSteps - 1}
-                        >
-                          Siguiente
-                          {theme.direction === 'rtl'
-                            ? (
-                            <KeyboardArrowLeft />
-                              )
-                            : (
-                            <KeyboardArrowRight />
-                              )}
-                        </Button>
-                      }
-                      backButton={
-                        <Button
-                          size="small"
-                          onClick={() => handleBack()}
-                          disabled={activeStep === 0}
-                        >
-                          {theme.direction === 'rtl'
-                            ? (
-                            <KeyboardArrowRight />
-                              )
-                            : (
-                            <KeyboardArrowLeft />
-                              )}
-                          Anterior
-                        </Button>
-                      }
-                    />
-                  </Box>
-                  <Box sx={classes.infoProduct}>
-                    <Typography variant="h5">Descripción: </Typography>
-                    <Typography variant="body1">
-                      {productInfo.descripcion}
-                    </Typography>
-                  </Box>
-                </Box>
-                <Box sx={classes.detailProduct}>
-                  <Typography variant="h5">Especificaciones: </Typography>
-                  <Typography variant="body1">
-                    {productInfo.especificaciones}
-                  </Typography>
-                  <br />
-                  <Typography variant="h5">Incluye: </Typography>
-                  <Typography variant="body1">{productInfo.incluye}</Typography>
-                </Box>
-              </CardContent>
-              <CardMedia component="div" sx={classes.moreImgs}>
-                {!!productInfo.imagenes &&
-                  productInfo.imagenes.map((image, key) => (
-                    <Box
-                      key={key}
-                      component="img"
-                      src={typeof image === 'string' ? image : image?.url || ''}
-                      alt={productInfo.titulo}
-                      sx={{
-                        height: 330,
-                        display: 'block',
-                        maxWidth: 330,
+    <Box sx={{ bgcolor: '#fcfcfc', minHeight: '100vh', pb: 10 }}>
+      <Container maxWidth="lg">
+        {/* Navigation / Breadcrumbs */}
+        <Box sx={{ py: 3, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Button 
+            startIcon={<ArrowBack />} 
+            onClick={() => router.back()}
+            sx={{ textTransform: 'none', color: 'text.secondary' }}
+          >
+            Volver a la Tienda
+          </Button>
+          <Breadcrumbs separator={<ChevronRight fontSize="small" />} aria-label="breadcrumb">
+            <Link underline="hover" color="inherit" href="/" sx={{ fontSize: '0.875rem' }}>Inicio</Link>
+            <Link underline="hover" color="inherit" href="/tienda" sx={{ fontSize: '0.875rem' }}>Tienda</Link>
+            <Typography color="text.primary" sx={{ fontSize: '0.875rem', fontWeight: 'medium' }}>{product.titulo}</Typography>
+          </Breadcrumbs>
+        </Box>
+
+        <Grid container spacing={6}>
+          {/* Left Column: Visuals */}
+          <Grid item xs={12} md={7}>
+            <Box sx={{ position: 'relative' }}>
+              <Paper 
+                elevation={0}
+                component={motion.div}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                sx={{ 
+                  borderRadius: 4, 
+                  overflow: 'hidden', 
+                  bgcolor: 'white',
+                  boxShadow: '0 20px 40px rgba(0,0,0,0.08)',
+                  position: 'relative',
+                  aspectRatio: '1/1',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  p: 4
+                }}
+              >
+                <motion.img 
+                  key={activeImage}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4 }}
+                  src={images[activeImage]} 
+                  alt={product.titulo}
+                  style={{ 
+                    maxWidth: '100%', 
+                    maxHeight: '100%', 
+                    objectFit: 'contain',
+                    filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.1))'
+                  }}
+                />
+              </Paper>
+
+              {/* Thumbnail Gallery */}
+              {images.length > 1 && (
+                <Stack 
+                  direction="row" 
+                  spacing={2} 
+                  sx={{ mt: 3, overflowX: 'auto', pb: 1 }}
+                >
+                  {images.map((img, idx) => (
+                    <Box 
+                      key={idx}
+                      onClick={() => setActiveImage(idx)}
+                      sx={{ 
+                        width: 80, 
+                        height: 80, 
+                        borderRadius: 2, 
+                        cursor: 'pointer',
+                        border: activeImage === idx ? '2px solid #00bcd4' : '2px solid transparent',
                         overflow: 'hidden',
-                        width: '100%'
+                        bgcolor: 'white',
+                        flexShrink: 0,
+                        transition: 'all 0.2s',
+                        '&:hover': { opacity: 0.8 }
                       }}
-                    ></Box>
+                    >
+                      <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </Box>
                   ))}
-              </CardMedia>
-            </Card>
-          </Box>
-            )
-          : (
-          <Box sx={{ display: 'flex' }}>
-            <CircularProgress />
-          </Box>
-            )}
+                </Stack>
+              )}
+            </Box>
+          </Grid>
+
+          {/* Right Column: Data & Action */}
+          <Grid item xs={12} md={5}>
+            <Box 
+              component={motion.div}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <Typography variant="overline" color="secondary" sx={{ fontWeight: 'bold', letterSpacing: 2 }}>
+                {product.marca || 'Aeronautics'}
+              </Typography>
+              <Typography variant="h3" sx={{ fontWeight: 800, mb: 2, color: '#1a2744' }}>
+                {product.titulo}
+              </Typography>
+              
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                <Typography variant="h4" sx={{ color: '#00bcd4', fontWeight: 'bold', mr: 2 }}>
+                  {calculateCopPrice(product.precio)}
+                </Typography>
+                <Chip label="En Stock" color="success" size="small" variant="outlined" sx={{ borderRadius: 1 }} />
+              </Box>
+
+              <Typography variant="body1" sx={{ color: 'text.secondary', lineHeight: 1.8, mb: 4 }}>
+                {product.descripcion}
+              </Typography>
+
+              <Divider sx={{ mb: 4 }} />
+
+              {/* Tech Specs Instrumented Panel */}
+              <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 3, textTransform: 'uppercase', letterSpacing: 1 }}>
+                Especificaciones Técnicas
+              </Typography>
+              
+              <Grid container spacing={2} sx={{ mb: 4 }}>
+                <Grid item xs={6}>
+                  <SpecItem icon={MonitorWeight} label="Peso" value={product.peso || 'N/A'} />
+                  <SpecItem icon={Straighten} label="Dimensiones" value={product.dimensiones || 'N/A'} />
+                  <SpecItem icon={Speed} label="Rendimiento" value="Alto" />
+                </Grid>
+                <Grid item xs={6}>
+                  <SpecItem icon={BatteryChargingFull} label="Batería" value="LiPo Ready" />
+                  <SpecItem icon={SettingsInputAntenna} label="Frecuencia" value="2.4GHz / 5.8GHz" />
+                  <SpecItem icon={Security} label="Garantía" value="Oficial Wavi" />
+                </Grid>
+              </Grid>
+
+              {/* Action Area */}
+              <Box sx={{ p: 4, borderRadius: 4, bgcolor: 'white', boxShadow: '0 10px 30px rgba(0,0,0,0.04)', border: '1px solid #f0f0f0' }}>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                  Recibe este producto en la puerta de tu casa con envío asegurado.
+                </Typography>
+                <AddProduct product={product} variant="button" />
+                <Typography variant="caption" sx={{ display: 'block', textAlign: 'center', mt: 2, color: 'text.disabled' }}>
+                  Pagos seguros vía MercadoPago & PSE
+                </Typography>
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
+
+        {/* Detailed Info Tabs/Sections */}
+        <Box sx={{ mt: 10 }}>
+            <Divider sx={{ mb: 6 }} />
+            <Grid container spacing={6}>
+                <Grid item xs={12} md={6}>
+                    <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 3 }}>¿Qué Incluye?</Typography>
+                    <Typography variant="body1" sx={{ color: 'text.secondary', whiteSpace: 'pre-line' }}>
+                        {product.incluye || 'Consulta con soporte para más detalles sobre los componentes incluidos.'}
+                    </Typography>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 3 }}>Detalles Adicionales</Typography>
+                    <Typography variant="body1" sx={{ color: 'text.secondary', whiteSpace: 'pre-line' }}>
+                        {product.especificaciones || 'No hay especificaciones adicionales listadas.'}
+                    </Typography>
+                </Grid>
+            </Grid>
+        </Box>
       </Container>
-    </>
+    </Box>
   )
 }
 
-ProductDetail.propTypes = {}
+// Utility to match the Chip component used in the UI
+const Chip = ({ label, color }) => (
+    <Box sx={{ 
+        px: 1.5, 
+        py: 0.5, 
+        borderRadius: 1, 
+        fontSize: '0.75rem', 
+        fontWeight: 'bold', 
+        bgcolor: color === 'success' ? 'rgba(76, 175, 80, 0.1)' : 'rgba(0,0,0,0.05)',
+        color: color === 'success' ? '#4caf50' : 'inherit',
+        border: `1px solid ${color === 'success' ? '#4caf50' : '#ddd'}`
+    }}>
+        {label}
+    </Box>
+)
 
-const mapStateToProps = (state) => {
-  // console.log("state", state);
-  return {
-    productInfo: state.product
-  }
-}
-
-export default connect(mapStateToProps, null)(withRoot(ProductDetail))
+export default ProductDetail

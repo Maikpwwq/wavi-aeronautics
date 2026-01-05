@@ -9,11 +9,14 @@ import FirebaseCompareShoppingCartIds from '@/services/FirebaseCompareShoppingCa
 import { parseCopCurrency } from '@/utilities/priceUtils'
 import { saveCartToFirestore } from '@/services/shoppingCartService'
 
-const AddProduct = ({ product }) => {
+import Button from '@mui/material/Button'
+import { motion } from 'framer-motion'
+
+const AddProduct = ({ product, variant = 'icon' }) => {
   const { shoppingCart, updateCart, updateShowCart } = useContext(ShowCartContext)
 
   const handleAddToCart = (e) => {
-    e.preventDefault()
+    if (e) e.preventDefault()
     
     // Create a working copy of the cart items or empty array
     const currentItems = shoppingCart.productos ? [...shoppingCart.productos] : []
@@ -87,6 +90,36 @@ const AddProduct = ({ product }) => {
     }
   }
 
+  if (variant === 'button') {
+    return (
+      <Button
+        component={motion.button}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        fullWidth
+        variant="contained"
+        size="large"
+        onClick={handleAddToCart}
+        startIcon={<AddShoppingCartIcon />}
+        sx={{
+          py: 2,
+          fontSize: '1.1rem',
+          fontWeight: 'bold',
+          borderRadius: 3,
+          backgroundColor: '#00bcd4', // Electric Blue
+          '&:hover': {
+            backgroundColor: '#0097a7',
+          },
+          boxShadow: '0 8px 24px rgba(0, 188, 212, 0.3)',
+          textTransform: 'none',
+          letterSpacing: 1
+        }}
+      >
+        AGREGAR AL CARRITO
+      </Button>
+    )
+  }
+
   return (
     <IconButton
       color="inherit"
@@ -99,7 +132,8 @@ const AddProduct = ({ product }) => {
 }
 
 AddProduct.propTypes = {
-  product: PropTypes.object.isRequired
+  product: PropTypes.object.isRequired,
+  variant: PropTypes.oneOf(['icon', 'button'])
 }
 
 export default AddProduct
