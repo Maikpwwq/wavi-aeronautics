@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
+import { auth } from '@/firebase/firebaseClient'
 import IconButton from '@mui/material/IconButton'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 import PropTypes from 'prop-types'
@@ -53,7 +54,16 @@ const AddProduct = ({ product }) => {
       })
       
       // Persist to Firestore - save minimal structure (productID + cantidad)
-      const cartID = sessionStorage.getItem('cartID')
+      let cartID = sessionStorage.getItem('cartID')
+      
+      // If guest has no ID yet, create it now (Lazy initialization)
+      if (!cartID && !auth?.currentUser?.uid) {
+        const { v4: uuidv4 } = await import('uuid');
+        cartID = uuidv4();
+        sessionStorage.setItem('cartID', cartID);
+        console.log('[AddProduct] Created new guest cartID:', cartID);
+      }
+
       const cartToSave = currentItems.map(item => ({
         productID: item.productID,
         cantidad: item.cantidad
@@ -64,8 +74,9 @@ const AddProduct = ({ product }) => {
       sessionStorage.setItem('cartItems', totalItems.toString())
       sessionStorage.setItem('cartSum', totalSum.toString())
       
-      if (cartID) {
-        saveCartToFirestore(cartID, cartToSave)
+      const targetID = auth?.currentUser?.uid || cartID;
+      if (targetID) {
+        saveCartToFirestore(targetID, cartToSave)
       }
       
       // Calculate totals and deep sync with backend
