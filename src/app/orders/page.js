@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { collection, query, where, getDocs, orderBy } from 'firebase/firestore'
-import { firestore } from '@/firebase/firebaseClient'
+import { fetchUserOrders } from '@/services/ordersService'
+import { MOCK_ORDERS } from './constants'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
@@ -73,58 +73,28 @@ const getStatusColor = (status) => {
     }
 }
 
+
 const OrdersPage = () => {
     const user = useSelector((state) => state.user)
     const [orders, setOrders] = useState([])
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        const fetchOrders = async () => {
+        const getOrders = async () => {
             if (user?.uid) {
                 try {
-                    // This query assumes you have an 'orders' collection
-                    // Depending on your schema, this might need adjustment
-                    console.log("Fetching orders for user:", user.uid)
-                    const q = query(
-                        collection(firestore, 'orders'),
-                        where('userId', '==', user.uid),
-                        orderBy('createdAt', 'desc')
-                    )
+                    const ordersData = await fetchUserOrders(user.uid)
                     
-                    const querySnapshot = await getDocs(q)
-                    const ordersData = querySnapshot.docs.map(doc => ({
-                        id: doc.id,
-                        ...doc.data()
-                    }))
-                    console.log("Orders found:", ordersData)
-                    setOrders(ordersData)
+                    if (ordersData.length > 0) {
+                        setOrders(ordersData)
+                    } else {
+                        // Fallback to mock data for demonstration if no real orders exist
+                        console.log("No real orders found, showing mock data")
+                        setOrders(MOCK_ORDERS)
+                    }
                 } catch (error) {
-                    // Fallback for demo if orders collection doesn't exist or permissions fail
-                    // Or specifically if the compound query index is missing
-                    console.warn("Could not fetch real orders (missing index or collection?), using mock data:", error)
-                    
-                    // Mock data for visualization
-                    setOrders([
-                        {
-                            id: 'ORD-7829-XJ',
-                            items: [
-                                { name: 'DJI Mavic 3 Cine Premium Combo', quantity: 1, price: 4999 }
-                            ],
-                            total: 4999,
-                            status: 'Delivered',
-                            createdAt: { seconds: Date.now() / 1000 - 86400 * 5 } // 5 days ago
-                        },
-                        {
-                            id: 'ORD-9921-MC',
-                            items: [
-                                { name: 'FPV Propellers (Set of 4)', quantity: 2, price: 15 },
-                                { name: 'LiPo Battery 4S 1500mAh', quantity: 3, price: 25 }
-                            ],
-                            total: 105,
-                            status: 'Shipped',
-                            createdAt: { seconds: Date.now() / 1000 - 86400 * 1 } // 1 day ago
-                        }
-                    ])
+                    console.error("Error in OrdersPage:", error)
+                    setOrders(MOCK_ORDERS)
                 } finally {
                     setLoading(false)
                 }
@@ -133,7 +103,7 @@ const OrdersPage = () => {
             }
         }
 
-        fetchOrders()
+        getOrders()
     }, [user])
 
     if (loading) {

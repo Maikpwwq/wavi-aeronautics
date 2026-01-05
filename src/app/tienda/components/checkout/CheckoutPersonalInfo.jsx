@@ -17,7 +17,7 @@ const CheckoutPersonalInfo = ({ userInfo, handlePersonalInfo }) => {
            Información personal
          </Typography>
       </Box>
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3}}>
         <TextField
           id="userName"
           name="userName"

@@ -189,7 +189,7 @@ function ShowCartPage () {
                     color="secondary"
                     fullWidth
                     sx={{ mt: 2 }}
-                    onClick={() => navigate.push('/')}
+                    onClick={() => navigate.push('/tienda/kit-drones')}
                   >
                     Seguir comprando
                   </Button>

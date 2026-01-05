@@ -11,6 +11,10 @@ import ErrorIcon from '@mui/icons-material/Error'
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty'
 import Button from '@mui/material/Button'
 import Link from 'next/link'
+import { useContext } from 'react'
+import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
+import { createOrder } from '@/services/ordersService'
+import { auth } from '@/firebase/firebaseClient'
 
 const styles = {
   container: {
@@ -40,35 +44,70 @@ const styles = {
   }
 }
 
+
 const PSEResultadoContent = () => {
   const searchParams = useSearchParams()
+  const { shoppingCart, removeFromCart } = useContext(ShowCartContext)
   const [status, setStatus] = useState('loading')
   const [paymentInfo, setPaymentInfo] = useState(null)
+  const [orderCreated, setOrderCreated] = useState(false)
 
   useEffect(() => {
-    const collection_status = searchParams.get('collection_status')
-    const payment_id = searchParams.get('payment_id') || searchParams.get('collection_id')
-    const external_reference = searchParams.get('external_reference')
-    const status_param = searchParams.get('status')
+    const processResult = async () => {
+      const collection_status = searchParams.get('collection_status')
+      const payment_id = searchParams.get('payment_id') || searchParams.get('collection_id')
+      const external_reference = searchParams.get('external_reference')
+      const status_param = searchParams.get('status')
 
-    const paymentStatus = collection_status || status_param || 'unknown'
-    
-    setPaymentInfo({
-      paymentId: payment_id,
-      externalReference: external_reference,
-      status: paymentStatus
-    })
+      const paymentStatus = collection_status || status_param || 'unknown'
+      
+      setPaymentInfo({
+        paymentId: payment_id,
+        externalReference: external_reference,
+        status: paymentStatus
+      })
 
-    if (paymentStatus === 'approved') {
-      setStatus('success')
-    } else if (paymentStatus === 'pending' || paymentStatus === 'in_process') {
-      setStatus('pending')
-    } else if (paymentStatus === 'rejected' || paymentStatus === 'cancelled') {
-      setStatus('error')
-    } else {
-      setStatus('pending')
+      if (paymentStatus === 'approved') {
+        setStatus('success')
+        
+        // Create order in Firestore if not already created in this session
+        if (!orderCreated && shoppingCart.productos.length > 0) {
+          try {
+            const user = auth.currentUser
+            const orderData = {
+              userId: user?.uid || 'guest',
+              paymentId: payment_id,
+              externalReference: external_reference,
+              items: shoppingCart.productos.map(p => ({
+                name: p.titulo,
+                quantity: p.cantidad || 1,
+                price: parseFloat(p.precio?.toString().replace(/[^0-9.-]+/g,"") || 0)
+              })),
+              total: shoppingCart.suma,
+              status: 'processing',
+              paymentMethod: 'pse'
+            }
+            
+            await createOrder(orderData)
+            setOrderCreated(true)
+            
+            // Clear cart
+            shoppingCart.productos.forEach(p => removeFromCart(p.productID))
+          } catch (error) {
+            console.error("Failed to create order after success:", error)
+          }
+        }
+      } else if (paymentStatus === 'pending' || paymentStatus === 'in_process') {
+        setStatus('pending')
+      } else if (paymentStatus === 'rejected' || paymentStatus === 'cancelled') {
+        setStatus('error')
+      } else {
+        setStatus('pending')
+      }
     }
-  }, [searchParams])
+
+    processResult()
+  }, [searchParams, shoppingCart, removeFromCart, orderCreated])
 
   switch (status) {
     case 'loading':
@@ -98,7 +137,7 @@ const PSEResultadoContent = () => {
           )}
           <Button
             component={Link}
-            href="/tienda"
+            href="/tienda/drones-fpv-hd"
             variant="contained"
             color="primary"
             sx={styles.button}
@@ -126,7 +165,7 @@ const PSEResultadoContent = () => {
           )}
           <Button
             component={Link}
-            href="/tienda"
+            href="/tienda/drones-fpv-hd"
             variant="contained"
             color="primary"
             sx={styles.button}

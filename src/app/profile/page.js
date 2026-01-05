@@ -211,7 +211,7 @@ const ProfilePage = () => {
                       )}
                   </Box>
 
-                  <Grid container spacing={3}>
+                  <Grid container spacing={3} sx={{ flexDirection: 'column', justifyContent: 'center' }}>
                       <Grid item xs={12}>
                           <Typography variant="subtitle2" sx={{ mb: 1, color: 'text.secondary' }}>Información Personal</Typography>
                       </Grid>

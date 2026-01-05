@@ -9,6 +9,10 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import CircularProgress from '@mui/material/CircularProgress'
 import Button from '@mui/material/Button'
 import Link from 'next/link'
+import { useContext, useEffect, useState } from 'react'
+import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
+import { createOrder } from '@/services/ordersService'
+import { auth } from '@/firebase/firebaseClient'
 
 const styles = {
   container: {
@@ -30,10 +34,49 @@ const styles = {
   }
 }
 
+
 const PagoExitosoContent = () => {
   const searchParams = useSearchParams()
+  const { shoppingCart, removeFromCart } = useContext(ShowCartContext)
+  const [orderCreated, setOrderCreated] = useState(false)
+  
   const paymentId = searchParams.get('payment_id') || searchParams.get('collection_id')
   const externalReference = searchParams.get('external_reference')
+  const status = searchParams.get('status')
+
+  useEffect(() => {
+    const processOrder = async () => {
+      // Create order if payment is approved and not already created
+      if (status === 'approved' && !orderCreated && shoppingCart.productos.length > 0) {
+        try {
+          const user = auth.currentUser
+          const orderData = {
+            userId: user?.uid || 'guest',
+            paymentId: paymentId,
+            externalReference: externalReference,
+            items: shoppingCart.productos.map(p => ({
+              name: p.titulo,
+              quantity: p.cantidad || 1,
+              price: parseFloat(p.precio?.toString().replace(/[^0-9.-]+/g,"") || 0)
+            })),
+            total: shoppingCart.suma,
+            status: 'processing',
+            paymentMethod: 'card'
+          }
+          
+          await createOrder(orderData)
+          setOrderCreated(true)
+          
+          // Clear cart
+          shoppingCart.productos.forEach(p => removeFromCart(p.productID))
+        } catch (error) {
+          console.error("Failed to create order after success:", error)
+        }
+      }
+    }
+
+    processOrder()
+  }, [status, shoppingCart, removeFromCart, orderCreated, paymentId, externalReference])
 
   return (
     <>
@@ -55,15 +98,24 @@ const PagoExitosoContent = () => {
           Referencia: {externalReference}
         </Typography>
       )}
-      <Button
-        component={Link}
-        href="/tienda"
-        variant="contained"
-        color="primary"
-        sx={styles.button}
-      >
-        Volver a la Tienda
-      </Button>
+      <Box sx={{ display: 'flex', gap: 2, mt: 4 }}>
+        <Button
+            component={Link}
+            href="/orders"
+            variant="outlined"
+            color="primary"
+        >
+            Ver mis pedidos
+        </Button>
+        <Button
+            component={Link}
+            href="/tienda"
+            variant="contained"
+            color="primary"
+        >
+            Volver a la Tienda
+        </Button>
+      </Box>
     </>
   )
 }
