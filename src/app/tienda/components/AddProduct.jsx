@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
 import { auth } from '@/firebase/firebaseClient'
+import { v4 as uuidv4 } from 'uuid'
 import IconButton from '@mui/material/IconButton'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 import PropTypes from 'prop-types'
@@ -58,7 +59,6 @@ const AddProduct = ({ product }) => {
       
       // If guest has no ID yet, create it now (Lazy initialization)
       if (!cartID && !auth?.currentUser?.uid) {
-        const { v4: uuidv4 } = await import('uuid');
         cartID = uuidv4();
         sessionStorage.setItem('cartID', cartID);
         console.log('[AddProduct] Created new guest cartID:', cartID);
