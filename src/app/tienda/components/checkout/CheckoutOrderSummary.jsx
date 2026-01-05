@@ -63,59 +63,65 @@ const CheckoutOrderSummary = ({ shoppingCart, productsCart, userInfo, shippingIn
         Resumen productos:
       </Typography>
       <Box sx={{ mt: 3, mb: 3 }}>
-        {productsCart.map((producto, index) => (
-          <Box 
-            key={index} 
-            sx={{ 
-              display: 'flex', 
-              justifyContent: 'space-between', 
-              alignItems: 'center',
-              borderBottom: '1px solid #e0e0e0',
-              py: 2
-            }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-               <Box
-                  component="img"
-                  src={producto.imagenes?.[0]}
-                  alt={producto.titulo}
-                  sx={{
-                    width: 60,
-                    height: 60,
-                    objectFit: 'contain',
-                    borderRadius: 1,
-                    backgroundColor: '#fff',
-                    p: 0.5,
-                    border: '1px solid #eee'
+        {Array.isArray(productsCart) && productsCart.length > 0 ? (
+          productsCart.map((producto, index) => (
+            <Box 
+              key={index} 
+              sx={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                alignItems: 'center',
+                borderBottom: '1px solid #e0e0e0',
+                py: 2
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                 <Box
+                    component="img"
+                    src={producto.imagenes?.[0]}
+                    alt={producto.titulo}
+                    sx={{
+                      width: 60,
+                      height: 60,
+                      objectFit: 'contain',
+                      borderRadius: 1,
+                      backgroundColor: '#fff',
+                      p: 0.5,
+                      border: '1px solid #eee'
+                    }}
+                  />
+                  <Box>
+                    <Typography variant="body1" sx={{ fontWeight: 500, lineHeight: 1.2 }}>
+                      {producto.titulo}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Cantidad: {producto.cantidad || 1}
+                    </Typography>
+                  </Box>
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Typography variant="body1" sx={{ fontWeight: 'bold', minWidth: '80px', textAlign: 'right' }}>
+                  {producto.precio}
+                </Typography>
+                <IconButton 
+                  color="error" 
+                  onClick={() => {
+                    if (window.confirm(`¿Estás seguro de que deseas eliminar "${producto.titulo}" de la orden?`)) {
+                      removeFromCart(producto.productID)
+                    }
                   }}
-                />
-                <Box>
-                  <Typography variant="body1" sx={{ fontWeight: 500, lineHeight: 1.2 }}>
-                    {producto.titulo}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Cantidad: {producto.cantidad || 1}
-                  </Typography>
-                </Box>
+                  aria-label="eliminar"
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Box>
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold', minWidth: '80px', textAlign: 'right' }}>
-                {producto.precio}
-              </Typography>
-              <IconButton 
-                color="error" 
-                onClick={() => {
-                  if (window.confirm(`¿Estás seguro de que deseas eliminar "${producto.titulo}" de la orden?`)) {
-                    removeFromCart(producto.productID)
-                  }
-                }}
-                aria-label="eliminar"
-              >
-                <DeleteIcon />
-              </IconButton>
-            </Box>
-          </Box>
-        ))}
+          ))
+        ) : (
+          <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center', py: 4 }}>
+            No hay productos en el carrito. Por favor, agrega productos antes de continuar.
+          </Typography>
+        )}
         
         <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end', borderTop: '2px solid #333', pt: 2 }}>
            <Typography variant="h6">

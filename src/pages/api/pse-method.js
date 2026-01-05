@@ -61,8 +61,9 @@ const PSEPaymentRequestSchema = {
   }
 };
 
-// List of Colombian banks that support PSE
-const PSE_BANKS = [
+// Fallback list of Colombian banks (used if MercadoPago API fails)
+// Note: These codes should be updated if MercadoPago changes them
+const PSE_BANKS_FALLBACK = [
   { id: "1007", name: "Bancolombia" },
   { id: "1009", name: "Banco Davivienda" },
   { id: "1013", name: "Banco BBVA" },
@@ -78,20 +79,67 @@ const PSE_BANKS = [
   { id: "1058", name: "Banco Procredit" },
   { id: "1066", name: "Banco Cooperativo Coopcentral" },
   { id: "1291", name: "Nequi" },
-  { id: "1289", name: "Daviplata" }
+  { id: "1289", name: "Daviplata" },
+  { id: "1059", name: "Bancamía" },
+  { id: "1012", name: "Banco GNB Sudameris" },
+  { id: "1061", name: "Banco Agrario" },
+  { id: "1064", name: "Banco Mundo Mujer" },
+  { id: "1065", name: "Banco W" },
+  { id: "1069", name: "Lulo Bank" },
+  { id: "1070", name: "Ualá" }
 ];
 
 export default async function handler(req, res) {
-  // GET: Return list of available banks
+  const accessToken = process.env.NEXT_PUBLIC_MERCADOPAGOS_ACCESS_TOKEN;
+
+  // GET: Return list of available banks from MercadoPago API
   if (req.method === 'GET') {
-    return res.status(200).json({ banks: PSE_BANKS });
+    if (!accessToken) {
+      console.warn("PSE: No access token, returning fallback banks");
+      return res.status(200).json({ banks: PSE_BANKS_FALLBACK });
+    }
+
+    try {
+      // Fetch PSE payment method details from MercadoPago
+      const response = await fetch(
+        'https://api.mercadopago.com/v1/payment_methods/search?site_id=MCO&payment_type_id=bank_transfer',
+        {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        }
+      );
+
+      if (!response.ok) {
+        console.error('Failed to fetch banks from MercadoPago');
+        return res.status(200).json({ banks: PSE_BANKS_FALLBACK });
+      }
+
+      const data = await response.json();
+      
+      // Find PSE method and extract financial institutions
+      const pseMethod = data.results?.find(m => m.id === 'pse');
+      
+      if (pseMethod && pseMethod.financial_institutions) {
+        const banks = pseMethod.financial_institutions.map(fi => ({
+          id: fi.id,
+          name: fi.description
+        }));
+        console.log('Fetched PSE banks from MercadoPago:', banks.length);
+        return res.status(200).json({ banks });
+      }
+
+      // Fallback if PSE not found in results
+      return res.status(200).json({ banks: PSE_BANKS_FALLBACK });
+    } catch (err) {
+      console.error('Error fetching PSE banks:', err);
+      return res.status(200).json({ banks: PSE_BANKS_FALLBACK });
+    }
   }
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
-
-  const accessToken = process.env.NEXT_PUBLIC_MERCADOPAGOS_ACCESS_TOKEN;
   
   if (!accessToken) {
     console.error("PSE: MERCADOPAGO_ACCESS_TOKEN not configured (PSE uses MercadoPago as processor)");
@@ -108,11 +156,19 @@ export default async function handler(req, res) {
       shipments 
     } = req.body;
 
+    // Get client IP address from request headers (required for PSE)
+    const clientIP = req.headers['x-forwarded-for']?.split(',')[0]?.trim() 
+      || req.headers['x-real-ip'] 
+      || req.socket?.remoteAddress 
+      || '127.0.0.1';
+
     // Validate required fields for PSE
     if (!amount || amount <= 0) {
       return res.status(400).json({ error: 'Valid amount is required' });
     }
-    if (!payer?.email) {
+    // Accept both 'email' and 'userMail' field names from frontend
+    const payerEmail = payer?.email || payer?.userMail;
+    if (!payerEmail) {
       return res.status(400).json({ error: 'Payer email is required' });
     }
     if (!payer?.identification?.number) {
@@ -142,6 +198,7 @@ export default async function handler(req, res) {
       },
       callback_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://wavi-aeronautics.vercel.app'}/tienda/pse-resultado`,
       additional_info: {
+        ip_address: clientIP,
         items: items?.map(item => ({
           id: item.productID || item.id,
           title: item.titulo || item.title,

@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env: {},
+  // turbopack: {
+  //   root: path.join(__dirname, '..'),
+  // },
   images: {
     remotePatterns: [
       {

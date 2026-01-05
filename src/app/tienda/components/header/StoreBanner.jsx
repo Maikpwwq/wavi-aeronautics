@@ -11,6 +11,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
 import { formatCurrency } from '@/utilities/priceUtils'
 import ShoppingCart from '../ShoppingCart'
+import UserDropdown from '@/app/components/UserDropdown'
 
 const styles = {
   secondaryBar: {
@@ -47,7 +48,7 @@ const StoreBanner = () => {
               {shoppingCart.items} Productos
               <br />{formatCurrency(shoppingCart.suma)} COP
             </Grid>
-            <Grid item size={{ xs: 3, sm: 1, md: 1, lg: 1, xl: 1 }}>
+            <Grid item size={{ xs: 3, sm: 1, md: 1, lg: 1, xl: 1 }} sx={{ display: 'flex', alignItems: 'center' }}>
               <Tooltip title="Carrito">
                 <IconButton
                   color="inherit"
@@ -57,6 +58,7 @@ const StoreBanner = () => {
                   <ShoppingCartIcon fontSize="large" />
                 </IconButton>
               </Tooltip>
+              <UserDropdown showLoginLabel={false} />
             </Grid>
           </Grid>
           <ShoppingCart />

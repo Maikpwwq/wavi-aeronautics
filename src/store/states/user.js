@@ -3,7 +3,22 @@ import { createSlice } from '@reduxjs/toolkit'
 
 // const dispatcher = useDispatch();
 
-export const initialUser = null
+// Try to load from session storage for initial state to prevent flicker
+const loadUserFromSession = () => {
+    if (typeof window !== 'undefined') {
+        const stored = sessionStorage.getItem('wavi_user')
+        if (stored) {
+            try {
+                return JSON.parse(stored)
+            } catch (e) {
+                console.error("Failed to parse user session", e)
+            }
+        }
+    }
+    return null
+}
+
+export const initialUser = loadUserFromSession()
 
 // Slice
 const userSlice = createSlice({

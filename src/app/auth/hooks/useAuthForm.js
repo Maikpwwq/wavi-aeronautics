@@ -49,7 +49,7 @@ const useAuthForm = () => {
             handleAlert('Estas credenciales son incorrectas.', 'error')
             break
         case 'auth/weak-password':
-            handleAlert('Password muy debil.', 'error')
+            handleAlert('Contraseña muy debil.', 'error')
             break
         case 'auth/missing-email':
             handleAlert('Falta un correo.', 'error')

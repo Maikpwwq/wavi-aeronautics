@@ -1,6 +1,7 @@
 import React, { useState, createContext, useEffect } from 'react'
 import FirebaseLoadShoppingCart from '@/services/FirebaseLoadShoppingCart'
 import { saveCartToFirestore } from '@/services/shoppingCartService'
+import { FirebaseCompareShoppingCartIds } from '@/services/FirebaseCompareShoppingCartIds'
 import { calculateCopPrice, parseCopCurrency } from '@/utilities/priceUtils'
 
 export const ShowCartContext = createContext()
@@ -62,63 +63,74 @@ const ShoppingCartProvider = ({ children }) => {
           suma: storedSum ? parseInt(storedSum, 10) : 0,
           updated: !prev.updated
         }))
+      }
 
-        // Also fetch from Firestore to sync (in case local cache is stale)
-        const loadCartItems = async () => {
-          try {
-            const items = await FirebaseLoadShoppingCart()
-            console.log("Loaded Cart Items from Firestore:", items);
-            
-            if (items && Array.isArray(items) && items.length > 0) {
-              // These are just IDs, need to hydrate
-              if (cachedAllProducts) {
-                const allProducts = JSON.parse(cachedAllProducts);
-                const cartIdsMap = new Map(items.map(p => [p.productID, p.cantidad]));
-                
-                const hydratedFromFirestore = allProducts
-                  .filter(p => cartIdsMap.has(p.productID))
-                  .map(p => ({
-                    ...p,
-                    precio: calculateCopPrice(p.precio),
-                    cantidad: cartIdsMap.get(p.productID) || 1
-                  }));
-                
-                if (hydratedFromFirestore.length > 0) {
-                  const totalItems = hydratedFromFirestore.reduce((acc, item) => acc + (item.cantidad || 0), 0);
-                  
-                  // Recalculate sum properly from fetched items
-                  const totalSum = hydratedFromFirestore.reduce((acc, item) => {
-                     return acc + (parseCopCurrency(item.precio) * (parseInt(item.cantidad) || 1));
-                  }, 0);
+      // Initial Load & Subscription
+      const initializeCart = async () => {
+        let activeCartID = storedCartID;
 
-                  setShoppingCart(prev => ({
-                    ...prev,
-                    productos: hydratedFromFirestore,
-                    items: totalItems,
-                    suma: totalSum // Update sum from Firestore data too
-                  }))
-                }
-              }
-            }
-          } catch (e) {
-            console.error("Failed to load cart items from Firestore", e)
-          }
+        // Note: In a real app we might want to dependency inject the user ID here or read from Redux
+        // But for this provider which wraps the app, we might rely on the side-effects of AuthListener
+        // updating Redux/SessionStorage.
+        // Let's rely on sessionStorage for the user ID if available as "wavi_user"
+        const storedUser = sessionStorage.getItem('wavi_user');
+        if (storedUser) {
+             const u = JSON.parse(storedUser);
+             if (u.uid) activeCartID = u.uid;
         }
-        loadCartItems()
-      } else {
-        // No ID? Create one via FirebaseLoadShoppingCart
-        FirebaseLoadShoppingCart().then(() => {
-          const newCartID = sessionStorage.getItem('cartID')
-          if (newCartID) {
-            setShoppingCart(prev => ({
-              ...prev,
-              cartID: newCartID
-            }))
-          }
-        });
+
+        if (!activeCartID) {
+           // Create new Guest ID
+           await FirebaseLoadShoppingCart(); 
+           activeCartID = sessionStorage.getItem('cartID');
+        }
+
+
+        if (activeCartID) {
+            setShoppingCart(prev => ({ ...prev, cartID: activeCartID }));
+            
+            // Subscribe to Firestore changes
+            const { subscribeToCart } = await import('@/services/shoppingCartService');
+            const unsubscribe = subscribeToCart(activeCartID, (items) => {
+                
+                if (items.length > 0) {
+                    // Use FirebaseCompareShoppingCartIds to hydrate cart with full product data
+                    // This function fetches from cache or Firestore and updates the cart state
+                    FirebaseCompareShoppingCartIds({
+                        products: items,
+                        updateCart: (cartState) => {
+                            setShoppingCart(prev => ({
+                                ...prev,
+                                ...cartState,
+                                updated: !prev.updated
+                            }));
+                        }
+                    });
+                } else {
+                    // Empty cart
+                    setShoppingCart(prev => ({
+                        ...prev,
+                        productos: [],
+                        items: 0,
+                        suma: 0,
+                        updated: !prev.updated
+                    }));
+                }
+            });
+
+            return unsubscribe; // Cleanup needs to be handled
+        }
+      };
+
+      // We need to manage the cleanup of the subscription
+      let unsub = () => {};
+      initializeCart().then(fn => { if(fn) unsub = fn; });
+      
+      return () => {
+          unsub();
       }
     }
-  }, [])
+  }, []);
   const updateShoppingCart = (newProductos) => {
     console.log('updateShoppingCart', newProductos)
     setShoppingCart((shoppingCart) => ({
