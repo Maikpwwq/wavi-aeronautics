@@ -78,11 +78,23 @@ const ProductDetail = () => {
     if (!searchId) return
 
     const subscription$ = getProductById(searchId, category, marca)
-    const productSub = subscription$.subscribe()
     
+    // 1. Handle direct service response
+    const productSub = subscription$.subscribe((response) => {
+      if (response?.currentProduct?.[0]) {
+        console.log('[ProductDetail] Loaded from direct service:', response.currentProduct[0]);
+        setProduct(response.currentProduct[0]);
+        setLoading(false);
+      }
+    })
+    
+    // 2. Handle shared information (for broadcast updates)
     const infoSub = sharingInformationService.getSubject().subscribe((data) => {
-      if (data?.productos?.[0]) {
-        setProduct(data.productos[0])
+      // Handle naming inconsistency in project services (products vs productos)
+      const dataProduct = data?.productos?.[0] || data?.products?.[0];
+      if (dataProduct) {
+        console.log('[ProductDetail] Loaded from sharing service:', dataProduct);
+        setProduct(dataProduct)
         setLoading(false)
       }
     })
@@ -95,7 +107,7 @@ const ProductDetail = () => {
 
   // Fallback to Redux if direct fetch hasn't completed but Redux has it
   useEffect(() => {
-    if (reduxProduct && reduxProduct.id === searchId) {
+    if (reduxProduct && reduxProduct.productID === searchId) {
       setProduct(reduxProduct)
       setLoading(false)
     }
