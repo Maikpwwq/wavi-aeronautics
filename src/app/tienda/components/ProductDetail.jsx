@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo, useCallback } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useSelector } from 'react-redux'
 import { 
@@ -14,14 +14,10 @@ import {
   Divider, 
   Stack, 
   Paper,
-  CircularProgress,
-  IconButton,
-  Tooltip
+  CircularProgress
 } from '@mui/material'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { 
-  NavigateBefore, 
-  NavigateNext, 
   ChevronRight, 
   ArrowBack,
   Speed,
@@ -32,36 +28,107 @@ import {
   Security
 } from '@mui/icons-material'
 
+// Services & Utilities
 import { getProductById } from '@/services/sharedServices'
 import { sharingInformationService } from '@/services/sharing-information'
-import AddProduct from './AddProduct'
 import { calculateCopPrice } from '@/utilities/priceUtils'
 
-const SpecItem = ({ icon: Icon, label, value }) => (
-  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-    <Box 
-      sx={{ 
-        p: 1, 
-        borderRadius: 2, 
-        bgcolor: 'rgba(0, 188, 212, 0.1)', 
-        color: '#00bcd4',
-        mr: 2,
-        display: 'flex'
-      }}
-    >
-      <Icon fontSize="small" />
-    </Box>
-    <Box>
-      <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 'bold', display: 'block', textTransform: 'uppercase' }}>
-        {label}
-      </Typography>
-      <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-        {value}
-      </Typography>
-    </Box>
+// Local imports
+import { BRAND_COLORS } from '../innerTheme'
+import AddProduct from './AddProduct'
+import { 
+  ProductPackageList, 
+  ProductSpecsList, 
+  SpecItem,
+  parsePackageItems, 
+  parseSpecifications 
+} from './product-detail'
+
+// =============================================================================
+// STYLES
+// =============================================================================
+const styles = {
+  breadcrumbLink: {
+    fontSize: '0.875rem',
+    color: BRAND_COLORS.text.link,
+    textDecoration: 'none',
+    transition: 'all 0.2s ease',
+    '&:hover': {
+      textDecoration: 'underline',
+      color: BRAND_COLORS.primary,
+    },
+    '&:active': {
+      color: BRAND_COLORS.primaryDark,
+    }
+  },
+  backButton: {
+    textTransform: 'none', 
+    color: BRAND_COLORS.text.secondary,
+    '&:hover': {
+      color: BRAND_COLORS.primary,
+      bgcolor: 'rgba(25, 118, 210, 0.04)'
+    }
+  },
+  mainImage: {
+    borderRadius: 4, 
+    overflow: 'hidden', 
+    bgcolor: 'white',
+    boxShadow: '0 20px 40px rgba(0,0,0,0.08)',
+    position: 'relative',
+    aspectRatio: '1/1',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    p: 4
+  },
+  thumbnail: (isActive) => ({
+    width: 80, 
+    height: 80, 
+    borderRadius: 2, 
+    cursor: 'pointer',
+    border: isActive ? `2px solid ${BRAND_COLORS.accent}` : '2px solid transparent',
+    overflow: 'hidden',
+    bgcolor: 'white',
+    flexShrink: 0,
+    transition: 'all 0.2s',
+    '&:hover': { opacity: 0.8 }
+  }),
+  actionBox: {
+    p: 4, 
+    borderRadius: 4, 
+    bgcolor: 'white', 
+    boxShadow: '0 10px 30px rgba(0,0,0,0.04)', 
+    border: `1px solid ${BRAND_COLORS.border.light}`
+  }
+}
+
+// =============================================================================
+// LOCAL COMPONENTS
+// =============================================================================
+const Chip = ({ label, color }) => (
+  <Box sx={{ 
+    px: 1.5, 
+    py: 0.5, 
+    borderRadius: 1, 
+    fontSize: '0.75rem', 
+    fontWeight: 'bold', 
+    bgcolor: color === 'success' ? 'rgba(76, 175, 80, 0.1)' : 'rgba(0,0,0,0.05)',
+    color: color === 'success' ? BRAND_COLORS.success : 'inherit',
+    border: `1px solid ${color === 'success' ? BRAND_COLORS.success : '#ddd'}`
+  }}>
+    {label}
   </Box>
 )
 
+const LoadingSpinner = () => (
+  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+    <CircularProgress />
+  </Box>
+)
+
+// =============================================================================
+// MAIN COMPONENT
+// =============================================================================
 const ProductDetail = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -74,26 +141,24 @@ const ProductDetail = () => {
   const [activeImage, setActiveImage] = useState(0)
   const [loading, setLoading] = useState(true)
 
+  // ---------------------------------------------------------------------------
+  // Data fetching
+  // ---------------------------------------------------------------------------
   useEffect(() => {
     if (!searchId) return
 
     const subscription$ = getProductById(searchId, category, marca)
     
-    // 1. Handle direct service response
     const productSub = subscription$.subscribe((response) => {
       if (response?.currentProduct?.[0]) {
-        console.log('[ProductDetail] Loaded from direct service:', response.currentProduct[0]);
-        setProduct(response.currentProduct[0]);
-        setLoading(false);
+        setProduct(response.currentProduct[0])
+        setLoading(false)
       }
     })
     
-    // 2. Handle shared information (for broadcast updates)
     const infoSub = sharingInformationService.getSubject().subscribe((data) => {
-      // Handle naming inconsistency in project services (products vs productos)
-      const dataProduct = data?.productos?.[0] || data?.products?.[0];
+      const dataProduct = data?.productos?.[0] || data?.products?.[0]
       if (dataProduct) {
-        console.log('[ProductDetail] Loaded from sharing service:', dataProduct);
         setProduct(dataProduct)
         setLoading(false)
       }
@@ -105,7 +170,7 @@ const ProductDetail = () => {
     }
   }, [searchId, category, marca])
 
-  // Fallback to Redux if direct fetch hasn't completed but Redux has it
+  // Redux fallback
   useEffect(() => {
     if (reduxProduct && reduxProduct.productID === searchId) {
       setProduct(reduxProduct)
@@ -113,40 +178,52 @@ const ProductDetail = () => {
     }
   }, [reduxProduct, searchId])
 
+  // ---------------------------------------------------------------------------
+  // Memoized values
+  // ---------------------------------------------------------------------------
   const images = useMemo(() => {
     if (!product?.imagenes) return []
     return product.imagenes.map(img => typeof img === 'string' ? img : img.url || '')
   }, [product])
 
-  if (loading || !product) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
-        <CircularProgress />
-      </Box>
-    )
-  }
+  const parsedPackageItems = useMemo(() => parsePackageItems(product?.incluye), [product?.incluye])
+  const parsedSpecifications = useMemo(() => parseSpecifications(product?.especificaciones), [product?.especificaciones])
+
+  // ---------------------------------------------------------------------------
+  // Handlers
+  // ---------------------------------------------------------------------------
+  const handleGoBack = useCallback(() => {
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+      router.back()
+    } else {
+      router.push('/tienda')
+    }
+  }, [router])
+
+  // ---------------------------------------------------------------------------
+  // Render
+  // ---------------------------------------------------------------------------
+  if (loading || !product) return <LoadingSpinner />
 
   return (
-    <Box sx={{ bgcolor: '#fcfcfc', minHeight: '100vh', pb: 10 }}>
+    <Box sx={{ bgcolor: BRAND_COLORS.background.page, minHeight: '100vh', pb: 10 }}>
       <Container maxWidth="lg">
-        {/* Navigation / Breadcrumbs */}
-        <Box sx={{ py: 3, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Button 
-            startIcon={<ArrowBack />} 
-            onClick={() => router.back()}
-            sx={{ textTransform: 'none', color: 'text.secondary' }}
-          >
-            Volver a la Tienda
+        {/* Navigation */}
+        <Box sx={{ py: 3, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Button startIcon={<ArrowBack />} onClick={handleGoBack} sx={styles.backButton}>
+            Volver atrás
           </Button>
           <Breadcrumbs separator={<ChevronRight fontSize="small" />} aria-label="breadcrumb">
-            <Link underline="hover" color="inherit" href="/" sx={{ fontSize: '0.875rem' }}>Inicio</Link>
-            <Link underline="hover" color="inherit" href="/tienda" sx={{ fontSize: '0.875rem' }}>Tienda</Link>
-            <Typography color="text.primary" sx={{ fontSize: '0.875rem', fontWeight: 'medium' }}>{product.titulo}</Typography>
+            <Link underline="hover" href="/" sx={styles.breadcrumbLink}>Inicio</Link>
+            <Link underline="hover" href="/tienda" sx={styles.breadcrumbLink}>Tienda</Link>
+            <Typography color="text.primary" sx={{ fontSize: '0.875rem', fontWeight: 'medium' }}>
+              {product.titulo}
+            </Typography>
           </Breadcrumbs>
         </Box>
 
         <Grid container spacing={6}>
-          {/* Left Column: Visuals */}
+          {/* Left Column: Images */}
           <Grid item xs={12} md={7}>
             <Box sx={{ position: 'relative' }}>
               <Paper 
@@ -154,18 +231,7 @@ const ProductDetail = () => {
                 component={motion.div}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                sx={{ 
-                  borderRadius: 4, 
-                  overflow: 'hidden', 
-                  bgcolor: 'white',
-                  boxShadow: '0 20px 40px rgba(0,0,0,0.08)',
-                  position: 'relative',
-                  aspectRatio: '1/1',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  p: 4
-                }}
+                sx={styles.mainImage}
               >
                 <motion.img 
                   key={activeImage}
@@ -183,30 +249,10 @@ const ProductDetail = () => {
                 />
               </Paper>
 
-              {/* Thumbnail Gallery */}
               {images.length > 1 && (
-                <Stack 
-                  direction="row" 
-                  spacing={2} 
-                  sx={{ mt: 3, overflowX: 'auto', pb: 1 }}
-                >
+                <Stack direction="row" spacing={2} sx={{ mt: 3, overflowX: 'auto', pb: 1 }}>
                   {images.map((img, idx) => (
-                    <Box 
-                      key={idx}
-                      onClick={() => setActiveImage(idx)}
-                      sx={{ 
-                        width: 80, 
-                        height: 80, 
-                        borderRadius: 2, 
-                        cursor: 'pointer',
-                        border: activeImage === idx ? '2px solid #00bcd4' : '2px solid transparent',
-                        overflow: 'hidden',
-                        bgcolor: 'white',
-                        flexShrink: 0,
-                        transition: 'all 0.2s',
-                        '&:hover': { opacity: 0.8 }
-                      }}
-                    >
+                    <Box key={idx} onClick={() => setActiveImage(idx)} sx={styles.thumbnail(activeImage === idx)}>
                       <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </Box>
                   ))}
@@ -215,26 +261,21 @@ const ProductDetail = () => {
             </Box>
           </Grid>
 
-          {/* Right Column: Data & Action */}
+          {/* Right Column: Product Info */}
           <Grid item xs={12} md={5}>
-            <Box 
-              component={motion.div}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              <Typography variant="overline" color="secondary" sx={{ fontWeight: 'bold', letterSpacing: 2 }}>
+            <Box component={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+              <Typography variant="overline" sx={{ fontWeight: 'bold', letterSpacing: 2, color: BRAND_COLORS.primary }}>
                 {product.marca || 'Aeronautics'}
               </Typography>
-              <Typography variant="h3" sx={{ fontWeight: 800, mb: 2, color: '#1a2744' }}>
+              <Typography variant="h3" sx={{ fontWeight: 800, mb: 2, color: BRAND_COLORS.text.primary }}>
                 {product.titulo}
               </Typography>
               
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-                <Typography variant="h4" sx={{ color: '#00bcd4', fontWeight: 'bold', mr: 2 }}>
+                <Typography variant="h4" sx={{ color: BRAND_COLORS.accent, fontWeight: 'bold', mr: 2 }}>
                   {calculateCopPrice(product.precio)}
                 </Typography>
-                <Chip label="En Stock" color="success" size="small" variant="outlined" sx={{ borderRadius: 1 }} />
+                <Chip label="En Stock" color="success" />
               </Box>
 
               <Typography variant="body1" sx={{ color: 'text.secondary', lineHeight: 1.8, mb: 4 }}>
@@ -243,7 +284,7 @@ const ProductDetail = () => {
 
               <Divider sx={{ mb: 4 }} />
 
-              {/* Tech Specs Instrumented Panel */}
+              {/* Tech Specs */}
               <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 3, textTransform: 'uppercase', letterSpacing: 1 }}>
                 Especificaciones Técnicas
               </Typography>
@@ -262,7 +303,7 @@ const ProductDetail = () => {
               </Grid>
 
               {/* Action Area */}
-              <Box sx={{ p: 4, borderRadius: 4, bgcolor: 'white', boxShadow: '0 10px 30px rgba(0,0,0,0.04)', border: '1px solid #f0f0f0' }}>
+              <Box sx={styles.actionBox}>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
                   Recibe este producto en la puerta de tu casa con envío asegurado.
                 </Typography>
@@ -275,43 +316,27 @@ const ProductDetail = () => {
           </Grid>
         </Grid>
 
-        {/* Detailed Info Tabs/Sections */}
+        {/* Additional Details */}
         <Box sx={{ mt: 10 }}>
-            <Divider sx={{ mb: 6 }} />
-            <Grid container spacing={6}>
-                <Grid item xs={12} md={6}>
-                    <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 3 }}>¿Qué Incluye?</Typography>
-                    <Typography variant="body1" sx={{ color: 'text.secondary', whiteSpace: 'pre-line' }}>
-                        {product.incluye || 'Consulta con soporte para más detalles sobre los componentes incluidos.'}
-                    </Typography>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 3 }}>Detalles Adicionales</Typography>
-                    <Typography variant="body1" sx={{ color: 'text.secondary', whiteSpace: 'pre-line' }}>
-                        {product.especificaciones || 'No hay especificaciones adicionales listadas.'}
-                    </Typography>
-                </Grid>
+          <Divider sx={{ mb: 6 }} />
+          <Grid container spacing={6}>
+            <Grid item xs={12} md={6}>
+              <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 3, color: BRAND_COLORS.text.primary }}>
+                ¿Qué Incluye?
+              </Typography>
+              <ProductPackageList items={parsedPackageItems} />
             </Grid>
+            <Grid item xs={12} md={6}>
+              <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 3, color: BRAND_COLORS.text.primary }}>
+                Detalles Adicionales
+              </Typography>
+              <ProductSpecsList specs={parsedSpecifications} />
+            </Grid>
+          </Grid>
         </Box>
       </Container>
     </Box>
   )
 }
-
-// Utility to match the Chip component used in the UI
-const Chip = ({ label, color }) => (
-    <Box sx={{ 
-        px: 1.5, 
-        py: 0.5, 
-        borderRadius: 1, 
-        fontSize: '0.75rem', 
-        fontWeight: 'bold', 
-        bgcolor: color === 'success' ? 'rgba(76, 175, 80, 0.1)' : 'rgba(0,0,0,0.05)',
-        color: color === 'success' ? '#4caf50' : 'inherit',
-        border: `1px solid ${color === 'success' ? '#4caf50' : '#ddd'}`
-    }}>
-        {label}
-    </Box>
-)
 
 export default ProductDetail
