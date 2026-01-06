@@ -1,16 +1,13 @@
 'use client'
 
-import React, { useEffect, useState, useMemo, useCallback } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
+import React, { useEffect, useState, useMemo } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { useSelector } from 'react-redux'
 import { 
   Box, 
   Container, 
   Grid, 
   Typography, 
-  Button, 
-  Breadcrumbs, 
-  Link, 
   Divider, 
   Stack, 
   Paper,
@@ -18,8 +15,6 @@ import {
 } from '@mui/material'
 import { motion } from 'framer-motion'
 import { 
-  ChevronRight, 
-  ArrowBack,
   Speed,
   Straighten,
   MonitorWeight,
@@ -36,6 +31,7 @@ import { calculateCopPrice } from '@/utilities/priceUtils'
 // Local imports
 import { BRAND_COLORS } from '../innerTheme'
 import AddProduct from './AddProduct'
+import PageNavigation from './PageNavigation'
 import { 
   ProductPackageList, 
   ProductSpecsList, 
@@ -48,27 +44,6 @@ import {
 // STYLES
 // =============================================================================
 const styles = {
-  breadcrumbLink: {
-    fontSize: '0.875rem',
-    color: BRAND_COLORS.text.link,
-    textDecoration: 'none',
-    transition: 'all 0.2s ease',
-    '&:hover': {
-      textDecoration: 'underline',
-      color: BRAND_COLORS.primary,
-    },
-    '&:active': {
-      color: BRAND_COLORS.primaryDark,
-    }
-  },
-  backButton: {
-    textTransform: 'none', 
-    color: BRAND_COLORS.text.secondary,
-    '&:hover': {
-      color: BRAND_COLORS.primary,
-      bgcolor: 'rgba(25, 118, 210, 0.04)'
-    }
-  },
   mainImage: {
     borderRadius: 4, 
     overflow: 'hidden', 
@@ -76,10 +51,10 @@ const styles = {
     boxShadow: '0 20px 40px rgba(0,0,0,0.08)',
     position: 'relative',
     aspectRatio: '1/1',
+    maxHeight: '600px',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    p: 4
+    justifyContent: 'center'
   },
   thumbnail: (isActive) => ({
     width: 80, 
@@ -130,7 +105,6 @@ const LoadingSpinner = () => (
 // MAIN COMPONENT
 // =============================================================================
 const ProductDetail = () => {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const searchId = searchParams.get('id')
   const category = searchParams.get('category')
@@ -190,37 +164,15 @@ const ProductDetail = () => {
   const parsedSpecifications = useMemo(() => parseSpecifications(product?.especificaciones), [product?.especificaciones])
 
   // ---------------------------------------------------------------------------
-  // Handlers
-  // ---------------------------------------------------------------------------
-  const handleGoBack = useCallback(() => {
-    if (typeof window !== 'undefined' && window.history.length > 1) {
-      router.back()
-    } else {
-      router.push('/tienda')
-    }
-  }, [router])
-
-  // ---------------------------------------------------------------------------
   // Render
   // ---------------------------------------------------------------------------
   if (loading || !product) return <LoadingSpinner />
 
   return (
     <Box sx={{ bgcolor: BRAND_COLORS.background.page, minHeight: '100vh', pb: 10 }}>
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
         {/* Navigation */}
-        <Box sx={{ py: 3, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Button startIcon={<ArrowBack />} onClick={handleGoBack} sx={styles.backButton}>
-            Volver atrás
-          </Button>
-          <Breadcrumbs separator={<ChevronRight fontSize="small" />} aria-label="breadcrumb">
-            <Link underline="hover" href="/" sx={styles.breadcrumbLink}>Inicio</Link>
-            <Link underline="hover" href="/tienda" sx={styles.breadcrumbLink}>Tienda</Link>
-            <Typography color="text.primary" sx={{ fontSize: '0.875rem', fontWeight: 'medium' }}>
-              {product.titulo}
-            </Typography>
-          </Breadcrumbs>
-        </Box>
+        <PageNavigation category={category} currentPage={product.titulo} />
 
         <Grid container spacing={6}>
           {/* Left Column: Images */}
@@ -278,30 +230,6 @@ const ProductDetail = () => {
                 <Chip label="En Stock" color="success" />
               </Box>
 
-              <Typography variant="body1" sx={{ color: 'text.secondary', lineHeight: 1.8, mb: 4 }}>
-                {product.descripcion}
-              </Typography>
-
-              <Divider sx={{ mb: 4 }} />
-
-              {/* Tech Specs */}
-              <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 3, textTransform: 'uppercase', letterSpacing: 1 }}>
-                Especificaciones Técnicas
-              </Typography>
-              
-              <Grid container spacing={2} sx={{ mb: 4 }}>
-                <Grid item xs={6}>
-                  <SpecItem icon={MonitorWeight} label="Peso" value={product.peso || 'N/A'} />
-                  <SpecItem icon={Straighten} label="Dimensiones" value={product.dimensiones || 'N/A'} />
-                  <SpecItem icon={Speed} label="Rendimiento" value="Alto" />
-                </Grid>
-                <Grid item xs={6}>
-                  <SpecItem icon={BatteryChargingFull} label="Batería" value="LiPo Ready" />
-                  <SpecItem icon={SettingsInputAntenna} label="Frecuencia" value="2.4GHz / 5.8GHz" />
-                  <SpecItem icon={Security} label="Garantía" value="Oficial Wavi" />
-                </Grid>
-              </Grid>
-
               {/* Action Area */}
               <Box sx={styles.actionBox}>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
@@ -312,12 +240,48 @@ const ProductDetail = () => {
                   Pagos seguros vía MercadoPago & PSE
                 </Typography>
               </Box>
-            </Box>
+
+              </Box>
+
           </Grid>
         </Grid>
 
+        {/* Section 3: Description & Specs */}
+        <Grid container spacing={6} sx={{ mt: 2 }}>
+          <Grid item xs={12}>
+             <Box component={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+                <Typography variant="body1" sx={{ color: 'text.secondary', lineHeight: 1.8, mb: 4 }}>
+                  {product.descripcion}
+                </Typography>
+
+                <Divider sx={{ mb: 4 }} />
+
+                {/* Tech Specs */}
+                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 3, textTransform: 'uppercase', letterSpacing: 1 }}>
+                  Especificaciones Técnicas
+                </Typography>
+                
+                <Grid container spacing={2} sx={{ mb: 4 }}>
+                  <Grid item xs={12} md={6}>
+                    <SpecItem icon={MonitorWeight} label="Peso" value={product.peso || 'N/A'} />
+                    <SpecItem icon={Straighten} label="Dimensiones" value={product.dimensiones || 'N/A'} />
+                    <SpecItem icon={Speed} label="Rendimiento" value="Alto" />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <SpecItem icon={BatteryChargingFull} label="Batería" value="LiPo Ready" />
+                    <SpecItem icon={SettingsInputAntenna} label="Frecuencia" value="2.4GHz / 5.8GHz" />
+                    <SpecItem icon={Security} label="Garantía" value="Oficial Wavi" />
+                  </Grid>
+                </Grid>
+             </Box>
+          </Grid>
+        </Grid>
+
+
+
+
         {/* Additional Details */}
-        <Box sx={{ mt: 10 }}>
+        <Box>
           <Divider sx={{ mb: 6 }} />
           <Grid container spacing={6}>
             <Grid item xs={12} md={6}>

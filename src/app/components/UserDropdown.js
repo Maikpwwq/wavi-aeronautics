@@ -192,19 +192,17 @@ const UserDropdown = ({ showLoginLabel = true }) => {
         </Link>
 
         {/* Admin Dashboard - Only visible for admin users */}
-        {isAdmin && (
-          <>
-            <Divider sx={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
-            <Link href="/admin" style={{ textDecoration: 'none', color: 'inherit' }}>
-              <MenuItem sx={{ ...classes.menuItem, backgroundColor: 'rgba(255, 215, 0, 0.1)' }}>
-                <ListItemIcon sx={{ color: '#ffd700', minWidth: '36px' }}>
-                  <AdminPanelSettingsIcon fontSize="small" />
-                </ListItemIcon>
-                Panel Admin
-              </MenuItem>
-            </Link>
-          </>
-        )}
+        {isAdmin && [
+          <Divider key="admin-divider" sx={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />,
+          <Link key="admin-link" href="/admin" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <MenuItem sx={{ ...classes.menuItem, backgroundColor: 'rgba(255, 215, 0, 0.1)' }}>
+              <ListItemIcon sx={{ color: '#ffd700', minWidth: '36px' }}>
+                <AdminPanelSettingsIcon fontSize="small" />
+              </ListItemIcon>
+              Panel Admin
+            </MenuItem>
+          </Link>
+        ]}
 
         <Divider sx={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
         

@@ -1,9 +1,5 @@
-import React, { Suspense, useState } from 'react'
-import {
-  connect,
-  useSelector
-} from 'react-redux'
-// import PropTypes from 'prop-types'
+import React, { Suspense } from 'react'
+import { useSelector } from 'react-redux'
 import withRoot from '@/modules/withRoot'
 import theme from '../innerTheme'
 import Grid from '@mui/material/Grid'
@@ -78,16 +74,13 @@ const styles = (theme) => ({
 })
 
 function ProductosDestacados (props) {
-  // const { classes } = props;
   const classes = styles(theme)
-  const shopState = useSelector((store) => store.shop)
-  const { drones } = shopState
-
-  const [featuredProducts] = useState(drones || []) // setStoreProducts
+  const shopState = useSelector((store) => store?.shop)
+  const featuredProducts = shopState?.dronesRC || []
 
   return (
-    <Box sx={classes.root}>
-      <Container fluid sx={classes.container}>
+    <Box sx={classes.root}> 
+      <Container maxWidth="lg" sx={classes.container}>
         <Typography
           variant="h4"
           marked="center"
@@ -134,15 +127,5 @@ function ProductosDestacados (props) {
   )
 }
 
-ProductosDestacados.propTypes = {
-  // classes: PropTypes.object.isRequired,
-}
 
-const mapStateToProps = (state) => {
-  // console.log("state", state);
-  return {
-    featuredProducts: state.drones
-  }
-}
-
-export default connect(mapStateToProps, null)(withRoot(ProductosDestacados))
+export default withRoot(ProductosDestacados)
