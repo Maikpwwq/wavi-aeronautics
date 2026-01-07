@@ -26,6 +26,15 @@ const nextConfig = {
       tls: './src/utilities/emptyModule.js',
     },
   },
+  async redirects() {
+    return [
+      {
+        source: '/tienda',
+        destination: '/tienda/kit-drones',
+        permanent: true,
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig

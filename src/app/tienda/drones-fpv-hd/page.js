@@ -20,6 +20,8 @@ const styles = (theme) => ({
     paddingLeft: `${theme.spacing(6)} !important`,
     display: 'flex',
     flexDirection: 'column',
+    flex: 1, // Take remaining space
+    minWidth: 0, // Prevent flex item from overflowing
     [theme.breakpoints.down('sm')]: {
       paddingLeft: `${theme.spacing(2)} !important`
     }
@@ -33,6 +35,7 @@ const styles = (theme) => ({
   productShowcase: {
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'flex-start', // Align sidebar and content to top
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column'
     }
@@ -87,10 +90,10 @@ const DroneProducts = () => {
               <Grid
                 container
                 spacing={2}
-                sx={{ justifyContent: 'space-around' }}
+                sx={{ justifyContent: 'flex-start' }}
               >
                 {filteredProducts.map((product, k) => (
-                  <Grid item key={k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
+                  <Grid item key={k} size={{ xs: 12, sm: 6, md: 6, lg: 4, xl: 3 }}>
                     <ProductCard
                       sx="d-flex mb-2"
                       category="dronesHD"
