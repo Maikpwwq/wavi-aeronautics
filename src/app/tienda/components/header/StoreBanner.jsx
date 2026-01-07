@@ -38,7 +38,7 @@ const StoreBanner = () => {
           <Grid container alignItems="center" spacing={1} sx={{ width: '100%', justifyContent: 'space-between' }}>
             <Grid item size={{ xs: 12, sm: 8, md: 9, lg: 9, xl: 10 }} xs>
               <Typography color="inherit" variant="h5" component="h1">
-                Tienda
+                <span style={{ fontWeight: 'bold' }}>Para lo mejor en FPV y Drones</span>
               </Typography>
               <Typography color="inherit" variant="body1" sx={{ display: 'flex' }}>
                 <LocalShippingIcon sx={{ marginRight: '1rem' }}/> {' '} Envios gratis a toda Colombia!

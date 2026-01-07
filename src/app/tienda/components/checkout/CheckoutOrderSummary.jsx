@@ -8,6 +8,7 @@ import IconButton from '@mui/material/IconButton'
 import PersonIcon from '@mui/icons-material/Person'
 import HomeIcon from '@mui/icons-material/Home'
 import DeleteIcon from '@mui/icons-material/Delete'
+import ProductLink from '../ProductLink'
 
 const CheckoutOrderSummary = ({ shoppingCart, productsCart, userInfo, shippingInfo, removeFromCart }) => {
   return (
@@ -75,21 +76,25 @@ const CheckoutOrderSummary = ({ shoppingCart, productsCart, userInfo, shippingIn
                 py: 2
               }}
             >
+
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                 <Box
-                    component="img"
-                    src={producto.imagenes?.[0]}
-                    alt={producto.titulo}
-                    sx={{
-                      width: 60,
-                      height: 60,
-                      objectFit: 'contain',
-                      borderRadius: 1,
-                      backgroundColor: '#fff',
-                      p: 0.5,
-                      border: '1px solid #eee'
-                    }}
-                  />
+                 <ProductLink product={producto}>
+                   <Box
+                      component="img"
+                      src={producto.imagenes?.[0]}
+                      alt={producto.titulo}
+                      sx={{
+                        width: 60,
+                        height: 60,
+                        objectFit: 'contain',
+                        borderRadius: 1,
+                        backgroundColor: '#fff',
+                        p: 0.5,
+                        border: '1px solid #eee',
+                        cursor: 'pointer'
+                      }}
+                    />
+                 </ProductLink>
                   <Box>
                     <Typography variant="body1" sx={{ fontWeight: 500, lineHeight: 1.2 }}>
                       {producto.titulo}

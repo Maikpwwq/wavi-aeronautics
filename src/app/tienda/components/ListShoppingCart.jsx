@@ -14,6 +14,7 @@ import CardHeader from '@mui/material/CardHeader'
 import CardMedia from '@mui/material/CardMedia'
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
+import ProductLink from './ProductLink'
 
 const styles = (theme) => ({
   image: {
@@ -89,41 +90,46 @@ const ListShoppingCart = (props) => {
         }>
           {shoppingCart.productos &&
             shoppingCart.productos.map(
-              ({ titulo, precio, imagenes, productID, cantidad }, index) => (
-                <Card style={{ ...classes.card, width: '100%' }} key={index}>
-                  <Typography
-                    variant="h6"
-                    gutterBottom
-                    marked="center"
-                    align="center"
-                    style={classes.cantidad}
-                  >
-                    {cantidad} X
-                  </Typography>
-                  {imagenes && imagenes.length > 0 && (
-                    <CardMedia
-                      sx={classes.image}
-                      component="img"
-                      image={imagenes[0]}
-                      alt={titulo}
-                    ></CardMedia>
-                  )}
+              (product, index) => {
+                const { titulo, precio, imagenes, productID, cantidad, categoria, marca } = product
+                return (
+                  <Card style={{ ...classes.card, width: '100%' }} key={index}>
+                    <Typography
+                      variant="h6"
+                      gutterBottom
+                      marked="center"
+                      align="center"
+                      style={classes.cantidad}
+                    >
+                      {cantidad} X
+                    </Typography>
+                    {imagenes && imagenes.length > 0 && (
+                      <ProductLink product={product} style={classes.image}>
+                        <CardMedia
+                          component="img"
+                          image={imagenes[0]}
+                          alt={titulo}
+                          sx={{ ...classes.image, cursor: 'pointer' }}
+                        />
+                      </ProductLink>
+                    )}
 
-                  <CardHeader
-                    title={titulo}
-                    subheader={precio}
-                    action={
-                      <IconButton 
-                        color="error" 
-                        onClick={() => handleRemove(productID, titulo)}
-                        aria-label="eliminar"
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    }
-                  ></CardHeader>
-                </Card>
-              )
+                    <CardHeader
+                      title={titulo}
+                      subheader={precio}
+                      action={
+                        <IconButton 
+                          color="error" 
+                          onClick={() => handleRemove(productID, titulo)}
+                          aria-label="eliminar"
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      }
+                    ></CardHeader>
+                  </Card>
+                )
+              }
             )}
             {shoppingCart.productos && shoppingCart.productos.length >= 1 && (
               <Box className="" maxWidth="sm">

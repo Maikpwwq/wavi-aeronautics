@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import Link from 'next/link'
+import ProductLink from './ProductLink'
 import { loadDetail } from '@/store/states/product'
 import AddProduct from '@/app/tienda/components/AddProduct'
 
@@ -50,15 +50,21 @@ const ProductCard = ({ products, category }) => {
   return (
     <>
       <Box className="" maxWidth="sm" style={{ height: '100%' }}>
-        <Card className="product-card" style={{ height: '100%' }}>
+        <Card 
+          className="product-card" 
+          style={{ height: '100%' }}
+          sx={{
+            transition: 'border-radius 0.3s ease',
+            '&:hover': {
+              borderRadius: '16px' // Augment border radius on hover
+            }
+          }}
+        >
           <CardActionArea>
             {producto !== undefined && imagenes && imagenes.length > 0 && (
-              <Link
+              <ProductLink
+                product={producto}
                 style={classes.imageCentered}
-                href={{
-                  pathname: '/tienda/producto',
-                  query: { id: productID, category: categoria, marca: marca },
-                }}
               >
                 <div className="product-card-image-container">
                   <CardMedia
@@ -70,7 +76,7 @@ const ProductCard = ({ products, category }) => {
                     onClick={handleSelect}
                   />
                 </div>
-              </Link>
+              </ProductLink>
             )}
           </CardActionArea>
           <CardHeader

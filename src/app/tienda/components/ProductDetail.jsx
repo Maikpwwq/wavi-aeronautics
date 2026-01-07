@@ -51,7 +51,7 @@ const styles = {
     boxShadow: '0 20px 40px rgba(0,0,0,0.08)',
     position: 'relative',
     aspectRatio: '1/1',
-    maxHeight: '700px',
+    maxHeight: '639px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'

@@ -2,7 +2,7 @@
 import React, { useContext, Suspense } from 'react'
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import ProductLink from '../components/ProductLink'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Paper from '@mui/material/Paper'
@@ -93,11 +93,8 @@ function ShowCartPage () {
                 {cart.map(({ titulo, precio, imagenes, productID, categoria, marca, cantidad }, index) => (
                   <Paper key={index} elevation={2} sx={classes.cartItem}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, width: '100%' }}>
-                      <Link
-                        href={{
-                          pathname: 'producto',
-                          query: `id=${productID}&category=${categoria}&marca=${marca}`
-                        }}
+                      <ProductLink
+                        product={{ productID, categoria, marca }}
                       >
                          <Box 
                            component="img"
@@ -105,19 +102,16 @@ function ShowCartPage () {
                            alt={titulo}
                            sx={classes.image}
                          />
-                      </Link>
+                      </ProductLink>
                       <Box sx={{ flexGrow: 1 }}>
-                        <Link
-                          href={{
-                            pathname: 'producto',
-                            query: `id=${productID}&category=${categoria}&marca=${marca}`
-                          }}
+                        <ProductLink
+                          product={{ productID, categoria, marca }}
                           style={{ textDecoration: 'none', color: 'inherit' }}
                         >
                           <Typography variant="h6" sx={{ fontWeight: 600, lineHeight: 1.2, mb: 0.5 }}>
                             {titulo}
                           </Typography>
-                        </Link>
+                        </ProductLink>
                         <Typography variant="body2" color="text.secondary">
                           Marca: {marca || 'Genérica'} | Categoría: {categoria || 'Varios'}
                         </Typography>

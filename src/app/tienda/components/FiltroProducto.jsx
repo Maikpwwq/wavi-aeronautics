@@ -9,6 +9,61 @@ import Typography from '@/modules/components/Typography'
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
+import { formatCurrency, parseCopCurrency } from '@/utilities/priceUtils'
+
+const PriceInput = ({ value, onChange, placeholder }) => {
+  const [localValue, setLocalValue] = useState(value ? formatCurrency(value) : '')
+
+  React.useEffect(() => {
+    // Update local value when external value changes (e.g. reset)
+    if (value === '' || value === 0) {
+      setLocalValue('')
+    } else {
+       // Only format if specialized logic needed, otherwise trust user input until blur
+       // But if external updates happen (reset), we want to format
+       setLocalValue(formatCurrency(value))
+    }
+  }, [value])
+
+  const handleChange = (e) => {
+    // Allow user to type, stripping formatted chars to keep it sane or just let them type
+    // Better: let them type, process on blur? or formatting as they type?
+    // Simple approach: Allow typing numbers, format on blur
+    // For now, let's just let them type whatever, and try to keep it numeric-ish
+    setLocalValue(e.target.value)
+  }
+
+  const handleBlur = () => {
+    const numeric = parseCopCurrency(localValue)
+    if (numeric > 0) {
+      setLocalValue(formatCurrency(numeric))
+      onChange(numeric)
+    } else {
+      setLocalValue('')
+      onChange('')
+    }
+  }
+  
+  const handleKeyDown = (e) => {
+     if (e.key === 'Enter') {
+        handleBlur()
+     }
+  }
+
+  return (
+    <input
+      type="text"
+      placeholder={placeholder}
+      value={localValue}
+      onChange={handleChange}
+      onBlur={handleBlur}
+      onKeyDown={handleKeyDown}
+      className="filter-pill"
+      style={{ width: '100%', cursor: 'text' }}
+    />
+  )
+}
+
 const FiltroProducto = (props) => {
   const {
     filters,
@@ -62,22 +117,16 @@ const FiltroProducto = (props) => {
           <div className="filter-section">
             <div className="filter-section-title">PRECIO</div>
             <div className="filter-price-row">
-              <input
-                type="number"
+              <PriceInput 
                 placeholder="Mín"
                 value={filters.precio.min}
-                onChange={(e) => setMinPrice(e.target.value)}
-                className="filter-pill"
-                style={{ width: '100%', cursor: 'text' }}
+                onChange={(val) => setMinPrice(val)}
               />
               <span style={{ color: '#aaa' }}>—</span>
-              <input
-                type="number"
+              <PriceInput 
                 placeholder="Máx"
                 value={filters.precio.max}
-                onChange={(e) => setMaxPrice(e.target.value)}
-                className="filter-pill"
-                style={{ width: '100%', cursor: 'text' }}
+                onChange={(val) => setMaxPrice(val)}
               />
             </div>
           </div>
