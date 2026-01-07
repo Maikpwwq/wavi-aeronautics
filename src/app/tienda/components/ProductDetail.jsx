@@ -51,10 +51,14 @@ const styles = {
     boxShadow: '0 20px 40px rgba(0,0,0,0.08)',
     position: 'relative',
     aspectRatio: '1/1',
-    maxHeight: '600px',
+    maxHeight: '700px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  actionInfo: {
+    p: 4, 
+    maxWidth: '500px !important',
   },
   thumbnail: (isActive) => ({
     width: 80, 
@@ -202,7 +206,7 @@ const ProductDetail = () => {
               </Paper>
 
               {images.length > 1 && (
-                <Stack direction="row" spacing={2} sx={{ mt: 3, overflowX: 'auto', pb: 1 }}>
+                <Stack direction="row" spacing={2} sx={{ mt: 3, overflowX: 'auto', pb: 1, maxWidth: '700px' }}>
                   {images.map((img, idx) => (
                     <Box key={idx} onClick={() => setActiveImage(idx)} sx={styles.thumbnail(activeImage === idx)}>
                       <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -214,7 +218,7 @@ const ProductDetail = () => {
           </Grid>
 
           {/* Right Column: Product Info */}
-          <Grid item xs={12} md={5}>
+          <Grid item xs={12} md={5} sx={styles.actionInfo}>
             <Box component={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
               <Typography variant="overline" sx={{ fontWeight: 'bold', letterSpacing: 2, color: BRAND_COLORS.primary }}>
                 {product.marca || 'Aeronautics'}
