@@ -65,12 +65,18 @@ export default function OrderIssues() {
   const columns = [
     { field: 'id', headerName: 'ID Pedido', width: 200 },
     { 
-        field: 'user', 
+        field: 'clientInfo', 
         headerName: 'Cliente', 
-        width: 200, 
-        valueGetter: (params) => {
-             if (params && params.email) return params.email
-             return params ? params.name || params.email || 'N/A' : 'N/A' 
+        width: 250, 
+        renderCell: (params) => {
+             const email = params.row.userEmail || 'N/A'
+             const name = params.row.userName || 'Sin Nombre'
+             return (
+               <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                 <Typography variant="body2" sx={{ fontWeight: 'bold', lineHeight: 1.2 }}>{email}</Typography>
+                 <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1.2 }}>{name}</Typography>
+               </Box>
+             )
         }
     },
     { field: 'date', headerName: 'Fecha', width: 130 },
