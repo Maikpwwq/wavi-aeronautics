@@ -59,7 +59,7 @@ export default function AdminUsers() {
       setLastDoc(result.lastDoc)
     } catch (error) {
       console.error(error)
-      setSnackbar({ open: true, message: 'Error al cargar usuarios', severity: 'error' })
+      setSnackbar({ open: true, message: `Error: ${error.message}`, severity: 'error' })
     } finally {
       setLoading(false)
       setLoadingMore(false)
@@ -74,11 +74,11 @@ export default function AdminUsers() {
     const user = params.row
     setCurrentUser(user)
     setEditForm({
-      name: user.name || '',
-      phone: user.phone || '',
+      name: user.name || user.userName || '',
+      phone: user.phone || user.phoneNumber || '',
       address: user.address || '',
-      role: user.role || 'user',
-      email: user.email || ''
+      role: user.role || user.rol || 'user',
+      email: user.email || user.userMail || ''
     })
     setOpenEdit(true)
   }
@@ -107,24 +107,35 @@ export default function AdminUsers() {
 
   const columns = [
     { field: 'id', headerName: 'UID', width: 150 },
-    { field: 'name', headerName: 'Nombre', width: 200 },
-    { field: 'email', headerName: 'Email', width: 200 },
-    { field: 'phone', headerName: 'Teléfono', width: 150 },
-    { field: 'role', headerName: 'Rol', width: 120 },
     { 
-      field: 'lastLogin', 
-      headerName: 'Último Acceso', 
+      field: 'name', 
+      headerName: 'Nombre', 
       width: 200,
-      valueGetter: (params) => {
-        // Handle different timestamp formats or missing values
-        if (!params) return 'N/A'
-        // If it's a Firestore Timestamp convert to date
-        // Note: DataGrid valueGetter params logic changed in v6/v7, verifying v8 usage
-        // params is value if simple, but here we access row data usually. 
-        // In v6+ params is the value. 
-        // Actually best to use valueGetter: (value, row) => ...
-        return params ? new Date(params.seconds * 1000).toLocaleString() : 'N/A'
-      }
+      valueGetter: (params, row) => row?.userName || row?.name || ''
+    },
+    { 
+      field: 'email', 
+      headerName: 'Email', 
+      width: 250,
+      valueGetter: (params, row) => row?.userMail || row?.email || ''
+    },
+    { 
+      field: 'phone', 
+      headerName: 'Teléfono', 
+      width: 150,
+      valueGetter: (params, row) => row?.phoneNumber || row?.phone || ''
+    },
+    { 
+      field: 'role', 
+      headerName: 'Rol', 
+      width: 120,
+      valueGetter: (params, row) => row?.rol || row?.role || 'user'
+    },
+    { 
+      field: 'joined', 
+      headerName: 'Fecha Registro', 
+      width: 200,
+      valueGetter: (params, row) => row?.userJoined || 'N/A'
     },
     {
       field: 'actions',

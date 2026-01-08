@@ -1,0 +1,88 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Helper function to check if user is Admin
+    // Looks up the 'role' field in the 'users' collection for the current user's UID
+    function isAdmin() {
+      return isAuthenticated() && 
+        (
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.rol == 'admin'
+        );
+    }
+
+    // Helper function to check if user is the Owner of the document
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // =========================================================
+    // USERS COLLECTION
+    // =========================================================
+    match /users/{userId} {
+      // Users can read their own profile, Admins can read all
+      allow read: if isOwner(userId) || isAdmin();
+      
+      // Users can update their own profile (but NOT their role)
+      // Admins can update everything (including roles)
+      allow update: if isAdmin() || (isOwner(userId) && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']));
+      
+      // Only system/admin should technically create users via Auth triggers, 
+      // but if client creates document after signup:
+      allow create: if isOwner(userId); 
+    }
+
+    // =========================================================
+    // PRODUCTS COLLECTION
+    // =========================================================
+    match /products/{productId} {
+      // Public read access for the store
+      allow read: if true;
+      
+      // Only Admins can modify inventory
+      allow write: if isAdmin();
+    }
+
+    // =========================================================
+    // ORDERS COLLECTION
+    // =========================================================
+    match /orders/{orderId} {
+      // Admins can read/write all orders
+      allow read, write: if isAdmin();
+
+      // Users can read/create their own orders
+      // Assuming 'userId' or 'user.id' is stored in the order document
+      allow create: if isAuthenticated();
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || resource.data.user.id == request.auth.uid);
+    }
+    
+    // =========================================================
+    // POSTS (BLOG) COLLECTION
+    // =========================================================
+    match /posts/{postId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // =========================================================
+    // PROMOTIONS COLLECTION
+    // =========================================================
+    match /promotions/{promoId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // =========================================================
+    // DEFAULT CATCH-ALL (Deny by default)
+    // =========================================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

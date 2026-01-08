@@ -21,10 +21,10 @@ import {
 // Fetch all users with pagination
 export const getAllUsers = async (limitCount = 10, lastDoc = null) => {
   try {
-    let q = query(collection(firestore, 'users'), orderBy('createdAt', 'desc'), limit(limitCount))
+    let q = query(collection(firestore, 'users'), limit(limitCount))
     
     if (lastDoc) {
-      q = query(collection(firestore, 'users'), orderBy('createdAt', 'desc'), startAfter(lastDoc), limit(limitCount))
+      q = query(collection(firestore, 'users'), startAfter(lastDoc), limit(limitCount))
     }
 
     const snapshot = await getDocs(q)
