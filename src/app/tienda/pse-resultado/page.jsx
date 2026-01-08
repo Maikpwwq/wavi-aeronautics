@@ -58,8 +58,29 @@ const PSEResultadoContent = () => {
       const payment_id = searchParams.get('payment_id') || searchParams.get('collection_id')
       const external_reference = searchParams.get('external_reference')
       const status_param = searchParams.get('status')
+      const preference_id = searchParams.get('preference_id')
 
-      const paymentStatus = collection_status || status_param || 'unknown'
+      // Normalize payment status
+      // MercadoPago sends 'null' string sometimes, handle that.
+      const rawStatus = collection_status || status_param || 'unknown'
+      let paymentStatus = rawStatus
+      let firestoreStatus = 'pending'
+
+      if (rawStatus === 'approved') {
+        paymentStatus = 'approved'
+        firestoreStatus = 'processing'
+        setStatus('success')
+      } else if (rawStatus === 'pending' || rawStatus === 'in_process') {
+        paymentStatus = 'pending'
+        firestoreStatus = 'pending'
+        setStatus('pending')
+      } else if (rawStatus === 'rejected' || rawStatus === 'cancelled' || rawStatus === 'null') {
+        paymentStatus = 'rejected'
+        firestoreStatus = 'failed'
+        setStatus('error')
+      } else {
+        setStatus('pending')
+      }
       
       setPaymentInfo({
         paymentId: payment_id,
@@ -67,44 +88,38 @@ const PSEResultadoContent = () => {
         status: paymentStatus
       })
 
-      if (paymentStatus === 'approved') {
-        setStatus('success')
-        
-        // Create order in Firestore if not already created in this session
-        if (!orderCreated && shoppingCart.productos.length > 0) {
-          try {
-            const user = auth.currentUser
-            const orderData = {
-              userId: user?.uid || 'guest',
-              userEmail: user?.email || searchParams.get('payer_email') || 'guest@example.com',
-              userName: user?.displayName || searchParams.get('payer_name') || 'Invitado',
-              paymentId: payment_id,
-              externalReference: external_reference,
-              items: shoppingCart.productos.map(p => ({
-                name: p.titulo,
-                quantity: p.cantidad || 1,
-                price: parseFloat(p.precio?.toString().replace(/[^0-9.-]+/g,"") || 0)
-              })),
-              total: shoppingCart.suma,
-              status: 'processing',
-              paymentMethod: 'pse'
-            }
-            
-            await createOrder(orderData)
-            setOrderCreated(true)
-            
-            // Clear cart
-            shoppingCart.productos.forEach(p => removeFromCart(p.productID))
-          } catch (error) {
-            console.error("Failed to create order after success:", error)
+      // Attempt to capture the order in Firestore for ALL outcomes if we have cart items
+      // This ensures we track "Intent to Buy" / Issues
+      if (!orderCreated && shoppingCart.productos.length > 0) {
+        try {
+          const user = auth.currentUser
+          const orderData = {
+            userId: user?.uid || 'guest',
+            userEmail: user?.email || searchParams.get('payer_email') || 'guest@example.com',
+            userName: user?.displayName || searchParams.get('payer_name') || 'Invitado',
+            paymentId: payment_id || preference_id || 'no-id',
+            externalReference: external_reference || 'no-ref',
+            items: shoppingCart.productos.map(p => ({
+              name: p.titulo,
+              quantity: p.cantidad || 1,
+              price: parseFloat(p.precio?.toString().replace(/[^0-9.-]+/g,"") || 0)
+            })),
+            total: shoppingCart.suma,
+            status: firestoreStatus, // 'processing', 'pending', or 'failed'
+            paymentMethod: 'pse',
+            paymentStatusRaw: rawStatus
           }
+          
+          await createOrder(orderData)
+          setOrderCreated(true)
+          
+          // ONLY Clear cart if approved
+          if (paymentStatus === 'approved') {
+             shoppingCart.productos.forEach(p => removeFromCart(p.productID))
+          }
+        } catch (error) {
+          console.error("Failed to create order record:", error)
         }
-      } else if (paymentStatus === 'pending' || paymentStatus === 'in_process') {
-        setStatus('pending')
-      } else if (paymentStatus === 'rejected' || paymentStatus === 'cancelled') {
-        setStatus('error')
-      } else {
-        setStatus('pending')
       }
     }
 
