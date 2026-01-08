@@ -18,11 +18,14 @@ export const getAdminStats = async () => {
     const ordersRef = collection(firestore, 'orders')
     const usersRef = collection(firestore, 'users')
 
-    // 1. Calculate Total Income using server-side sum aggregation
-    const incomeSnapshot = await getAggregateFromServer(ordersRef, {
-      totalIncome: sum('total')
-    })
-    const totalIncome = incomeSnapshot.data().totalIncome || 0
+    // 1. Calculate Total Income
+    // We only want to sum 'paid', 'shipped', 'delivered'.
+    // Firestore aggregation doesn't easily support "IN" queries combined with sum efficiently 
+    // without matching indexes or separate queries. 
+    // For simplicity and accuracy with the requested filter:
+    const incomeQuery = query(ordersRef, where('status', 'in', ['paid', 'shipped', 'delivered']))
+    const incomeSnapshot = await getDocs(incomeQuery)
+    const totalIncome = incomeSnapshot.docs.reduce((acc, doc) => acc + (doc.data().total || 0), 0)
 
     // 2. Count Total Orders
     const ordersCountSnapshot = await getAggregateFromServer(ordersRef, {
@@ -30,8 +33,9 @@ export const getAdminStats = async () => {
     })
     const totalOrders = ordersCountSnapshot.data().totalOrders || 0
 
-    // 3. Count Pending Orders
-    const pendingOrdersQuery = query(ordersRef, where('status', '==', 'processing'))
+    // 3. Count Pending Orders (Issues + In Process)
+    // We include 'pending', 'verification_required' (Issues) and 'processing' (Paid but not shipped)
+    const pendingOrdersQuery = query(ordersRef, where('status', 'in', ['pending', 'verification_required', 'processing']))
     const pendingSnapshot = await getAggregateFromServer(pendingOrdersQuery, {
       pendingCount: count()
     })

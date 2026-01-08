@@ -27,6 +27,9 @@ import { usePathname } from 'next/navigation'
 import AdminGuard from '@/app/components/admin/AdminGuard'
 import UserDropdown from '@/app/components/UserDropdown'
 
+const WaviPixelLogo =
+  'https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FWaviPixelLogo.png?alt=media&token=7edcec69-8b24-4b95-b970-6b9acfddbdeb'
+
 const drawerWidth = 240
 
 const Sidebar = styled(Drawer)(({ theme }) => ({
@@ -121,12 +124,17 @@ export default function AdminLayout({ children }) {
         
         <Sidebar variant="persistent" anchor="left" open={open}>
           <Box sx={{ p: 3, textAlign: 'center' }}>
-             <Typography variant="h5" color="secondary" sx={{ fontWeight: 'bold', letterSpacing: 1 }}>
-                WAVI
-             </Typography>
-             <Typography variant="caption" sx={{ opacity: 0.7 }}>
-                AERONAUTICS
-             </Typography>
+            <Link href="/" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+              <Box
+                component="img"
+                src={WaviPixelLogo}
+                alt="Wavi Aeronautics"
+                sx={{ height: 48, width: 48, marginRight: 2, borderRadius: '50%' }}
+              />
+              <Typography variant="h6" sx={classes.link}>
+                Wavi Aeronautics
+              </Typography>
+            </Link>
           </Box>
           <Divider sx={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
           <List sx={{ mt: 2 }}>
