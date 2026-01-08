@@ -16,7 +16,12 @@ import {
   Snackbar,
   Alert,
   Tabs,
-  Tab
+  Tab,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Chip
 } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import { getAllProducts, createProduct, updateProduct, toggleProductStatus } from '@/firebase/adminServices'
