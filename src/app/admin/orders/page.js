@@ -70,6 +70,7 @@ export default function AdminOrders() {
       setOrders(mapped)
     } catch (error) {
       console.error(error)
+      // Ideally we would show a snackbar here too, but for now logging actual error is key
     } finally {
       setLoading(false)
     }

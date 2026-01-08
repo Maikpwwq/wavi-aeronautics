@@ -107,7 +107,7 @@ export const toggleProductStatus = async (id, isActive) => {
 // Fetch orders with optional status filtering and pagination
 export const getOrders = async (statusFilter = null, limitCount = 10, lastDoc = null) => {
   try {
-    let constraints = [orderBy('createdAt', 'desc'), limit(limitCount)]
+    let constraints = [limit(limitCount)]
     
     if (statusFilter) {
       if (Array.isArray(statusFilter)) {

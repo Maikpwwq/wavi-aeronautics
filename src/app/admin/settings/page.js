@@ -28,15 +28,24 @@ function ProductPanel() {
   // Dialog State
   const [openDialog, setOpenDialog] = useState(false)
   const [currentProduct, setCurrentProduct] = useState(null)
-  const [formData, setFormData] = useState({
+  
+  // Initial Form State
+  const initialFormState = {
     name: '',
     price: '',
     stock: '',
     description: '',
-    image: '',
+    imagenes: [''], // Array of URLs
     active: true,
-    discount: 0
-  })
+    discount: 0,
+    categoria: '',
+    especificaciones: '',
+    incluye: '',
+    marca: '',
+    productID: ''
+  }
+  
+  const [formData, setFormData] = useState(initialFormState)
 
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' })
 
@@ -65,35 +74,41 @@ function ProductPanel() {
         price: product.price || '',
         stock: product.stock || '',
         description: product.description || '',
-        image: product.image || '',
+        imagenes: Array.isArray(product.imagenes) && product.imagenes.length > 0 ? product.imagenes : [product.image || ''],
         active: product.active !== undefined ? product.active : true,
-        discount: product.discount || 0
+        discount: product.discount || 0,
+        categoria: product.categoria || '',
+        especificaciones: product.especificaciones || '',
+        incluye: product.incluye || '',
+        marca: product.marca || '',
+        productID: product.productID || ''
       })
     } else {
       setCurrentProduct(null)
-      setFormData({
-        name: '',
-        price: '',
-        stock: '',
-        description: '',
-        image: '',
-        active: true,
-        discount: 0
-      })
+      setFormData(initialFormState)
     }
     setOpenDialog(true)
   }
 
   const handleSave = async () => {
     try {
+      // Filter out empty image URLs
+      const validImages = formData.imagenes.filter(url => url.trim() !== '')
+      
       const payload = {
         name: formData.name,
-        price: parseFloat(formData.price),
-        stock: parseInt(formData.stock),
+        price: parseFloat(formData.price) || 0,
+        stock: parseInt(formData.stock) || 0,
         description: formData.description,
-        image: formData.image, // URL
+        imagenes: validImages,
+        image: validImages.length > 0 ? validImages[0] : '', // Backward compatibility for main image
         active: formData.active,
-        discount: parseFloat(formData.discount)
+        discount: parseFloat(formData.discount) || 0,
+        categoria: formData.categoria,
+        especificaciones: formData.especificaciones,
+        incluye: formData.incluye,
+        marca: formData.marca,
+        productID: formData.productID
       }
 
       if (currentProduct) {
@@ -115,33 +130,45 @@ function ProductPanel() {
   const handleToggleStatus = async (id, currentStatus) => {
     try {
       await toggleProductStatus(id, !currentStatus)
-      // Optimistic update
       setProducts(prev => prev.map(p => p.id === id ? { ...p, active: !currentStatus } : p))
     } catch (error) {
       console.error(error)
       setSnackbar({ open: true, message: 'Error al cambiar estado', severity: 'error' })
     }
   }
+  
+  // Image Array Handlers
+  const handleAddImage = () => {
+    setFormData({ ...formData, imagenes: [...formData.imagenes, ''] })
+  }
+
+  const handleImageChange = (index, value) => {
+    const newImages = [...formData.imagenes]
+    newImages[index] = value
+    setFormData({ ...formData, imagenes: newImages })
+  }
+
+  const handleRemoveImage = (index) => {
+    const newImages = formData.imagenes.filter((_, i) => i !== index)
+    setFormData({ ...formData, imagenes: newImages })
+  }
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 150 },
+    { field: 'productID', headerName: 'ID Producto', width: 120 },
     { field: 'name', headerName: 'Nombre', width: 200 },
+    { field: 'marca', headerName: 'Marca', width: 120 },
+    { field: 'categoria', headerName: 'Categoría', width: 130 },
     { 
       field: 'price', 
       headerName: 'Precio', 
       width: 100,
-      valueFormatter: (params) => {
-         // DataGrid v6+ valueFormatter params is the value itself usually
-         // Safe check
-         if (params.value == null) return ''
-         return `$${params.value}`
-      }
+      valueFormatter: (params) => params.value ? `$${params.value}` : ''
     },
-    { field: 'stock', headerName: 'Stock', width: 100 },
+    { field: 'stock', headerName: 'Stock', width: 80 },
     { 
       field: 'active', 
       headerName: 'Activo', 
-      width: 100,
+      width: 80,
       renderCell: (params) => (
         <Switch
           checked={params.value}
@@ -150,17 +177,28 @@ function ProductPanel() {
         />
       )
     },
-    { field: 'discount', headerName: 'Descuento (%)', width: 120 },
     {
       field: 'actions',
       headerName: 'Acciones',
-      width: 150,
+      width: 100,
       renderCell: (params) => (
         <Button variant="outlined" size="small" onClick={() => handleOpenDialog(params.row)}>
           Editar
         </Button>
       )
     }
+  ]
+  
+  const categories = [
+    'Googles', 
+    'radioControl', 
+    'baterias', 
+    'dronesRC', 
+    'digitalVTX', 
+    'FPV HD', 
+    'dronesKits', 
+    'transmisors', 
+    'receptors'
   ]
 
   return (
@@ -170,7 +208,7 @@ function ProductPanel() {
         <Button variant="contained" onClick={() => handleOpenDialog()}>Nuevo Producto</Button>
       </Box>
       
-      <Paper sx={{ height: 500, width: '100%' }}>
+      <Paper sx={{ height: 600, width: '100%' }}>
         <DataGrid
           rows={products}
           columns={columns}
@@ -183,12 +221,44 @@ function ProductPanel() {
         <DialogTitle>{currentProduct ? 'Editar Producto' : 'Nuevo Producto'}</DialogTitle>
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
-            <TextField
-              label="Nombre del Producto"
-              value={formData.name}
-              onChange={(e) => setFormData({...formData, name: e.target.value})}
-              fullWidth
-            />
+            
+            {/* Basic Info */}
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              <TextField
+                label="Nombre del Producto"
+                value={formData.name}
+                onChange={(e) => setFormData({...formData, name: e.target.value})}
+                fullWidth
+              />
+               <TextField
+                label="ID Producto (SKU)"
+                value={formData.productID}
+                onChange={(e) => setFormData({...formData, productID: e.target.value})}
+                fullWidth
+              />
+            </Box>
+
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              <TextField
+                label="Marca"
+                value={formData.marca}
+                onChange={(e) => setFormData({...formData, marca: e.target.value})}
+                fullWidth
+              />
+              <FormControl fullWidth>
+                <InputLabel>Categoría</InputLabel>
+                <Select
+                  value={formData.categoria}
+                  label="Categoría"
+                  onChange={(e) => setFormData({...formData, categoria: e.target.value})}
+                >
+                  {categories.map((cat) => (
+                    <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+
             <Box sx={{ display: 'flex', gap: 2 }}>
               <TextField
                 label="Precio ($)"
@@ -204,7 +274,16 @@ function ProductPanel() {
                 onChange={(e) => setFormData({...formData, stock: e.target.value})}
                 fullWidth
               />
+               <TextField
+                label="Descuento (%)"
+                type="number"
+                value={formData.discount}
+                onChange={(e) => setFormData({...formData, discount: e.target.value})}
+                fullWidth
+              />
             </Box>
+
+            {/* Detailed Info */}
             <TextField
               label="Descripción"
               value={formData.description}
@@ -213,31 +292,52 @@ function ProductPanel() {
               rows={3}
               fullWidth
             />
-            <TextField
-              label="URL de Imagen"
-              value={formData.image}
-              onChange={(e) => setFormData({...formData, image: e.target.value})}
+             <TextField
+              label="Especificaciones"
+              value={formData.especificaciones}
+              onChange={(e) => setFormData({...formData, especificaciones: e.target.value})}
+              multiline
+              rows={3}
               fullWidth
-              helperText="Pega aquí el enlace directo a la imagen"
+              placeholder="Detalles técnicos..."
             />
-             <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-               <TextField
-                label="Descuento Individual (%)"
-                type="number"
-                value={formData.discount}
-                onChange={(e) => setFormData({...formData, discount: e.target.value})}
-                sx={{ width: '200px' }}
-              />
-              <FormControlLabel
-                control={
-                  <Switch 
-                    checked={formData.active} 
-                    onChange={(e) => setFormData({...formData, active: e.target.checked})} 
-                  />
-                }
-                label="Producto Activo (Visible en tienda)"
-              />
-            </Box>
+             <TextField
+              label="Incluye (Qué viene en la caja)"
+              value={formData.incluye}
+              onChange={(e) => setFormData({...formData, incluye: e.target.value})}
+              multiline
+              rows={2}
+              fullWidth
+            />
+
+            {/* Image URLs Handling */}
+            <Typography variant="subtitle1" sx={{ mt: 1 }}>Imágenes</Typography>
+            {formData.imagenes.map((url, index) => (
+              <Box key={index} sx={{ display: 'flex', gap: 1 }}>
+                <TextField
+                  label={`URL Imagen ${index + 1}`}
+                  value={url}
+                  onChange={(e) => handleImageChange(index, e.target.value)}
+                  fullWidth
+                  size="small"
+                />
+                <Button color="error" onClick={() => handleRemoveImage(index)}>X</Button>
+              </Box>
+            ))}
+            <Button variant="outlined" size="small" onClick={handleAddImage} sx={{ alignSelf: 'start' }}>
+              Agregar URL de Imagen
+            </Button>
+
+            <FormControlLabel
+              control={
+                <Switch 
+                  checked={formData.active} 
+                  onChange={(e) => setFormData({...formData, active: e.target.checked})} 
+                />
+              }
+              label="Producto Activo (Visible en tienda)"
+            />
+
           </Box>
         </DialogContent>
         <DialogActions>

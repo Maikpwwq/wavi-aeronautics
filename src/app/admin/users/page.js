@@ -30,10 +30,12 @@ export default function AdminUsers() {
   // Edit Dialog State
   const [openEdit, setOpenEdit] = useState(false)
   const [currentUser, setCurrentUser] = useState(null)
+  
+  // Form State
   const [editForm, setEditForm] = useState({
     name: '',
     phone: '',
-    address: '',
+    addresses: [], // Array of objects
     role: '',
     email: ''
   })
@@ -56,7 +58,11 @@ export default function AdminUsers() {
         setUsers(result.users)
       }
       
-      setLastDoc(result.lastDoc)
+      if (result.users.length < limit) {
+        setLastDoc(null)
+      } else {
+        setLastDoc(result.lastDoc)
+      }
     } catch (error) {
       console.error(error)
       setSnackbar({ open: true, message: `Error: ${error.message}`, severity: 'error' })
@@ -73,10 +79,20 @@ export default function AdminUsers() {
   const handleEditClick = (params) => {
     const user = params.row
     setCurrentUser(user)
+    
+    // Safety check for addresses
+    let addresses = []
+    if (Array.isArray(user.addresses)) {
+      addresses = user.addresses
+    } else if (user.address) {
+      // Legacy single address support
+      addresses = [{street: user.address, city: '', country: '', state: '', zipCode: '', additionalInfo: ''}]
+    }
+
     setEditForm({
       name: user.name || user.userName || '',
       phone: user.phone || user.phoneNumber || '',
-      address: user.address || '',
+      addresses: addresses,
       role: user.role || user.rol || 'user',
       email: user.email || user.userMail || ''
     })
@@ -88,14 +104,26 @@ export default function AdminUsers() {
 
     try {
       await updateUser(currentUser.id, {
-        name: editForm.name,
+        userName: editForm.name, // Mapping to userName as per user schema preference
+        name: editForm.name,     // Keep standardized field too
+        phoneNumber: editForm.phone,
         phone: editForm.phone,
-        address: editForm.address,
+        addresses: editForm.addresses, // Saving the full array
+        rol: editForm.role,      // Mapping to rol as per user schema preference
         role: editForm.role
       })
       
       // Update local state
-      setUsers(prev => prev.map(u => u.id === currentUser.id ? { ...u, ...editForm } : u))
+      setUsers(prev => prev.map(u => u.id === currentUser.id ? { 
+        ...u, 
+        name: editForm.name,
+        userName: editForm.name,
+        phone: editForm.phone,
+        phoneNumber: editForm.phone,
+        role: editForm.role,
+        rol: editForm.role,
+        addresses: editForm.addresses
+      } : u))
       
       setSnackbar({ open: true, message: 'Usuario actualizado correctamente', severity: 'success' })
       setOpenEdit(false)
@@ -103,6 +131,27 @@ export default function AdminUsers() {
       console.error(error)
       setSnackbar({ open: true, message: 'Error al actualizar usuario', severity: 'error' })
     }
+  }
+
+  // Address Handlers
+  const handleAddAddress = () => {
+    setEditForm(prev => ({
+      ...prev,
+      addresses: [...prev.addresses, { street: '', city: '', state: '', country: '', zipCode: '', additionalInfo: '' }]
+    }))
+  }
+
+  const handleRemoveAddress = (index) => {
+    setEditForm(prev => ({
+      ...prev,
+      addresses: prev.addresses.filter((_, i) => i !== index)
+    }))
+  }
+
+  const handleAddressChange = (index, field, value) => {
+    const newAddresses = [...editForm.addresses]
+    newAddresses[index] = { ...newAddresses[index], [field]: value }
+    setEditForm(prev => ({ ...prev, addresses: newAddresses }))
   }
 
   const columns = [
@@ -158,21 +207,23 @@ export default function AdminUsers() {
           rows={users}
           columns={columns}
           loading={loading}
-          hideFooterPagination // We handle "Load More" manually for infinite scroll feeling or button
+          hideFooterPagination 
         />
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-          <Button 
-            variant="outlined" 
-            onClick={() => fetchUsers(true)} 
-            disabled={loadingMore || !lastDoc}
-          >
-            {loadingMore ? 'Cargando...' : 'Cargar Más'}
-          </Button>
-        </Box>
+        {lastDoc && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+            <Button 
+              variant="outlined" 
+              onClick={() => fetchUsers(true)} 
+              disabled={loadingMore}
+            >
+              {loadingMore ? 'Cargando...' : 'Cargar Más'}
+            </Button>
+          </Box>
+        )}
       </Paper>
 
       {/* Edit Dialog */}
-      <Dialog open={openEdit} onClose={() => setOpenEdit(false)} fullWidth maxWidth="sm">
+      <Dialog open={openEdit} onClose={() => setOpenEdit(false)} fullWidth maxWidth="md">
         <DialogTitle>Editar Usuario</DialogTitle>
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
@@ -188,26 +239,21 @@ export default function AdminUsers() {
               disabled
               fullWidth
             />
-            <TextField
-              label="Nombre"
-              value={editForm.name}
-              onChange={(e) => setEditForm({...editForm, name: e.target.value})}
-              fullWidth
-            />
-            <TextField
-              label="Teléfono"
-              value={editForm.phone}
-              onChange={(e) => setEditForm({...editForm, phone: e.target.value})}
-              fullWidth
-            />
-            <TextField
-              label="Dirección"
-              value={editForm.address}
-              onChange={(e) => setEditForm({...editForm, address: e.target.value})}
-              fullWidth
-              multiline
-              rows={2}
-            />
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              <TextField
+                label="Nombre"
+                value={editForm.name}
+                onChange={(e) => setEditForm({...editForm, name: e.target.value})}
+                fullWidth
+              />
+              <TextField
+                label="Teléfono"
+                value={editForm.phone}
+                onChange={(e) => setEditForm({...editForm, phone: e.target.value})}
+                fullWidth
+              />
+            </Box>
+            
             <FormControl fullWidth>
               <InputLabel>Rol</InputLabel>
               <Select
@@ -220,6 +266,62 @@ export default function AdminUsers() {
                 <MenuItem value="editor">Editor</MenuItem>
               </Select>
             </FormControl>
+
+            <Typography variant="h6" sx={{ mt: 2 }}>Direcciones de Envío</Typography>
+            {editForm.addresses.map((addr, index) => (
+              <Paper key={index} sx={{ p: 2, bgcolor: 'background.default', border: '1px solid #eee' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                  <Typography variant="subtitle2">Dirección {index + 1}</Typography>
+                  <Button size="small" color="error" onClick={() => handleRemoveAddress(index)}>Eliminar</Button>
+                </Box>
+                <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
+                  <TextField 
+                    label="Calle / Dirección" 
+                    value={addr.street} 
+                    onChange={(e) => handleAddressChange(index, 'street', e.target.value)} 
+                    fullWidth 
+                    size="small"
+                  />
+                   <TextField 
+                    label="Información Adicional" 
+                    value={addr.additionalInfo} 
+                    onChange={(e) => handleAddressChange(index, 'additionalInfo', e.target.value)} 
+                    fullWidth 
+                    size="small"
+                  />
+                  <TextField 
+                    label="Ciudad" 
+                    value={addr.city} 
+                    onChange={(e) => handleAddressChange(index, 'city', e.target.value)} 
+                    fullWidth 
+                    size="small"
+                  />
+                   <TextField 
+                    label="Estado / Depto" 
+                    value={addr.state} 
+                    onChange={(e) => handleAddressChange(index, 'state', e.target.value)} 
+                    fullWidth 
+                    size="small"
+                  />
+                   <TextField 
+                    label="País" 
+                    value={addr.country} 
+                    onChange={(e) => handleAddressChange(index, 'country', e.target.value)} 
+                    fullWidth 
+                    size="small"
+                  />
+                   <TextField 
+                    label="Código Postal" 
+                    value={addr.zipCode} 
+                    onChange={(e) => handleAddressChange(index, 'zipCode', e.target.value)} 
+                    fullWidth 
+                    size="small"
+                  />
+                </Box>
+              </Paper>
+            ))}
+            <Button variant="outlined" onClick={handleAddAddress} sx={{ alignSelf: 'start' }}>+ Agregar Dirección</Button>
+
           </Box>
         </DialogContent>
         <DialogActions>
