@@ -50,6 +50,16 @@ service cloud.firestore {
     }
 
     // =========================================================
+    // LEGACY PRODUCTS HIERARCHY (productos/...)
+    // =========================================================
+    // Allow deep read access for the hierarchical store structure
+    // e.g. /productos/googles/FatShark/...
+    match /productos/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // =========================================================
     // ORDERS COLLECTION
     // =========================================================
     match /orders/{orderId} {
