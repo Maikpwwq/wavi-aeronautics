@@ -79,6 +79,24 @@ service cloud.firestore {
     }
     
     // =========================================================
+    // SHOPPING CART
+    // =========================================================
+    match /shoppingCart/{cartId} {
+      // Guests use a random session ID, so we must allow public read/write 
+      // strictly for this collection to support guest checkout.
+      // Ideally, implement Firebase Anonymous Auth to use 'isOwner' safely.
+      allow read, write: if true;
+    }
+
+    // =========================================================
+    // SUBSCRIBERS (Newsletter)
+    // =========================================================
+    match /suscritos/{emailId} {
+      allow create: if true; // Public can subscribe
+      allow read, delete: if isAdmin();
+    }
+
+    // =========================================================
     // DEFAULT CATCH-ALL (Deny by default)
     // =========================================================
     match /{document=**} {

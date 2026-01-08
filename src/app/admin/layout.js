@@ -21,6 +21,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import PeopleIcon from '@mui/icons-material/People'
 import SettingsIcon from '@mui/icons-material/Settings'
 import HomeIcon from '@mui/icons-material/Home'
+import ReportProblemIcon from '@mui/icons-material/ReportProblem'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import AdminGuard from '@/app/components/admin/AdminGuard'
@@ -84,6 +85,7 @@ const StyledAppBar = styled(AppBar, { shouldForwardProp: (prop) => prop !== 'ope
 const NAV_ITEMS = [
   { text: 'Dashboard', icon: <DashboardIcon />, path: '/admin' },
   { text: 'Pedidos', icon: <ShoppingCartIcon />, path: '/admin/orders' },
+  { text: 'Problemas de Pedidos', icon: <ReportProblemIcon />, path: '/admin/orders/issues' },
   { text: 'Usuarios', icon: <PeopleIcon />, path: '/admin/users' },
   { text: 'Configuración', icon: <SettingsIcon />, path: '/admin/settings' },
 ]
