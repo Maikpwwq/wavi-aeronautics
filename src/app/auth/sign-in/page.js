@@ -11,6 +11,9 @@ import FormButton from '@/modules/form/FormButton'
 import FormFeedback from '@/modules/form/FormFeedback'
 import Typography from '@/modules/components/Typography'
 import theme from '@/modules/theme'
+import { Button, Divider } from '@mui/material'
+import GoogleIcon from '@mui/icons-material/Google' 
+import FacebookIcon from '@mui/icons-material/Facebook'
 
 import AuthLayout from '../components/AuthLayout'
 import authService from '@/services/authService'
@@ -30,6 +33,12 @@ const styles = (theme) => ({
   },   
   link: {
     paddingTop: theme.spacing(2)
+  },
+  socialButton: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(1),
+    textTransform: 'none',
+    fontWeight: 'bold',
   }
 })
 
@@ -76,6 +85,17 @@ const SignInForm = () => {
     } else {
         handleError(errorCode, errorMessage)
     }
+  }
+  
+  const handleSocialClick = async (provider) => {
+      const { userID, errorCode, errorMessage } = await authService.signInWithSocial(provider)
+      if (!!userID) {
+          handleSuccess(userID, 'Se ha iniciado una nueva sesión.')
+      } else {
+        if (errorCode) {
+             handleError(errorCode, errorMessage)
+        }
+      }
   }
 
   return (
@@ -155,6 +175,44 @@ const SignInForm = () => {
           </SubForm>
         )}
       </Form>
+      
+      <Divider sx={{ my: 3 }}>o continúa con</Divider>
+
+      <Button
+        variant="outlined"
+        fullWidth
+        startIcon={<GoogleIcon />}
+        onClick={() => handleSocialClick('google')}
+        sx={{
+            ...classes.socialButton,
+            backgroundColor: 'white',
+            color: '#757575',
+            borderColor: '#ddd',
+            '&:hover': {
+                backgroundColor: '#f5f5f5',
+                borderColor: '#ccc'
+            }
+        }}
+      >
+        Continuar con Google
+      </Button>
+
+      <Button
+        variant="contained"
+        fullWidth
+        startIcon={<FacebookIcon />}
+        onClick={() => handleSocialClick('facebook')}
+        sx={{
+            ...classes.socialButton,
+            backgroundColor: '#1877F2',
+            color: 'white',
+            '&:hover': {
+                backgroundColor: '#166fe5'
+            }
+        }}
+      >
+        Continuar con Facebook
+      </Button>
     </>
   )
 }

@@ -1,7 +1,14 @@
 
 import { auth, firestore } from '@/firebase/firebaseClient'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth'
-import { collection, doc, setDoc } from 'firebase/firestore'
+import { 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  sendPasswordResetEmail,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  signInWithPopup
+} from 'firebase/auth'
+import { collection, doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore'
 import { saveCartToFirestore } from './shoppingCartService'
 
 /**
@@ -78,6 +85,64 @@ const authService = {
       await sendPasswordResetEmail(auth, email)
       return { success: true }
     } catch (error) {
+      return this._handleError(error)
+    }
+  },
+
+  /**
+   * Social Login (Google & Facebook)
+   * @param {string} providerName - 'google' or 'facebook'
+   */
+  async signInWithSocial(providerName) {
+    try {
+      let provider
+      if (providerName === 'google') {
+        provider = new GoogleAuthProvider()
+      } else if (providerName === 'facebook') {
+        provider = new FacebookAuthProvider()
+      } else {
+        throw new Error('Provider not supported')
+      }
+
+      const result = await signInWithPopup(auth, provider)
+      const user = result.user
+      
+      // Check if user exists
+      const userDocRef = doc(firestore, 'users', user.uid)
+      const userDoc = await getDoc(userDocRef)
+
+      if (userDoc.exists()) {
+        // User exists, update lastLogin
+        await setDoc(userDocRef, {
+          lastLogin: serverTimestamp()
+        }, { merge: true })
+      } else {
+        // New user
+        const newUser = {
+          userId: user.uid,
+          userMail: user.email,
+          userName: user.displayName || '',
+          userJoined: user.metadata.creationTime,
+          role: 'user', // Default role
+          lastLogin: serverTimestamp()
+        }
+        
+        // Initialize empty cart
+        await saveCartToFirestore(user.uid, [])
+
+        // Save user profile
+        await setDoc(userDocRef, newUser)
+      }
+
+      return { userID: user.uid }
+    } catch (error) {
+      if (error.code === 'auth/account-exists-with-different-credential') {
+        return {
+           userID: null,
+           errorCode: error.code,
+           errorMessage: 'Ya existe una cuenta con el mismo email pero con credenciales diferentes.'
+        }
+      }
       return this._handleError(error)
     }
   }
