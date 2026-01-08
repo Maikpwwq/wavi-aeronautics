@@ -69,8 +69,9 @@ export default function OrderIssues() {
         headerName: 'Cliente', 
         width: 250, 
         renderCell: (params) => {
-             const email = params.row.userEmail || 'N/A'
-             const name = params.row.userName || 'Sin Nombre'
+             // Handle both Flat (Live) and Nested (Test) data structures
+             const email = params.row.userEmail || params.row.user?.email || 'N/A'
+             const name = params.row.userName || params.row.user?.name || 'Sin Nombre'
              return (
                <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                  <Typography variant="body2" sx={{ fontWeight: 'bold', lineHeight: 1.2 }}>{email}</Typography>

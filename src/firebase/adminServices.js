@@ -162,11 +162,15 @@ export const generateTestOrders = async (count = 10) => {
       const randomUser = dummyUsers[Math.floor(Math.random() * dummyUsers.length)]
       const randomStatus = statuses[Math.floor(Math.random() * statuses.length)]
       
+      // Use Flat Schema to match Live Orders and ensure User Portal visibility
       const orderData = {
         total: Math.floor(Math.random() * 500) + 50,
         status: randomStatus,
         createdAt: serverTimestamp(),
-        user: randomUser,
+        userId: 'test-user-id', // Placeholder or random
+        userEmail: randomUser.email,
+        userName: randomUser.name,
+        userPhone: randomUser.phone,
         items: [
           { name: 'Product A', quantity: 1, price: 100 },
           { name: 'Product B', quantity: 2, price: 50 },

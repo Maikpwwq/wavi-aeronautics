@@ -104,18 +104,18 @@ export default function AdminOrders() {
   const columns = [
     { field: 'id', headerName: 'ID Pedido', width: 220 },
     { 
-        field: 'user', 
+        field: 'clientInfo', 
         headerName: 'Cliente', 
-        width: 200, 
-        valueGetter: (params) => {
-             // v6: params is the value. If field is 'user', params is user obj.
-             // But params might be undefined if field missing.
-             // Actually, row is safer. 
-             // In v6/v7 valueGetter: (value, row) => ...
-             // Let's assume standard behavior:
-             if (params && params.email) return params.email
-             return params ? params.name || params.email || 'N/A' : 'N/A' 
-             // If user stores just ID, this might fail, but test data has user object
+        width: 250, 
+        renderCell: (params) => {
+             const email = params.row.userEmail || params.row.user?.email || 'N/A'
+             const name = params.row.userName || params.row.user?.name || 'Cliente'
+             return (
+               <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                 <Typography variant="body2" sx={{ fontWeight: 'bold' }}>{email}</Typography>
+                 <Typography variant="caption" color="text.secondary">{name}</Typography>
+               </Box>
+             )
         }
     },
     { field: 'date', headerName: 'Fecha', width: 130 },
