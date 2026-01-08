@@ -2,34 +2,12 @@ import Box from '@mui/material/Box'
 import { styled } from '@mui/material/styles'
 import Toolbar from '@mui/material/Toolbar'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import LoginIcon from '@mui/icons-material/Login'
-import LogoutIcon from '@mui/icons-material/Logout'
-import PersonIcon from '@mui/icons-material/Person'
-import SecurityIcon from '@mui/icons-material/Security'
-import ReceiptIcon from '@mui/icons-material/Receipt'
-import { signOut } from 'firebase/auth'
-import React, { useState } from 'react'
+import React from 'react'
 import Link from 'next/link'
-import { useSelector } from 'react-redux'
-// let displayName = user.displayName
-// let email = user.email
-// var emailVerified = user.emailVerified
-// var uid = user.uid
-import { auth } from '@/firebase/firebaseClient'
 import AppBar from '../components/AppBar'
 import theme from '../theme'
 import withRoot from '../withRoot'
 import UserDropdown from '@/app/components/UserDropdown'
-// import clsx from 'clsx'
-// import WaviPixelLogo from "public/static/img/WaviPixelLogo.png";
-import Avatar from '@mui/material/Avatar'
-import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import Divider from '@mui/material/Divider'
-import IconButton from '@mui/material/IconButton'
-import Tooltip from '@mui/material/Tooltip'
-import { motion, AnimatePresence } from 'framer-motion'
 import Typography from '@mui/material/Typography'
 
 const WaviPixelLogo =
