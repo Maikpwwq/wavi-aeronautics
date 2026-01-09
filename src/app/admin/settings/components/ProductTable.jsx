@@ -1,6 +1,6 @@
 'use client'
 
-import { Paper, Button, Switch } from '@mui/material'
+import { Paper, Button, Switch, useMediaQuery, useTheme } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 
 /**
@@ -17,9 +17,12 @@ export default function ProductTable({
   onEdit, 
   onToggleStatus 
 }) {
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+
   const columns = [
-    { field: 'productID', headerName: 'ID Producto', width: 140 },
-    { field: 'name', headerName: 'Nombre', width: 250, flex: 1 },
+    { field: 'productID', headerName: 'ID', width: 90 },
+    { field: 'name', headerName: 'Nombre', width: isMobile ? 180 : 250, flex: isMobile ? 0 : 1 },
     { field: 'marca', headerName: 'Marca', width: 100 },
     { field: 'categoria', headerName: 'Categoría', width: 110 },
     { 
@@ -32,7 +35,7 @@ export default function ProductTable({
     { 
       field: 'active', 
       headerName: 'Activo', 
-      width: 80,
+      width: 70,
       renderCell: (params) => (
         <Switch
           checked={params.value}
@@ -44,13 +47,15 @@ export default function ProductTable({
     },
     {
       field: 'actions',
-      headerName: 'Acciones',
-      width: 100,
+      headerName: 'Editar',
+      width: 80,
+      sortable: false,
       renderCell: (params) => (
         <Button 
           variant="outlined" 
           size="small" 
           onClick={() => onEdit(params.row)}
+          sx={{ minWidth: '60px', padding: '2px 5px', fontSize: '0.75rem' }}
         >
           Editar
         </Button>
@@ -58,8 +63,17 @@ export default function ProductTable({
     }
   ]
 
+  // Columns to hide on mobile
+  const columnVisibilityModel = {
+    productID: !isMobile,
+    marca: !isMobile,
+    categoria: !isMobile,
+    stock: !isMobile,
+    // Always show: name, price, active, actions
+  }
+
   return (
-    <Paper sx={{ height: 550, width: '100%' }}>
+    <Paper sx={{ height: 550, width: '100%', overflow: 'hidden' }}>
       <DataGrid
         rows={products}
         columns={columns}
@@ -68,8 +82,18 @@ export default function ProductTable({
         initialState={{
           pagination: { paginationModel: { pageSize: 25 } },
         }}
+        columnVisibilityModel={columnVisibilityModel}
         pageSizeOptions={[10, 25, 50]}
         density="compact"
+        sx={{
+          '& .MuiDataGrid-cell': {
+            fontSize: isMobile ? '0.8rem' : '0.875rem',
+            padding: isMobile ? '0 5px' : undefined
+          },
+          '& .MuiDataGrid-columnHeader': {
+             padding: isMobile ? '0 5px' : undefined
+          }
+        }}
       />
     </Paper>
   )
