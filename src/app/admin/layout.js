@@ -33,23 +33,7 @@ const WaviPixelLogo =
 
 const drawerWidth = 240
 
-// Custom hook to detect if a specific query matches
-const useResponsiveDrawer = () => {
-  const theme = useTheme()
-  const isDesktop = useMediaQuery(theme.breakpoints.up('md'))
-  const [open, setOpen] = useState(true)
-
-  // Auto-set initial state based on screen size, but only on mount to match client/server
-  useEffect(() => {
-    setOpen(isDesktop)
-  }, [isDesktop])
-
-  const toggleDrawer = () => {
-    setOpen(!open)
-  }
-
-  return { open, setOpen, toggleDrawer, isDesktop }
-}
+// Custom hook section removed - inlining logic
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -109,7 +93,19 @@ const NAV_ITEMS = [
 ]
 
 export default function AdminLayout({ children }) {
-  const { open, setOpen, toggleDrawer, isDesktop } = useResponsiveDrawer()
+  const theme = useTheme()
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'))
+  const [open, setOpen] = useState(true)
+
+  // Auto-set initial state based on screen size
+  useEffect(() => {
+    setOpen(isDesktop)
+  }, [isDesktop])
+
+  const toggleDrawer = () => {
+    setOpen(prev => !prev)
+  }
+
   const pathname = usePathname()
 
   // Drawer Content (Same for both Mobile and Desktop)
@@ -233,7 +229,6 @@ export default function AdminLayout({ children }) {
             anchor="left"
             open={open}
             onClose={toggleDrawer}
-            ModalProps={{ keepMounted: true }} // Better open performance on mobile
             sx={{
               width: drawerWidth,
               ...drawerStyles
