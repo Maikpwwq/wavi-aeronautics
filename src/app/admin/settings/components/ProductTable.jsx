@@ -46,6 +46,18 @@ export default function ProductTable({
       )
     },
     {
+      field: 'priceUSD',
+      headerName: 'Dbg:USD',
+      width: 80,
+      valueGetter: (params) => params.row.priceUSD || 'N/A'
+    },
+    {
+      field: 'precio_raw',
+      headerName: 'Dbg:Precio',
+      width: 100,
+      valueGetter: (params) => params.row.precio || 'N/A'
+    },
+    {
       field: 'actions',
       headerName: 'Editar',
       width: 80,
@@ -69,6 +81,8 @@ export default function ProductTable({
     marca: !isMobile,
     categoria: !isMobile,
     stock: !isMobile,
+    priceUSD: true, // Force show for debug
+    precio_raw: true // Force show for debug
     // Always show: name, price, active, actions
   }
 
