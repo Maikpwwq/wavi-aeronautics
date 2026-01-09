@@ -79,6 +79,8 @@ export const parseProductPrices = (products) => {
   
   products.forEach(product => {
     if (product.precio && product.precio !== 'Agotado') {
+      // Preserve original USD price for Admin reference
+      product.priceUSD = product.precio;
       product.precio = calculateCopPrice(product.precio);
     }
   });

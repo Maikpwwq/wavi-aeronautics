@@ -66,7 +66,7 @@ export const normalizeProduct = (product, idx, categoria) => ({
   ...product,
   id: product.productID || product.id || `product-${idx}`,
   name: product.titulo || product.title || product.productName || product.name || 'Sin Nombre',
-  price: parseFloat(product.precio) || product.productPrice || product.price || 0,
+  price: parseFloat(product.priceUSD) || parseFloat(product.precio) || product.productPrice || product.price || 0,
   stock: product.productStock || product.stock || 0,
   marca: product.marca || product.productBrand || '',
   description: product.descripcion || product.description || '',
