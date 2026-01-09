@@ -69,6 +69,7 @@ export const normalizeProduct = (product, idx, categoria) => ({
   price: parseFloat(product.precio) || product.productPrice || product.price || 0,
   stock: product.productStock || product.stock || 0,
   marca: product.marca || product.productBrand || '',
+  description: product.descripcion || product.description || '',
   active: product.active !== undefined ? product.active : true,
   categoria,
 })

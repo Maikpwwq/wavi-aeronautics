@@ -18,16 +18,17 @@ export default function ProductTable({
   onToggleStatus 
 }) {
   const columns = [
-    { field: 'productID', headerName: 'ID Producto', width: 120 },
-    { field: 'name', headerName: 'Nombre', width: 220, flex: 1 },
-    { field: 'marca', headerName: 'Marca', width: 120 },
+    { field: 'productID', headerName: 'ID Producto', width: 140 },
+    { field: 'name', headerName: 'Nombre', width: 250, flex: 1 },
+    { field: 'marca', headerName: 'Marca', width: 100 },
+    { field: 'categoria', headerName: 'Categoría', width: 110 },
     { 
       field: 'price', 
       headerName: 'Precio', 
-      width: 100,
-      valueFormatter: (params) => params.value ? `$${params.value}` : ''
+      width: 90,
+      valueFormatter: (params) => params.value ? `$${params.value}` : '$0'
     },
-    { field: 'stock', headerName: 'Stock', width: 80 },
+    { field: 'stock', headerName: 'Stock', width: 70 },
     { 
       field: 'active', 
       headerName: 'Activo', 
