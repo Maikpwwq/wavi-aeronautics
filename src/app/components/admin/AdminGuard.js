@@ -1,52 +1,68 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { useRouter } from 'next/navigation'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
+import { auth, firestore } from '@/firebase/firebaseClient'
+import { onAuthStateChanged } from 'firebase/auth'
+import { doc, getDoc } from 'firebase/firestore'
 
 /**
  * AdminGuard - Higher-Order Component for admin-only page protection
  * 
- * Checks if the current user has admin role before rendering children.
- * Redirects unauthorized users to the login page.
+ * Waits for Firebase auth state to be restored on page reload,
+ * then verifies admin role from Firestore before rendering children.
  */
 const AdminGuard = ({ children }) => {
   const router = useRouter()
-  const user = useSelector((state) => state.user)
   const [isChecking, setIsChecking] = useState(true)
   const [isAuthorized, setIsAuthorized] = useState(false)
 
   useEffect(() => {
-    // Give Redux a moment to hydrate from sessionStorage
-    const checkAuth = async () => {
-      // Small delay to allow sessionStorage hydration
-      await new Promise(resolve => setTimeout(resolve, 100))
-      
-      if (!user) {
+    // Listen for Firebase auth state changes
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (!firebaseUser) {
         // Not logged in
-        console.log('[AdminGuard] No user found, redirecting to login')
+        console.log('[AdminGuard] No Firebase user, redirecting to login')
         router.replace('/auth/sign-in?redirect=/admin')
         return
       }
 
-      if (user.rol !== 'admin') {
-        // Logged in but not admin
-        console.log('[AdminGuard] User is not admin, redirecting to home')
+      // User is logged in, check if they have admin role in Firestore
+      try {
+        const userDocRef = doc(firestore, 'users', firebaseUser.uid)
+        const userDoc = await getDoc(userDocRef)
+        
+        if (!userDoc.exists()) {
+          console.log('[AdminGuard] User document not found, redirecting to home')
+          router.replace('/')
+          return
+        }
+
+        const userData = userDoc.data()
+        const isAdmin = userData.role === 'admin' || userData.rol === 'admin'
+
+        if (!isAdmin) {
+          console.log('[AdminGuard] User is not admin, redirecting to home')
+          router.replace('/')
+          return
+        }
+
+        // User is admin
+        console.log('[AdminGuard] User authorized as admin')
+        setIsAuthorized(true)
+        setIsChecking(false)
+      } catch (error) {
+        console.error('[AdminGuard] Error checking admin status:', error)
         router.replace('/')
-        return
       }
+    })
 
-      // User is admin
-      console.log('[AdminGuard] User authorized as admin')
-      setIsAuthorized(true)
-      setIsChecking(false)
-    }
-
-    checkAuth()
-  }, [user, router])
+    // Cleanup subscription on unmount
+    return () => unsubscribe()
+  }, [router])
 
   // Show loading spinner while checking auth
   if (isChecking) {
@@ -80,3 +96,4 @@ const AdminGuard = ({ children }) => {
 }
 
 export default AdminGuard
+
