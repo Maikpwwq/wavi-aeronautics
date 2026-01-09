@@ -29,7 +29,10 @@ export default function ProductTable({
       field: 'price', 
       headerName: 'Precio', 
       width: 90,
-      valueFormatter: (params) => params.value ? `$${params.value}` : '$0'
+      valueFormatter: (value) => {
+        if (value === 0) return '$0'
+        return value ? `$${value}` : '$0'
+      }
     },
     { field: 'stock', headerName: 'Stock', width: 70 },
     { 
@@ -44,18 +47,6 @@ export default function ProductTable({
           size="small"
         />
       )
-    },
-    {
-      field: 'priceUSD',
-      headerName: 'Dbg:USD',
-      width: 80,
-      valueGetter: (params) => params.row.priceUSD || 'N/A'
-    },
-    {
-      field: 'precio_raw',
-      headerName: 'Dbg:Precio',
-      width: 100,
-      valueGetter: (params) => params.row.precio || 'N/A'
     },
     {
       field: 'actions',
@@ -81,8 +72,6 @@ export default function ProductTable({
     marca: !isMobile,
     categoria: !isMobile,
     stock: !isMobile,
-    priceUSD: true, // Force show for debug
-    precio_raw: true // Force show for debug
     // Always show: name, price, active, actions
   }
 
