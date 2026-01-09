@@ -28,27 +28,41 @@ import {
 import { DataGrid } from '@mui/x-data-grid'
 import { fetchAllProducts } from '@/store/states/shop'
 import { updateProductInHierarchy } from '@/firebase/adminServices'
+import { 
+  fetchDronesProducts, 
+  fetchGooglesProducts, 
+  fetchRadioControlProducts,
+  fetchAccesoriosProducts,
+  fetchTransmisorsProducts,
+  fetchDigitalVTXProducts 
+} from '@/store/states/shop'
+
+// Category configuration - maps to Redux state keys and fetch actions
+const CATEGORIES = [
+  { key: 'dronesKit', label: 'Kit Drones', fetchAction: fetchDronesProducts },
+  { key: 'dronesRC', label: 'Drones RC', fetchAction: fetchDronesProducts },
+  { key: 'dronesHD', label: 'FPV HD (GEPRC)', fetchAction: fetchDronesProducts },
+  { key: 'googles', label: 'Googles', fetchAction: fetchGooglesProducts },
+  { key: 'radioControl', label: 'Radio Control', fetchAction: fetchRadioControlProducts },
+  { key: 'baterias', label: 'Baterías/Accesorios', fetchAction: fetchAccesoriosProducts },
+  { key: 'transmisors', label: 'Transmisores', fetchAction: fetchTransmisorsProducts },
+  { key: 'receptors', label: 'Receptores', fetchAction: fetchTransmisorsProducts },
+  { key: 'digitalVTX', label: 'Digital VTX', fetchAction: fetchDigitalVTXProducts },
+]
 
 function ProductPanel() {
   const dispatch = useDispatch()
   const shop = useSelector((state) => state.shop)
   const loading = shop.loading
   
-  // Combine all product categories into a single array for the admin table
+  // Selected category state - default to dronesKit (usually pre-loaded)
+  const [selectedCategory, setSelectedCategory] = useState('dronesKit')
+  
+  // Get products for selected category from Redux store
   const products = useMemo(() => {
-    const allProducts = [
-      ...(shop.dronesKit || []).map(p => ({ ...p, categoria: 'dronesKits' })),
-      ...(shop.dronesHD || []).map(p => ({ ...p, categoria: 'FPV HD' })),
-      ...(shop.dronesRC || []).map(p => ({ ...p, categoria: 'dronesRC' })),
-      ...(shop.baterias || []).map(p => ({ ...p, categoria: 'baterias' })),
-      ...(shop.googles || []).map(p => ({ ...p, categoria: 'Googles' })),
-      ...(shop.radioControl || []).map(p => ({ ...p, categoria: 'radioControl' })),
-      ...(shop.receptors || []).map(p => ({ ...p, categoria: 'receptors' })),
-      ...(shop.transmisors || []).map(p => ({ ...p, categoria: 'transmisors' })),
-      ...(shop.digitalVTX || []).map(p => ({ ...p, categoria: 'digitalVTX' })),
-    ]
-    // Add unique ID for DataGrid - Map various field names to consistent names
-    return allProducts.map((p, idx) => ({
+    const categoryData = shop[selectedCategory] || []
+    // Map field names to consistent names for DataGrid
+    return categoryData.map((p, idx) => ({
       ...p,
       id: p.productID || p.id || `product-${idx}`,
       name: p.title || p.productName || p.name || 'Sin Nombre',
@@ -56,8 +70,29 @@ function ProductPanel() {
       stock: p.productStock || p.stock || 0,
       marca: p.marca || p.productBrand || '',
       active: p.active !== undefined ? p.active : true,
+      categoria: selectedCategory,
     }))
-  }, [shop])
+  }, [shop, selectedCategory])
+  
+  // Fetch category data when selection changes
+  const handleCategoryChange = (newCategory) => {
+    setSelectedCategory(newCategory)
+    
+    // Check if data already exists in Redux
+    if (!shop[newCategory] || shop[newCategory].length === 0) {
+      const categoryConfig = CATEGORIES.find(c => c.key === newCategory)
+      if (categoryConfig?.fetchAction) {
+        dispatch(categoryConfig.fetchAction())
+      }
+    }
+  }
+  
+  // Load default category on mount if not already loaded
+  useEffect(() => {
+    if (!shop.dronesKit || shop.dronesKit.length === 0) {
+      dispatch(fetchDronesProducts())
+    }
+  }, [dispatch, shop.dronesKit])
   
   // Dialog State
   const [openDialog, setOpenDialog] = useState(false)
@@ -69,7 +104,7 @@ function ProductPanel() {
     price: '',
     stock: '',
     description: '',
-    imagenes: [''], // Array of URLs
+    imagenes: [''],
     active: true,
     discount: 0,
     categoria: '',
@@ -80,21 +115,7 @@ function ProductPanel() {
   }
   
   const [formData, setFormData] = useState(initialFormState)
-
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' })
-
-  // Fetch all products via Redux if not loaded
-  useEffect(() => {
-    const hasProducts = 
-      shop.dronesKit?.length > 0 || 
-      shop.googles?.length > 0 || 
-      shop.radioControl?.length > 0 ||
-      shop.baterias?.length > 0
-    
-    if (!hasProducts && !loading) {
-      dispatch(fetchAllProducts())
-    }
-  }, [dispatch, shop, loading])
 
   const handleOpenDialog = (product = null) => {
     if (product) {
@@ -242,9 +263,26 @@ function ProductPanel() {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, gap: 2 }}>
         <Typography variant="h6">Inventario</Typography>
-        <Button variant="contained" onClick={() => handleOpenDialog()}>Nuevo Producto</Button>
+        
+        {/* Category Selector */}
+        <FormControl sx={{ minWidth: 200 }}>
+          <InputLabel>Categoría</InputLabel>
+          <Select
+            value={selectedCategory}
+            label="Categoría"
+            onChange={(e) => handleCategoryChange(e.target.value)}
+          >
+            {CATEGORIES.map((cat) => (
+              <MenuItem key={cat.key} value={cat.key}>{cat.label}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        
+        <Typography variant="body2" color="text.secondary">
+          {products.length} productos
+        </Typography>
       </Box>
       
       <Paper sx={{ height: 600, width: '100%' }}>
