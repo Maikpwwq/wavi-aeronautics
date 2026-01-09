@@ -47,14 +47,14 @@ function ProductPanel() {
       ...(shop.transmisors || []).map(p => ({ ...p, categoria: 'transmisors' })),
       ...(shop.digitalVTX || []).map(p => ({ ...p, categoria: 'digitalVTX' })),
     ]
-    // Add unique ID for DataGrid (use productID or generate one)
+    // Add unique ID for DataGrid - Map various field names to consistent names
     return allProducts.map((p, idx) => ({
       ...p,
       id: p.productID || p.id || `product-${idx}`,
-      name: p.productName || p.name || 'Sin Nombre',
-      price: p.productPrice || p.price || 0,
+      name: p.title || p.productName || p.name || 'Sin Nombre',
+      price: p.precio || p.productPrice || p.price || 0,
       stock: p.productStock || p.stock || 0,
-      marca: p.productBrand || p.marca || '',
+      marca: p.marca || p.productBrand || '',
       active: p.active !== undefined ? p.active : true,
     }))
   }, [shop])
