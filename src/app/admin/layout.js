@@ -64,6 +64,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
 
 const StyledAppBar = styled(AppBar, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
+    zIndex: theme.zIndex.drawer + 1, // Ensure AppBar is above drawer and content
     backgroundColor: 'white',
     color: '#1a2744',
     boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
@@ -111,6 +112,7 @@ export default function AdminLayout({ children }) {
   // Drawer Content (Same for both Mobile and Desktop)
   const drawerContent = (
     <>
+      <Toolbar /> {/* Spacer content to sit below the clipped AppBar */}
       <Box sx={{ p: 3, textAlign: 'center' }}>
         <Link href="/" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
           <Box
