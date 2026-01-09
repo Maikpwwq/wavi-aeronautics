@@ -34,12 +34,10 @@ export const getAdminStats = async () => {
     const totalOrders = ordersCountSnapshot.data().totalOrders || 0
 
     // 3. Count Pending Orders (Issues + In Process)
-    // We include 'pending', 'verification_required' (Issues) and 'processing' (Paid but not shipped)
-    const pendingOrdersQuery = query(ordersRef, where('status', 'in', ['pending', 'verification_required', 'processing']))
-    const pendingSnapshot = await getAggregateFromServer(pendingOrdersQuery, {
-      pendingCount: count()
-    })
-    const pendingOrders = pendingSnapshot.data().pendingCount || 0
+    // Using client-side count to avoid potential composite index issues with 'in' queries
+    const pendingOrdersQuery = query(ordersRef, where('status', 'in', ['pending', 'verification_required', 'processing', 'failed']))
+    const pendingSnapshot = await getDocs(pendingOrdersQuery)
+    const pendingOrders = pendingSnapshot.size
 
     // 4. Count Total Users
     const usersCountSnapshot = await getAggregateFromServer(usersRef, {
