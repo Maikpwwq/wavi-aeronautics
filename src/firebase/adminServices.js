@@ -52,7 +52,104 @@ export const updateUser = async (uid, data) => {
 
 // ==================== PRODUCT MANAGEMENT ====================
 
-// Fetch all products (including inactive ones)
+// Category to Firestore path mapping for hierarchical 'productos' collection
+const CATEGORY_PATHS = {
+  'dronesKits': 'productos/dron/kit_fpv_dron',
+  'dronesRC': 'productos/dron/RC',
+  'FPV HD': 'productos/dron/geprc',
+  'Googles': 'productos/Googles',    // Has sub-categories
+  'radioControl': 'productos/radio_control', // Has sub-categories
+  'digitalVTX': 'productos/digital_vtx', // Has sub-categories
+  'baterias': 'productos/radio_control', // Part of radio_control hierarchy
+  'transmisors': 'productos/radio_control',
+  'receptors': 'productos/radio_control',
+}
+
+// Update a product in the hierarchical 'productos' structure
+// Searches for the product by productID and updates it
+export const updateProductInHierarchy = async (productID, data, categoryHint = null) => {
+  try {
+    // Build list of collections to search based on category hint
+    let collectionsToSearch = []
+    
+    if (categoryHint && CATEGORY_PATHS[categoryHint]) {
+      // Use the category hint to narrow search
+      const basePath = CATEGORY_PATHS[categoryHint]
+      collectionsToSearch = await getCollectionsForPath(basePath)
+    } else {
+      // Search all major collections
+      collectionsToSearch = [
+        'productos/dron/kit_fpv_dron',
+        'productos/dron/RC',
+        'productos/dron/geprc',
+        'productos/Googles/DJI',
+        'productos/Googles/Betafpv',
+        'productos/Googles/Emaxusa',
+        'productos/Googles/FatShark',
+        'productos/Googles/Walksnail',
+        'productos/Googles/Iflight-rc',
+        'productos/digital_vtx/DJI',
+        'productos/digital_vtx/CADDX',
+      ]
+    }
+    
+    // Search for the product in each collection
+    for (const collPath of collectionsToSearch) {
+      const collRef = collection(firestore, collPath)
+      const q = query(collRef, where('productID', '==', productID))
+      const snapshot = await getDocs(q)
+      
+      if (!snapshot.empty) {
+        // Found the product, update it
+        const docToUpdate = snapshot.docs[0]
+        await updateDoc(docToUpdate.ref, {
+          ...data,
+          updatedAt: serverTimestamp()
+        })
+        
+        // Also clear sessionStorage cache for this category so next load gets fresh data
+        console.log(`[AdminServices] Updated product ${productID} in ${collPath}`)
+        return { success: true, path: collPath }
+      }
+    }
+    
+    throw new Error(`Product with ID ${productID} not found in any collection`)
+  } catch (error) {
+    console.error('Error updating product in hierarchy:', error)
+    throw error
+  }
+}
+
+// Helper to get sub-collections for a given path (simplified)
+async function getCollectionsForPath(basePath) {
+  // For paths like 'productos/Googles', return known sub-collections
+  if (basePath.includes('Googles')) {
+    return [
+      'productos/Googles/DJI',
+      'productos/Googles/Betafpv',
+      'productos/Googles/Emaxusa',
+      'productos/Googles/FatShark',
+      'productos/Googles/Walksnail',
+      'productos/Googles/Iflight-rc',
+    ]
+  }
+  if (basePath.includes('digital_vtx')) {
+    return ['productos/digital_vtx/DJI', 'productos/digital_vtx/CADDX']
+  }
+  if (basePath.includes('radio_control')) {
+    // This has many sub-paths, return main ones for baterias/controls
+    return [
+      'productos/radio_control/betafpv/baterias/2PCS-2s-300mAh',
+      'productos/radio_control/betafpv/control-remoto/lite-radio2',
+      'productos/radio_control/radio-master/control-remoto/tx16s',
+      'productos/radio_control/iflight-rc/control-remoto/iF8-E',
+    ]
+  }
+  // Default: return the base path as a collection
+  return [basePath]
+}
+
+// Fetch all products (from flat 'products' collection - legacy)
 export const getAllProducts = async () => {
   try {
     const snapshot = await getDocs(collection(firestore, 'products'))
@@ -63,13 +160,13 @@ export const getAllProducts = async () => {
   }
 }
 
-// Create a new product
+// Create a new product (flat collection - for new products)
 export const createProduct = async (data) => {
   try {
     const docRef = await addDoc(collection(firestore, 'products'), {
       ...data,
       createdAt: serverTimestamp(),
-      active: true // Default to active
+      active: true
     })
     return { id: docRef.id, ...data }
   } catch (error) {
@@ -78,7 +175,7 @@ export const createProduct = async (data) => {
   }
 }
 
-// Update product details
+// Update product details (flat collection)
 export const updateProduct = async (id, data) => {
   try {
     const productRef = doc(firestore, 'products', id)

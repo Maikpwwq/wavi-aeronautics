@@ -27,6 +27,7 @@ import {
 } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import { fetchAllProducts } from '@/store/states/shop'
+import { updateProductInHierarchy } from '@/firebase/adminServices'
 
 function ProductPanel() {
   const dispatch = useDispatch()
@@ -124,35 +125,44 @@ function ProductPanel() {
       // Filter out empty image URLs
       const validImages = formData.imagenes.filter(url => url.trim() !== '')
       
+      // Build payload with field names matching Firestore schema
       const payload = {
-        name: formData.name,
-        price: parseFloat(formData.price) || 0,
-        stock: parseInt(formData.stock) || 0,
-        description: formData.description,
-        imagenes: validImages,
-        image: validImages.length > 0 ? validImages[0] : '', // Backward compatibility for main image
+        productName: formData.name,
+        productPrice: parseFloat(formData.price) || 0,
+        productStock: parseInt(formData.stock) || 0,
+        productDescription: formData.description,
+        productImages: validImages,
+        productBrand: formData.marca,
         active: formData.active,
         discount: parseFloat(formData.discount) || 0,
-        categoria: formData.categoria,
         especificaciones: formData.especificaciones,
         incluye: formData.incluye,
-        marca: formData.marca,
-        productID: formData.productID
       }
 
-      if (currentProduct) {
-        await updateProduct(currentProduct.id, payload)
-        setSnackbar({ open: true, message: 'Producto actualizado', severity: 'success' })
+      if (currentProduct && currentProduct.productID) {
+        // Update existing product in hierarchical structure
+        await updateProductInHierarchy(
+          currentProduct.productID, 
+          payload, 
+          currentProduct.categoria
+        )
+        setSnackbar({ open: true, message: 'Producto actualizado correctamente', severity: 'success' })
+        
+        // Clear sessionStorage to force refresh on next load
+        if (typeof window !== 'undefined') {
+          sessionStorage.clear()
+        }
+        
+        // Refresh products from Redux
+        dispatch(fetchAllProducts())
       } else {
-        await createProduct(payload)
-        setSnackbar({ open: true, message: 'Producto creado', severity: 'success' })
+        setSnackbar({ open: true, message: 'Solo se pueden editar productos existentes', severity: 'warning' })
       }
       
       setOpenDialog(false)
-      fetchProducts()
     } catch (error) {
       console.error(error)
-      setSnackbar({ open: true, message: 'Error al guardar producto', severity: 'error' })
+      setSnackbar({ open: true, message: `Error: ${error.message}`, severity: 'error' })
     }
   }
 
