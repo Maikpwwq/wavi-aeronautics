@@ -112,7 +112,7 @@ export default function AdminLayout({ children }) {
   // Drawer Content (Same for both Mobile and Desktop)
   const drawerContent = (
     <>
-      <Toolbar /> {/* Spacer content to sit below the clipped AppBar */}
+      <Toolbar sx={{ display: { xs: 'block', md: 'none' } }} /> {/* Spacer visible only on mobile */}
       <Box sx={{ p: 3, textAlign: 'center' }}>
         <Link href="/" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
           <Box
