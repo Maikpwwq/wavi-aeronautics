@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { 
   Box, 
   Typography, 
@@ -21,14 +22,41 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Chip
+  Chip,
+  CircularProgress
 } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
-import { getAllProducts, createProduct, updateProduct, toggleProductStatus } from '@/firebase/adminServices'
+import { fetchAllProducts } from '@/store/states/shop'
 
 function ProductPanel() {
-  const [products, setProducts] = useState([])
-  const [loading, setLoading] = useState(true)
+  const dispatch = useDispatch()
+  const shop = useSelector((state) => state.shop)
+  const loading = shop.loading
+  
+  // Combine all product categories into a single array for the admin table
+  const products = useMemo(() => {
+    const allProducts = [
+      ...(shop.dronesKit || []).map(p => ({ ...p, categoria: 'dronesKits' })),
+      ...(shop.dronesHD || []).map(p => ({ ...p, categoria: 'FPV HD' })),
+      ...(shop.dronesRC || []).map(p => ({ ...p, categoria: 'dronesRC' })),
+      ...(shop.baterias || []).map(p => ({ ...p, categoria: 'baterias' })),
+      ...(shop.googles || []).map(p => ({ ...p, categoria: 'Googles' })),
+      ...(shop.radioControl || []).map(p => ({ ...p, categoria: 'radioControl' })),
+      ...(shop.receptors || []).map(p => ({ ...p, categoria: 'receptors' })),
+      ...(shop.transmisors || []).map(p => ({ ...p, categoria: 'transmisors' })),
+      ...(shop.digitalVTX || []).map(p => ({ ...p, categoria: 'digitalVTX' })),
+    ]
+    // Add unique ID for DataGrid (use productID or generate one)
+    return allProducts.map((p, idx) => ({
+      ...p,
+      id: p.productID || p.id || `product-${idx}`,
+      name: p.productName || p.name || 'Sin Nombre',
+      price: p.productPrice || p.price || 0,
+      stock: p.productStock || p.stock || 0,
+      marca: p.productBrand || p.marca || '',
+      active: p.active !== undefined ? p.active : true,
+    }))
+  }, [shop])
   
   // Dialog State
   const [openDialog, setOpenDialog] = useState(false)
@@ -54,22 +82,18 @@ function ProductPanel() {
 
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' })
 
-  const fetchProducts = async () => {
-    setLoading(true)
-    try {
-      const data = await getAllProducts()
-      setProducts(data)
-    } catch (error) {
-      console.error(error)
-      setSnackbar({ open: true, message: 'Error al cargar productos', severity: 'error' })
-    } finally {
-      setLoading(false)
-    }
-  }
-
+  // Fetch all products via Redux if not loaded
   useEffect(() => {
-    fetchProducts()
-  }, [])
+    const hasProducts = 
+      shop.dronesKit?.length > 0 || 
+      shop.googles?.length > 0 || 
+      shop.radioControl?.length > 0 ||
+      shop.baterias?.length > 0
+    
+    if (!hasProducts && !loading) {
+      dispatch(fetchAllProducts())
+    }
+  }, [dispatch, shop, loading])
 
   const handleOpenDialog = (product = null) => {
     if (product) {
