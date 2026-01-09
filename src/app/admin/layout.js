@@ -131,7 +131,7 @@ export default function AdminLayout({ children }) {
                 alt="Wavi Aeronautics"
                 sx={{ height: 48, width: 48, marginRight: 2, borderRadius: '50%' }}
               />
-              <Typography variant="h6" sx={classes.link}>
+              <Typography variant="h6" sx={{ color: 'white', fontWeight: 'bold' }}>
                 Wavi Aeronautics
               </Typography>
             </Link>
