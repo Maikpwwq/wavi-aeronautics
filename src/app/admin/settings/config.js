@@ -56,6 +56,7 @@ export const INITIAL_PRODUCT_FORM = {
 
 /**
  * Normalize product data from various Firestore schemas to consistent format
+ * Handles Spanish field names from Firestore (titulo, precio, marca, etc.)
  * @param {Object} product - Raw product from Firestore
  * @param {number} idx - Index for fallback ID
  * @param {string} categoria - Category key
@@ -64,8 +65,8 @@ export const INITIAL_PRODUCT_FORM = {
 export const normalizeProduct = (product, idx, categoria) => ({
   ...product,
   id: product.productID || product.id || `product-${idx}`,
-  name: product.title || product.productName || product.name || 'Sin Nombre',
-  price: product.precio || product.productPrice || product.price || 0,
+  name: product.titulo || product.title || product.productName || product.name || 'Sin Nombre',
+  price: parseFloat(product.precio) || product.productPrice || product.price || 0,
   stock: product.productStock || product.stock || 0,
   marca: product.marca || product.productBrand || '',
   active: product.active !== undefined ? product.active : true,
