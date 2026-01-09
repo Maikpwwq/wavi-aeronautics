@@ -1,7 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
-import { styled } from '@mui/material/styles'
+import React, { useState, useEffect } from 'react'
+import { styled, useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import Box from '@mui/material/Box'
 import Drawer from '@mui/material/Drawer'
 import AppBar from '@mui/material/AppBar'
@@ -32,17 +33,23 @@ const WaviPixelLogo =
 
 const drawerWidth = 240
 
-const Sidebar = styled(Drawer)(({ theme }) => ({
-  width: drawerWidth,
-  flexShrink: 0,
-  '& .MuiDrawer-paper': {
-    width: drawerWidth,
-    boxSizing: 'border-box',
-    backgroundColor: '#1a2744',
-    color: 'white',
-    borderRight: '1px solid rgba(255, 255, 255, 0.1)',
-  },
-}))
+// Custom hook to detect if a specific query matches
+const useResponsiveDrawer = () => {
+  const theme = useTheme()
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'))
+  const [open, setOpen] = useState(true)
+
+  // Auto-set initial state based on screen size, but only on mount to match client/server
+  useEffect(() => {
+    setOpen(isDesktop)
+  }, [isDesktop])
+
+  const toggleDrawer = () => {
+    setOpen(!open)
+  }
+
+  return { open, setOpen, toggleDrawer, isDesktop }
+}
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -52,16 +59,22 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    marginLeft: `-${drawerWidth}px`,
-    ...(open && {
-      transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      marginLeft: 0,
-    }),
+    marginLeft: 0, // Default for mobile (no margin shift needed usually for temporary)
+    [theme.breakpoints.up('md')]: {
+        marginLeft: `-${drawerWidth}px`, // Desktop: starts shifted left (hidden)
+        ...(open && {
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginLeft: 0, // Desktop: Shifted back to 0 when open (push content)
+        }),
+    },
     minHeight: '100vh',
     backgroundColor: '#f5f7fa',
+    width: '100%', // Ensure full width
+    maxWidth: '100vw',
+    overflowX: 'hidden'
   }),
 )
 
@@ -74,14 +87,16 @@ const StyledAppBar = styled(AppBar, { shouldForwardProp: (prop) => prop !== 'ope
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    ...(open && {
-      width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: `${drawerWidth}px`,
-      transition: theme.transitions.create(['margin', 'width'], {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    }),
+    [theme.breakpoints.up('md')]: {
+        ...(open && {
+        width: `calc(100% - ${drawerWidth}px)`,
+        marginLeft: `${drawerWidth}px`,
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+        }),
+    }
   }),
 )
 
@@ -94,11 +109,87 @@ const NAV_ITEMS = [
 ]
 
 export default function AdminLayout({ children }) {
-  const [open, setOpen] = useState(true)
+  const { open, setOpen, toggleDrawer, isDesktop } = useResponsiveDrawer()
   const pathname = usePathname()
 
-  const handleDrawerToggle = () => {
-    setOpen(!open)
+  // Drawer Content (Same for both Mobile and Desktop)
+  const drawerContent = (
+    <>
+      <Box sx={{ p: 3, textAlign: 'center' }}>
+        <Link href="/" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+          <Box
+            component="img"
+            src={WaviPixelLogo}
+            alt="Wavi Aeronautics"
+            sx={{ height: 48, width: 48, marginRight: 2, borderRadius: '50%' }}
+          />
+          <Typography variant="h6" sx={{ color: 'white', fontWeight: 'bold' }}>
+            Wavi Aeronautics
+          </Typography>
+        </Link>
+      </Box>
+      <Divider sx={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
+      <List sx={{ mt: 2 }}>
+        {NAV_ITEMS.map((item) => (
+          <ListItem key={item.text} disablePadding>
+            <ListItemButton 
+              component={Link} 
+              href={item.path}
+              selected={pathname === item.path}
+              onClick={() => !isDesktop && setOpen(false)} // Close on mobile navigation
+              sx={{
+                mx: 1,
+                borderRadius: 2,
+                mb: 1,
+                '&.Mui-selected': {
+                    backgroundColor: 'rgba(0, 188, 212, 0.2)',
+                    color: '#00bcd4',
+                    '& .MuiListItemIcon-root': { color: '#00bcd4' }
+                },
+                '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                }
+              }}
+            >
+              <ListItemIcon sx={{ color: 'rgba(255,255,255,0.7)', minWidth: 40 }}>
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      
+      <Box sx={{ mt: 'auto', p: 2 }}>
+          <Divider sx={{ backgroundColor: 'rgba(255,255,255,0.1)', mb: 2 }} />
+          <ListItem disablePadding>
+            <ListItemButton 
+              component={Link} 
+              href="/"
+              sx={{
+                borderRadius: 2,
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
+              }}
+            >
+              <ListItemIcon sx={{ color: 'rgba(255,255,255,0.7)', minWidth: 40 }}>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText primary="Volver al Sitio" />
+            </ListItemButton>
+          </ListItem>
+      </Box>
+    </>
+  )
+
+  const drawerStyles = {
+    flexShrink: 0,
+    '& .MuiDrawer-paper': {
+      width: drawerWidth,
+      boxSizing: 'border-box',
+      backgroundColor: '#1a2744',
+      color: 'white',
+      borderRight: '1px solid rgba(255, 255, 255, 0.1)',
+    },
   }
 
   return (
@@ -109,89 +200,52 @@ export default function AdminLayout({ children }) {
             <IconButton
               color="inherit"
               aria-label="open drawer"
-              onClick={handleDrawerToggle}
+              onClick={toggleDrawer}
               edge="start"
               sx={{ mr: 2 }}
             >
-              {open ? <ChevronLeftIcon /> : <MenuIcon />}
+              {open && isDesktop ? <ChevronLeftIcon /> : <MenuIcon />}
             </IconButton>
-            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
+            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, fontWeight: 'bold', fontSize: { xs: '1rem', sm: '1.25rem' } }}>
               Panel de Administración
             </Typography>
             <UserDropdown showLoginLabel={false} />
           </Toolbar>
         </StyledAppBar>
         
-        <Sidebar variant="persistent" anchor="left" open={open}>
-          <Box sx={{ p: 3, textAlign: 'center' }}>
-            <Link href="/" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
-              <Box
-                component="img"
-                src={WaviPixelLogo}
-                alt="Wavi Aeronautics"
-                sx={{ height: 48, width: 48, marginRight: 2, borderRadius: '50%' }}
-              />
-              <Typography variant="h6" sx={{ color: 'white', fontWeight: 'bold' }}>
-                Wavi Aeronautics
-              </Typography>
-            </Link>
-          </Box>
-          <Divider sx={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
-          <List sx={{ mt: 2 }}>
-            {NAV_ITEMS.map((item) => (
-              <ListItem key={item.text} disablePadding>
-                <ListItemButton 
-                  component={Link} 
-                  href={item.path}
-                  selected={pathname === item.path}
-                  sx={{
-                    mx: 1,
-                    borderRadius: 2,
-                    mb: 1,
-                    '&.Mui-selected': {
-                        backgroundColor: 'rgba(0, 188, 212, 0.2)',
-                        color: '#00bcd4',
-                        '& .MuiListItemIcon-root': {
-                            color: '#00bcd4',
-                        }
-                    },
-                    '&:hover': {
-                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    }
-                  }}
-                >
-                  <ListItemIcon sx={{ color: 'rgba(255,255,255,0.7)', minWidth: 40 }}>
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText primary={item.text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-          
-          <Box sx={{ mt: 'auto', p: 2 }}>
-             <Divider sx={{ backgroundColor: 'rgba(255,255,255,0.1)', mb: 2 }} />
-             <ListItem disablePadding>
-                <ListItemButton 
-                  component={Link} 
-                  href="/"
-                  sx={{
-                    borderRadius: 2,
-                    '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
-                  }}
-                >
-                  <ListItemIcon sx={{ color: 'rgba(255,255,255,0.7)', minWidth: 40 }}>
-                    <HomeIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Volver al Sitio" />
-                </ListItemButton>
-              </ListItem>
-          </Box>
-        </Sidebar>
+        {/* Desktop Sidebar (Persistent) */}
+        {isDesktop ? (
+          <Drawer
+            variant="persistent"
+            anchor="left"
+            open={open}
+            sx={{
+              width: drawerWidth,
+              ...drawerStyles
+            }}
+          >
+            {drawerContent}
+          </Drawer>
+        ) : (
+          /* Mobile Sidebar (Temporary) */
+          <Drawer
+            variant="temporary"
+            anchor="left"
+            open={open}
+            onClose={toggleDrawer}
+            ModalProps={{ keepMounted: true }} // Better open performance on mobile
+            sx={{
+              width: drawerWidth,
+              ...drawerStyles
+            }}
+          >
+            {drawerContent}
+          </Drawer>
+        )}
 
         <Main open={open}>
           <Toolbar /> {/* Spacer for fixed AppBar */}
-          <Box sx={{ maxWidth: 1400, mx: 'auto' }}>
+          <Box sx={{ maxWidth: '100%', mx: 'auto', p: { xs: 0, md: 2 } }}>
             {children}
           </Box>
         </Main>
