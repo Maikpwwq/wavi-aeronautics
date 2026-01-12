@@ -130,7 +130,7 @@ export const NEW_PRODUCT_SCHEMA = {
   titulo: '',             // Display name
   slug: '',               // URL-friendly (auto-generated)
   
-  category: 'dronesKit',  // Indexed field
+  category: '',           // Explicit selection required
   brand: '',              // Indexed field  
   tags: [],               // Searchable array
   

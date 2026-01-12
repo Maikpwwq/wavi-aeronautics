@@ -414,6 +414,7 @@ export default function NewProductForm() {
         </Alert>
 
         <DragAndDropUploader
+          key={`${formData.category}-${formData.brand}`}
           storagePath={`product-images/${formData.category || 'temp'}/${formData.brand || 'unknown'}`}
           onUploadComplete={handleImageUploadComplete}
           existingImages={formData.imagenes.filter(u => u)}
