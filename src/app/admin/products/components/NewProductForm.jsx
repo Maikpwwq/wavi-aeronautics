@@ -61,7 +61,7 @@ export default function NewProductForm() {
   const dispatch = useDispatch()
   
   // Form state
-  const [formData, setFormData] = useState(NEW_PRODUCT_SCHEMA)
+  const [formData, setFormData] = useState(JSON.parse(JSON.stringify(NEW_PRODUCT_SCHEMA)))
   const [tagInput, setTagInput] = useState('')
   
   // UI state
@@ -97,6 +97,15 @@ export default function NewProductForm() {
       return () => clearTimeout(timeout)
     }
   }, [formData])
+  // ==================== Actions ====================
+
+  const resetForm = useCallback(() => {
+    // Deep copy to ensure clean state
+    setFormData(JSON.parse(JSON.stringify(NEW_PRODUCT_SCHEMA)))
+    sessionStorage.removeItem(DRAFT_STORAGE_KEY)
+    setValidationErrors({})
+    setActiveStep(0)
+  }, [])
 
   // ==================== Form Handlers ====================
 
