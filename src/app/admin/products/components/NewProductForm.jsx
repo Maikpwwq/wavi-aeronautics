@@ -110,12 +110,19 @@ export default function NewProductForm() {
   }, [validationErrors])
 
   const handleAddTag = () => {
-    if (tagInput.trim() && !formData.tags.includes(tagInput.trim())) {
-      setFormData(prev => ({
-        ...prev,
-        tags: [...prev.tags, tagInput.trim().toLowerCase()]
-      }))
-      setTagInput('')
+    if (tagInput.trim()) {
+      const newTags = tagInput
+        .split(',')
+        .map(t => t.trim().toLowerCase())
+        .filter(t => t && !formData.tags.includes(t))
+      
+      if (newTags.length > 0) {
+        setFormData(prev => ({
+          ...prev,
+          tags: [...prev.tags, ...newTags]
+        }))
+        setTagInput('')
+      }
     }
   }
 
