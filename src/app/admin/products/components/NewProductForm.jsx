@@ -112,7 +112,6 @@ export default function NewProductForm() {
   const handleAddTag = () => {
     if (tagInput.trim()) {
       const newTags = tagInput
-      const newTags = tagInput
         .split(/[,;]+/)
         .map(t => t.trim().toLowerCase())
         .filter(t => t && !formData.tags.includes(t))

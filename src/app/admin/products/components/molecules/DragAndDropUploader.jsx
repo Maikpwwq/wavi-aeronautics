@@ -73,9 +73,7 @@ export default function DragAndDropUploader({
 
   // Sync existing images on mount/change
   useEffect(() => {
-    if (existingImages.length > 0 && uploadedUrls.length === 0) {
-      setUploadedUrls(existingImages)
-    }
+    setUploadedUrls(existingImages)
   }, [existingImages])
 
   // Notify parent when URLs change
