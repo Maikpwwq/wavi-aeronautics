@@ -57,6 +57,7 @@
     "prop-types": "^15.8.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-dropzone": "^14.3.8",
     "react-final-form": "^7.0.0",
     "react-redux": "^9.2.0",
     "react-sdk-mercadopago": "^1.1.1",

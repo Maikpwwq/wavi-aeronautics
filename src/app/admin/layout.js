@@ -90,6 +90,7 @@ const NAV_ITEMS = [
   { text: 'Pedidos', icon: <ShoppingCartIcon />, path: '/admin/orders' },
   { text: 'Problemas de Pedidos', icon: <ReportProblemIcon />, path: '/admin/orders/issues' },
   { text: 'Usuarios', icon: <PeopleIcon />, path: '/admin/users' },
+  { text: 'Gestión de Productos', icon: <SettingsIcon />, path: '/admin/products' },
   { text: 'Configuración', icon: <SettingsIcon />, path: '/admin/settings' },
 ]
 

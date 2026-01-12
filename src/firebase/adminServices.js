@@ -13,6 +13,7 @@ import {
   limit, 
   startAfter,
   getDoc,
+  setDoc,
   serverTimestamp
 } from 'firebase/firestore'
 
@@ -159,8 +160,56 @@ export const getAllProducts = async () => {
     throw error
   }
 }
+// ==================== NEW PRODUCT REGISTRATION (Flat Collection) ====================
 
-// Create a new product (flat collection - for new products)
+/**
+ * Check if a productID already exists in the 'products' collection
+ * Used to prevent duplicate SKUs
+ * @param {string} productID - The SKU to check
+ * @returns {boolean} True if exists
+ */
+export const checkProductIDExists = async (productID) => {
+  try {
+    const docRef = doc(firestore, 'products', productID)
+    const docSnap = await getDoc(docRef)
+    return docSnap.exists()
+  } catch (error) {
+    console.error('Error checking productID:', error)
+    throw error
+  }
+}
+
+/**
+ * Create a new product in the flat 'products' collection
+ * Uses productID as the document ID for uniqueness
+ * @param {Object} productData - Sanitized product data
+ * @returns {Object} Created product with ID
+ */
+export const createNewProduct = async (productData) => {
+  try {
+    const { productID, ...data } = productData
+    
+    if (!productID) {
+      throw new Error('productID is required')
+    }
+
+    const docRef = doc(firestore, 'products', productID)
+    
+    await setDoc(docRef, {
+      ...data,
+      productID,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    })
+
+    return { id: productID, ...data }
+  } catch (error) {
+    console.error('Error creating product:', error)
+    throw error
+  }
+}
+
+// Legacy: Create product with auto-generated ID
 export const createProduct = async (data) => {
   try {
     const docRef = await addDoc(collection(firestore, 'products'), {

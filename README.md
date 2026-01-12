@@ -5,80 +5,164 @@
 We offer representative brands and the best products in the market including:
 **TeamBlackSheep, Geprc, RadioMaster, Betafpv, Emax, Ethix, Flywoo, iFlight.**
 
-Visit our live store: [https://wavi-aeronautics.web.app/](https://wavi-aeronautics.web.app/)
+🔗 **Live Site:** [https://wavi-aeronautics.web.app/](https://wavi-aeronautics.web.app/)
+
+---
 
 ## 🚀 Key Features
 
-*   **Comprehensive Catalog:** Browsable categories for Drone Kits, FPV Goggles, RC Transmitters, Batteries, and Accessories.
-*   **Smart Filtering:** Filter products by price range and brand with real-time updates and currency formatting.
-*   **Dynamic Search:** Quick product search functionality.
-*   **User Authentication:** Secure login and registration using Firebase Auth.
-*   **Shopping Cart:** Persistent shopping cart with real-time order summary and checkout flow.
-*   **Responsive Design:** Fully optimized UI for desktop and mobile devices using Material UI.
-*   **Product Details:** In-depth product pages with image galleries, technical specifications, and related items.
+- **Comprehensive Catalog:** Browsable categories for Drone Kits, FPV Goggles, RC Transmitters, Batteries, and Accessories.
+- **Smart Filtering:** Filter products by price range and brand with real-time updates and currency formatting.
+- **Dynamic Search:** Quick product search functionality.
+- **User Authentication:** Secure login and registration using Firebase Auth (Email/Password, Google, Facebook).
+- **Shopping Cart:** Persistent shopping cart with real-time order summary and checkout flow via MercadoPago.
+- **Responsive Design:** Fully optimized UI for desktop and mobile devices using Material UI.
+- **Admin Dashboard:** Full-featured admin panel for product, order, user, and promotion management.
+
+---
 
 ## 🛠 Tech Stack
 
-This project is built using modern web technologies:
+| Category          | Technology                                     |
+| ----------------- | ---------------------------------------------- |
+| **Framework**     | [Next.js 16](https://nextjs.org/) (App Router) |
+| **UI Library**    | [Material UI (MUI) v7](https://mui.com/)       |
+| **State**         | [Redux Toolkit](https://redux-toolkit.js.org/) |
+| **Backend**       | [Firebase](https://firebase.google.com/) (Auth, Firestore, Storage, Hosting) |
+| **Payments**      | [MercadoPago](https://www.mercadopago.com/)    |
+| **File Uploads**  | [react-dropzone](https://react-dropzone.js.org/) + Firebase Storage |
+| **Package Mgr**   | pnpm                                           |
 
-*   **Frontend Framework:** [Next.js 16](https://nextjs.org/) (React)
-*   **State Management:** [Redux Toolkit](https://redux-toolkit.js.org/)
-*   **UI Library:** [Material UI (MUI)](https://mui.com/)
-*   **Backend / Services:** [Firebase](https://firebase.google.com/)
-    *   Authentication
-    *   Firestore (Database)
-    *   Storage (Images)
-    *   Hosting
-*   **Styling:** CSS Modules & MUI Theming
-*   **Package Manager:** pnpm
+---
+
+## 📁 Pages Structure
+
+### Public Pages (Storefront)
+
+| Route                         | Description                            |
+| ----------------------------- | -------------------------------------- |
+| `/`                           | Homepage                               |
+| `/tienda/kit-drones`          | Drone Kit category                     |
+| `/tienda/drones`              | RC Drones category                     |
+| `/tienda/drones-fpv-hd`       | FPV HD Drones category                 |
+| `/tienda/googles`             | FPV Goggles category                   |
+| `/tienda/radio-control`       | Radio Control Transmitters             |
+| `/tienda/trasmisor-receptor`  | VTX/Receivers                          |
+| `/tienda/digital-vtx`         | Digital Video Transmitters             |
+| `/tienda/accesorios`          | Accessories                            |
+| `/tienda/software`            | Software & Tools                       |
+| `/tienda/escuela`             | FPV School / Training                  |
+| `/tienda/producto`            | Product Detail Page (dynamic)          |
+| `/tienda/ver-carrito`         | Shopping Cart                          |
+| `/tienda/detalles-envio`      | Shipping Details / Checkout            |
+| `/tienda/pago-exitoso`        | Payment Success                        |
+| `/tienda/pago-fallido`        | Payment Failed                         |
+| `/tienda/pago-pendiente`      | Payment Pending                        |
+| `/tienda/pse-resultado`       | PSE Payment Result                     |
+
+### Authentication
+
+| Route                        | Description            |
+| ---------------------------- | ---------------------- |
+| `/auth/sign-in`              | Login                  |
+| `/auth/sign-up`              | Registration           |
+| `/auth/forgot-password`      | Password Recovery      |
+| `/security/change-password`  | Change Password        |
+
+### User Account
+
+| Route       | Description        |
+| ----------- | ------------------ |
+| `/profile`  | User Profile       |
+| `/orders`   | Order History      |
+
+### Blog / Posts
+
+| Route               | Description          |
+| ------------------- | -------------------- |
+| `/blog`             | Blog Listing         |
+| `/posts`            | Posts Listing        |
+| `/posts/[id]`       | Single Post          |
+| `/posts/[id]/comments` | Post Comments     |
+
+### Legal Pages
+
+| Route                          | Description                  |
+| ------------------------------ | ---------------------------- |
+| `/politica-de-privacidad`      | Privacy Policy               |
+| `/condiciones-del-servicio`    | Terms of Service             |
+| `/eliminacion-datos-usuario`   | User Data Deletion Request   |
+
+### Admin Dashboard (`/admin/*`)
+
+| Route                    | Description                      |
+| ------------------------ | -------------------------------- |
+| `/admin`                 | Dashboard Overview               |
+| `/admin/orders`          | Order Management                 |
+| `/admin/orders/issues`   | Order Issues / Problems          |
+| `/admin/users`           | User Management                  |
+| `/admin/products`        | Product Management (CRUD)        |
+| `/admin/settings`        | Store Settings                   |
+| `/admin/promotions`      | Promotions / Discount Codes      |
+| `/admin/publications`    | Blog Post Management             |
+
+---
 
 ## 📦 Getting Started
 
-Follow these instructions to set up the project locally.
-
 ### Prerequisites
 
-*   Node.js (v18 or higher recommended)
-*   pnpm
+- Node.js (v18 or higher)
+- pnpm
 
 ### Installation
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/maikpwwq/wavi-aeronautics.git
-    cd wavi-aeronautics
-    ```
+```bash
+# Clone the repository
+git clone https://github.com/maikpwwq/wavi-aeronautics.git
+cd wavi-aeronautics
 
-2.  **Install dependencies:**
-    ```bash
-    pnpm install
-    ```
+# Install dependencies
+pnpm install
 
-3.  **Run the development server:**
-    ```bash
-    pnpm dev
-    ```
+# Run the development server
+pnpm dev
+```
 
-4.  Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-## 📁 Project Structure
+---
 
-*   `src/app`: Main application routes (Next.js App Router).
-*   `src/app/tienda`: Store-specific pages and components.
-*   `src/modules`: Shared UI components and logic.
-*   `src/store`: Redux store configuration and slices.
-*   `src/utilities`: Helper functions (price formatting, data parsing).
-*   `src/firebase`: Firebase configuration and client initialization.
+## 📂 Source Code Structure
+
+```
+src/
+├── app/                # Next.js App Router pages & layouts
+│   ├── admin/          # Admin dashboard pages
+│   ├── auth/           # Authentication pages
+│   ├── tienda/         # Store category & product pages
+│   └── ...
+├── firebase/           # Firebase config & admin services
+├── modules/            # Shared UI components (Atomic Design)
+├── services/           # Data fetching services
+├── store/              # Redux store & slices
+└── utilities/          # Helper functions (price, validation, etc.)
+```
+
+---
 
 ## 🌐 Services & Socials
 
 Beyond the store, Wavi Aeronautics provides professional services:
-1.  **Precision Flights:** For agriculture, sports, and cargo.
-2.  **Digital Mapping:** Photogrammetry and digital modeling.
-3.  **Technical Support:** Preventive and corrective maintenance.
 
-*   **Facebook:** [Wavi Aeronautics](https://www.facebook.com/wavi.aeronautics/)
-*   **LinkedIn:** [Wavi Aeronautics](https://www.linkedin.com/company/wavi-aeronautics/)
+1. **Precision Flights:** For agriculture, sports, and cargo.
+2. **Digital Mapping:** Photogrammetry and digital modeling.
+3. **Technical Support:** Preventive and corrective maintenance.
+
+- **Facebook:** [Wavi Aeronautics](https://www.facebook.com/wavi.aeronautics/)
+- **LinkedIn:** [Wavi Aeronautics](https://www.linkedin.com/company/wavi-aeronautics/)
+
+---
 
 ## 📄 License
 
