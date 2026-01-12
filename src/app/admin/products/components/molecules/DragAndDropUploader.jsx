@@ -17,7 +17,8 @@ import { useDropzone } from 'react-dropzone'
 import { 
   ref, 
   uploadBytesResumable, 
-  getDownloadURL 
+  getDownloadURL,
+  deleteObject 
 } from 'firebase/storage'
 import { storage, auth } from '@/firebase/firebaseClient'
 
@@ -28,7 +29,13 @@ import {
   LinearProgress, 
   IconButton,
   Paper,
-  Alert
+  Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  CircularProgress
 } from '@mui/material'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -183,8 +190,50 @@ export default function DragAndDropUploader({
 
   // ==================== Remove Image ====================
 
-  const handleRemoveImage = (urlToRemove) => {
-    setUploadedUrls(prev => prev.filter(url => url !== urlToRemove))
+  const [deleteConfirm, setDeleteConfirm] = useState({
+    open: false,
+    url: null,
+    deleting: false
+  })
+
+  const handleRequestDelete = (urlToRemove) => {
+    setDeleteConfirm({ open: true, url: urlToRemove, deleting: false })
+  }
+
+  const handleCancelDelete = () => {
+    setDeleteConfirm({ open: false, url: null, deleting: false })
+  }
+
+  const handleConfirmDelete = async () => {
+    const urlToRemove = deleteConfirm.url
+    if (!urlToRemove) return
+
+    setDeleteConfirm(prev => ({ ...prev, deleting: true }))
+
+    try {
+      // Extract file path from Firebase Storage URL and delete
+      // Firebase Storage URLs contain the path after /o/ (URL encoded)
+      const urlObj = new URL(urlToRemove)
+      const pathMatch = urlObj.pathname.match(/\/o\/(.+)$/)
+      
+      if (pathMatch) {
+        const filePath = decodeURIComponent(pathMatch[1])
+        const fileRef = ref(storage, filePath)
+        await deleteObject(fileRef)
+      }
+
+      // Remove from state
+      setUploadedUrls(prev => prev.filter(url => url !== urlToRemove))
+      setDeleteConfirm({ open: false, url: null, deleting: false })
+    } catch (err) {
+      console.error('Error deleting file:', err)
+      setError(`Error al eliminar: ${err.message}`)
+      setDeleteConfirm({ open: false, url: null, deleting: false })
+      
+      // Still remove from form state even if Storage delete fails
+      // (file might have been deleted manually or doesn't exist)
+      setUploadedUrls(prev => prev.filter(url => url !== urlToRemove))
+    }
   }
 
   const handleRemoveUploading = (uploadId) => {
@@ -324,7 +373,7 @@ export default function DragAndDropUploader({
                 }}>
                   <IconButton 
                     size="small" 
-                    onClick={() => handleRemoveImage(url)}
+                    onClick={() => handleRequestDelete(url)}
                     sx={{ color: 'white' }}
                   >
                     <DeleteIcon fontSize="small" />
@@ -342,6 +391,50 @@ export default function DragAndDropUploader({
           </Box>
         </Box>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog 
+        open={deleteConfirm.open} 
+        onClose={handleCancelDelete}
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle>¿Eliminar imagen?</DialogTitle>
+        <DialogContent>
+          <Typography variant="body2" color="text.secondary">
+            Esta acción eliminará la imagen permanentemente del servidor. ¿Estás seguro?
+          </Typography>
+          {deleteConfirm.url && (
+            <Box 
+              component="img" 
+              src={deleteConfirm.url} 
+              alt="Preview" 
+              sx={{ 
+                width: '100%', 
+                maxHeight: 150, 
+                objectFit: 'contain', 
+                mt: 2,
+                borderRadius: 1
+              }} 
+            />
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelDelete} disabled={deleteConfirm.deleting}>
+            Cancelar
+          </Button>
+          <Button 
+            onClick={handleConfirmDelete} 
+            color="error" 
+            variant="contained"
+            disabled={deleteConfirm.deleting}
+            startIcon={deleteConfirm.deleting ? <CircularProgress size={16} /> : <DeleteIcon />}
+          >
+            {deleteConfirm.deleting ? 'Eliminando...' : 'Eliminar'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   )
 }
+
