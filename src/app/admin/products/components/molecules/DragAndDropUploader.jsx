@@ -85,7 +85,7 @@ export default function DragAndDropUploader({
 
   // ==================== Upload Logic ====================
 
-  const uploadFile = async (file) => {
+  const uploadFile = useCallback(async (file) => {
     // Verify user is authenticated before upload
     const currentUser = auth.currentUser
     if (!currentUser) {
@@ -144,7 +144,7 @@ export default function DragAndDropUploader({
       )
       throw err
     }
-  }
+  }, [storagePath]) // Re-create if path changes
 
   // ==================== Dropzone Config ====================
 
@@ -174,7 +174,7 @@ export default function DragAndDropUploader({
         console.error('Upload error:', err)
       }
     }
-  }, [uploadedUrls.length, uploadingFiles.length, maxFiles])
+  }, [uploadedUrls.length, uploadingFiles.length, maxFiles, uploadFile])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
