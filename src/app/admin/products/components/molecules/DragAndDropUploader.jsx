@@ -19,7 +19,7 @@ import {
   uploadBytesResumable, 
   getDownloadURL 
 } from 'firebase/storage'
-import { storage } from '@/firebase/firebaseClient'
+import { storage, auth } from '@/firebase/firebaseClient'
 
 // MUI Components
 import { 
@@ -80,6 +80,12 @@ export default function DragAndDropUploader({
   // ==================== Upload Logic ====================
 
   const uploadFile = async (file) => {
+    // Verify user is authenticated before upload
+    const currentUser = auth.currentUser
+    if (!currentUser) {
+      throw new Error('Debes iniciar sesión para subir imágenes')
+    }
+
     const uniqueName = generateUniqueFileName(file.name)
     const storageRef = ref(storage, `${storagePath}/${uniqueName}`)
     

@@ -1,0 +1,37 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Product images - allow authenticated users to upload
+    match /product-images/{allPaths=**} {
+      // Anyone can read product images
+      allow read: if true;
+      
+      // Only authenticated users can write/delete
+      allow write, delete: if request.auth != null;
+    }
+    
+    // User profile images
+    match /user-images/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow write, delete: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Blog/publication images
+    match /blog-images/{allPaths=**} {
+      allow read: if true;
+      allow write, delete: if request.auth != null;
+    }
+    
+    // Existing productos folder (legacy)
+    match /productos/{allPaths=**} {
+      allow read: if true;
+      allow write, delete: if request.auth != null;
+    }
+    
+    // Pagina assets
+    match /pagina/{allPaths=**} {
+      allow read: if true;
+    }
+  }
+}
