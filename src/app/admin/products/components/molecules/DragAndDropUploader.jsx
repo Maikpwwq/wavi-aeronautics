@@ -92,6 +92,12 @@ export default function DragAndDropUploader({
       throw new Error('Debes iniciar sesión para subir imágenes')
     }
 
+    console.log('Starting upload to path:', storagePath) // Debug
+
+    if (storagePath.includes('unknown') || storagePath.includes('temp')) {
+      throw new Error(`Ruta de almacenamiento inválida: ${storagePath}. Selecciona Categoría y Marca.`)
+    }
+
     const uniqueName = generateUniqueFileName(file.name)
     const storageRef = ref(storage, `${storagePath}/${uniqueName}`)
     
