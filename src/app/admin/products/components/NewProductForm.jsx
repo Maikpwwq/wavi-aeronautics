@@ -186,7 +186,7 @@ export default function NewProductForm() {
 
     try {
       // Check for duplicate productID
-      const exists = await checkProductIDExists(formData.productID)
+      const exists = await checkProductIDExists(formData.productID, formData.category)
       if (exists) {
         setValidationErrors(prev => ({ ...prev, productID: 'Este ID ya existe' }))
         setSnackbar({ 

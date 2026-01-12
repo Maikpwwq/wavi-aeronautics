@@ -14,7 +14,8 @@ import {
   startAfter,
   getDoc,
   setDoc,
-  serverTimestamp
+  serverTimestamp,
+  collectionGroup
 } from 'firebase/firestore'
 
 // ==================== USER MANAGEMENT ====================
@@ -151,28 +152,51 @@ async function getCollectionsForPath(basePath) {
 }
 
 // Fetch all products (from flat 'products' collection - legacy)
+// Fetch all products (using collectionGroup for hierarchical items)
 export const getAllProducts = async () => {
   try {
-    const snapshot = await getDocs(collection(firestore, 'products'))
+    // collectionGroup allows fetching from all 'items' subcollections across categories
+    const itemsQuery = query(collectionGroup(firestore, 'items'))
+    const snapshot = await getDocs(itemsQuery)
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
   } catch (error) {
     console.error('Error fetching products:', error)
-    throw error
+    // Fallback/Safety: Try fetching from legacy flat collection if checking fails
+    try {
+      const flatSnapshot = await getDocs(collection(firestore, 'products'))
+      return flatSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+    } catch (e) {
+      throw error
+    }
   }
 }
-// ==================== NEW PRODUCT REGISTRATION (Flat Collection) ====================
+
+// ==================== NEW PRODUCT REGISTRATION (Hierarchical Subcollection) ====================
 
 /**
- * Check if a productID already exists in the 'products' collection
- * Used to prevent duplicate SKUs
+ * Check if a productID already exists in the specific category/items path
  * @param {string} productID - The SKU to check
+ * @param {string} category - The category ID (parent doc)
  * @returns {boolean} True if exists
  */
-export const checkProductIDExists = async (productID) => {
+export const checkProductIDExists = async (productID, category) => {
   try {
-    const docRef = doc(firestore, 'products', productID)
-    const docSnap = await getDoc(docRef)
-    return docSnap.exists()
+    if (!productID) return false
+    
+    // Check hierarchical path: products/{category}/items/{productID}
+    // Note: If category is unknown (migration?), checking might miss duplicates 
+    // unless we use collectionGroup query, but that's expensive for a simple check.
+    if (category) {
+      const docRef = doc(firestore, 'products', category, 'items', productID)
+      const docSnap = await getDoc(docRef)
+      if (docSnap.exists()) return true
+    }
+    
+    // Also check flat collection just in case
+    const flatRef = doc(firestore, 'products', productID)
+    const flatSnap = await getDoc(flatRef)
+    return flatSnap.exists()
+    
   } catch (error) {
     console.error('Error checking productID:', error)
     throw error
@@ -180,29 +204,29 @@ export const checkProductIDExists = async (productID) => {
 }
 
 /**
- * Create a new product in the flat 'products' collection
- * Uses productID as the document ID for uniqueness
+ * Create a new product in the hierarchical 'products/{category}/items' subcollection
  * @param {Object} productData - Sanitized product data
  * @returns {Object} Created product with ID
  */
 export const createNewProduct = async (productData) => {
   try {
-    const { productID, ...data } = productData
+    const { productID, category, ...data } = productData
     
-    if (!productID) {
-      throw new Error('productID is required')
-    }
+    if (!productID) throw new Error('productID is required')
+    if (!category) throw new Error('category is required')
 
-    const docRef = doc(firestore, 'products', productID)
+    // Path: products/{category}/items/{productID}
+    const docRef = doc(firestore, 'products', category, 'items', productID)
     
     await setDoc(docRef, {
       ...data,
       productID,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
+      category, // Keep category in doc for easier querying
+      updatedAt: serverTimestamp(),
+      createdAt: serverTimestamp()
     })
 
-    return { id: productID, ...data }
+    return { id: productID, ...productData }
   } catch (error) {
     console.error('Error creating product:', error)
     throw error

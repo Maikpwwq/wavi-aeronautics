@@ -168,8 +168,7 @@ export const generateSlug = (title, brand) => {
  */
 export const generateProductID = (titulo, brand) => {
   const slug = generateSlug(titulo, brand)
-  const timestamp = Date.now().toString(36).slice(-4)
-  return `${slug}-${timestamp}`.toUpperCase()
+  return slug.toUpperCase()
 }
 
 /**
