@@ -112,7 +112,8 @@ export default function NewProductForm() {
   const handleAddTag = () => {
     if (tagInput.trim()) {
       const newTags = tagInput
-        .split(',')
+      const newTags = tagInput
+        .split(/[,;]+/)
         .map(t => t.trim().toLowerCase())
         .filter(t => t && !formData.tags.includes(t))
       
@@ -321,6 +322,7 @@ export default function NewProductForm() {
           <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
             <TextField
               label="Agregar Tag"
+              placeholder="Tag1, Tag2, Tag3..."
               value={tagInput}
               onChange={(e) => setTagInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
