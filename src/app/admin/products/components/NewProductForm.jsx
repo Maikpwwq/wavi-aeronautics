@@ -393,8 +393,20 @@ export default function NewProductForm() {
           Imágenes y Video
         </Typography>
 
+        {/* Storage path info message */}
+        <Alert severity="info" sx={{ mb: 2 }} icon={false}>
+          <Typography variant="body2">
+            📁 Las imágenes se guardarán en: <strong>product-images/{formData.category || '[categoría]'}/{formData.brand || '[marca]'}/</strong>
+          </Typography>
+          {(!formData.category || !formData.brand) && (
+            <Typography variant="caption" color="text.secondary">
+              Selecciona categoría y marca arriba antes de subir imágenes.
+            </Typography>
+          )}
+        </Alert>
+
         <DragAndDropUploader
-          storagePath={`product-images/${formData.category}`}
+          storagePath={`product-images/${formData.category || 'temp'}/${formData.brand || 'unknown'}`}
           onUploadComplete={handleImageUploadComplete}
           existingImages={formData.imagenes.filter(u => u)}
           maxFiles={10}
