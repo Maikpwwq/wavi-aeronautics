@@ -16,6 +16,7 @@ import {
 import CategorySelector from './components/CategorySelector'
 import ProductTable from './components/ProductTable'
 import ProductEditDialog from './components/ProductEditDialog'
+import NewProductForm from './components/NewProductForm'
 
 // Services & Actions
 import { updateProductInHierarchy } from '@/firebase/adminServices'
