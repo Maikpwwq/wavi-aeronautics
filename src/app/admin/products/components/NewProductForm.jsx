@@ -410,6 +410,7 @@ export default function NewProductForm() {
           onUploadComplete={handleImageUploadComplete}
           existingImages={formData.imagenes.filter(u => u)}
           maxFiles={10}
+          disabled={!formData.category || !formData.brand}
         />
 
         <TextField

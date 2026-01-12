@@ -63,7 +63,8 @@ export default function DragAndDropUploader({
   onUploadComplete,
   existingImages = [],
   maxFiles = 10,
-  maxSizeMB = 5
+  maxSizeMB = 5,
+  disabled = false
 }) {
   // State
   const [uploadingFiles, setUploadingFiles] = useState([])
@@ -179,6 +180,7 @@ export default function DragAndDropUploader({
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
+    disabled,
     accept: {
       'image/jpeg': ['.jpg', '.jpeg'],
       'image/png': ['.png'],
@@ -250,23 +252,26 @@ export default function DragAndDropUploader({
         sx={{
           p: 3,
           border: '2px dashed',
-          borderColor: isDragActive ? 'primary.main' : 'grey.300',
-          backgroundColor: isDragActive ? 'action.hover' : 'background.paper',
-          cursor: 'pointer',
+          borderColor: isDragActive ? 'primary.main' : disabled ? 'grey.300' : 'grey.300',
+          backgroundColor: disabled ? 'action.disabledBackground' : isDragActive ? 'action.hover' : 'background.paper',
+          cursor: disabled ? 'not-allowed' : 'pointer',
           textAlign: 'center',
           transition: 'all 0.2s ease',
+          opacity: disabled ? 0.6 : 1,
           '&:hover': {
-            borderColor: 'primary.light',
-            backgroundColor: 'action.hover'
+            borderColor: disabled ? 'grey.300' : 'primary.light',
+            backgroundColor: disabled ? 'action.disabledBackground' : 'action.hover'
           }
         }}
       >
         <input {...getInputProps()} />
-        <CloudUploadIcon sx={{ fontSize: 48, color: 'grey.400', mb: 1 }} />
+        <CloudUploadIcon sx={{ fontSize: 48, color: disabled ? 'action.disabled' : 'grey.400', mb: 1 }} />
         <Typography variant="body1" color="text.secondary">
-          {isDragActive 
-            ? 'Suelta las imágenes aquí...' 
-            : 'Arrastra imágenes o haz clic para seleccionar'
+          {disabled 
+            ? 'Selecciona categoría y marca para habilitar la carga'
+            : isDragActive 
+              ? 'Suelta las imágenes aquí...' 
+              : 'Arrastra imágenes o haz clic para seleccionar'
           }
         </Typography>
         <Typography variant="caption" color="text.secondary">
