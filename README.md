@@ -17,7 +17,7 @@ We offer representative brands and the best products in the market including:
 - **User Authentication:** Secure login and registration using Firebase Auth (Email/Password, Google, Facebook).
 - **Shopping Cart:** Persistent shopping cart with real-time order summary and checkout flow via MercadoPago.
 - **Responsive Design:** Fully optimized UI for desktop and mobile devices using Material UI.
-- **Admin Dashboard:** Full-featured admin panel for product, order, user, and promotion management.
+- **Admin Dashboard:** Full-featured admin panel for product (Brand-organized), order, user, and promotion management.
 
 ---
 
@@ -30,8 +30,32 @@ We offer representative brands and the best products in the market including:
 | **State**         | [Redux Toolkit](https://redux-toolkit.js.org/) |
 | **Backend**       | [Firebase](https://firebase.google.com/) (Auth, Firestore, Storage, Hosting) |
 | **Payments**      | [MercadoPago](https://www.mercadopago.com/)    |
-| **File Uploads**  | [react-dropzone](https://react-dropzone.js.org/) + Firebase Storage |
+| **Storage**       | [Firebase Storage](https://firebase.google.com/products/storage) (Hierarchical: `category/brand/product`) |
+| **File Uploads**  | [react-dropzone](https://react-dropzone.js.org/) |
 | **Package Mgr**   | pnpm                                           |
+
+---
+
+## 🏗 Data Architecture
+
+### Firestore Schema
+We use a **hierarchical data structure** to optimize for brand-based browsing while maintaining global query capabilities.
+
+#### Collections
+- **Users:** `users/{uid}`
+- **Orders:** `orders/{orderId}` (Flat collection for easy admin reporting)
+- **Products:** Nested structure for organization:
+  ```text
+  products/{category}/brands/{brand}/items/{productID}
+  ```
+  - **Querying:** Global product searches use `collectionGroup('items')`.
+  - **Organization:** Products are physically stored under their specific Brand folder.
+
+### Storage Bucket
+Images are organized in parallel with the database structure:
+```text
+product-images/{category}/{brand}/{filename}
+```
 
 ---
 
