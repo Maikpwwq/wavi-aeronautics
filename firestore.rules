@@ -41,7 +41,7 @@ service cloud.firestore {
     // =========================================================
     // PRODUCTS COLLECTION
     // =========================================================
-    match /products/{productId} {
+    match /products/{document=**} {
       // Public read access for the store
       allow read: if true;
       

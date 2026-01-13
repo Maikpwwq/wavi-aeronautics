@@ -142,9 +142,9 @@ export default function NewProductForm() {
     }))
   }
 
-  const handleImageUploadComplete = (urls) => {
+  const handleImageUploadComplete = useCallback((urls) => {
     setFormData(prev => ({ ...prev, imagenes: urls }))
-  }
+  }, [])
 
   const handleGenerateProductID = () => {
     if (formData.titulo && formData.brand) {
