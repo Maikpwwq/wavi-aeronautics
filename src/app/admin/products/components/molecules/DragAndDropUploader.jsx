@@ -73,15 +73,13 @@ export default function DragAndDropUploader({
 
   // Sync existing images on mount/change
   useEffect(() => {
-    setUploadedUrls(existingImages)
+    // Only update if content is different to avoid infinite loops
+    if (JSON.stringify(existingImages) !== JSON.stringify(uploadedUrls)) {
+      setUploadedUrls(existingImages)
+    }
   }, [existingImages])
 
-  // Notify parent when URLs change
-  useEffect(() => {
-    if (onUploadComplete) {
-      onUploadComplete(uploadedUrls)
-    }
-  }, [uploadedUrls, onUploadComplete])
+
 
   // ==================== Upload Logic ====================
 
@@ -137,7 +135,12 @@ export default function DragAndDropUploader({
               
               // Remove from uploading, add to uploaded
               setUploadingFiles(prev => prev.filter(f => f.id !== uploadId))
-              setUploadedUrls(prev => [...prev, downloadURL])
+              setUploadedUrls(prev => {
+                const newState = [...prev, downloadURL]
+                // Notify parent directly
+                if (onUploadComplete) onUploadComplete(newState)
+                return newState
+              })
               
               resolve(downloadURL)
             } catch (err) {
@@ -235,7 +238,11 @@ export default function DragAndDropUploader({
       }
 
       // Remove from state
-      setUploadedUrls(prev => prev.filter(url => url !== urlToRemove))
+      setUploadedUrls(prev => {
+        const newState = prev.filter(url => url !== urlToRemove)
+        if (onUploadComplete) onUploadComplete(newState)
+        return newState
+      })
       setDeleteConfirm({ open: false, url: null, deleting: false })
     } catch (err) {
       console.error('Error deleting file:', err)
@@ -244,7 +251,11 @@ export default function DragAndDropUploader({
       
       // Still remove from form state even if Storage delete fails
       // (file might have been deleted manually or doesn't exist)
-      setUploadedUrls(prev => prev.filter(url => url !== urlToRemove))
+      setUploadedUrls(prev => {
+        const newState = prev.filter(url => url !== urlToRemove)
+        if (onUploadComplete) onUploadComplete(newState)
+        return newState
+      })
     }
   }
 
