@@ -38,6 +38,7 @@ import AddIcon from '@mui/icons-material/Add'
 // Config imports
 import {
   CATEGORIES,
+  CATEGORY_OPTIONS,
   BRAND_OPTIONS,
   PRODUCT_SCHEMA,
   DRAFT_STORAGE_KEY,
@@ -143,18 +144,18 @@ export default function NewProductForm() {
   }
 
   const handleImageUploadComplete = useCallback((urls) => {
-    setFormData(prev => ({ ...prev, imagenes: urls }))
+    setFormData(prev => ({ ...prev, images: urls }))
   }, [])
 
   const handleGenerateProductID = () => {
-    if (formData.titulo) {
-      const newID = generateProductID(formData.titulo)
-      const newSlug = generateSlug(formData.titulo)
+    if (formData.name) {
+      const newID = generateProductID(formData.name)
+      const newSlug = generateSlug(formData.name)
       setFormData(prev => ({ ...prev, productID: newID, slug: newSlug }))
     } else {
       setSnackbar({
         open: true,
-        message: 'Ingresa título primero',
+        message: 'Ingresa el nombre del producto primero',
         severity: 'warning'
       })
     }
@@ -173,11 +174,11 @@ export default function NewProductForm() {
   const validateForm = () => {
     const errors = {}
     
-    if (!formData.titulo?.trim()) errors.titulo = 'Título requerido'
+    if (!formData.name?.trim()) errors.name = 'Nombre requerido'
     if (!formData.productID?.trim()) errors.productID = 'ID de producto requerido'
     if (!formData.brand?.trim()) errors.brand = 'Marca requerida'
     if (!formData.category) errors.category = 'Categoría requerida'
-    if (formData.precio <= 0) errors.precio = 'Precio debe ser mayor a 0'
+    if (formData.price <= 0) errors.price = 'Precio debe ser mayor a 0'
     
     setValidationErrors(errors)
     return Object.keys(errors).length === 0
@@ -267,11 +268,11 @@ export default function NewProductForm() {
 
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2 }}>
           <TextField
-            label="Título del Producto"
-            value={formData.titulo}
-            onChange={(e) => handleChange('titulo', e.target.value)}
-            error={!!validationErrors.titulo}
-            helperText={validationErrors.titulo}
+            label="Nombre del Producto"
+            value={formData.name || ''}
+            onChange={(e) => handleChange('name', e.target.value)}
+            error={!!validationErrors.name}
+            helperText={validationErrors.name}
             fullWidth
             required
           />
@@ -279,7 +280,7 @@ export default function NewProductForm() {
           <Box sx={{ display: 'flex', gap: 1 }}>
             <TextField
               label="ID Producto (SKU)"
-              value={formData.productID}
+              value={formData.productID || ''}
               onChange={(e) => handleChange('productID', e.target.value.toUpperCase())}
               error={!!validationErrors.productID}
               helperText={validationErrors.productID}
@@ -298,31 +299,33 @@ export default function NewProductForm() {
           <FormControl fullWidth required error={!!validationErrors.brand}>
             <InputLabel>Marca</InputLabel>
             <Select
-              value={formData.brand}
+              value={formData.brand || ''}
               label="Marca"
               onChange={(e) => handleChange('brand', e.target.value)}
             >
               {BRAND_OPTIONS.map((brand) => (
-                <MenuItem key={brand} value={brand}>
-                  {brand.charAt(0).toUpperCase() + brand.slice(1)}
+                <MenuItem key={brand} value={brand} sx={{ textTransform: 'capitalize' }}>
+                  {brand.replace('-', ' ')}
                 </MenuItem>
               ))}
             </Select>
+            <FormHelperText>{validationErrors.brand}</FormHelperText>
           </FormControl>
 
           <FormControl fullWidth required error={!!validationErrors.category}>
             <InputLabel>Categoría</InputLabel>
             <Select
-              value={formData.category}
+              value={formData.category || ''}
               label="Categoría"
               onChange={(e) => handleChange('category', e.target.value)}
             >
-              {CATEGORIES.map((cat) => (
-                <MenuItem key={cat.key} value={cat.key}>
+              {CATEGORY_OPTIONS.map((cat) => (
+                <MenuItem key={cat.value} value={cat.value}>
                   {cat.label}
                 </MenuItem>
               ))}
             </Select>
+            <FormHelperText>{validationErrors.category}</FormHelperText>
           </FormControl>
         </Box>
 
@@ -365,10 +368,10 @@ export default function NewProductForm() {
           <TextField
             label="Precio (USD)"
             type="number"
-            value={formData.precio}
-            onChange={(e) => handleChange('precio', parseFloat(e.target.value) || 0)}
-            error={!!validationErrors.precio}
-            helperText={validationErrors.precio}
+            value={formData.price || ''}
+            onChange={(e) => handleChange('price', parseFloat(e.target.value) || 0)}
+            error={!!validationErrors.price}
+            helperText={validationErrors.price}
             InputProps={{
               startAdornment: <InputAdornment position="start">$</InputAdornment>
             }}
@@ -378,14 +381,14 @@ export default function NewProductForm() {
           <TextField
             label="Stock"
             type="number"
-            value={formData.stock}
+            value={formData.stock || ''}
             onChange={(e) => handleChange('stock', parseInt(e.target.value) || 0)}
           />
 
           <TextField
             label="Descuento (%)"
             type="number"
-            value={formData.discount}
+            value={formData.discount || ''}
             onChange={(e) => handleChange('discount', parseFloat(e.target.value) || 0)}
             InputProps={{
               endAdornment: <InputAdornment position="end">%</InputAdornment>
@@ -396,7 +399,7 @@ export default function NewProductForm() {
         <FormControlLabel
           control={
             <Switch
-              checked={formData.active}
+              checked={formData.active !== undefined ? formData.active : true}
               onChange={(e) => handleChange('active', e.target.checked)}
             />
           }
@@ -427,7 +430,7 @@ export default function NewProductForm() {
           key={`${formData.category}-${formData.brand}`}
           storagePath={`product-images/${formData.category || 'temp'}/${formData.brand || 'no-brand'}`}
           onUploadComplete={handleImageUploadComplete}
-          existingImages={formData.imagenes.filter(u => u)}
+          existingImages={(formData.images || formData.imagenes || []).filter(u => u)}
           maxFiles={10}
           disabled={!formData.category || !formData.brand}
         />
@@ -450,8 +453,8 @@ export default function NewProductForm() {
 
         <TextField
           label="Descripción"
-          value={formData.descripcion}
-          onChange={(e) => handleChange('descripcion', e.target.value)}
+          value={formData.description || ''}
+          onChange={(e) => handleChange('description', e.target.value)}
           multiline
           rows={4}
           fullWidth
@@ -460,8 +463,8 @@ export default function NewProductForm() {
 
         <TextField
           label="Especificaciones Técnicas"
-          value={formData.especificaciones}
-          onChange={(e) => handleChange('especificaciones', e.target.value)}
+          value={formData.specifications || ''}
+          onChange={(e) => handleChange('specifications', e.target.value)}
           multiline
           rows={3}
           fullWidth
@@ -471,8 +474,8 @@ export default function NewProductForm() {
 
         <TextField
           label="Incluye (Contenido de la caja)"
-          value={formData.incluye}
-          onChange={(e) => handleChange('incluye', e.target.value)}
+          value={formData.includes || ''}
+          onChange={(e) => handleChange('includes', e.target.value)}
           multiline
           rows={3}
           fullWidth
