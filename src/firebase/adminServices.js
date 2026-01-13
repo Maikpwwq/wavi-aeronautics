@@ -71,15 +71,55 @@ const CATEGORY_PATHS = {
 // Searches for the product by productID and updates it
 export const updateProductInHierarchy = async (productID, data, categoryHint = null) => {
   try {
-    // Build list of collections to search based on category hint
+    const brand = data.brand || ''
+    const category = categoryHint || data.category || ''
+    
+    // ============================================================
+    // 1. Try direct path in new hierarchical structure first
+    // ============================================================
+    if (category && brand) {
+      const directPath = `products/${category}/brands/${brand}/items`
+      const directRef = doc(firestore, directPath, productID)
+      const directSnap = await getDoc(directRef)
+      
+      if (directSnap.exists()) {
+        await updateDoc(directRef, {
+          ...data,
+          updatedAt: serverTimestamp()
+        })
+        console.log(`[AdminServices] Updated product ${productID} at ${directPath}/${productID}`)
+        return { success: true, path: `${directPath}/${productID}` }
+      }
+    }
+    
+    // ============================================================
+    // 2. Search via collectionGroup('items') for new structure
+    // ============================================================
+    const itemsQuery = query(
+      collectionGroup(firestore, 'items'),
+      where('productID', '==', productID)
+    )
+    const itemsSnapshot = await getDocs(itemsQuery)
+    
+    if (!itemsSnapshot.empty) {
+      const docToUpdate = itemsSnapshot.docs[0]
+      await updateDoc(docToUpdate.ref, {
+        ...data,
+        updatedAt: serverTimestamp()
+      })
+      console.log(`[AdminServices] Updated product ${productID} via collectionGroup at ${docToUpdate.ref.path}`)
+      return { success: true, path: docToUpdate.ref.path }
+    }
+    
+    // ============================================================
+    // 3. Fallback: Search legacy collections
+    // ============================================================
     let collectionsToSearch = []
     
     if (categoryHint && CATEGORY_PATHS[categoryHint]) {
-      // Use the category hint to narrow search
       const basePath = CATEGORY_PATHS[categoryHint]
       collectionsToSearch = await getCollectionsForPath(basePath)
     } else {
-      // Search all major collections
       collectionsToSearch = [
         'productos/dron/kit_fpv_dron',
         'productos/dron/RC',
@@ -95,22 +135,18 @@ export const updateProductInHierarchy = async (productID, data, categoryHint = n
       ]
     }
     
-    // Search for the product in each collection
     for (const collPath of collectionsToSearch) {
       const collRef = collection(firestore, collPath)
       const q = query(collRef, where('productID', '==', productID))
       const snapshot = await getDocs(q)
       
       if (!snapshot.empty) {
-        // Found the product, update it
         const docToUpdate = snapshot.docs[0]
         await updateDoc(docToUpdate.ref, {
           ...data,
           updatedAt: serverTimestamp()
         })
-        
-        // Also clear sessionStorage cache for this category so next load gets fresh data
-        console.log(`[AdminServices] Updated product ${productID} in ${collPath}`)
+        console.log(`[AdminServices] Updated product ${productID} in legacy path ${collPath}`)
         return { success: true, path: collPath }
       }
     }
