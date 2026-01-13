@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import Link from 'next/link'
 import { loadDetail } from '@/store/states/product'
 import { calculateCopPrice } from '@/utilities/priceUtils'
+import { BRAND_COLORS } from '../innerTheme'
 
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
@@ -125,7 +126,8 @@ const ProductItem = ({ products, category }) => {
               overflow: 'hidden',
               display: '-webkit-box',
               WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical'
+              WebkitBoxOrient: 'vertical',
+              color: BRAND_COLORS.text.primary
             }}
           >
             {name}

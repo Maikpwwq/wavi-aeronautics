@@ -50,6 +50,7 @@ import {
 
 // Components
 import DragAndDropUploader from './molecules/DragAndDropUploader'
+import ReorderableImageList from './molecules/ReorderableImageList'
 
 // Services
 import { createNewProduct, checkProductIDExists } from '@/firebase/adminServices'
@@ -145,7 +146,21 @@ export default function NewProductForm() {
   }
 
   const handleImageUploadComplete = useCallback((urls) => {
-    setFormData(prev => ({ ...prev, images: urls }))
+    setFormData(prev => ({ 
+      ...prev, 
+      images: [...(prev.images || prev.imagenes || []), ...urls] 
+    }))
+  }, [])
+
+  const handleImagesReorder = useCallback((newImages) => {
+    setFormData(prev => ({ ...prev, images: newImages }))
+  }, [])
+
+  const handleImageDelete = useCallback((urlToDelete) => {
+    setFormData(prev => ({
+      ...prev,
+      images: (prev.images || prev.imagenes || []).filter(url => url !== urlToDelete)
+    }))
   }, [])
 
   const handleGenerateProductID = () => {
@@ -431,10 +446,18 @@ export default function NewProductForm() {
           key={`${formData.category}-${formData.brand}`}
           storagePath={`product-images/${formData.category || 'temp'}/${formData.brand || 'no-brand'}`}
           onUploadComplete={handleImageUploadComplete}
-          existingImages={(formData.images || formData.imagenes || []).filter(u => u)}
+          existingImages={[]}
           maxFiles={10}
           disabled={!formData.category || !formData.brand}
         />
+
+        <Box sx={{ mt: 2 }}>
+          <ReorderableImageList
+            images={formData.images || formData.imagenes || []}
+            onChange={handleImagesReorder}
+            onDelete={handleImageDelete}
+          />
+        </Box>
 
         <TextField
           label="URL de Video (YouTube/Vimeo)"

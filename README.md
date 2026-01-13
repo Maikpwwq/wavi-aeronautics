@@ -238,6 +238,15 @@ Beyond the store, Wavi Aeronautics provides professional services:
 - **LinkedIn:** [Wavi Aeronautics](https://www.linkedin.com/company/wavi-aeronautics/)
 
 ---
+ 
+ ## 🆕 Recent Updates (Jan 2026)
+ 
+ - **Admin Image Management:** Added drag-and-drop image reordering to the `NewProductForm`, allowing easy sorting of product galleries.
+ - **Price Formatting Engine:** Implemented robust currency handling that differentiates between legacy static prices (COP) and new dynamic prices (USD), applying exchange rates automatically.
+ - **Schema Standardization:** Unified the product data model across the application (Cards, Details, Forms) to prioritize English field names with seamless legacy fallback.
+ - **UI/UX Polish:** Fixed link color inheritance in product cards and resolved specific crash scenarios in form validation.
+ 
+ ---
 
 ## 📄 License
 
