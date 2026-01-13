@@ -16,12 +16,21 @@ import {
   MenuItem,
   Typography,
   Chip,
-  Stack
+  Stack,
+  Divider
 } from '@mui/material'
 import { CATEGORY_OPTIONS, BRAND_OPTIONS } from '../config'
 
+// Components
+import ReorderableImageList from './molecules/ReorderableImageList'
+import DragAndDropUploader from './molecules/DragAndDropUploader'
+
 /**
  * ProductEditDialog - Organism component for editing product details
+ * 
+ * Features:
+ * - Tags: Comma-separated input with chip display
+ * - Images: Reorderable grid with drag-and-drop + Upload capability
  * 
  * @param {boolean} open - Dialog open state
  * @param {function} onClose - Close callback
@@ -38,37 +47,46 @@ export default function ProductEditDialog({
   onSave,
   isEditing = false
 }) {
-  // Image array handlers (use English 'images', fallback to 'imagenes')
-  const handleAddImage = () => {
-    const currentImages = formData.images || formData.imagenes || []
-    onFormChange({ images: [...currentImages, ''] })
-  }
+  // Get current images (support both field names)
+  const currentImages = formData.images || formData.imagenes || []
 
-  const handleImageChange = (index, value) => {
-    const currentImages = formData.images || formData.imagenes || []
-    const newImages = [...currentImages]
-    newImages[index] = value
+  // Image handlers
+  const handleImagesChange = (newImages) => {
     onFormChange({ images: newImages })
   }
 
-  const handleRemoveImage = (index) => {
-    const currentImages = formData.images || formData.imagenes || []
-    const newImages = currentImages.filter((_, i) => i !== index)
+  const handleImageDelete = (urlToDelete) => {
+    const newImages = currentImages.filter(url => url !== urlToDelete)
     onFormChange({ images: newImages })
+  }
+
+  const handleUploadComplete = (newUrls) => {
+    // Append newly uploaded images to existing list
+    onFormChange({ images: newUrls })
   }
 
   // Tags handler (comma-separated input)
   const handleTagsChange = (e) => {
     const tagsString = e.target.value
-    // Store as array, display as comma-separated
     const tagsArray = tagsString.split(',').map(t => t.trim()).filter(Boolean)
     onFormChange({ tags: tagsArray })
   }
 
+  const handleTagDelete = (indexToDelete) => {
+    const newTags = (formData.tags || []).filter((_, idx) => idx !== indexToDelete)
+    onFormChange({ tags: newTags })
+  }
+
   const tagsDisplayValue = Array.isArray(formData.tags) ? formData.tags.join(', ') : ''
 
-  // Get brand value (support both 'brand' and 'marca' for compatibility)
+  // Get brand/category values for storage path
   const brandValue = formData.brand || formData.marca || ''
+  const categoryValue = formData.category || formData.categoria || ''
+
+  // Build storage path for uploader
+  const storagePath = brandValue && categoryValue 
+    ? `product-images/${categoryValue}/${brandValue}`
+    : 'product-images/temp'
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
@@ -84,7 +102,7 @@ export default function ProductEditDialog({
             <TextField
               label="Nombre del Producto"
               value={formData.name || formData.titulo || ''}
-              onChange={(e) => onFormChange({ name: e.target.value, titulo: e.target.value })}
+              onChange={(e) => onFormChange({ name: e.target.value })}
               fullWidth
             />
             <TextField
@@ -103,7 +121,7 @@ export default function ProductEditDialog({
               <Select
                 value={brandValue}
                 label="Marca"
-                onChange={(e) => onFormChange({ brand: e.target.value, marca: e.target.value })}
+                onChange={(e) => onFormChange({ brand: e.target.value })}
               >
                 {BRAND_OPTIONS.map((brand) => (
                   <MenuItem key={brand} value={brand} sx={{ textTransform: 'capitalize' }}>
@@ -115,9 +133,9 @@ export default function ProductEditDialog({
             <FormControl fullWidth>
               <InputLabel>Categoría</InputLabel>
               <Select
-                value={formData.categoria || formData.category || ''}
+                value={categoryValue}
                 label="Categoría"
-                onChange={(e) => onFormChange({ categoria: e.target.value, category: e.target.value })}
+                onChange={(e) => onFormChange({ category: e.target.value })}
                 disabled={isEditing}
               >
                 {CATEGORY_OPTIONS.map((cat) => (
@@ -133,7 +151,7 @@ export default function ProductEditDialog({
               label="Precio ($)"
               type="number"
               value={formData.price || formData.precio || ''}
-              onChange={(e) => onFormChange({ price: e.target.value, precio: e.target.value })}
+              onChange={(e) => onFormChange({ price: e.target.value })}
               fullWidth
             />
             <TextField
@@ -156,7 +174,7 @@ export default function ProductEditDialog({
           <TextField
             label="Descripción"
             value={formData.description || formData.descripcion || ''}
-            onChange={(e) => onFormChange({ description: e.target.value, descripcion: e.target.value })}
+            onChange={(e) => onFormChange({ description: e.target.value })}
             multiline
             rows={2}
             fullWidth
@@ -179,64 +197,78 @@ export default function ProductEditDialog({
             fullWidth
           />
 
-          {/* Video & Tags */}
-          <Box sx={{ display: 'flex', gap: 2 }}>
+          {/* Video */}
+          <TextField
+            label="Video URL (YouTube)"
+            value={formData.video || ''}
+            onChange={(e) => onFormChange({ video: e.target.value })}
+            fullWidth
+            placeholder="https://youtube.com/watch?v=..."
+          />
+
+          <Divider sx={{ my: 1 }} />
+
+          {/* Tags Section */}
+          <Box>
+            <Typography variant="subtitle2" gutterBottom>
+              Tags
+            </Typography>
             <TextField
-              label="Video URL (YouTube)"
-              value={formData.video || ''}
-              onChange={(e) => onFormChange({ video: e.target.value })}
-              fullWidth
-              placeholder="https://youtube.com/watch?v=..."
-            />
-            <TextField
-              label="Tags (separadas por coma)"
+              label="Agregar tags (separadas por coma)"
               value={tagsDisplayValue}
               onChange={handleTagsChange}
               fullWidth
-              placeholder="fpv, drone, racing"
+              size="small"
+              placeholder="fpv, drone, racing, geprc"
+              helperText="Escribe tags separadas por comas y presiona fuera del campo"
             />
+            {formData.tags && formData.tags.length > 0 && (
+              <Stack direction="row" spacing={1} flexWrap="wrap" rowGap={1} sx={{ mt: 1 }}>
+                {formData.tags.map((tag, i) => (
+                  <Chip 
+                    key={i} 
+                    label={tag} 
+                    size="small" 
+                    onDelete={() => handleTagDelete(i)}
+                    color="primary"
+                    variant="outlined"
+                  />
+                ))}
+              </Stack>
+            )}
           </Box>
 
-          {/* Tags Preview */}
-          {formData.tags && formData.tags.length > 0 && (
-            <Stack direction="row" spacing={1} flexWrap="wrap" rowGap={1}>
-              {formData.tags.map((tag, i) => (
-                <Chip key={i} label={tag} size="small" onDelete={() => {
-                  const newTags = formData.tags.filter((_, idx) => idx !== i)
-                  onFormChange({ tags: newTags })
-                }} />
-              ))}
-            </Stack>
-          )}
+          <Divider sx={{ my: 1 }} />
 
-          {/* Images */}
-          <Typography variant="subtitle2" sx={{ mt: 1 }}>Imágenes</Typography>
-          {(formData.images || formData.imagenes || []).map((url, index) => (
-            <Box key={index} sx={{ display: 'flex', gap: 1 }}>
-              <TextField
-                label={`URL Imagen ${index + 1}`}
-                value={typeof url === 'string' ? url : url?.url || ''}
-                onChange={(e) => handleImageChange(index, e.target.value)}
-                fullWidth
-                size="small"
+          {/* Images Section */}
+          <Box>
+            <Typography variant="subtitle2" gutterBottom>
+              Imágenes del Producto
+            </Typography>
+            
+            {/* Reorderable Image Grid */}
+            <ReorderableImageList
+              images={currentImages}
+              onChange={handleImagesChange}
+              onDelete={handleImageDelete}
+            />
+
+            {/* Upload New Images */}
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: 'block' }}>
+                Subir nuevas imágenes:
+              </Typography>
+              <DragAndDropUploader
+                storagePath={storagePath}
+                onUploadComplete={handleUploadComplete}
+                existingImages={currentImages}
+                maxFiles={10}
+                disabled={!brandValue || !categoryValue}
               />
-              <Button 
-                color="error" 
-                onClick={() => handleRemoveImage(index)}
-                sx={{ minWidth: 40 }}
-              >
-                X
-              </Button>
             </Box>
-          ))}
-          <Button 
-            variant="outlined" 
-            size="small" 
-            onClick={handleAddImage} 
-            sx={{ alignSelf: 'start' }}
-          >
-            + Agregar Imagen
-          </Button>
+          </Box>
+
+          <Divider sx={{ my: 1 }} />
 
           {/* Status */}
           <FormControlLabel
@@ -258,4 +290,3 @@ export default function ProductEditDialog({
     </Dialog>
   )
 }
-
