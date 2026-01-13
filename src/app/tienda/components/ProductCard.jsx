@@ -33,8 +33,14 @@ const ProductCard = ({ products, category }) => {
   const classes = styles()
   const dispatch = useDispatch()
   const categoria = category || 'tienda'
-  const producto = products
-  const { titulo, precio, imagenes, productID, marca } = producto
+  const producto = products || {}
+  
+  // Destructure with fallbacks to support both English (standard properties) and Spanish (legacy) schemas
+  const name = producto.name || producto.titulo || producto.title || ''
+  const price = producto.price || producto.precio || 0
+  const images = producto.images || producto.imagenes || []
+  const brand = producto.brand || producto.marca || ''
+  const id = producto.productID || producto.id || ''
 
   const handleSelect = () => {
     console.log('producto', producto)
@@ -44,8 +50,6 @@ const ProductCard = ({ products, category }) => {
       return console.error(e.message)
     }
   }
-
-
 
   return (
     <>
@@ -61,7 +65,7 @@ const ProductCard = ({ products, category }) => {
           }}
         >
           <CardActionArea>
-            {producto !== undefined && imagenes && imagenes.length > 0 && (
+            {producto !== undefined && images && images.length > 0 && (
               <ProductLink
                 product={producto}
                 style={classes.imageCentered}
@@ -71,8 +75,8 @@ const ProductCard = ({ products, category }) => {
                     className="product-card-image"
                     component="img"
                     style={classes.imageSize}
-                    image={typeof imagenes[0] === 'string' ? imagenes[0] : imagenes[0]?.url || ''}
-                    alt={titulo}
+                    image={typeof images[0] === 'string' ? images[0] : images[0]?.url || ''}
+                    alt={name}
                     onClick={handleSelect}
                   />
                 </div>
@@ -80,7 +84,7 @@ const ProductCard = ({ products, category }) => {
             )}
           </CardActionArea>
           <CardHeader
-            title={titulo}
+            title={name}
             titleTypographyProps={{
               variant: 'h6',
               className: 'product-card-title',
@@ -88,7 +92,7 @@ const ProductCard = ({ products, category }) => {
                 transition: 'color 0.2s cubic-bezier(0.4, 0, 0.2, 1)' 
               }
             }}
-            subheader={precio}
+            subheader={`$ ${price.toLocaleString()}`}
             action={
               <AddProduct product={producto}/>
             }

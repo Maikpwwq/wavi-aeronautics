@@ -45,7 +45,7 @@ const AddProduct = ({ product, variant = 'icon' }) => {
       
       const totalSum = currentItems.reduce((acc, item) => {
         // Use the centralized parser to handle "$ 2.000.000" or raw numbers
-        let price = parseCopCurrency(item.precio);
+        let price = parseCopCurrency(item.price || item.precio);
         return acc + (price * (item.cantidad || 0));
       }, 0)
 

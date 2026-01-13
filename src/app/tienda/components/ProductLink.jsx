@@ -16,15 +16,16 @@ import PropTypes from 'prop-types'
 const ProductLink = ({ product, children, style, className }) => {
   if (!product) return <>{children}</>
 
-  const { productID, category, categoria, marca } = product
-  // Handle inconsistent naming (some objects have 'category', others 'categoria')
+  const { productID, category, categoria, marca, brand } = product
+  // Handle inconsistent naming
   const cat = category || categoria || 'tienda'
+  const productBrand = brand || marca || ''
 
   return (
     <Link
       href={{
         pathname: '/tienda/producto',
-        query: { id: productID, category: cat, marca: marca },
+        query: { id: productID, category: cat, marca: productBrand },
       }}
       style={{ textDecoration: 'none', color: 'inherit', ...style }}
       className={className}

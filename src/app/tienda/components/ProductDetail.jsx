@@ -174,12 +174,12 @@ const ProductDetail = () => {
   // Memoized values
   // ---------------------------------------------------------------------------
   const images = useMemo(() => {
-    if (!product?.imagenes) return []
-    return product.imagenes.map(img => typeof img === 'string' ? img : img.url || '')
+    const imgs = product?.images || product?.imagenes || []
+    return imgs.map(img => typeof img === 'string' ? img : img.url || '')
   }, [product])
 
-  const parsedPackageItems = useMemo(() => parsePackageItems(product?.incluye), [product?.incluye])
-  const parsedSpecifications = useMemo(() => parseSpecifications(product?.especificaciones), [product?.especificaciones])
+  const parsedPackageItems = useMemo(() => parsePackageItems(product?.includes || product?.incluye), [product])
+  const parsedSpecifications = useMemo(() => parseSpecifications(product?.specifications || product?.especificaciones), [product])
 
   // ---------------------------------------------------------------------------
   // Render
@@ -190,7 +190,7 @@ const ProductDetail = () => {
     <Box sx={{ bgcolor: BRAND_COLORS.background.page, minHeight: '100vh', pb: 10 }}>
       <Container maxWidth="xl">
         {/* Navigation */}
-        <PageNavigation category={category} currentPage={product.titulo} />
+        <PageNavigation category={category} currentPage={product.name || product.titulo} />
 
         <Grid container spacing={6}>
           {/* Left Column: Images */}
@@ -235,15 +235,15 @@ const ProductDetail = () => {
           <Grid item xs={12} md={5} sx={styles.actionInfo}>
             <Box component={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
               <Typography variant="overline" sx={{ fontWeight: 'bold', letterSpacing: 2, color: BRAND_COLORS.primary }}>
-                {product.marca || 'Aeronautics'}
+                {product.brand || product.marca || 'Aeronautics'}
               </Typography>
               <Typography variant="h3" sx={{ fontWeight: 800, mb: 2, color: BRAND_COLORS.text.primary }}>
-                {product.titulo}
+                {product.name || product.titulo}
               </Typography>
               
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                 <Typography variant="h4" sx={{ color: BRAND_COLORS.accent, fontWeight: 'bold', mr: 2 }}>
-                  {calculateCopPrice(product.precio)}
+                  {calculateCopPrice(product.price || product.precio)}
                 </Typography>
                 <Chip label="En Stock" color="success" />
               </Box>
@@ -280,7 +280,7 @@ const ProductDetail = () => {
           <Grid item xs={12}>
              <Box component={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
                 <Typography variant="body1" sx={{ color: 'text.secondary', lineHeight: 1.8, mb: 4 }}>
-                  {product.descripcion}
+                  {product.description || product.descripcion}
                 </Typography>
 
                 <Divider sx={{ mb: 4 }} />
