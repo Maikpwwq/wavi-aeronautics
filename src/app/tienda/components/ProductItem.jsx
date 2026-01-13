@@ -21,10 +21,25 @@ const ProductItem = ({ products, category }) => {
   
   if (!producto) return null
   
-  const { titulo, precio, imagenes, productID, marca } = producto
-  const imageUrl = imagenes && imagenes.length > 0 
-    ? (typeof imagenes[0] === 'string' ? imagenes[0] : imagenes[0]?.url || '') 
-    : '/static/images/no-image.png' // Fallback if needed
+  // Standardized fields
+  const name = producto.name || producto.titulo || producto.title || ''
+  const images = producto.images || producto.imagenes || []
+  const brand = producto.brand || producto.marca || 'Aeronautics'
+  const id = producto.productID || producto.id || ''
+
+  // Price logic
+  let displayPrice = '$ 0';
+  if (producto.price) {
+    displayPrice = calculateCopPrice(producto.price);
+  } else if (producto.precio) {
+    displayPrice = typeof producto.precio === 'string' 
+      ? producto.precio 
+      : `$ ${producto.precio.toLocaleString()}`;
+  }
+
+  const imageUrl = images && images.length > 0 
+    ? (typeof images[0] === 'string' ? images[0] : images[0]?.url || '') 
+    : '/static/images/no-image.png'
 
   const handleSelect = () => {
     try {
@@ -57,7 +72,7 @@ const ProductItem = ({ products, category }) => {
         component={Link} 
         href={{
           pathname: '/tienda/producto',
-          query: { id: productID, category: categoria, marca: marca },
+          query: { id: id, category: categoria, marca: brand },
         }}
         onClick={handleSelect}
         sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start' }}
@@ -75,7 +90,7 @@ const ProductItem = ({ products, category }) => {
            <Box 
              component="img"
              src={imageUrl}
-             alt={titulo}
+             alt={name}
              sx={{
                position: 'absolute',
                top: 0,
@@ -95,7 +110,7 @@ const ProductItem = ({ products, category }) => {
         <CardContent sx={{ flexGrow: 1, p: 2, width: '100%' }}>
           {/* Brand */}
           <Typography variant="caption" sx={{ color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 600, mb: 0.5, display: 'block' }}>
-            {marca || 'Aeronautics'}
+            {brand}
           </Typography>
 
           {/* Title - Clamped to 2 lines */}
@@ -113,12 +128,12 @@ const ProductItem = ({ products, category }) => {
               WebkitBoxOrient: 'vertical'
             }}
           >
-            {titulo}
+            {name}
           </Typography>
 
           {/* Price */}
           <Typography variant="h6" color="primary" sx={{ fontWeight: 700 }}>
-            {calculateCopPrice(precio)}
+            {displayPrice}
           </Typography>
         </CardContent>
       </CardActionArea>

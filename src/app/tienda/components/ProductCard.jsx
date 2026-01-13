@@ -1,4 +1,5 @@
 import React from 'react'
+import { calculateCopPrice } from '@/utilities/priceUtils'
 import { useDispatch } from 'react-redux'
 import ProductLink from './ProductLink'
 import { loadDetail } from '@/store/states/product'
@@ -37,10 +38,20 @@ const ProductCard = ({ products, category }) => {
   
   // Destructure with fallbacks to support both English (standard properties) and Spanish (legacy) schemas
   const name = producto.name || producto.titulo || producto.title || ''
-  const price = producto.price || producto.precio || 0
   const images = producto.images || producto.imagenes || []
   const brand = producto.brand || producto.marca || ''
   const id = producto.productID || producto.id || ''
+
+  // Price Handling: 'price' is USD (Number), 'precio' is COP (String/Number)
+  // If we have 'price', calculate COP. If 'precio', use as legacy display.
+  let displayPrice = '$ 0';
+  if (producto.price) {
+    displayPrice = calculateCopPrice(producto.price);
+  } else if (producto.precio) {
+    displayPrice = typeof producto.precio === 'string' 
+      ? producto.precio 
+      : `$ ${producto.precio.toLocaleString()}`;
+  }
 
   const handleSelect = () => {
     console.log('producto', producto)
@@ -92,7 +103,7 @@ const ProductCard = ({ products, category }) => {
                 transition: 'color 0.2s cubic-bezier(0.4, 0, 0.2, 1)' 
               }
             }}
-            subheader={`$ ${price.toLocaleString()}`}
+            subheader={displayPrice}
             action={
               <AddProduct product={producto}/>
             }

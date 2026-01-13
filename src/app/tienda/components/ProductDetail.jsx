@@ -181,6 +181,17 @@ const ProductDetail = () => {
   const parsedPackageItems = useMemo(() => parsePackageItems(product?.includes || product?.incluye), [product])
   const parsedSpecifications = useMemo(() => parseSpecifications(product?.specifications || product?.especificaciones), [product])
 
+  const displayPrice = useMemo(() => {
+    if (!product) return '$ 0';
+    if (product.price) return calculateCopPrice(product.price);
+    if (product.precio) {
+      return typeof product.precio === 'string' 
+        ? product.precio 
+        : `$ ${product.precio.toLocaleString()}`;
+    }
+    return '$ 0';
+  }, [product]);
+
   // ---------------------------------------------------------------------------
   // Render
   // ---------------------------------------------------------------------------
@@ -209,7 +220,7 @@ const ProductDetail = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.4 }}
                   src={images[activeImage]} 
-                  alt={product.titulo}
+                  alt={product.name || product.titulo}
                   style={{ 
                     maxWidth: '100%', 
                     maxHeight: '100%', 
@@ -243,7 +254,7 @@ const ProductDetail = () => {
               
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                 <Typography variant="h4" sx={{ color: BRAND_COLORS.accent, fontWeight: 'bold', mr: 2 }}>
-                  {calculateCopPrice(product.price || product.precio)}
+                  {displayPrice}
                 </Typography>
                 <Chip label="En Stock" color="success" />
               </Box>
