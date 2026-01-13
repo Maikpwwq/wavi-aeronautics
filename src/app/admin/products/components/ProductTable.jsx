@@ -23,8 +23,8 @@ export default function ProductTable({
   const columns = [
     { field: 'productID', headerName: 'ID', width: 90 },
     { field: 'name', headerName: 'Nombre', width: isMobile ? 180 : 250, flex: isMobile ? 0 : 1 },
-    { field: 'marca', headerName: 'Marca', width: 100 },
-    { field: 'categoria', headerName: 'Categoría', width: 110 },
+    { field: 'brand', headerName: 'Marca', width: 100 },
+    { field: 'category', headerName: 'Categoría', width: 110 },
     { 
       field: 'price', 
       headerName: 'Precio', 
@@ -69,8 +69,8 @@ export default function ProductTable({
   // Columns to hide on mobile
   const columnVisibilityModel = {
     productID: !isMobile,
-    marca: !isMobile,
-    categoria: !isMobile,
+    brand: !isMobile,
+    category: !isMobile,
     stock: !isMobile,
     // Always show: name, price, active, actions
   }
