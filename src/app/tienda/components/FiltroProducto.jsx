@@ -131,6 +131,31 @@ const FiltroProducto = (props) => {
             </div>
           </div>
 
+          {/* Sort Section */}
+          {setSortOrder && (
+            <div className="filter-section">
+              <div className="filter-section-title">ORDENAR POR</div>
+              <select 
+                value={sortOrder || 'newest'} 
+                onChange={(e) => setSortOrder(e.target.value)}
+                style={{ 
+                  width: '100%', 
+                  padding: '8px', 
+                  borderRadius: '4px', 
+                  border: '1px solid rgba(255, 255, 255, 0.23)', // Matching MUI default dark mode border roughly or theme
+                  backgroundColor: 'transparent',
+                  color: 'inherit',
+                  cursor: 'pointer'
+                }}
+              >
+                <option value="newest" style={{ color: 'black' }}>Más Nuevo</option>
+                <option value="oldest" style={{ color: 'black' }}>Más Antiguo</option>
+                <option value="price-asc" style={{ color: 'black' }}>Precio: Menor a Mayor</option>
+                <option value="price-desc" style={{ color: 'black' }}>Precio: Mayor a Menor</option>
+              </select>
+            </div>
+          )}
+
           {/* Brands Section */}
           <div className="filter-section">
             <div className="filter-section-title">MARCA</div>
@@ -169,7 +194,9 @@ FiltroProducto.propTypes = {
   toggleMarca: PropTypes.func.isRequired,
   setMinPrice: PropTypes.func.isRequired,
   setMaxPrice: PropTypes.func.isRequired,
-  resetFilters: PropTypes.func.isRequired
+  resetFilters: PropTypes.func.isRequired,
+  sortOrder: PropTypes.string,
+  setSortOrder: PropTypes.func
 }
 
 export default FiltroProducto

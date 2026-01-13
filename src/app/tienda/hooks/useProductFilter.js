@@ -77,11 +77,20 @@ export const useProductFilter = (products) => {
   // --------------------------------------------------------------------------
   // Logic: Filtering
   // --------------------------------------------------------------------------
+  // --------------------------------------------------------------------------
+  // Logic: Sort State
+  // --------------------------------------------------------------------------
+  const [sortOrder, setSortOrder] = useState('newest') // newest, oldest, price-asc, price-desc
+
+  // --------------------------------------------------------------------------
+  // Logic: Filtering & Sorting
+  // --------------------------------------------------------------------------
   const filteredProducts = useMemo(() => {
     if (!products) return []
 
-    return products.filter((product) => {
-      // 1. Brand Filter
+    // 1. Filter
+    const filtered = products.filter((product) => {
+      // Brand Filter
       if (
         filterState.marcas.length > 0 &&
         !filterState.marcas.includes(product.marca)
@@ -89,23 +98,45 @@ export const useProductFilter = (products) => {
         return false
       }
 
-      // 2. Price Filter
-      const productPrice = parsePrice(product.precio)
+      // Price Filter
+      const productPrice = parsePrice(product.price || product.precio)
       const minVal = parsePrice(filterState.precio.min)
       const maxVal = parsePrice(filterState.precio.max)
 
-      // If min set, product must be >= min
-      if (filterState.precio.min && productPrice < minVal) {
-        return false
-      }
-      // If max set, product must be <= max
-      if (filterState.precio.max && productPrice > maxVal) {
-        return false
-      }
+      if (filterState.precio.min && productPrice < minVal) return false
+      if (filterState.precio.max && productPrice > maxVal) return false
 
       return true
     })
-  }, [products, filterState])
+
+    // 2. Sort
+    return filtered.sort((a, b) => {
+      switch (sortOrder) {
+        case 'newest': {
+          const dateA = a.createdAt ? new Date(a.createdAt.seconds ? a.createdAt.seconds * 1000 : a.createdAt) : 0
+          const dateB = b.createdAt ? new Date(b.createdAt.seconds ? b.createdAt.seconds * 1000 : b.createdAt) : 0
+          return dateB - dateA
+        }
+        case 'oldest': {
+          const dateA = a.createdAt ? new Date(a.createdAt.seconds ? a.createdAt.seconds * 1000 : a.createdAt) : 0
+          const dateB = b.createdAt ? new Date(b.createdAt.seconds ? b.createdAt.seconds * 1000 : b.createdAt) : 0
+          return dateA - dateB
+        }
+        case 'price-asc': {
+          const priceA = parsePrice(a.price || a.precio)
+          const priceB = parsePrice(b.price || b.precio)
+          return priceA - priceB
+        }
+        case 'price-desc': {
+          const priceA = parsePrice(a.price || a.precio)
+          const priceB = parsePrice(b.price || b.precio)
+          return priceB - priceA
+        }
+        default:
+          return 0
+      }
+    })
+  }, [products, filterState, sortOrder])
 
   return {
     filters: filterState,
@@ -114,6 +145,8 @@ export const useProductFilter = (products) => {
     toggleMarca,
     setMinPrice,
     setMaxPrice,
-    resetFilters
+    resetFilters,
+    sortOrder,
+    setSortOrder
   }
 }

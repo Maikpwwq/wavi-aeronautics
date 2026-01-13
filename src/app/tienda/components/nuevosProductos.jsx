@@ -42,7 +42,7 @@ const styles = (theme) => ({
   carouselTrack: {
     display: 'flex',
     width: 'max-content', // Allow content to determine width
-    animation: 'marquee 50s linear infinite', // Adjust speed here
+    animation: 'marquee 55s linear infinite', // Adjust speed here
     '&:hover': {
       animationPlayState: 'paused' // Pause on hover (Desktop)
     }
