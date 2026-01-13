@@ -1,6 +1,9 @@
 /**
  * Product Management Configuration
  * Centralized config for category mappings and product field transformations
+ * 
+ * STANDARDIZATION: All new products use English field names.
+ * Legacy Spanish fields are read via normalizeProduct() for backwards compatibility.
  */
 
 import { 
@@ -38,67 +41,6 @@ export const CATEGORY_OPTIONS = [
   { value: 'digitalVTX', label: 'Digital VTX' },
 ]
 
-export const INITIAL_PRODUCT_FORM = {
-  name: '',
-  price: '',
-  stock: '',
-  description: '',
-  imagenes: [''],
-  active: true,
-  discount: 0,
-  categoria: '',
-  especificaciones: '',
-  incluye: '',
-  marca: '',
-  brand: '',
-  productID: '',
-  video: '',
-  tags: []
-}
-
-/**
- * Normalize product data from various Firestore schemas to consistent format
- * Handles Spanish field names from Firestore (titulo, precio, marca, etc.)
- * @param {Object} product - Raw product from Firestore
- * @param {number} idx - Index for fallback ID
- * @param {string} categoria - Category key
- * @returns {Object} Normalized product
- */
-export const normalizeProduct = (product, idx, categoria) => ({
-  ...product,
-  id: product.productID || product.id || `product-${idx}`,
-  name: product.titulo || product.title || product.productName || product.name || 'Sin Nombre',
-  price: parseFloat(product.priceUSD) || parseFloat(product.precio) || product.productPrice || product.price || 0,
-  stock: product.productStock || product.stock || 0,
-  marca: product.marca || product.productBrand || '',
-  description: product.descripcion || product.description || '',
-  active: product.active !== undefined ? product.active : true,
-  categoria,
-})
-
-/**
- * Build payload for Firestore update with correct field names
- * @param {Object} formData - Form data from UI
- * @param {Array} validImages - Filtered image URLs
- * @returns {Object} Firestore-compatible payload
- */
-export const buildProductPayload = (formData, validImages) => ({
-  titulo: formData.name,
-  precio: parseFloat(formData.price) || 0,
-  productStock: parseInt(formData.stock) || 0,
-  descripcion: formData.description,
-  imagenes: validImages,
-  marca: formData.marca,
-  active: formData.active,
-  discount: parseFloat(formData.discount) || 0,
-  especificaciones: formData.especificaciones,
-  incluye: formData.incluye,
-})
-
-// ============================================================
-// NEW PRODUCT REGISTRATION - Flat Collection Schema
-// ============================================================
-
 /**
  * Brand options derived from existing Firestore data
  */
@@ -124,39 +66,156 @@ export const BRAND_OPTIONS = [
   'other'
 ]
 
+// ============================================================
+// STANDARDIZED PRODUCT SCHEMA (English Field Names)
+// ============================================================
+
 /**
- * Initial form state for NEW product (flat collection)
+ * Initial form state for product editing (Admin Dashboard)
  */
-export const NEW_PRODUCT_SCHEMA = {
+export const INITIAL_PRODUCT_FORM = {
+  // Identifiers
+  productID: '',
+  slug: '',
+  
+  // Core Info
+  name: '',
+  brand: '',
+  category: '',
+  tags: [],
+  
+  // Pricing & Inventory
+  price: '',
+  discount: 0,
+  stock: '',
+  availability: true,
+  
+  // Content
+  description: '',
+  specifications: '',
+  includes: '',
+  
+  // Media
+  images: [''],
+  video: '',
+  
+  // Status
+  active: true
+}
+
+/**
+ * Full product schema for new product creation
+ */
+export const PRODUCT_SCHEMA = {
   productID: '',          // SKU - will be document ID
-  titulo: '',             // Display name
   slug: '',               // URL-friendly (auto-generated)
   
-  category: '',           // Explicit selection required
+  name: '',               // Display name
   brand: '',              // Indexed field  
+  category: '',           // Category key
   tags: [],               // Searchable array
   
-  availability: true,
+  price: 0,               // USD
+  discount: 0,            // Percentage
   stock: 0,
-  precio: 0,              // USD
-  discount: 0,
+  availability: true,
   
-  descripcion: '',
+  description: '',
+  specifications: '',
+  includes: '',
+  
+  images: [''],
   video: '',
-  imagenes: [''],
   
-  caracteristicas: {},    // Key-value map
-  especificaciones: '',
-  incluye: '',
+  active: true,
+  createdAt: null,        // Server timestamp
+  updatedAt: null         // Server timestamp
+}
+
+/**
+ * Normalize product data from various Firestore schemas to standardized format
+ * Handles BOTH legacy Spanish fields AND new English fields
+ * @param {Object} product - Raw product from Firestore
+ * @param {number} idx - Index for fallback ID
+ * @param {string} categoryKey - Category key
+ * @returns {Object} Normalized product with English field names
+ */
+export const normalizeProduct = (product, idx, categoryKey) => ({
+  ...product,
+  // Identifiers
+  id: product.productID || product.id || `product-${idx}`,
+  productID: product.productID || product.id || `product-${idx}`,
+  slug: product.slug || '',
   
-  active: true
+  // Core Info (English first, Spanish fallback)
+  name: product.name || product.titulo || product.title || product.productName || 'Sin Nombre',
+  brand: product.brand || product.marca || product.productBrand || '',
+  category: product.category || product.categoria || categoryKey || '',
+  tags: product.tags || [],
+  
+  // Pricing & Inventory
+  price: parseFloat(product.price) || parseFloat(product.priceUSD) || parseFloat(product.precio) || product.productPrice || 0,
+  discount: parseFloat(product.discount) || 0,
+  stock: parseInt(product.stock) || parseInt(product.productStock) || 0,
+  availability: product.availability !== undefined ? product.availability : (product.stock > 0),
+  
+  // Content
+  description: product.description || product.descripcion || '',
+  specifications: product.specifications || product.especificaciones || '',
+  includes: product.includes || product.incluye || '',
+  
+  // Media
+  images: product.images || product.imagenes || [],
+  video: product.video || '',
+  
+  // Status
+  active: product.active !== undefined ? product.active : true,
+})
+
+/**
+ * Build payload for Firestore write with STANDARDIZED English field names
+ * @param {Object} formData - Form data from UI
+ * @returns {Object} Firestore-compatible payload
+ */
+export const buildProductPayload = (formData) => {
+  const validImages = (formData.images || formData.imagenes || []).filter(url => url?.trim())
+  
+  return {
+    // Identifiers
+    productID: formData.productID?.trim() || '',
+    slug: formData.slug || generateSlug(formData.name || formData.titulo || ''),
+    
+    // Core Info
+    name: (formData.name || formData.titulo || '').trim(),
+    brand: (formData.brand || formData.marca || '').toLowerCase().trim(),
+    category: formData.category || formData.categoria || '',
+    tags: (formData.tags || []).filter(t => t?.trim()),
+    
+    // Pricing & Inventory
+    price: parseFloat(formData.price || formData.precio) || 0,
+    discount: parseFloat(formData.discount) || 0,
+    stock: parseInt(formData.stock || formData.productStock) || 0,
+    availability: Boolean((formData.stock || 0) > 0),
+    
+    // Content
+    description: (formData.description || formData.descripcion || '').trim(),
+    specifications: (formData.specifications || formData.especificaciones || '').trim(),
+    includes: (formData.includes || formData.incluye || '').trim(),
+    
+    // Media
+    images: validImages,
+    video: (formData.video || '').trim(),
+    
+    // Status
+    active: formData.active !== false
+  }
 }
 
 /**
  * Generate URL-friendly slug from title
  */
 export const generateSlug = (title) => {
-  const base = `${title}`
+  const base = `${title || ''}`
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')  // Remove accents
@@ -168,46 +227,12 @@ export const generateSlug = (title) => {
 /**
  * Generate productID from form data
  */
-export const generateProductID = (titulo) => {
-  const slug = generateSlug(titulo)
+export const generateProductID = (name) => {
+  const slug = generateSlug(name)
   return slug.toUpperCase()
-}
-
-/**
- * Sanitize product data before Firestore write
- * - Ensures correct types
- * - Removes empty strings from arrays
- * - Trims whitespace
- */
-export const sanitizeProductData = (data) => {
-  return {
-    productID: data.productID?.trim() || '',
-    titulo: data.titulo?.trim() || '',
-    slug: data.slug || generateSlug(data.titulo),
-    
-    category: data.category || 'dronesKit',
-    brand: data.brand?.toLowerCase() || '',
-    tags: (data.tags || []).filter(t => t?.trim()),
-    
-    availability: Boolean(data.stock > 0),
-    stock: parseInt(data.stock) || 0,
-    precio: parseFloat(data.precio) || 0,
-    discount: parseFloat(data.discount) || 0,
-    
-    descripcion: data.descripcion?.trim() || '',
-    video: data.video?.trim() || '',
-    imagenes: (data.imagenes || []).filter(url => url?.trim()),
-    
-    caracteristicas: data.caracteristicas || {},
-    especificaciones: data.especificaciones?.trim() || '',
-    incluye: data.incluye?.trim() || '',
-    
-    active: data.active !== false
-  }
 }
 
 /**
  * SessionStorage key for form draft persistence
  */
 export const DRAFT_STORAGE_KEY = 'admin_new_product_draft'
-

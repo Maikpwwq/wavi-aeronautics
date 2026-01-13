@@ -38,20 +38,23 @@ export default function ProductEditDialog({
   onSave,
   isEditing = false
 }) {
-  // Image array handlers
+  // Image array handlers (use English 'images', fallback to 'imagenes')
   const handleAddImage = () => {
-    onFormChange({ imagenes: [...(formData.imagenes || []), ''] })
+    const currentImages = formData.images || formData.imagenes || []
+    onFormChange({ images: [...currentImages, ''] })
   }
 
   const handleImageChange = (index, value) => {
-    const newImages = [...(formData.imagenes || [])]
+    const currentImages = formData.images || formData.imagenes || []
+    const newImages = [...currentImages]
     newImages[index] = value
-    onFormChange({ imagenes: newImages })
+    onFormChange({ images: newImages })
   }
 
   const handleRemoveImage = (index) => {
-    const newImages = (formData.imagenes || []).filter((_, i) => i !== index)
-    onFormChange({ imagenes: newImages })
+    const currentImages = formData.images || formData.imagenes || []
+    const newImages = currentImages.filter((_, i) => i !== index)
+    onFormChange({ images: newImages })
   }
 
   // Tags handler (comma-separated input)
@@ -160,8 +163,8 @@ export default function ProductEditDialog({
           />
           <TextField
             label="Especificaciones"
-            value={formData.especificaciones || ''}
-            onChange={(e) => onFormChange({ especificaciones: e.target.value })}
+            value={formData.specifications || formData.especificaciones || ''}
+            onChange={(e) => onFormChange({ specifications: e.target.value })}
             multiline
             rows={2}
             fullWidth
@@ -169,8 +172,8 @@ export default function ProductEditDialog({
           />
           <TextField
             label="Incluye (Qué viene en la caja)"
-            value={formData.incluye || ''}
-            onChange={(e) => onFormChange({ incluye: e.target.value })}
+            value={formData.includes || formData.incluye || ''}
+            onChange={(e) => onFormChange({ includes: e.target.value })}
             multiline
             rows={2}
             fullWidth
@@ -208,7 +211,7 @@ export default function ProductEditDialog({
 
           {/* Images */}
           <Typography variant="subtitle2" sx={{ mt: 1 }}>Imágenes</Typography>
-          {(formData.imagenes || []).map((url, index) => (
+          {(formData.images || formData.imagenes || []).map((url, index) => (
             <Box key={index} sx={{ display: 'flex', gap: 1 }}>
               <TextField
                 label={`URL Imagen ${index + 1}`}
