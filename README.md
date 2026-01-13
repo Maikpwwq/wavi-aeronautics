@@ -57,6 +57,43 @@ Images are organized in parallel with the database structure:
 product-images/{category}/{brand}/{filename}
 ```
 
+### Standardized Product Schema
+All new products use **English field names**. Legacy Spanish fields are read via normalization for backwards compatibility.
+
+```javascript
+{
+  // Identifiers
+  productID: string,        // SKU (Document ID)
+  slug: string,             // URL-friendly
+  
+  // Core Info
+  name: string,             // Display name (legacy: titulo)
+  brand: string,            // Indexed (legacy: marca)
+  category: string,         // Category key (legacy: categoria)
+  tags: string[],           // Searchable array
+  
+  // Pricing & Inventory
+  price: number,            // USD (legacy: precio)
+  discount: number,         // Percentage
+  stock: number,
+  availability: boolean,
+  
+  // Content
+  description: string,      // (legacy: descripcion)
+  specifications: string,   // (legacy: especificaciones)
+  includes: string,         // (legacy: incluye)
+  
+  // Media
+  images: string[],         // URLs (legacy: imagenes)
+  video: string,            // YouTube URL
+  
+  // Metadata
+  active: boolean,
+  createdAt: Timestamp,
+  updatedAt: Timestamp
+}
+```
+
 ---
 
 ## 📁 Pages Structure
