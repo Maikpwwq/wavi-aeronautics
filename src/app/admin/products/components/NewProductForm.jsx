@@ -39,11 +39,11 @@ import AddIcon from '@mui/icons-material/Add'
 import {
   CATEGORIES,
   BRAND_OPTIONS,
-  NEW_PRODUCT_SCHEMA,
+  PRODUCT_SCHEMA,
   DRAFT_STORAGE_KEY,
   generateProductID,
   generateSlug,
-  sanitizeProductData
+  buildProductPayload
 } from '../config'
 
 // Components
@@ -61,7 +61,7 @@ export default function NewProductForm() {
   const dispatch = useDispatch()
   
   // Form state
-  const [formData, setFormData] = useState(JSON.parse(JSON.stringify(NEW_PRODUCT_SCHEMA)))
+  const [formData, setFormData] = useState(JSON.parse(JSON.stringify(PRODUCT_SCHEMA)))
   const [tagInput, setTagInput] = useState('')
   
   // UI state
@@ -101,7 +101,7 @@ export default function NewProductForm() {
 
   const resetForm = useCallback(() => {
     // Deep copy to ensure clean state
-    setFormData(JSON.parse(JSON.stringify(NEW_PRODUCT_SCHEMA)))
+    setFormData(JSON.parse(JSON.stringify(PRODUCT_SCHEMA)))
     sessionStorage.removeItem(DRAFT_STORAGE_KEY)
     setValidationErrors({})
     setActiveStep(0)
@@ -162,7 +162,7 @@ export default function NewProductForm() {
 
   const handleClearDraft = () => {
     sessionStorage.removeItem(DRAFT_STORAGE_KEY)
-    setFormData(NEW_PRODUCT_SCHEMA)
+    setFormData(PRODUCT_SCHEMA)
     setHasDraft(false)
     setValidationErrors({})
     setSnackbar({ open: true, message: 'Borrador eliminado', severity: 'info' })
@@ -209,12 +209,12 @@ export default function NewProductForm() {
       }
 
       // Sanitize and submit
-      const sanitizedData = sanitizeProductData(formData)
+      const sanitizedData = buildProductPayload(formData)
       await createNewProduct(sanitizedData)
 
       // Clear draft and refresh
       sessionStorage.removeItem(DRAFT_STORAGE_KEY)
-      setFormData(NEW_PRODUCT_SCHEMA)
+      setFormData(PRODUCT_SCHEMA)
       setHasDraft(false)
       dispatch(fetchAllProducts())
 
