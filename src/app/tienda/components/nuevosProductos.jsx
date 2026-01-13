@@ -1,14 +1,3 @@
-import React, { Suspense } from 'react'
-import { useSelector } from 'react-redux'
-import withRoot from '@/modules/withRoot'
-import theme from '@/app/tienda/innerTheme'
-import Grid from '@mui/material/Grid'
-import Box from '@mui/material/Box'
-import Container from '@mui/material/Container'
-
-import Typography from '@/modules/components/Typography'
-import ProductItem from '@/app/tienda/components/ProductItem'
-import ProductSkeleton from '@/app/tienda/components/ProductSkeleton'
 
 import React, { Suspense, useMemo } from 'react'
 import { useSelector } from 'react-redux'
