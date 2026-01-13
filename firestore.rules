@@ -50,6 +50,13 @@ service cloud.firestore {
     }
 
     // =========================================================
+    // COLLECTION GROUP: items
+    // =========================================================
+    match /{path=**}/items/{itemId} {
+      allow read: if true;
+    }
+
+    // =========================================================
     // LEGACY PRODUCTS HIERARCHY (productos/...)
     // =========================================================
     // Allow deep read access for the hierarchical store structure
