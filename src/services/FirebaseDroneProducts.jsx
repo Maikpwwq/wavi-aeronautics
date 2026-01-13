@@ -1,6 +1,6 @@
 'use client'
 import { firestore } from '@/firebase/firebaseClient'
-import { collection, doc, getDocs } from 'firebase/firestore'
+import { collection, doc, getDocs, collectionGroup, query } from 'firebase/firestore'
 import { parseProductPrices } from '@/utilities/priceUtils'
 
 async function FirebaseDroneProducts() {
@@ -41,24 +41,39 @@ async function FirebaseDroneProducts() {
   const productsCollectionRC = collection(productsDoc, 'RC')
   const productsColGEPRC = collection(productsDoc, 'geprc')
 
+  // NEW: Collection Group query for new hierarchical products
+  const newItemsQuery = query(collectionGroup(_firestore, 'items'))
+
   try {
-    const [snapshotKits, snapshotRC, snapshotHD] = await Promise.all([
+    const [snapshotKits, snapshotRC, snapshotHD, snapshotNewItems] = await Promise.all([
       getDocs(productsCollectionKits),
       getDocs(productsCollectionRC),
-      getDocs(productsColGEPRC)
+      getDocs(productsColGEPRC),
+      getDocs(newItemsQuery)
     ])
 
+    // Legacy Data
     productosKits = snapshotKits.docs.map(doc => doc.data())
     productosRC = snapshotRC.docs.map(doc => doc.data())
     productosHD = snapshotHD.docs.map(doc => doc.data())
 
-    // Cache raw data (before price formatting?) 
-    // The original code seemed to cache the raw parsed data or re-parsed it. 
-    // Ideally we cache raw data and parse on render, but keeping consistent with original flow:
-    // We'll cache the raw data to avoid double-price-conversion if reload happens?
-    // Actually the previous code cached the data *before* mutating? No, it mutated inside map.
-    // Let's safe-guard: Cache raw, then parse.
+    // New Data (filtered by category)
+    const newItems = snapshotNewItems.docs.map(doc => ({ id: doc.id, ...doc.data() }))
     
+    newItems.forEach(item => {
+      // Deduplicate based on productID just in case
+      const existsInLegacy = (list) => list.some(p => p.productID === item.productID)
+
+      if (item.category === 'dronesKit' && !existsInLegacy(productosKits)) {
+        productosKits.push(item)
+      } else if (item.category === 'dronesRC' && !existsInLegacy(productosRC)) {
+        productosRC.push(item)
+      } else if (item.category === 'dronesHD' && !existsInLegacy(productosHD)) {
+        productosHD.push(item)
+      }
+    })
+
+    // Cache raw data
     if (typeof window !== 'undefined') {
        sessionStorage.setItem('Productos_Drones_Kits', JSON.stringify(productosKits))
        sessionStorage.setItem('Productos_DronesRC', JSON.stringify(productosRC))
