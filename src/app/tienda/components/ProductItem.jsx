@@ -2,82 +2,133 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import Link from 'next/link'
 import { loadDetail } from '@/store/states/product'
+import { calculateCopPrice } from '@/utilities/priceUtils'
 
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
+import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
+import Typography from '@mui/material/Typography'
 import { CardActionArea } from '@mui/material'
 import PropTypes from 'prop-types'
-
-// import { useQuery } from "react-query";
-
-const styles = () => ({
-  imageCentered: {
-    display: 'flex',
-    justifyContent: 'center'
-  },
-  imageSize: {
-    height: '330px',
-    width: 'auto'
-  }
-})
+import { useTheme } from '@mui/material/styles'
 
 const ProductItem = ({ products, category }) => {
-  const classes = styles()
   const dispatch = useDispatch()
+  const theme = useTheme()
   const categoria = category || 'tienda'
   const producto = products
+  
+  if (!producto) return null
+  
   const { titulo, precio, imagenes, productID, marca } = producto
+  const imageUrl = imagenes && imagenes.length > 0 
+    ? (typeof imagenes[0] === 'string' ? imagenes[0] : imagenes[0]?.url || '') 
+    : '/static/images/no-image.png' // Fallback if needed
 
   const handleSelect = () => {
-    // console.log('producto', producto)
     try {
       dispatch(loadDetail({ producto }))
     } catch (e) {
-      return console.error(e.message)
+      console.error(e.message)
     }
   }
 
   return (
-    <>
-      <Box maxWidth="sm" style={{ height: '100%' }}>
-        <Card className="product-card" style={{ height: '100%' }}>
-          <CardActionArea>
-            {producto !== undefined && imagenes && imagenes.length > 0 && (
-              <Link
-                style={classes.imageCentered}
-                href={{
-                  pathname: '/tienda/producto',
-                  query: { id: productID, category: categoria, marca: marca },
-                }}
-              >
-                <div className="product-card-image-container">
-                  <CardMedia
-                    className="product-card-image"
-                    component="img"
-                    style={classes.imageSize}
-                    image={typeof imagenes[0] === 'string' ? imagenes[0] : imagenes[0]?.url || ''}
-                    alt={titulo}
-                    onClick={() => handleSelect}
-                  />
-                </div>
-              </Link>
-            )}
-          </CardActionArea>
-          <CardHeader
-            title={titulo}
-            subheader={precio}
-          ></CardHeader>
-        </Card>
-      </Box>
-    </>
+    <Card 
+      elevation={0}
+      sx={{ 
+        height: '100%', 
+        display: 'flex', 
+        flexDirection: 'column',
+        borderRadius: 3,
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        bgcolor: 'background.paper',
+        border: '1px solid',
+        borderColor: 'divider',
+        '&:hover': {
+          transform: 'translateY(-8px)',
+          boxShadow: '0 12px 24px rgba(0,0,0,0.1)',
+          borderColor: 'transparent'
+        }
+      }}
+    >
+      <CardActionArea 
+        component={Link} 
+        href={{
+          pathname: '/tienda/producto',
+          query: { id: productID, category: categoria, marca: marca },
+        }}
+        onClick={handleSelect}
+        sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start' }}
+      >
+        {/* Image Container - Square Aspect Ratio */}
+        <Box sx={{ 
+          position: 'relative', 
+          width: '100%', 
+          pt: '100%', // 1:1 Aspect Ratio
+          bgcolor: '#fff',
+          overflow: 'hidden',
+          borderBottom: '1px solid',
+          borderColor: 'divider'
+        }}>
+           <Box 
+             component="img"
+             src={imageUrl}
+             alt={titulo}
+             sx={{
+               position: 'absolute',
+               top: 0,
+               left: 0,
+               width: '100%',
+               height: '100%',
+               objectFit: 'contain',
+               padding: 3,
+               transition: 'transform 0.5s ease',
+               '.MuiCardActionArea-root:hover &': {
+                 transform: 'scale(1.05)'
+               }
+             }}
+           />
+        </Box>
+
+        <CardContent sx={{ flexGrow: 1, p: 2, width: '100%' }}>
+          {/* Brand */}
+          <Typography variant="caption" sx={{ color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 600, mb: 0.5, display: 'block' }}>
+            {marca || 'Aeronautics'}
+          </Typography>
+
+          {/* Title - Clamped to 2 lines */}
+          <Typography 
+            variant="subtitle1" 
+            component="div" 
+            sx={{ 
+              fontWeight: 'bold', 
+              lineHeight: 1.2,
+              mb: 1,
+              height: '2.4em', // approx 2 lines
+              overflow: 'hidden',
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical'
+            }}
+          >
+            {titulo}
+          </Typography>
+
+          {/* Price */}
+          <Typography variant="h6" color="primary" sx={{ fontWeight: 700 }}>
+            {calculateCopPrice(precio)}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+    </Card>
   )
 }
 
 ProductItem.propTypes = {
   products: PropTypes.object.isRequired,
-  category: PropTypes.string.isRequired
+  category: PropTypes.string
 }
 
 export default ProductItem
