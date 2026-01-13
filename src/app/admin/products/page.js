@@ -75,22 +75,26 @@ function ProductPanel() {
   
   const handleEdit = (product) => {
     setCurrentProduct(product)
+    // Use standardized English field names that match normalizeProduct output
     setFormData({
+      productID: product.productID || '',
       name: product.name || '',
+      brand: product.brand || '',
+      category: product.category || selectedCategory,
       price: product.price || '',
       stock: product.stock || '',
-      description: product.description || '',
-      imagenes: product.imagenes?.length ? product.imagenes : [product.image || ''],
-      active: product.active ?? true,
       discount: product.discount || 0,
-      categoria: product.categoria || selectedCategory,
-      especificaciones: product.especificaciones || '',
-      incluye: product.incluye || '',
-      marca: product.marca || '',
-      productID: product.productID || ''
+      description: product.description || '',
+      specifications: product.specifications || '',
+      includes: product.includes || '',
+      images: product.images?.length ? product.images : [''],
+      video: product.video || '',
+      tags: product.tags || [],
+      active: product.active ?? true,
     })
     setDialogOpen(true)
   }
+
   
   const handleFormChange = (updates) => {
     setFormData(prev => ({ ...prev, ...updates }))
@@ -98,14 +102,14 @@ function ProductPanel() {
   
   const handleSave = async () => {
     try {
-      const validImages = formData.imagenes.filter(url => url.trim())
-      const payload = buildProductPayload(formData, validImages)
+      // buildProductPayload now handles image filtering internally
+      const payload = buildProductPayload(formData)
       
       if (currentProduct?.productID) {
         await updateProductInHierarchy(
           currentProduct.productID, 
           payload, 
-          currentProduct.categoria
+          formData.category || currentProduct.category
         )
         
         // Clear cache and refresh
