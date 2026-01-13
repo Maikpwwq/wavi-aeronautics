@@ -131,14 +131,22 @@ export default function DragAndDropUploader({
             reject(error)
           },
           async () => {
-            // Upload complete - get download URL
-            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref)
-            
-            // Remove from uploading, add to uploaded
-            setUploadingFiles(prev => prev.filter(f => f.id !== uploadId))
-            setUploadedUrls(prev => [...prev, downloadURL])
-            
-            resolve(downloadURL)
+            try {
+              // Upload complete - get download URL
+              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref)
+              
+              // Remove from uploading, add to uploaded
+              setUploadingFiles(prev => prev.filter(f => f.id !== uploadId))
+              setUploadedUrls(prev => [...prev, downloadURL])
+              
+              resolve(downloadURL)
+            } catch (err) {
+              console.error('Error getting download URL:', err)
+              setUploadingFiles(prev => 
+                prev.map(f => f.id === uploadId ? { ...f, error: 'Error obteniendo URL (Permisos?)' } : f)
+              )
+              reject(err)
+            }
           }
         )
       })
