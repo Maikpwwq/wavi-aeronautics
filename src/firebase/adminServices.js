@@ -174,22 +174,26 @@ export const getAllProducts = async () => {
 // ==================== NEW PRODUCT REGISTRATION (Hierarchical Subcollection) ====================
 
 /**
- * Check if a productID already exists in the specific category/items path
+ * Check if a productID already exists in the specific category/brands/brand/items path
  * @param {string} productID - The SKU to check
  * @param {string} category - The category ID (parent doc)
+ * @param {string} brand - The brand ID (optional but recommended for precise check)
  * @returns {boolean} True if exists
  */
-export const checkProductIDExists = async (productID, category) => {
+export const checkProductIDExists = async (productID, category, brand) => {
   try {
     if (!productID) return false
     
-    // Check hierarchical path: products/{category}/items/{productID}
-    // Note: If category is unknown (migration?), checking might miss duplicates 
-    // unless we use collectionGroup query, but that's expensive for a simple check.
-    if (category) {
-      const docRef = doc(firestore, 'products', category, 'items', productID)
+    // Check hierarchical path: products/{category}/brands/{brand}/items/{productID}
+    if (category && brand) {
+      const docRef = doc(firestore, 'products', category, 'brands', brand, 'items', productID)
       const docSnap = await getDoc(docRef)
       if (docSnap.exists()) return true
+    } else if (category && !brand) {
+      // Fallback: This is tricky in the new structure without Brand. 
+      // We might miss duplicates if we don't know the brand. 
+      // Ideally validation ensures Brand is present BEFORE check.
+      console.warn('Checking existence without Brand in hierarchical structure might be inaccurate.')
     }
     
     // Also check flat collection just in case
@@ -204,24 +208,26 @@ export const checkProductIDExists = async (productID, category) => {
 }
 
 /**
- * Create a new product in the hierarchical 'products/{category}/items' subcollection
+ * Create a new product in the hierarchical 'products/{category}/brands/{brand}/items' subcollection
  * @param {Object} productData - Sanitized product data
  * @returns {Object} Created product with ID
  */
 export const createNewProduct = async (productData) => {
   try {
-    const { productID, category, ...data } = productData
+    const { productID, category, brand, ...data } = productData
     
     if (!productID) throw new Error('productID is required')
     if (!category) throw new Error('category is required')
+    if (!brand) throw new Error('brand is required')
 
-    // Path: products/{category}/items/{productID}
-    const docRef = doc(firestore, 'products', category, 'items', productID)
+    // Path: products/{category}/brands/{brand}/items/{productID}
+    const docRef = doc(firestore, 'products', category, 'brands', brand, 'items', productID)
     
     await setDoc(docRef, {
       ...data,
       productID,
-      category, // Keep category in doc for easier querying
+      category, 
+      brand,
       updatedAt: serverTimestamp(),
       createdAt: serverTimestamp()
     })

@@ -147,14 +147,14 @@ export default function NewProductForm() {
   }, [])
 
   const handleGenerateProductID = () => {
-    if (formData.titulo && formData.brand) {
-      const newID = generateProductID(formData.titulo, formData.brand)
-      const newSlug = generateSlug(formData.titulo, formData.brand)
+    if (formData.titulo) {
+      const newID = generateProductID(formData.titulo)
+      const newSlug = generateSlug(formData.titulo)
       setFormData(prev => ({ ...prev, productID: newID, slug: newSlug }))
     } else {
       setSnackbar({
         open: true,
-        message: 'Ingresa título y marca primero',
+        message: 'Ingresa título primero',
         severity: 'warning'
       })
     }
@@ -195,7 +195,8 @@ export default function NewProductForm() {
 
     try {
       // Check for duplicate productID
-      const exists = await checkProductIDExists(formData.productID, formData.category)
+      // Pass brand for precise check in new hierarchy
+      const exists = await checkProductIDExists(formData.productID, formData.category, formData.brand)
       if (exists) {
         setValidationErrors(prev => ({ ...prev, productID: 'Este ID ya existe' }))
         setSnackbar({ 

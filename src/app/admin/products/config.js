@@ -153,8 +153,8 @@ export const NEW_PRODUCT_SCHEMA = {
 /**
  * Generate URL-friendly slug from title
  */
-export const generateSlug = (title, brand) => {
-  const base = `${brand}-${title}`
+export const generateSlug = (title) => {
+  const base = `${title}`
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')  // Remove accents
@@ -166,8 +166,8 @@ export const generateSlug = (title, brand) => {
 /**
  * Generate productID from form data
  */
-export const generateProductID = (titulo, brand) => {
-  const slug = generateSlug(titulo, brand)
+export const generateProductID = (titulo) => {
+  const slug = generateSlug(titulo)
   return slug.toUpperCase()
 }
 
@@ -181,7 +181,7 @@ export const sanitizeProductData = (data) => {
   return {
     productID: data.productID?.trim() || '',
     titulo: data.titulo?.trim() || '',
-    slug: data.slug || generateSlug(data.titulo, data.brand),
+    slug: data.slug || generateSlug(data.titulo),
     
     category: data.category || 'dronesKit',
     brand: data.brand?.toLowerCase() || '',
