@@ -132,6 +132,20 @@ product-images/{category}/{brand}/{filename}
 
 ---
 
+## 📝 Recent Updates (January 2026)
+
+### Storefront Enhancements
+- **ProductItem Cards:** Redesigned with responsive square images (`object-fit: contain`), cleaner typography, hover animations, and proper COP price formatting.
+- **NuevosProductos Carousel:** Implemented CSS-based infinite auto-scroll with pause-on-hover. Products sorted by `createdAt`/`updatedAt` (most recent first) with localized date display.
+- **ProductDetail Page:** Added Video embed section (YouTube) and Tags display component for enhanced product information.
+
+### Admin Dashboard
+- **ProductEditDialog:** Fixed Brand/Category dropdowns (aligned `CATEGORY_OPTIONS` with `CATEGORIES` keys). Added Video URL input and Tags field with chip preview.
+- **Firestore Rules:** Added `collectionGroup('items')` permission rule for global product queries.
+- **Dashboard Services:** Updated `FirebaseDroneProducts.jsx` to fetch from new hierarchical structure (`products/{cat}/brands/{brand}/items`) and merge with legacy data.
+
+---
+
 ## 📦 Getting Started
 
 ### Prerequisites

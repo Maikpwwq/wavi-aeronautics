@@ -14,9 +14,11 @@ import {
   InputLabel, 
   Select, 
   MenuItem,
-  Typography
+  Typography,
+  Chip,
+  Stack
 } from '@mui/material'
-import { CATEGORY_OPTIONS } from '../config'
+import { CATEGORY_OPTIONS, BRAND_OPTIONS } from '../config'
 
 /**
  * ProductEditDialog - Organism component for editing product details
@@ -38,19 +40,32 @@ export default function ProductEditDialog({
 }) {
   // Image array handlers
   const handleAddImage = () => {
-    onFormChange({ imagenes: [...formData.imagenes, ''] })
+    onFormChange({ imagenes: [...(formData.imagenes || []), ''] })
   }
 
   const handleImageChange = (index, value) => {
-    const newImages = [...formData.imagenes]
+    const newImages = [...(formData.imagenes || [])]
     newImages[index] = value
     onFormChange({ imagenes: newImages })
   }
 
   const handleRemoveImage = (index) => {
-    const newImages = formData.imagenes.filter((_, i) => i !== index)
+    const newImages = (formData.imagenes || []).filter((_, i) => i !== index)
     onFormChange({ imagenes: newImages })
   }
+
+  // Tags handler (comma-separated input)
+  const handleTagsChange = (e) => {
+    const tagsString = e.target.value
+    // Store as array, display as comma-separated
+    const tagsArray = tagsString.split(',').map(t => t.trim()).filter(Boolean)
+    onFormChange({ tags: tagsArray })
+  }
+
+  const tagsDisplayValue = Array.isArray(formData.tags) ? formData.tags.join(', ') : ''
+
+  // Get brand value (support both 'brand' and 'marca' for compatibility)
+  const brandValue = formData.brand || formData.marca || ''
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
@@ -65,36 +80,45 @@ export default function ProductEditDialog({
           <Box sx={{ display: 'flex', gap: 2 }}>
             <TextField
               label="Nombre del Producto"
-              value={formData.name}
-              onChange={(e) => onFormChange({ name: e.target.value })}
+              value={formData.name || formData.titulo || ''}
+              onChange={(e) => onFormChange({ name: e.target.value, titulo: e.target.value })}
               fullWidth
             />
             <TextField
               label="ID Producto (SKU)"
-              value={formData.productID}
+              value={formData.productID || ''}
               onChange={(e) => onFormChange({ productID: e.target.value })}
               fullWidth
               disabled={isEditing}
             />
           </Box>
 
+          {/* Brand & Category Row */}
           <Box sx={{ display: 'flex', gap: 2 }}>
-            <TextField
-              label="Marca"
-              value={formData.marca}
-              onChange={(e) => onFormChange({ marca: e.target.value })}
-              fullWidth
-            />
+            <FormControl fullWidth>
+              <InputLabel>Marca</InputLabel>
+              <Select
+                value={brandValue}
+                label="Marca"
+                onChange={(e) => onFormChange({ brand: e.target.value, marca: e.target.value })}
+              >
+                {BRAND_OPTIONS.map((brand) => (
+                  <MenuItem key={brand} value={brand} sx={{ textTransform: 'capitalize' }}>
+                    {brand.replace('-', ' ')}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <FormControl fullWidth>
               <InputLabel>Categoría</InputLabel>
               <Select
-                value={formData.categoria}
+                value={formData.categoria || formData.category || ''}
                 label="Categoría"
-                onChange={(e) => onFormChange({ categoria: e.target.value })}
+                onChange={(e) => onFormChange({ categoria: e.target.value, category: e.target.value })}
                 disabled={isEditing}
               >
                 {CATEGORY_OPTIONS.map((cat) => (
-                  <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+                  <MenuItem key={cat.value} value={cat.value}>{cat.label}</MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -105,21 +129,21 @@ export default function ProductEditDialog({
             <TextField
               label="Precio ($)"
               type="number"
-              value={formData.price}
-              onChange={(e) => onFormChange({ price: e.target.value })}
+              value={formData.price || formData.precio || ''}
+              onChange={(e) => onFormChange({ price: e.target.value, precio: e.target.value })}
               fullWidth
             />
             <TextField
               label="Stock"
               type="number"
-              value={formData.stock}
+              value={formData.stock || ''}
               onChange={(e) => onFormChange({ stock: e.target.value })}
               fullWidth
             />
             <TextField
               label="Descuento (%)"
               type="number"
-              value={formData.discount}
+              value={formData.discount || ''}
               onChange={(e) => onFormChange({ discount: e.target.value })}
               fullWidth
             />
@@ -128,15 +152,15 @@ export default function ProductEditDialog({
           {/* Detailed Info */}
           <TextField
             label="Descripción"
-            value={formData.description}
-            onChange={(e) => onFormChange({ description: e.target.value })}
+            value={formData.description || formData.descripcion || ''}
+            onChange={(e) => onFormChange({ description: e.target.value, descripcion: e.target.value })}
             multiline
             rows={2}
             fullWidth
           />
           <TextField
             label="Especificaciones"
-            value={formData.especificaciones}
+            value={formData.especificaciones || ''}
             onChange={(e) => onFormChange({ especificaciones: e.target.value })}
             multiline
             rows={2}
@@ -145,20 +169,50 @@ export default function ProductEditDialog({
           />
           <TextField
             label="Incluye (Qué viene en la caja)"
-            value={formData.incluye}
+            value={formData.incluye || ''}
             onChange={(e) => onFormChange({ incluye: e.target.value })}
             multiline
             rows={2}
             fullWidth
           />
 
+          {/* Video & Tags */}
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <TextField
+              label="Video URL (YouTube)"
+              value={formData.video || ''}
+              onChange={(e) => onFormChange({ video: e.target.value })}
+              fullWidth
+              placeholder="https://youtube.com/watch?v=..."
+            />
+            <TextField
+              label="Tags (separadas por coma)"
+              value={tagsDisplayValue}
+              onChange={handleTagsChange}
+              fullWidth
+              placeholder="fpv, drone, racing"
+            />
+          </Box>
+
+          {/* Tags Preview */}
+          {formData.tags && formData.tags.length > 0 && (
+            <Stack direction="row" spacing={1} flexWrap="wrap" rowGap={1}>
+              {formData.tags.map((tag, i) => (
+                <Chip key={i} label={tag} size="small" onDelete={() => {
+                  const newTags = formData.tags.filter((_, idx) => idx !== i)
+                  onFormChange({ tags: newTags })
+                }} />
+              ))}
+            </Stack>
+          )}
+
           {/* Images */}
           <Typography variant="subtitle2" sx={{ mt: 1 }}>Imágenes</Typography>
-          {formData.imagenes.map((url, index) => (
+          {(formData.imagenes || []).map((url, index) => (
             <Box key={index} sx={{ display: 'flex', gap: 1 }}>
               <TextField
                 label={`URL Imagen ${index + 1}`}
-                value={url}
+                value={typeof url === 'string' ? url : url?.url || ''}
                 onChange={(e) => handleImageChange(index, e.target.value)}
                 fullWidth
                 size="small"
@@ -185,7 +239,7 @@ export default function ProductEditDialog({
           <FormControlLabel
             control={
               <Switch 
-                checked={formData.active} 
+                checked={formData.active !== false} 
                 onChange={(e) => onFormChange({ active: e.target.checked })} 
               />
             }
@@ -201,3 +255,4 @@ export default function ProductEditDialog({
     </Dialog>
   )
 }
+

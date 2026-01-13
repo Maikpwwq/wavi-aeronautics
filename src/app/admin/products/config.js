@@ -25,20 +25,19 @@ export const CATEGORIES = [
   { key: 'digitalVTX', label: 'Digital VTX', fetchAction: fetchDigitalVTXProducts },
 ]
 
-// Category options for form select (legacy format)
+// Category options for form select - aligned with CATEGORIES keys
 export const CATEGORY_OPTIONS = [
-  'Googles', 
-  'radioControl', 
-  'baterias', 
-  'dronesRC', 
-  'digitalVTX', 
-  'FPV HD', 
-  'dronesKits', 
-  'transmisors', 
-  'receptors'
+  { value: 'dronesKit', label: 'Kit Drones' },
+  { value: 'dronesRC', label: 'Drones RC' },
+  { value: 'dronesHD', label: 'FPV HD' },
+  { value: 'googles', label: 'Googles' },
+  { value: 'radioControl', label: 'Radio Control' },
+  { value: 'baterias', label: 'Baterías/Accesorios' },
+  { value: 'transmisors', label: 'Transmisores' },
+  { value: 'receptors', label: 'Receptores' },
+  { value: 'digitalVTX', label: 'Digital VTX' },
 ]
 
-// Initial form state for product editing
 export const INITIAL_PRODUCT_FORM = {
   name: '',
   price: '',
@@ -51,7 +50,10 @@ export const INITIAL_PRODUCT_FORM = {
   especificaciones: '',
   incluye: '',
   marca: '',
-  productID: ''
+  brand: '',
+  productID: '',
+  video: '',
+  tags: []
 }
 
 /**
