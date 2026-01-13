@@ -105,6 +105,20 @@ const LoadingSpinner = () => (
   </Box>
 )
 
+// Helper for video URLs
+const getEmbedUrl = (url) => {
+  if (!url) return '';
+  // Handle YouTube
+  if (url.includes('youtube.com/watch')) {
+    return url.replace('watch?v=', 'embed/');
+  }
+  if (url.includes('youtu.be')) {
+    const id = url.split('/').pop();
+    return `https://www.youtube.com/embed/${id}`;
+  }
+  return url;
+};
+
 // =============================================================================
 // MAIN COMPONENT
 // =============================================================================
@@ -245,7 +259,18 @@ const ProductDetail = () => {
                 </Typography>
               </Box>
 
-              </Box>
+              {/* Tags Section */}
+              {product.tags && product.tags.length > 0 && (
+                <Box sx={{ mt: 3, pt: 3, borderTop: `1px dashed ${BRAND_COLORS.border.light}` }}>
+                  <Stack direction="row" spacing={1} flexWrap="wrap" rowGap={1}>
+                    {product.tags.map((tag, i) => (
+                      <Chip key={i} label={tag} />
+                    ))}
+                  </Stack>
+                </Box>
+              )}
+
+            </Box>
 
           </Grid>
         </Grid>
@@ -280,6 +305,36 @@ const ProductDetail = () => {
              </Box>
           </Grid>
         </Grid>
+
+        {/* Video Section */}
+        {product.video && (
+          <Box sx={{ mt: 8, mb: 8 }}>
+            <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 3, color: BRAND_COLORS.text.primary }}>
+              Video Reseña
+            </Typography>
+            <Paper 
+              elevation={0}
+              sx={{ 
+                position: 'relative', 
+                paddingBottom: '56.25%', // 16:9 
+                height: 0, 
+                overflow: 'hidden', 
+                borderRadius: 4,
+                bgcolor: 'black',
+                boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
+              }}
+            >
+              <iframe 
+                src={getEmbedUrl(product.video)} 
+                title={product.name}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+              />
+            </Paper>
+          </Box>
+        )}
 
 
 
