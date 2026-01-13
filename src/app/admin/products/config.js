@@ -151,7 +151,11 @@ export const normalizeProduct = (product, idx, categoryKey) => ({
   name: product.name || product.titulo || product.title || product.productName || 'Sin Nombre',
   brand: product.brand || product.marca || product.productBrand || '',
   category: product.category || product.categoria || categoryKey || '',
-  tags: product.tags || [],
+  tags: Array.isArray(product.tags) 
+    ? product.tags 
+    : (product.tags && typeof product.tags === 'object') 
+      ? Object.values(product.tags) 
+      : [],
   
   // Pricing & Inventory
   price: parseFloat(product.price) || parseFloat(product.priceUSD) || parseFloat(product.precio) || product.productPrice || 0,
