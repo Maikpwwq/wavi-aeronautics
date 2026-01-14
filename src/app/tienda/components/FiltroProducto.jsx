@@ -71,7 +71,9 @@ const FiltroProducto = (props) => {
     toggleMarca,
     setMinPrice,
     setMaxPrice,
-    resetFilters
+    resetFilters,
+    sortOrder,
+    setSortOrder
   } = props
 
   const theme = useTheme()
