@@ -41,6 +41,7 @@ const MigrationTool = () => {
   const [progress, setProgress] = useState({})    // { category: { total, done, errors } }
   const [results, setResults] = useState({})      // { category: 'done' | 'error' | 'ready' }
   const [errorDetails, setErrorDetails] = useState({}) // { category: [error messages] }
+  const [exchangeRate, setExchangeRate] = useState(4150) // Default exchange rate COP -> USD
 
   // Category mapping: Redux key → display label + Firestore category
   const CATEGORY_MAP = useMemo(() => [
@@ -68,13 +69,18 @@ const MigrationTool = () => {
   }
 
   // Parse legacy price string "$ 1.200.000" → 1200000 (COP as stored)
-  // Note: Legacy prices are already in COP, we keep them as-is
   const parseLegacyPrice = (priceValue) => {
     if (typeof priceValue === 'number') return priceValue
     if (!priceValue || typeof priceValue !== 'string') return 0
     // Remove currency symbol, dots, spaces → "$ 1.200.000" → "1200000"
     const numericString = priceValue.replace(/[^0-9]/g, '')
     return parseInt(numericString, 10) || 0
+  }
+
+  // Convert COP to USD based on exchange rate
+  const convertCopToUsd = (priceCOP) => {
+    if (!priceCOP || priceCOP === 0) return 0
+    return Math.round(priceCOP / exchangeRate)
   }
 
   // Generate productID if not present
@@ -95,14 +101,17 @@ const MigrationTool = () => {
   const migrateProduct = async (legacyProduct, firestoreCategory) => {
     try {
       // Pre-process legacy price (COP string like "$ 1.200.000" → 1200000)
-      const parsedPrice = parseLegacyPrice(legacyProduct.precio || legacyProduct.price)
+      const parsedPriceCOP = parseLegacyPrice(legacyProduct.precio || legacyProduct.price)
       
-      // Build payload using existing config function (handles Spanish→English mapping)
-      // Pass pre-parsed price to override the precio field
+      // Convert to USD for the new schema
+      // NOTE: The new 'price' field expects USD. Legacy 'precio' was COP.
+      const priceUSD = convertCopToUsd(parsedPriceCOP)
+      
+      // Build payload using existing config function
       const payload = buildProductPayload({
         ...legacyProduct,
-        price: parsedPrice, // Use parsed numeric price
-        category: firestoreCategory, // Override category with target
+        price: priceUSD, // Use converted USD price
+        category: firestoreCategory,
       })
 
       // Ensure required fields
@@ -111,7 +120,7 @@ const MigrationTool = () => {
         productID: generateProductID(legacyProduct),
         category: firestoreCategory,
         brand: formatBrand(legacyProduct.marca || legacyProduct.brand),
-        price: parsedPrice, // Ensure price is numeric
+        price: priceUSD, // Ensure price is USD number
       }
 
       // Write to new hierarchy
@@ -212,11 +221,21 @@ const MigrationTool = () => {
           a la nueva jerarquía <code>products/{'{category}'}/brands/{'{brand}'}/items</code> (esquema inglés).
         </Alert>
 
-        <Box sx={{ mb: 2 }}>
+        <Box sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
           <Typography variant="body2" color="text.secondary">
             Total productos en Redux: <strong>{totals.total}</strong> | 
             Migrados: <strong>{totals.migrated}</strong>
           </Typography>
+          
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 'auto', p: 1, border: '1px solid', borderColor: 'divider', borderRadius: 1 }}>
+            <Typography variant="caption" sx={{ whiteSpace: 'nowrap' }}>Tasa de Cambio (COP/USD):</Typography>
+            <input 
+              type="number" 
+              value={exchangeRate} 
+              onChange={(e) => setExchangeRate(Number(e.target.value))}
+              style={{ width: 80, padding: 4 }}
+            />
+          </Box>
         </Box>
 
         <TableContainer component={Paper} variant="outlined">
