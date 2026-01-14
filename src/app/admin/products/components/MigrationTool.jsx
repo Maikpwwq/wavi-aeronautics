@@ -32,36 +32,112 @@ import { buildProductPayload } from '../config'
  * 
  * Flow: Redux Store → buildProductPayload() → createNewProduct() → Firestore
  */
-const MigrationTool = () => {
-  // Redux state - legacy products loaded from productos collection
-  const shopState = useSelector((store) => store?.shop)
+import { firestore } from '@/firebase/firebaseClient'
+import { collection, getDocs, doc } from 'firebase/firestore'
 
-  // Migration state
-  const [migrating, setMigrating] = useState(null) // Currently migrating category
-  const [progress, setProgress] = useState({})    // { category: { total, done, errors } }
-  const [results, setResults] = useState({})      // { category: 'done' | 'error' | 'ready' }
-  const [errorDetails, setErrorDetails] = useState({}) // { category: [error messages] }
+// ... (previous imports)
+
+const MigrationTool = () => {
+  // Local state for legacy products (bypassing Redux which now has new schema)
+  const [legacyShopState, setLegacyShopState] = useState({})
+  const [loadingLegacy, setLoadingLegacy] = useState(false)
+
+  // Migration state...
+  const [migrating, setMigrating] = useState(null)
+  const [progress, setProgress] = useState({})
+  const [results, setResults] = useState({}) 
+  const [errorDetails, setErrorDetails] = useState({})
   const [exchangeRate, setExchangeRate] = useState(() => {
     const envRate = Number(process.env.NEXT_PUBLIC_DOLARTOCOP)
     return !isNaN(envRate) && envRate > 0 ? envRate : 3730
-  }) // Default exchange rate COP -> USD
+  })
 
-  // Category mapping: Redux key → display label + Firestore category
-  const CATEGORY_MAP = useMemo(() => [
-    { reduxKey: 'googles', label: 'Googles', firestoreCategory: 'googles' },
-    { reduxKey: 'digitalVTX', label: 'Digital VTX', firestoreCategory: 'digitalVTX' },
-    { reduxKey: 'dronesRC', label: 'Drones RC', firestoreCategory: 'dronesRC' },
-    { reduxKey: 'dronesKit', label: 'Kit Drones', firestoreCategory: 'dronesKit' },
-    { reduxKey: 'dronesHD', label: 'Drones HD', firestoreCategory: 'dronesHD' },
-    { reduxKey: 'baterias', label: 'Baterías/Accesorios', firestoreCategory: 'baterias' },
-    { reduxKey: 'receptors', label: 'Receptores', firestoreCategory: 'receptors' },
-    { reduxKey: 'transmisors', label: 'Transmisores', firestoreCategory: 'transmisors' },
-    { reduxKey: 'radioControl', label: 'Radio Control', firestoreCategory: 'radioControl' },
-  ], [])
+  // Legacy Paths Configuration
+  const LEGACY_PATHS_MAP = useMemo(() => ({
+    googles: [
+      'productos/Googles/betafpv',
+      'productos/Googles/DJI',
+      'productos/Googles/FatShark',
+      'productos/Googles/Iflight-rc',
+      'productos/Googles/Emaxusa',
+      'productos/Googles/Walksnail'
+    ],
+    digitalVTX: [
+      'productos/digital_vtx/DJI',
+      'productos/digital_vtx/CADDX'
+    ],
+    dronesRC: ['productos/dron/RC'],
+    dronesKit: ['productos/dron/kit_fpv_dron'],
+    dronesHD: ['productos/dron/geprc'],
+    receptors: [
+      'productos/radio_control/betafpv/receptor/BETAFPV-ELRS',
+      'productos/radio_control/flysky/receptor/Flysky-FS-X14S-V2',
+      'productos/radio_control/flysky/receptor/Flysky-FS-iA8X',
+      'productos/radio_control/flywoo/receptor/Flywoo-ELRS',
+      'productos/radio_control/frsky/receptor/Frsky_R-XSR',
+      'productos/radio_control/frsky/receptor/Frsky_XM+',
+      'productos/radio_control/iflight-rc/receptor/iFlight-R81-SPI',
+      'productos/radio_control/radio-master/receptor/NANO-ELRS-EP2',
+      'productos/radio_control/radio-master/receptor/RadioMaster-R81',
+      'productos/radio_control/team-blacksheep/receptor/Crossfire-Nano-RX',
+      'productos/radio_control/team-blacksheep/receptor/Crossfire-Nano-RX-Pro',
+      'productos/radio_control/team-blacksheep/receptor/Crossfire-Nano-RX-SE',
+      'productos/radio_control/team-blacksheep/receptor/Traser-Nano-RX'
+    ],
+    transmisors: [
+      'productos/radio_control/team-blacksheep/transmisor/Crossfire-Nano-Tx',
+      'productos/radio_control/betafpv/transmisor/ELRS-Nano-TX'
+    ],
+    baterias: [
+      'productos/radio_control/betafpv/baterias/2PCS-2s-300mAh',
+      'productos/radio_control/eachine/baterias/E520S-1200mAh',
+      'productos/radio_control/eachine/baterias/E58-500mAh',
+      'productos/radio_control/emax-usa/baterias/1S-300mAh',
+      'productos/radio_control/emax-usa/baterias/1S-450mAh',
+      'productos/radio_control/emax-usa/baterias/2PCS-2S-300mAh',
+      'productos/radio_control/flywoo/baterias/4PCS-1S-450mAh',
+      'productos/radio_control/flywoo/baterias/4PCS-1S-750mAh',
+      'productos/radio_control/geprc/baterias/4S-650a850mAh',
+      'productos/radio_control/iflight-rc/baterias/3S-450mAh',
+      'productos/radio_control/uruav/baterias/1S-250mAh'
+    ],
+    radioControl: [
+      'productos/radio_control/betafpv/control-remoto/lite-radio2',
+      'productos/radio_control/radio-master/control-remoto/tx16s',
+      'productos/radio_control/iflight-rc/control-remoto/iF8-E'
+      // Add more RC paths if previously defined
+    ]
+  }), [])
 
-  // Get products for each category from Redux
+  // Fetch Legacy Data Effect
+  React.useEffect(() => {
+    const fetchLegacyData = async () => {
+      setLoadingLegacy(true)
+      const newState = {}
+      
+      try {
+        await Promise.all(Object.entries(LEGACY_PATHS_MAP).map(async ([key, paths]) => {
+          const promises = paths.map(path => getDocs(collection(firestore, path)))
+          const snapshots = await Promise.all(promises)
+          const data = snapshots.flatMap(snap => snap.docs.map(doc => ({ id: doc.id, ...doc.data() })))
+          newState[key] = data
+        }))
+        setLegacyShopState(newState)
+      } catch (err) {
+        console.error("Error fetching legacy migration data:", err)
+      } finally {
+        setLoadingLegacy(false)
+      }
+    }
+
+    if (typeof window !== 'undefined') {
+      fetchLegacyData()
+    }
+  }, [LEGACY_PATHS_MAP])
+
+  // Helper to get products (now from local legacy state)
   const getCategoryProducts = (reduxKey) => {
-    return shopState?.[reduxKey] || []
+    return legacyShopState[reduxKey] || []
   }
 
   // Format brand for Firestore path (lowercase, trimmed, default if empty)
@@ -210,7 +286,7 @@ const MigrationTool = () => {
       }
     })
     return { total, migrated }
-  }, [CATEGORY_MAP, shopState, progress])
+  }, [CATEGORY_MAP, legacyShopState, progress])
 
   return (
     <Card sx={{ m: 2 }}>
