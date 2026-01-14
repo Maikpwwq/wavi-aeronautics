@@ -15,18 +15,6 @@ async function FirebaseRadioControlProducts() {
     }
   }
 
-async function FirebaseRadioControlProducts() {
-  let storeProductsRC = []
-
-  if (typeof window !== 'undefined') {
-    const cachedRC = sessionStorage.getItem('Productos_RC')
-    if (cachedRC) {
-      storeProductsRC = JSON.parse(cachedRC)
-      parseProductPrices(storeProductsRC)
-      return { storeProductsRC }
-    }
-  }
-
   // New Hierarchy Fetch: products/{category}/brands/{brand}/items
   // Query all 'items' subcollections where category == 'radioControl'
   try {
