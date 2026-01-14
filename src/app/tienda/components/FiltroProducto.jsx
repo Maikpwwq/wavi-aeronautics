@@ -67,8 +67,8 @@ const PriceInput = ({ value, onChange, placeholder }) => {
 const FiltroProducto = (props) => {
   const {
     filters,
-    availableMarcas,
-    toggleMarca,
+    availableBrands,
+    toggleBrand,
     setMinPrice,
     setMaxPrice,
     resetFilters,
@@ -121,13 +121,13 @@ const FiltroProducto = (props) => {
             <div className="filter-price-row">
               <PriceInput 
                 placeholder="Mín"
-                value={filters.precio.min}
+                value={filters.price.min}
                 onChange={(val) => setMinPrice(val)}
               />
               <span style={{ color: '#aaa' }}>—</span>
               <PriceInput 
                 placeholder="Máx"
-                value={filters.precio.max}
+                value={filters.price.max}
                 onChange={(val) => setMaxPrice(val)}
               />
             </div>
@@ -162,14 +162,14 @@ const FiltroProducto = (props) => {
           <div className="filter-section">
             <div className="filter-section-title">MARCA</div>
             <div className="filter-pills">
-              {availableMarcas.length > 0 ? (
-                availableMarcas.map((marca) => (
+              {availableBrands.length > 0 ? (
+                availableBrands.map((brand) => (
                   <div
-                    key={marca}
-                    className={`filter-pill ${filters.marcas.includes(marca) ? 'active' : ''}`}
-                    onClick={() => toggleMarca(marca)}
+                    key={brand}
+                    className={`filter-pill ${filters.brands.includes(brand) ? 'active' : ''}`}
+                    onClick={() => toggleBrand(brand)}
                   >
-                    {marca}
+                    {brand}
                   </div>
                 ))
               ) : (
@@ -192,8 +192,8 @@ const FiltroProducto = (props) => {
 
 FiltroProducto.propTypes = {
   filters: PropTypes.object.isRequired,
-  availableMarcas: PropTypes.array.isRequired,
-  toggleMarca: PropTypes.func.isRequired,
+  availableBrands: PropTypes.array.isRequired,
+  toggleBrand: PropTypes.func.isRequired,
   setMinPrice: PropTypes.func.isRequired,
   setMaxPrice: PropTypes.func.isRequired,
   resetFilters: PropTypes.func.isRequired,

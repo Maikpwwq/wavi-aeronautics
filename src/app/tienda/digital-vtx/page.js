@@ -49,8 +49,8 @@ export const DigitalVTX = () => {
   const {
     filters,
     filteredProducts,
-    availableMarcas,
-    toggleMarca,
+    availableBrands,
+    toggleBrand,
     setMinPrice,
     setMaxPrice,
     resetFilters,
@@ -75,8 +75,8 @@ export const DigitalVTX = () => {
       <Box sx={classes.productShowcase}>
         <FiltroProducto 
           filters={filters}
-          availableMarcas={availableMarcas}
-          toggleMarca={toggleMarca}
+          availableBrands={availableBrands}
+          toggleBrand={toggleBrand}
           setMinPrice={setMinPrice}
           setMaxPrice={setMaxPrice}
           resetFilters={resetFilters}

@@ -49,8 +49,8 @@ const Accesorios = () => {
   const {
     filters,
     filteredProducts,
-    availableMarcas,
-    toggleMarca,
+    availableBrands,
+    toggleBrand,
     setMinPrice,
     setMaxPrice,
     resetFilters,
@@ -75,8 +75,8 @@ const Accesorios = () => {
       <Box sx={classes.productShowcase}>
         <FiltroProducto 
           filters={filters}
-          availableMarcas={availableMarcas}
-          toggleMarca={toggleMarca}
+          availableBrands={availableBrands}
+          toggleBrand={toggleBrand}
           setMinPrice={setMinPrice}
           setMaxPrice={setMaxPrice}
           resetFilters={resetFilters}

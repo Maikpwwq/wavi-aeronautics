@@ -5,8 +5,8 @@ export const useProductFilter = (products) => {
   // Logic: Filter State
   // --------------------------------------------------------------------------
   const [filterState, setFilterState] = useState({
-    marcas: [],
-    precio: {
+    brands: [],
+    price: {
       min: '',
       max: ''
     }
@@ -15,18 +15,18 @@ export const useProductFilter = (products) => {
   // --------------------------------------------------------------------------
   // Logic: Actions
   // --------------------------------------------------------------------------
-  const toggleMarca = (marca) => {
+  const toggleBrand = (brand) => {
     setFilterState((prev) => {
-      const isSelected = prev.marcas.includes(marca)
+      const isSelected = prev.brands.includes(brand)
       if (isSelected) {
         return {
           ...prev,
-          marcas: prev.marcas.filter((m) => m !== marca)
+          brands: prev.brands.filter((m) => m !== brand)
         }
       } else {
         return {
           ...prev,
-          marcas: [...prev.marcas, marca]
+          brands: [...prev.brands, brand]
         }
       }
     })
@@ -35,21 +35,21 @@ export const useProductFilter = (products) => {
   const setMinPrice = (val) => {
     setFilterState((prev) => ({
       ...prev,
-      precio: { ...prev.precio, min: val }
+      price: { ...prev.price, min: val }
     }))
   }
 
   const setMaxPrice = (val) => {
     setFilterState((prev) => ({
       ...prev,
-      precio: { ...prev.precio, max: val }
+      price: { ...prev.price, max: val }
     }))
   }
 
   const resetFilters = () => {
     setFilterState({
-      marcas: [],
-      precio: { min: '', max: '' }
+      brands: [],
+      price: { min: '', max: '' }
     })
   }
 
@@ -64,14 +64,14 @@ export const useProductFilter = (products) => {
   }
 
   // Extract unique brands from current products
-  const availableMarcas = useMemo(() => {
+  const availableBrands = useMemo(() => {
     if (!products) return []
-    const marcasSet = new Set(
+    const brandsSet = new Set(
       products
-        .map((p) => p.marca)
+        .map((p) => p.brand || p.marca) // Handle new 'brand' and legacy 'marca'
         .filter((m) => m && m !== 'default') // Filter invalid brands
     )
-    return Array.from(marcasSet).sort()
+    return Array.from(brandsSet).sort()
   }, [products])
 
   // --------------------------------------------------------------------------
@@ -91,26 +91,32 @@ export const useProductFilter = (products) => {
     // 1. Filter
     const filtered = products.filter((product) => {
       // Brand Filter
+      const productBrand = product.brand || product.marca
       if (
-        filterState.marcas.length > 0 &&
-        !filterState.marcas.includes(product.marca)
+        filterState.brands.length > 0 &&
+        !filterState.brands.includes(productBrand)
       ) {
         return false
       }
 
       // Price Filter
-      const productPrice = parsePrice(product.price || product.precio)
-      const minVal = parsePrice(filterState.precio.min)
-      const maxVal = parsePrice(filterState.precio.max)
+      // Prefer 'precio' (formatted COP string) over 'price' (USD number) for comparison
+      // because the filter inputs are in encoded COP
+      const productPrice = parsePrice(product.precio || product.price) 
+      const minVal = parsePrice(filterState.price.min)
+      const maxVal = parsePrice(filterState.price.max)
 
-      if (filterState.precio.min && productPrice < minVal) return false
-      if (filterState.precio.max && productPrice > maxVal) return false
+      if (filterState.price.min && productPrice < minVal) return false
+      if (filterState.price.max && productPrice > maxVal) return false
 
       return true
     })
 
     // 2. Sort
     return filtered.sort((a, b) => {
+      // Helper to get consistent price for sorting
+      const getPrice = (p) => parsePrice(p.precio || p.price)
+
       switch (sortOrder) {
         case 'newest': {
           const dateA = a.createdAt ? new Date(a.createdAt.seconds ? a.createdAt.seconds * 1000 : a.createdAt) : 0
@@ -123,14 +129,10 @@ export const useProductFilter = (products) => {
           return dateA - dateB
         }
         case 'price-asc': {
-          const priceA = parsePrice(a.price || a.precio)
-          const priceB = parsePrice(b.price || b.precio)
-          return priceA - priceB
+          return getPrice(a) - getPrice(b)
         }
         case 'price-desc': {
-          const priceA = parsePrice(a.price || a.precio)
-          const priceB = parsePrice(b.price || b.precio)
-          return priceB - priceA
+          return getPrice(b) - getPrice(a)
         }
         default:
           return 0
@@ -141,8 +143,8 @@ export const useProductFilter = (products) => {
   return {
     filters: filterState,
     filteredProducts,
-    availableMarcas,
-    toggleMarca,
+    availableBrands,
+    toggleBrand,
     setMinPrice,
     setMaxPrice,
     resetFilters,

@@ -73,8 +73,8 @@ const TrasmisorReceptor = () => {
   // Use custom filter hook
   const {
     filters,
-    availableMarcas,
-    toggleMarca,
+    availableBrands,
+    toggleBrand,
     setMinPrice,
     setMaxPrice,
     resetFilters,
@@ -103,8 +103,8 @@ const TrasmisorReceptor = () => {
       <Box sx={classes.productShowcase}>
         <FiltroProducto 
           filters={filters}
-          availableMarcas={availableMarcas}
-          toggleMarca={toggleMarca}
+          availableBrands={availableBrands}
+          toggleBrand={toggleBrand}
           setMinPrice={setMinPrice}
           setMaxPrice={setMaxPrice}
           resetFilters={resetFilters}

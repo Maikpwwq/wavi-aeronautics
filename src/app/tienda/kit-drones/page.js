@@ -51,8 +51,8 @@ const DroneProducts = () => {
   const {
     filters,
     filteredProducts,
-    availableMarcas,
-    toggleMarca,
+    availableBrands,
+    toggleBrand,
     setMinPrice,
     setMaxPrice,
     resetFilters,
@@ -71,8 +71,8 @@ const DroneProducts = () => {
       <Box sx={classes.productShowcase}>
         <FiltroProducto 
           filters={filters}
-          availableMarcas={availableMarcas}
-          toggleMarca={toggleMarca}
+          availableBrands={availableBrands}
+          toggleBrand={toggleBrand}
           setMinPrice={setMinPrice}
           setMaxPrice={setMaxPrice}
           resetFilters={resetFilters}
