@@ -125,7 +125,7 @@ const TrasmisorReceptor = () => {
             ) : filteredTransmisors.length > 0 ? (
               <Grid container spacing={2}>
                 {filteredTransmisors.map((product, k) => (
-                  <Grid item key={product.productID || k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
+                  <Grid item key={product.productID || k} size={{ xs: 12, sm: 6, md: 6, lg: 4, xl: 3 }}>
                     <ProductCard
                       category="transmisors"
                       className="d-flex mb-2"
@@ -155,7 +155,7 @@ const TrasmisorReceptor = () => {
             ) : filteredReceptors.length > 0 ? (
               <Grid container spacing={2}>
                 {filteredReceptors.map((product, k) => (
-                  <Grid item key={product.productID || k} size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}>
+                  <Grid item key={product.productID || k} size={{ xs: 12, sm: 6, md: 6, lg: 4, xl: 3 }}>
                     <ProductCard
                       category="receptors"
                       className="d-flex mb-2"
