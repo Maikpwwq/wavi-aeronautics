@@ -91,6 +91,7 @@ const NAV_ITEMS = [
   { text: 'Problemas de Pedidos', icon: <ReportProblemIcon />, path: '/admin/orders/issues' },
   { text: 'Usuarios', icon: <PeopleIcon />, path: '/admin/users' },
   { text: 'Gestión de Productos', icon: <SettingsIcon />, path: '/admin/products' },
+  { text: 'Migrar Productos', icon: <SettingsIcon />, path: '/admin/products/migrate' },
   { text: 'Configuración', icon: <SettingsIcon />, path: '/admin/settings' },
 ]
 

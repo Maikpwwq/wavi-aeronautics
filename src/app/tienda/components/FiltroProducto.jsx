@@ -146,7 +146,7 @@ const FiltroProducto = (props) => {
                   borderRadius: '4px', 
                   border: '1px solid rgba(255, 255, 255, 0.23)', // Matching MUI default dark mode border roughly or theme
                   backgroundColor: 'transparent',
-                  color: 'inherit',
+                  color: '#eee',
                   cursor: 'pointer'
                 }}
               >
