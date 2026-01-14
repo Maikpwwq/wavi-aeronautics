@@ -78,8 +78,20 @@ export const parseProductPrices = (products) => {
   if (!products || !Array.isArray(products)) return;
   
   products.forEach(product => {
-    if (product.precio && product.precio !== 'Agotado') {
-      // Preserve original USD price for Admin reference
+    // Case 1: New Migrated Product (has 'price' in USD, missing 'precio')
+    if (product.price !== undefined && product.price !== null) {
+      // Calculate COP string from USD price
+      product.priceUSD = product.price; // Standardize for admin (already number)
+      product.precio = calculateCopPrice(product.price);
+    } 
+    // Case 2: Legacy Product (has 'precio' in COP formatted string or number)
+    else if (product.precio && product.precio !== 'Agotado') {
+      // Preserve original USD price for Admin reference (Wait, legacy 'precio' IS COP?)
+      // Actually legacy 'precio' was treated as USD by calculateCopPrice logic previously?
+      // Re-reading logic: calculateCopPrice takes input, strips chars, multiply by rate. 
+      // So legacy system treated 'precio' as USD input?
+      // Yes, calculateCopPrice(priceInUsd). 
+      // So we keep this behavior for legacy items.
       product.priceUSD = product.precio;
       product.precio = calculateCopPrice(product.precio);
     }
