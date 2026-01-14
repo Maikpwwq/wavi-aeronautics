@@ -52,6 +52,19 @@ const MigrationTool = () => {
     return !isNaN(envRate) && envRate > 0 ? envRate : 3730
   })
 
+  // Category mapping: Redux key → display label + Firestore category
+  const CATEGORY_MAP = useMemo(() => [
+    { reduxKey: 'googles', label: 'Googles', firestoreCategory: 'googles' },
+    { reduxKey: 'digitalVTX', label: 'Digital VTX', firestoreCategory: 'digitalVTX' },
+    { reduxKey: 'dronesRC', label: 'Drones RC', firestoreCategory: 'dronesRC' },
+    { reduxKey: 'dronesKit', label: 'Kit Drones', firestoreCategory: 'dronesKit' },
+    { reduxKey: 'dronesHD', label: 'Drones HD', firestoreCategory: 'dronesHD' },
+    { reduxKey: 'baterias', label: 'Baterías/Accesorios', firestoreCategory: 'baterias' },
+    { reduxKey: 'receptors', label: 'Receptores', firestoreCategory: 'receptors' },
+    { reduxKey: 'transmisors', label: 'Transmisores', firestoreCategory: 'transmisors' },
+    { reduxKey: 'radioControl', label: 'Radio Control', firestoreCategory: 'radioControl' },
+  ], [])
+
   // Legacy Paths Configuration
   const LEGACY_PATHS_MAP = useMemo(() => ({
     googles: [
