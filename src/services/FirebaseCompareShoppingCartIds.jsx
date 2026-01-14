@@ -1,87 +1,8 @@
 'use client'
 import { firestore, auth } from '@/firebase/firebaseClient'
-import { calculateCopPrice, parseCopCurrency } from '@/utilities/priceUtils'
-import { collection, getDocs, query, where, documentId } from 'firebase/firestore'
+import { parseCopCurrency, parseProductPrices } from '@/utilities/priceUtils'
+import { collectionGroup, getDocs, query, where } from 'firebase/firestore'
 import PropTypes from 'prop-types'
-
-// Helper to define all collections once
-const getProductCollections = (db) => {
-  const rootParams = [
-    ['productos', 'dron', 'kit_fpv_dron'],
-    ['productos', 'dron', 'RC'],
-    ['productos', 'dron', 'geprc'],
-    ['productos', 'Googles', 'Betafpv'],
-    ['productos', 'Googles', 'DJI'],
-    ['productos', 'Googles', 'Emaxusa'],
-    ['productos', 'Googles', 'FatShark'],
-    ['productos', 'Googles', 'Iflight-rc'],
-    ['productos', 'Googles', 'Walksnail'],
-    // Radio Control - Betafpv
-    ['productos', 'radio_control', 'betafpv/baterias/2PCS-2s-300mAh'],
-    ['productos', 'radio_control', 'betafpv/control-remoto/lite-radio2'],
-    ['productos', 'radio_control', 'betafpv/control-remoto/lite-radio3'],
-    ['productos', 'radio_control', 'betafpv/control-remoto/lite-radio3-pro'],
-    ['productos', 'radio_control', 'betafpv/receptor/BETAFPV-ELRS'],
-    // Radio Control - Eachine
-    ['productos', 'radio_control', 'eachine/baterias/E520S-1200mAh'],
-    ['productos', 'radio_control', 'eachine/baterias/E58-500mAh'],
-    ['productos', 'radio_control', 'eachine/control-remoto/liteRadio-2.4G'],
-    ['productos', 'radio_control', 'eachine/control-remoto/FPV-EX5/'],
-    // Radio Control - EmaxUsa
-    ['productos', 'radio_control', 'emax-usa/baterias/1S-300mAh'],
-    ['productos', 'radio_control', 'emax-usa/baterias/1S-450mAh'],
-    ['productos', 'radio_control', 'emax-usa/baterias/2PCS-2S-300mAh'],
-    ['productos', 'radio_control', 'emax-usa/control-remoto/E8'],
-    // Radio Control - Flysky
-    ['productos', 'radio_control', 'flysky/receptor/Flysky-FS-X14S-V2'],
-    ['productos', 'radio_control', 'flysky/receptor/Flysky-FS-iA8X'],
-    // Radio Control - Flywoo
-    ['productos', 'radio_control', 'flywoo/baterias/4PCS-1S-450mAh'],
-    ['productos', 'radio_control', 'flywoo/baterias/4PCS-1S-750mAh'],
-    ['productos', 'radio_control', 'flywoo/control-remoto/LiteRadio-V3-ELRS'],
-    ['productos', 'radio_control', 'flywoo/control-remoto/LiteRadio-V3-TBS'],
-    ['productos', 'radio_control', 'flywoo/receptor/Flywoo-ELRS'],
-    // Radio Control - Frsky
-    ['productos', 'radio_control', 'frsky/receptor/Frsky_R-XSR'],
-    ['productos', 'radio_control', 'frsky/receptor/Frsky_XM+'],
-    // Radio Control - Geprc
-    ['productos', 'radio_control', 'geprc/baterias/4S-650a850mAh'],
-    ['productos', 'radio_control', 'geprc/control-remoto/tinyRadio-GR8'],
-    // Radio Control - Iflightrc
-    ['productos', 'radio_control', 'iflight-rc/baterias/3S-450mAh'],
-    ['productos', 'radio_control', 'iflight-rc/cargadores/M4-AC30-1-4S'],
-    ['productos', 'radio_control', 'iflight-rc/control-remoto/C8-ELRS'],
-    ['productos', 'radio_control', 'iflight-rc/control-remoto/iF8-E'],
-    ['productos', 'radio_control', 'iflight-rc/receptor/iFlight-R81-SPI'],
-    // Radio Control - Radiomaster
-    ['productos', 'radio_control', 'radio-master/control-remoto/T8-Lite'],
-    ['productos', 'radio_control', 'radio-master/control-remoto/T8-Pro'],
-    ['productos', 'radio_control', 'radio-master/control-remoto/zorro'],
-    ['productos', 'radio_control', 'radio-master/control-remoto/tx12'],
-    ['productos', 'radio_control', 'radio-master/control-remoto/tx16s'],
-    ['productos', 'radio_control', 'radio-master/control-remoto/tx16-Max'],
-    ['productos', 'radio_control', 'radio-master/receptor/NANO-ELRS-EP2'],
-    ['productos', 'radio_control', 'radio-master/receptor/RadioMaster-R81'],
-    // Radio Control - Team Blacksheep
-    ['productos', 'radio_control', 'team-blacksheep/control-remoto/ethix-mambo'],
-    ['productos', 'radio_control', 'team-blacksheep/control-remoto/tango2pro'],
-    ['productos', 'radio_control', 'team-blacksheep/control-remoto/tango2'],
-    ['productos', 'radio_control', 'team-blacksheep/control-remoto/tbs-mambo'],
-    ['productos', 'radio_control', 'team-blacksheep/receptor/Crossfire-Nano-Rx-SE'],
-    ['productos', 'radio_control', 'team-blacksheep/receptor/Tracer-Nano-Rx'],
-    ['productos', 'radio_control', 'team-blacksheep/receptor/Crossfire-Nano-RX'],
-    ['productos', 'radio_control', 'team-blacksheep/receptor/Crossfire-Nano-Rx-Pro'],
-    // Radio Control - Uruav
-    ['productos', 'radio_control', 'uruav/baterias/1S-250mAh']
-  ];
-
-  return rootParams.map(pathParts => {
-    if (pathParts.length === 3) {
-      return collection(db, pathParts[0], pathParts[1], pathParts[2]);
-    }
-    return collection(db, ...pathParts); 
-  });
-};
 
 export const FirebaseCompareShoppingCartIds = async ({ products, updateCart }) => {
   try {
@@ -103,43 +24,41 @@ export const FirebaseCompareShoppingCartIds = async ({ products, updateCart }) =
         productsInputMap.set(p.productID, p.cantidad);
     });
 
-    const targetIds = Array.from(productsInputMap.keys());
+    const targetIds = Array.from(productsInputMap.keys()).filter(id => id);
     console.log("Looking for products with IDs:", targetIds);
 
-    let allProducts = [];
-    const cachedProducts = typeof window !== 'undefined' ? sessionStorage.getItem('Todos los productos') : null;
-
-    if (cachedProducts) {
-      allProducts = JSON.parse(cachedProducts);
-    } else {
-       const collectionRefs = getProductCollections(firestore);
-       const snapshots = await Promise.all(collectionRefs.map(ref => getDocs(ref)));
-       
-       snapshots.forEach(snap => {
-         snap.forEach(doc => {
-            allProducts.push(doc.data());
-         });
-       });
-       
-       if (typeof window !== 'undefined') {
-         sessionStorage.setItem('Todos los productos', JSON.stringify(allProducts));
-       }
+    // Fetch specific products using chunked 'in' queries (Firestore limit 10)
+    const fetchedProducts = [];
+    const chunks = [];
+    for (let i = 0; i < targetIds.length; i += 10) {
+        chunks.push(targetIds.slice(i, i + 10));
     }
 
-    // Filter and Hydrate
-    const cartProducts = allProducts.filter(p => productsInputMap.has(p.productID))
-      .map(p => {
-        const product = { ...p }; 
+    const promises = chunks.map(chunk => {
+        const q = query(
+            collectionGroup(firestore, 'items'), 
+            where('productID', 'in', chunk)
+        );
+        return getDocs(q);
+    });
+
+    const snapshots = await Promise.all(promises);
+    snapshots.forEach(snap => {
+        snap.forEach(doc => fetchedProducts.push(doc.data()));
+    });
+
+    // Hydrate cart products with fetched data
+    const cartProducts = fetchedProducts.map(p => {
         const qty = productsInputMap.get(p.productID);
-        const formattedPrice = calculateCopPrice(product.precio);
-        
         return {
-           ...product,
-           precio: formattedPrice,
+           ...p,
            cantidad: qty
         };
-      });
-      
+    });
+
+    // Parse prices (calculates COP 'precio' for new products if missing)
+    parseProductPrices(cartProducts);
+
     if (cartProducts.length > 0) {
         // Calculate Totals
         let totalItems = 0;
@@ -148,7 +67,7 @@ export const FirebaseCompareShoppingCartIds = async ({ products, updateCart }) =
         cartProducts.forEach(p => {
            totalItems += p.cantidad;
            
-           // Use parseCopCurrency to correctly parse the formatted price (e.g., "$ 2.212.650")
+           // Sum logic using formatted 'precio' (COP string)
            if (p.precio && p.precio !== 'Agotado') {
                const unitPriceCOP = parseCopCurrency(p.precio);
                totalSum += unitPriceCOP * p.cantidad;
