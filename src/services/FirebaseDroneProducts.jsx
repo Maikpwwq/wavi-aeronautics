@@ -1,12 +1,12 @@
 'use client'
 import { firestore } from '@/firebase/firebaseClient'
-import { collection, doc, getDocs, collectionGroup, query } from 'firebase/firestore'
+import { collection, doc, getDocs, query, collectionGroup, where } from 'firebase/firestore'
 import { parseProductPrices } from '@/utilities/priceUtils'
 
 async function FirebaseDroneProducts() {
-  let productosKits = []
-  let productosRC = []
-  let productosHD = []
+  let storeProductsKits = []
+  let storeProductsRC = []
+  let storeProductsHD = []
 
   // Try to load from SessionStorage first (Client-side only)
   if (typeof window !== 'undefined') {
@@ -15,79 +15,53 @@ async function FirebaseDroneProducts() {
     const cachedHD = sessionStorage.getItem('Productos_DronesHD')
 
     if (cachedKits && cachedRC && cachedHD) {
-      productosKits = JSON.parse(cachedKits)
-      productosRC = JSON.parse(cachedRC)
-      productosHD = JSON.parse(cachedHD)
+      storeProductsKits = JSON.parse(cachedKits)
+      storeProductsRC = JSON.parse(cachedRC)
+      storeProductsHD = JSON.parse(cachedHD)
       
       // Parse prices for display
-      parseProductPrices(productosKits)
-      parseProductPrices(productosRC)
-      parseProductPrices(productosHD)
+      parseProductPrices(storeProductsKits)
+      parseProductPrices(storeProductsRC)
+      parseProductPrices(storeProductsHD)
 
       return {
-        storeProductsKits: productosKits,
-        storeProductsRC: productosRC,
-        storeProductsHD: productosHD
+        storeProductsKits,
+        storeProductsRC,
+        storeProductsHD
       }
     }
   }
 
-  // Fetch from Firestore if not in cache
-  const _firestore = firestore
-  const productsRef = collection(_firestore, 'productos')
-  const productsDoc = doc(productsRef, 'dron')
-  
-  const productsCollectionKits = collection(productsDoc, 'kit_fpv_dron')
-  const productsCollectionRC = collection(productsDoc, 'RC')
-  const productsColGEPRC = collection(productsDoc, 'geprc')
-
-  // NEW: Collection Group query for new hierarchical products
-  const newItemsQuery = query(collectionGroup(_firestore, 'items'))
-
+  // New Hierarchy Fetch: products/{category}/brands/{brand}/items
   try {
-    const [snapshotKits, snapshotRC, snapshotHD, snapshotNewItems] = await Promise.all([
-      getDocs(productsCollectionKits),
-      getDocs(productsCollectionRC),
-      getDocs(productsColGEPRC),
-      getDocs(newItemsQuery)
-    ])
-
-    // Legacy Data
-    productosKits = snapshotKits.docs.map(doc => doc.data())
-    productosRC = snapshotRC.docs.map(doc => doc.data())
-    productosHD = snapshotHD.docs.map(doc => doc.data())
-
-    // New Data (filtered by category)
-    const newItems = snapshotNewItems.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+    const q = query(
+      collectionGroup(firestore, 'items'),
+      where('category', 'in', ['dronesKit', 'dronesRC', 'dronesHD'])
+    )
     
-    newItems.forEach(item => {
-      // Deduplicate based on productID just in case
-      const existsInLegacy = (list) => list.some(p => p.productID === item.productID)
+    const snapshot = await getDocs(q)
+    const allDocs = snapshot.docs.map(doc => doc.data())
 
-      if (item.category === 'dronesKit' && !existsInLegacy(productosKits)) {
-        productosKits.push(item)
-      } else if (item.category === 'dronesRC' && !existsInLegacy(productosRC)) {
-        productosRC.push(item)
-      } else if (item.category === 'dronesHD' && !existsInLegacy(productosHD)) {
-        productosHD.push(item)
-      }
-    })
+    // Separate by category
+    storeProductsKits = allDocs.filter(p => p.category === 'dronesKit')
+    storeProductsRC = allDocs.filter(p => p.category === 'dronesRC')
+    storeProductsHD = allDocs.filter(p => p.category === 'dronesHD')
 
     // Cache raw data
     if (typeof window !== 'undefined') {
-       sessionStorage.setItem('Productos_Drones_Kits', JSON.stringify(productosKits))
-       sessionStorage.setItem('Productos_DronesRC', JSON.stringify(productosRC))
-       sessionStorage.setItem('Productos_DronesHD', JSON.stringify(productosHD))
+       sessionStorage.setItem('Productos_Drones_Kits', JSON.stringify(storeProductsKits))
+       sessionStorage.setItem('Productos_DronesRC', JSON.stringify(storeProductsRC))
+       sessionStorage.setItem('Productos_DronesHD', JSON.stringify(storeProductsHD))
     }
 
-    parseProductPrices(productosKits)
-    parseProductPrices(productosRC)
-    parseProductPrices(productosHD)
+    parseProductPrices(storeProductsKits)
+    parseProductPrices(storeProductsRC)
+    parseProductPrices(storeProductsHD)
 
     return {
-      storeProductsKits: productosKits,
-      storeProductsRC: productosRC,
-      storeProductsHD: productosHD
+      storeProductsKits,
+      storeProductsRC,
+      storeProductsHD
     }
 
   } catch (error) {

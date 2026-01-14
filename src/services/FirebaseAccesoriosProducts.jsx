@@ -1,6 +1,6 @@
 'use client'
 import { firestore } from '@/firebase/firebaseClient'
-import { collection, doc, getDocs } from 'firebase/firestore'
+import { collection, doc, getDocs, query, collectionGroup, where } from 'firebase/firestore'
 import { parseProductPrices } from '@/utilities/priceUtils'
 
 async function FirebaseAccesoriosProducts() {
@@ -15,32 +15,15 @@ async function FirebaseAccesoriosProducts() {
     }
   }
 
-  const _firestore = firestore
-  const productsRef = collection(_firestore, 'productos')
-  const productsDoc = doc(productsRef, 'radio_control') // Warning: Accesorios seems to read from radio_control? Copy-paste error in original?
-  // Checking original file: "const productsDoc = doc(productsRef, 'radio_control')"
-  // But collections inside are "betafpv/baterias/...", "emax-usa/baterias/..."
-  // If this path worked before, it should work now. 
-  
-  const collectionPaths = [
-    'betafpv/baterias/2PCS-2s-300mAh',
-    'eachine/baterias/E520S-1200mAh',
-    'eachine/baterias/E58-500mAh',
-    'emax-usa/baterias/1S-300mAh',
-    'emax-usa/baterias/1S-450mAh',
-    'emax-usa/baterias/2PCS-2S-300mAh',
-    'flywoo/baterias/4PCS-1S-450mAh',
-    'flywoo/baterias/4PCS-1S-750mAh',
-    'geprc/baterias/4S-650a850mAh',
-    'iflight-rc/baterias/3S-450mAh',
-    'uruav/baterias/1S-250mAh'
-  ]
-
+  // New Hierarchy Fetch: products/{category}/brands/{brand}/items
   try {
-    const refs = collectionPaths.map(path => collection(productsDoc, path))
-    const snapshots = await Promise.all(refs.map(ref => getDocs(ref)))
+    const q = query(
+      collectionGroup(firestore, 'items'),
+      where('category', '==', 'baterias')
+    )
     
-    productsBaterias = snapshots.flatMap(snap => snap.docs.map(doc => doc.data()))
+    const snapshot = await getDocs(q)
+    productsBaterias = snapshot.docs.map(doc => doc.data())
 
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('Productos_Baterias', JSON.stringify(productsBaterias))

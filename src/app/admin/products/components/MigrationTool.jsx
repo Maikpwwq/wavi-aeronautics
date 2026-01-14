@@ -43,7 +43,7 @@ const MigrationTool = () => {
   const [errorDetails, setErrorDetails] = useState({}) // { category: [error messages] }
   const [exchangeRate, setExchangeRate] = useState(() => {
     const envRate = Number(process.env.NEXT_PUBLIC_DOLARTOCOP)
-    return !isNaN(envRate) && envRate > 0 ? envRate : 4150
+    return !isNaN(envRate) && envRate > 0 ? envRate : 3730
   }) // Default exchange rate COP -> USD
 
   // Category mapping: Redux key → display label + Firestore category
