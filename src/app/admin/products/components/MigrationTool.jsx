@@ -200,8 +200,16 @@ const MigrationTool = () => {
       const priceUSD = convertCopToUsd(parsedPriceCOP)
       
       // Build payload using existing config function
+      // Map legacy fields (Spanish) to standardized fields (English) locally
       const payload = buildProductPayload({
         ...legacyProduct,
+        name: legacyProduct.titulo || legacyProduct.name || '',
+        brand: legacyProduct.marca || legacyProduct.brand || '',
+        description: legacyProduct.descripcion || legacyProduct.description || '',
+        specifications: legacyProduct.especificaciones || legacyProduct.specifications || '',
+        includes: legacyProduct.incluye || legacyProduct.includes || '',
+        images: legacyProduct.imagenes || legacyProduct.images || [],
+        stock: parseInt(legacyProduct.productStock || legacyProduct.stock || 0),
         price: priceUSD, // Use converted USD price
         category: firestoreCategory,
       })

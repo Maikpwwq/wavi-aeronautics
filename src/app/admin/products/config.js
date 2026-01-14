@@ -133,8 +133,7 @@ export const PRODUCT_SCHEMA = {
 }
 
 /**
- * Normalize product data from various Firestore schemas to standardized format
- * Handles BOTH legacy Spanish fields AND new English fields
+ * Normalize product data from Firestore to standardized format
  * @param {Object} product - Raw product from Firestore
  * @param {number} idx - Index for fallback ID
  * @param {string} categoryKey - Category key
@@ -147,10 +146,10 @@ export const normalizeProduct = (product, idx, categoryKey) => ({
   productID: product.productID || product.id || `product-${idx}`,
   slug: product.slug || '',
   
-  // Core Info (English first, Spanish fallback)
-  name: product.name || product.titulo || product.title || product.productName || 'Sin Nombre',
-  brand: product.brand || product.marca || product.productBrand || '',
-  category: product.category || product.categoria || categoryKey || '',
+  // Core Info
+  name: product.name || 'Sin Nombre',
+  brand: product.brand || '',
+  category: product.category || categoryKey || '',
   tags: Array.isArray(product.tags) 
     ? product.tags 
     : (product.tags && typeof product.tags === 'object') 
@@ -158,18 +157,18 @@ export const normalizeProduct = (product, idx, categoryKey) => ({
       : [],
   
   // Pricing & Inventory
-  price: parseFloat(product.price) || parseFloat(product.priceUSD) || parseFloat(product.precio) || product.productPrice || 0,
+  price: parseFloat(product.price) || 0,
   discount: parseFloat(product.discount) || 0,
-  stock: parseInt(product.stock) || parseInt(product.productStock) || 0,
+  stock: parseInt(product.stock) || 0,
   availability: product.availability !== undefined ? product.availability : (product.stock > 0),
   
   // Content
-  description: product.description || product.descripcion || '',
-  specifications: product.specifications || product.especificaciones || '',
-  includes: product.includes || product.incluye || '',
+  description: product.description || '',
+  specifications: product.specifications || '',
+  includes: product.includes || '',
   
   // Media
-  images: product.images || product.imagenes || [],
+  images: product.images || [],
   video: product.video || '',
   
   // Status
@@ -182,29 +181,29 @@ export const normalizeProduct = (product, idx, categoryKey) => ({
  * @returns {Object} Firestore-compatible payload
  */
 export const buildProductPayload = (formData) => {
-  const validImages = (formData.images || formData.imagenes || []).filter(url => url?.trim())
+  const validImages = (formData.images || []).filter(url => url?.trim())
   
   return {
     // Identifiers
     productID: formData.productID?.trim() || '',
-    slug: formData.slug || generateSlug(formData.name || formData.titulo || ''),
+    slug: formData.slug || generateSlug(formData.name || ''),
     
     // Core Info
-    name: (formData.name || formData.titulo || '').trim(),
-    brand: (formData.brand || formData.marca || '').toLowerCase().trim(),
-    category: formData.category || formData.categoria || '',
+    name: (formData.name || '').trim(),
+    brand: (formData.brand || '').toLowerCase().trim(),
+    category: formData.category || '',
     tags: (formData.tags || []).filter(t => t?.trim()),
     
     // Pricing & Inventory
-    price: parseFloat(formData.price || formData.precio) || 0,
+    price: parseFloat(formData.price) || 0,
     discount: parseFloat(formData.discount) || 0,
-    stock: parseInt(formData.stock || formData.productStock) || 0,
+    stock: parseInt(formData.stock) || 0,
     availability: Boolean((formData.stock || 0) > 0),
     
     // Content
-    description: (formData.description || formData.descripcion || '').trim(),
-    specifications: (formData.specifications || formData.especificaciones || '').trim(),
-    includes: (formData.includes || formData.incluye || '').trim(),
+    description: (formData.description || '').trim(),
+    specifications: (formData.specifications || '').trim(),
+    includes: (formData.includes || '').trim(),
     
     // Media
     images: validImages,

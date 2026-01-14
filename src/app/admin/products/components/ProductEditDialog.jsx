@@ -80,8 +80,8 @@ export default function ProductEditDialog({
   const tagsDisplayValue = Array.isArray(formData.tags) ? formData.tags.join(', ') : ''
 
   // Get brand/category values for storage path
-  const brandValue = formData.brand || formData.marca || ''
-  const categoryValue = formData.category || formData.categoria || ''
+  const brandValue = formData.brand || ''
+  const categoryValue = formData.category || ''
 
   // Build storage path for uploader
   const storagePath = brandValue && categoryValue 
@@ -101,7 +101,7 @@ export default function ProductEditDialog({
           <Box sx={{ display: 'flex', gap: 2 }}>
             <TextField
               label="Nombre del Producto"
-              value={formData.name || formData.titulo || ''}
+              value={formData.name || ''}
               onChange={(e) => onFormChange({ name: e.target.value })}
               fullWidth
             />
@@ -150,7 +150,7 @@ export default function ProductEditDialog({
             <TextField
               label="Precio ($)"
               type="number"
-              value={formData.price || formData.precio || ''}
+              value={formData.price || ''}
               onChange={(e) => onFormChange({ price: e.target.value })}
               fullWidth
             />
@@ -173,7 +173,7 @@ export default function ProductEditDialog({
           {/* Detailed Info */}
           <TextField
             label="Descripción"
-            value={formData.description || formData.descripcion || ''}
+            value={formData.description || ''}
             onChange={(e) => onFormChange({ description: e.target.value })}
             multiline
             rows={2}
@@ -181,7 +181,7 @@ export default function ProductEditDialog({
           />
           <TextField
             label="Especificaciones"
-            value={formData.specifications || formData.especificaciones || ''}
+            value={formData.specifications || ''}
             onChange={(e) => onFormChange({ specifications: e.target.value })}
             multiline
             rows={2}
@@ -190,7 +190,7 @@ export default function ProductEditDialog({
           />
           <TextField
             label="Incluye (Qué viene en la caja)"
-            value={formData.includes || formData.incluye || ''}
+            value={formData.includes || ''}
             onChange={(e) => onFormChange({ includes: e.target.value })}
             multiline
             rows={2}
