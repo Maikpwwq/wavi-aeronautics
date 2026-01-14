@@ -25,8 +25,11 @@ const styles = () => ({
     justifyContent: 'center'
   },
   imageSize: {
-    height: '330px',
-    width: 'auto'
+    height: 'auto',
+    maxHeight: '330px',
+    width: '100%',
+    maxWidth: '100%',
+    objectFit: 'contain'
   }
 })
 
