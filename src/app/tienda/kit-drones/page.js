@@ -55,7 +55,9 @@ const DroneProducts = () => {
     toggleMarca,
     setMinPrice,
     setMaxPrice,
-    resetFilters
+    resetFilters,
+    sortOrder,
+    setSortOrder
   } = useProductFilter(dronesKit)
 
   // Show skeleton until drones category is loaded
@@ -74,6 +76,8 @@ const DroneProducts = () => {
           setMinPrice={setMinPrice}
           setMaxPrice={setMaxPrice}
           resetFilters={resetFilters}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
         />
         <Box sx={classes.presentationProducts}>
           <Typography variant='h5' sx={classes.spacingTexts}>

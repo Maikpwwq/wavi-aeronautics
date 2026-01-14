@@ -53,7 +53,9 @@ export const DigitalVTX = () => {
     toggleMarca,
     setMinPrice,
     setMaxPrice,
-    resetFilters
+    resetFilters,
+    sortOrder,
+    setSortOrder
   } = useProductFilter(digitalVTX)
   
   const theme = useTheme()
@@ -78,6 +80,8 @@ export const DigitalVTX = () => {
           setMinPrice={setMinPrice}
           setMaxPrice={setMaxPrice}
           resetFilters={resetFilters}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
         />
         <Box sx={classes.presentationProducts}>
           <Typography variant="h5" sx={classes.spacingTexts}>

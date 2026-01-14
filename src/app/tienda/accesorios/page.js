@@ -53,7 +53,9 @@ const Accesorios = () => {
     toggleMarca,
     setMinPrice,
     setMaxPrice,
-    resetFilters
+    resetFilters,
+    sortOrder,
+    setSortOrder
   } = useProductFilter(baterias)
   
   const theme = useTheme()
@@ -78,6 +80,8 @@ const Accesorios = () => {
           setMinPrice={setMinPrice}
           setMaxPrice={setMaxPrice}
           resetFilters={resetFilters}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
         />
         <Box sx={classes.presentationProducts}>
           <Typography variant="h5" sx={classes.spacingTexts}>

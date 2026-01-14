@@ -77,7 +77,9 @@ const TrasmisorReceptor = () => {
     toggleMarca,
     setMinPrice,
     setMaxPrice,
-    resetFilters
+    resetFilters,
+    sortOrder,
+    setSortOrder
   } = useProductFilter(allProducts)
 
   // Apply filters to each list separately
@@ -106,6 +108,8 @@ const TrasmisorReceptor = () => {
           setMinPrice={setMinPrice}
           setMaxPrice={setMaxPrice}
           resetFilters={resetFilters}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
         />
         <Box sx={classes.presentationProducts}>
           {/* Seccion de Transmisoras */}

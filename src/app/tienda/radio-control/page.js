@@ -53,7 +53,9 @@ export const RadioContol = () => {
     toggleMarca,
     setMinPrice,
     setMaxPrice,
-    resetFilters
+    resetFilters,
+    sortOrder,
+    setSortOrder
   } = useProductFilter(radioControl)
 
   const theme = useTheme()
@@ -78,6 +80,8 @@ export const RadioContol = () => {
           setMinPrice={setMinPrice}
           setMaxPrice={setMaxPrice}
           resetFilters={resetFilters}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
         />
         <Box sx={classes.presentationProducts}>
           <Typography variant="h5" sx={classes.spacingTexts}>
