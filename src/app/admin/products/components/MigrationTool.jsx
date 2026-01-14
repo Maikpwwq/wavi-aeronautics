@@ -67,6 +67,16 @@ const MigrationTool = () => {
     return formatted || 'default'
   }
 
+  // Parse legacy price string "$ 1.200.000" → 1200000 (COP as stored)
+  // Note: Legacy prices are already in COP, we keep them as-is
+  const parseLegacyPrice = (priceValue) => {
+    if (typeof priceValue === 'number') return priceValue
+    if (!priceValue || typeof priceValue !== 'string') return 0
+    // Remove currency symbol, dots, spaces → "$ 1.200.000" → "1200000"
+    const numericString = priceValue.replace(/[^0-9]/g, '')
+    return parseInt(numericString, 10) || 0
+  }
+
   // Generate productID if not present
   const generateProductID = (product) => {
     if (product.productID) return product.productID
@@ -84,9 +94,14 @@ const MigrationTool = () => {
   // Migrate a single product
   const migrateProduct = async (legacyProduct, firestoreCategory) => {
     try {
+      // Pre-process legacy price (COP string like "$ 1.200.000" → 1200000)
+      const parsedPrice = parseLegacyPrice(legacyProduct.precio || legacyProduct.price)
+      
       // Build payload using existing config function (handles Spanish→English mapping)
+      // Pass pre-parsed price to override the precio field
       const payload = buildProductPayload({
         ...legacyProduct,
+        price: parsedPrice, // Use parsed numeric price
         category: firestoreCategory, // Override category with target
       })
 
@@ -96,6 +111,7 @@ const MigrationTool = () => {
         productID: generateProductID(legacyProduct),
         category: firestoreCategory,
         brand: formatBrand(legacyProduct.marca || legacyProduct.brand),
+        price: parsedPrice, // Ensure price is numeric
       }
 
       // Write to new hierarchy
