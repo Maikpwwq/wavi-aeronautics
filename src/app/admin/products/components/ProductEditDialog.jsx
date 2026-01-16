@@ -209,26 +209,27 @@ export default function ProductEditDialog({
             placeholder="https://youtube.com/watch?v=..."
           />
 
-          {/* Options Section (for drones) */}
-          {(formData.category === 'dronesRC' || formData.category === 'dronesHD') && (
-            <Box sx={{ mt: 2 }}>
-              <Typography variant="subtitle2" gutterBottom>
-                Opciones de Producto
-              </Typography>
-              <Alert severity="info" sx={{ mb: 2 }} icon={false}>
-                Variantes disponibles (ej: tipo de receptor). El modificador se suma al precio base.
-              </Alert>
-              
-              {(!formData.options || formData.options.length === 0) && (
-                <Button
-                  variant="outlined"
-                  size="small"
-                  sx={{ mb: 2 }}
-                  onClick={() => onFormChange({ options: [...DEFAULT_DRONE_OPTIONS] })}
-                >
-                  Cargar opciones predeterminadas
-                </Button>
-              )}
+          {/* Options Section */}
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="subtitle2" gutterBottom>
+              Opciones de Producto
+            </Typography>
+            <Alert severity="info" sx={{ mb: 2 }} icon={false}>
+              Variantes disponibles (ej: tipo de receptor, color, tamaño). El modificador se suma al precio base.
+            </Alert>
+            
+            {/* Pre-populate button for drone categories */}
+            {(formData.category === 'dronesRC' || formData.category === 'dronesHD') && 
+             (!formData.options || formData.options.length === 0) && (
+              <Button
+                variant="outlined"
+                size="small"
+                sx={{ mb: 2 }}
+                onClick={() => onFormChange({ options: [...DEFAULT_DRONE_OPTIONS] })}
+              >
+                Cargar opciones predeterminadas (Drones)
+              </Button>
+            )}
 
               {(formData.options || []).map((opt, idx) => (
                 <Box key={idx} sx={{ display: 'flex', gap: 1, mb: 1, alignItems: 'center' }}>
@@ -279,8 +280,7 @@ export default function ProductEditDialog({
               >
                 Agregar Opción
               </Button>
-            </Box>
-          )}
+          </Box>
 
           <Divider sx={{ my: 1 }} />
 

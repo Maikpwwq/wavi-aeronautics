@@ -425,82 +425,79 @@ export default function NewProductForm() {
           sx={{ mt: 2 }}
         />
 
-        {/* ==================== Options Section (for drones) ==================== */}
-        {(formData.category === 'dronesRC' || formData.category === 'dronesHD') && (
-          <>
-            <Divider sx={{ my: 3 }} />
-            <Typography variant="h6" sx={{ mb: 2 }}>
-              Opciones de Producto
-            </Typography>
-            <Alert severity="info" sx={{ mb: 2 }}>
-              Define las variantes disponibles para este dron (ej: tipo de receptor). El modificador de precio se suma al precio base.
-            </Alert>
-            
-            {/* Pre-populate button */}
-            {(!formData.options || formData.options.length === 0) && (
-              <Button
-                variant="outlined"
-                size="small"
-                sx={{ mb: 2 }}
-                onClick={() => handleChange('options', [...DEFAULT_DRONE_OPTIONS])}
-              >
-                Cargar opciones predeterminadas
-              </Button>
-            )}
-
-            {/* Options List */}
-            {(formData.options || []).map((opt, idx) => (
-              <Box key={idx} sx={{ display: 'flex', gap: 1, mb: 1, alignItems: 'center' }}>
-                <TextField
-                  label="Etiqueta"
-                  value={opt.label || ''}
-                  onChange={(e) => {
-                    const newOptions = [...(formData.options || [])]
-                    newOptions[idx] = { ...newOptions[idx], label: e.target.value }
-                    handleChange('options', newOptions)
-                  }}
-                  size="small"
-                  sx={{ flex: 2 }}
-                />
-                <TextField
-                  label="Modificador ($)"
-                  type="number"
-                  value={opt.priceModifier || 0}
-                  onChange={(e) => {
-                    const newOptions = [...(formData.options || [])]
-                    newOptions[idx] = { ...newOptions[idx], priceModifier: parseFloat(e.target.value) || 0 }
-                    handleChange('options', newOptions)
-                  }}
-                  size="small"
-                  sx={{ flex: 1 }}
-                  InputProps={{
-                    startAdornment: <InputAdornment position="start">+$</InputAdornment>
-                  }}
-                />
-                <Button
-                  size="small"
-                  color="error"
-                  onClick={() => {
-                    const newOptions = (formData.options || []).filter((_, i) => i !== idx)
-                    handleChange('options', newOptions)
-                  }}
-                >
-                  <DeleteIcon fontSize="small" />
-                </Button>
-              </Box>
-            ))}
-
-            {/* Add Option Button */}
-            <Button
-              variant="text"
-              size="small"
-              startIcon={<AddIcon />}
-              onClick={() => handleChange('options', [...(formData.options || []), { label: '', priceModifier: 0 }])}
-            >
-              Agregar Opción
-            </Button>
-          </>
+        {/* ==================== Options Section ==================== */}
+        <Divider sx={{ my: 3 }} />
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          Opciones de Producto
+        </Typography>
+        <Alert severity="info" sx={{ mb: 2 }}>
+          Define las variantes disponibles (ej: tipo de receptor, color, tamaño). El modificador de precio se suma al precio base.
+        </Alert>
+        
+        {/* Pre-populate button for drone categories */}
+        {(formData.category === 'dronesRC' || formData.category === 'dronesHD') && 
+         (!formData.options || formData.options.length === 0) && (
+          <Button
+            variant="outlined"
+            size="small"
+            sx={{ mb: 2 }}
+            onClick={() => handleChange('options', [...DEFAULT_DRONE_OPTIONS])}
+          >
+            Cargar opciones predeterminadas (Drones)
+          </Button>
         )}
+
+        {/* Options List */}
+        {(formData.options || []).map((opt, idx) => (
+          <Box key={idx} sx={{ display: 'flex', gap: 1, mb: 1, alignItems: 'center' }}>
+            <TextField
+              label="Etiqueta"
+              value={opt.label || ''}
+              onChange={(e) => {
+                const newOptions = [...(formData.options || [])]
+                newOptions[idx] = { ...newOptions[idx], label: e.target.value }
+                handleChange('options', newOptions)
+              }}
+              size="small"
+              sx={{ flex: 2 }}
+            />
+            <TextField
+              label="Modificador ($)"
+              type="number"
+              value={opt.priceModifier || 0}
+              onChange={(e) => {
+                const newOptions = [...(formData.options || [])]
+                newOptions[idx] = { ...newOptions[idx], priceModifier: parseFloat(e.target.value) || 0 }
+                handleChange('options', newOptions)
+              }}
+              size="small"
+              sx={{ flex: 1 }}
+              InputProps={{
+                startAdornment: <InputAdornment position="start">+$</InputAdornment>
+              }}
+            />
+            <Button
+              size="small"
+              color="error"
+              onClick={() => {
+                const newOptions = (formData.options || []).filter((_, i) => i !== idx)
+                handleChange('options', newOptions)
+              }}
+            >
+              <DeleteIcon fontSize="small" />
+            </Button>
+          </Box>
+        ))}
+
+        {/* Add Option Button */}
+        <Button
+          variant="text"
+          size="small"
+          startIcon={<AddIcon />}
+          onClick={() => handleChange('options', [...(formData.options || []), { label: '', priceModifier: 0 }])}
+        >
+          Agregar Opción
+        </Button>
 
         <Divider sx={{ my: 3 }} />
 
