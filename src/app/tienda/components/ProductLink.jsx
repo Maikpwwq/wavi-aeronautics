@@ -16,10 +16,10 @@ import PropTypes from 'prop-types'
 const ProductLink = ({ product, children, style, className }) => {
   if (!product) return <>{children}</>
 
-  const { productID, category, categoria, marca, brand } = product
+  const { productID, category, brand } = product
   // Handle inconsistent naming
-  const cat = category || categoria || 'tienda'
-  const productBrand = brand || marca || ''
+  const cat = category || 'tienda'
+  const productBrand = brand || ''
 
   return (
     <Link
@@ -39,8 +39,7 @@ ProductLink.propTypes = {
   product: PropTypes.shape({
     productID: PropTypes.any,
     category: PropTypes.string,
-    categoria: PropTypes.string,
-    marca: PropTypes.string,
+    brand: PropTypes.string,
   }).isRequired,
   children: PropTypes.node,
   style: PropTypes.object,

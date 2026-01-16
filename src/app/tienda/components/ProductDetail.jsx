@@ -173,13 +173,16 @@ const ProductDetail = () => {
   // ---------------------------------------------------------------------------
   // Memoized values
   // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // Memoized values
+  // ---------------------------------------------------------------------------
   const images = useMemo(() => {
-    const imgs = product?.images || product?.imagenes || []
+    const imgs = product?.images || []
     return imgs.map(img => typeof img === 'string' ? img : img.url || '')
   }, [product])
 
-  const parsedPackageItems = useMemo(() => parsePackageItems(product?.includes || product?.incluye), [product])
-  const parsedSpecifications = useMemo(() => parseSpecifications(product?.specifications || product?.especificaciones), [product])
+  const parsedPackageItems = useMemo(() => parsePackageItems(product?.includes), [product])
+  const parsedSpecifications = useMemo(() => parseSpecifications(product?.specifications), [product])
 
   const displayPrice = useMemo(() => {
     if (!product) return '$ 0';
@@ -201,7 +204,7 @@ const ProductDetail = () => {
     <Box sx={{ bgcolor: BRAND_COLORS.background.page, minHeight: '100vh', pb: 10 }}>
       <Container maxWidth="xl">
         {/* Navigation */}
-        <PageNavigation category={category} currentPage={product.name || product.titulo} />
+        <PageNavigation category={category} currentPage={product.name} />
 
         <Grid container spacing={6}>
           {/* Left Column: Images */}
@@ -220,7 +223,7 @@ const ProductDetail = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.4 }}
                   src={images[activeImage]} 
-                  alt={product.name || product.titulo}
+                  alt={product.name}
                   style={{ 
                     maxWidth: '100%', 
                     maxHeight: '100%', 
@@ -246,10 +249,10 @@ const ProductDetail = () => {
           <Grid item xs={12} md={5} sx={styles.actionInfo}>
             <Box component={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
               <Typography variant="overline" sx={{ fontWeight: 'bold', letterSpacing: 2, color: BRAND_COLORS.primary }}>
-                {product.brand || product.marca || 'Aeronautics'}
+                {product.brand || 'Aeronautics'}
               </Typography>
               <Typography variant="h3" sx={{ fontWeight: 800, mb: 2, color: BRAND_COLORS.text.primary }}>
-                {product.name || product.titulo}
+                {product.name}
               </Typography>
               
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
@@ -291,7 +294,7 @@ const ProductDetail = () => {
           <Grid item xs={12}>
              <Box component={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
                 <Typography variant="body1" sx={{ color: 'text.secondary', lineHeight: 1.8, mb: 4 }}>
-                  {product.description || product.descripcion}
+                  {product.description}
                 </Typography>
 
                 <Divider sx={{ mb: 4 }} />

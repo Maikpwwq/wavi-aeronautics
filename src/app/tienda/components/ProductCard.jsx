@@ -39,11 +39,11 @@ const ProductCard = ({ products, category }) => {
   const categoria = category || 'tienda'
   const producto = products || {}
   
-  // Destructure with fallbacks to support both English (standard properties) and Spanish (legacy) schemas
-  const name = producto.name || producto.titulo || producto.title || ''
-  const images = producto.images || producto.imagenes || []
-  const brand = producto.brand || producto.marca || ''
-  const id = producto.productID || producto.id || ''
+  // Standardized fields
+  const name = producto.name || ''
+  const images = producto.images || []
+  const brand = producto.brand || ''
+  const id = producto.productID || ''
 
   // Price Handling: 'price' is USD (Number), 'precio' is COP (String/Number)
   // If we have 'price', calculate COP. If 'precio', use as legacy display.

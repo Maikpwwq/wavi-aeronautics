@@ -23,10 +23,10 @@ const ProductItem = ({ products, category }) => {
   if (!producto) return null
   
   // Standardized fields
-  const name = producto.name || producto.titulo || producto.title || ''
-  const images = producto.images || producto.imagenes || []
-  const brand = producto.brand || producto.marca || 'Aeronautics'
-  const id = producto.productID || producto.id || ''
+  const name = producto.name || ''
+  const images = producto.images || []
+  const brand = producto.brand || 'Aeronautics'
+  const id = producto.productID || ''
 
   // Price logic
   let displayPrice = '$ 0';
