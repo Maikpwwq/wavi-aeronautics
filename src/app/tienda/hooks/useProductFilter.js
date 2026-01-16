@@ -116,6 +116,16 @@ export const useProductFilter = (products) => {
     return filtered.sort((a, b) => {
       // Helper to get consistent price for sorting
       const getPrice = (p) => parsePrice(p.precio || p.price)
+      
+      // Helper to check if product is "agotado" (out of stock / price = 0)
+      const isAgotado = (p) => getPrice(p) === 0
+
+      // Always push agotado products to the end, regardless of sort order
+      const aAgotado = isAgotado(a)
+      const bAgotado = isAgotado(b)
+      if (aAgotado && !bAgotado) return 1  // a goes after b
+      if (!aAgotado && bAgotado) return -1 // a goes before b
+      // If both are agotado or both are in stock, apply normal sorting
 
       switch (sortOrder) {
         case 'newest': {
