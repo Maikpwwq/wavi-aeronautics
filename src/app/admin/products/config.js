@@ -42,6 +42,20 @@ export const CATEGORY_OPTIONS = [
 ]
 
 /**
+ * Default options for drone categories (dronesRC, dronesHD)
+ * priceModifier is in USD
+ */
+export const DEFAULT_DRONE_OPTIONS = [
+  { label: 'PNP', priceModifier: 0 },
+  { label: 'ELRS 2.4G', priceModifier: 17 },
+  { label: 'TBS Nano RX', priceModifier: 35 },
+  { label: 'PNP With GPS', priceModifier: 13 },
+  { label: 'ELRS 2.4G With GPS', priceModifier: 30 },
+  { label: 'TBS Nano RX With GPS', priceModifier: 55 },
+  { label: 'ELRS 915MHz/2.4G GemX', priceModifier: 27 },
+]
+
+/**
  * Brand options derived from existing Firestore data
  */
 export const BRAND_OPTIONS = [
@@ -119,6 +133,7 @@ export const PRODUCT_SCHEMA = {
   discount: 0,            // Percentage
   stock: 0,
   availability: true,
+  options: [],             // Product variants: [{ label: string, priceModifier: number }]
   
   description: '',
   specifications: '',
@@ -161,6 +176,7 @@ export const normalizeProduct = (product, idx, categoryKey) => ({
   discount: parseFloat(product.discount) || 0,
   stock: parseInt(product.stock) || 0,
   availability: product.availability !== undefined ? product.availability : (product.stock > 0),
+  options: Array.isArray(product.options) ? product.options : [],
   
   // Content
   description: product.description || '',
@@ -199,6 +215,10 @@ export const buildProductPayload = (formData) => {
     discount: parseFloat(formData.discount) || 0,
     stock: parseInt(formData.stock) || 0,
     availability: Boolean((formData.stock || 0) > 0),
+    options: (formData.options || []).filter(opt => opt?.label?.trim()).map(opt => ({
+      label: opt.label.trim(),
+      priceModifier: parseFloat(opt.priceModifier) || 0
+    })),
     
     // Content
     description: (formData.description || '').trim(),

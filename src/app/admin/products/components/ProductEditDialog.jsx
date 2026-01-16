@@ -17,9 +17,13 @@ import {
   Typography,
   Chip,
   Stack,
-  Divider
+  Divider,
+  Alert,
+  InputAdornment
 } from '@mui/material'
-import { CATEGORY_OPTIONS, BRAND_OPTIONS } from '../config'
+import AddIcon from '@mui/icons-material/Add'
+import DeleteIcon from '@mui/icons-material/Delete'
+import { CATEGORY_OPTIONS, BRAND_OPTIONS, DEFAULT_DRONE_OPTIONS } from '../config'
 
 // Components
 import ReorderableImageList from './molecules/ReorderableImageList'
@@ -197,7 +201,6 @@ export default function ProductEditDialog({
             fullWidth
           />
 
-          {/* Video */}
           <TextField
             label="Video URL (YouTube)"
             value={formData.video || ''}
@@ -205,6 +208,79 @@ export default function ProductEditDialog({
             fullWidth
             placeholder="https://youtube.com/watch?v=..."
           />
+
+          {/* Options Section (for drones) */}
+          {(formData.category === 'dronesRC' || formData.category === 'dronesHD') && (
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="subtitle2" gutterBottom>
+                Opciones de Producto
+              </Typography>
+              <Alert severity="info" sx={{ mb: 2 }} icon={false}>
+                Variantes disponibles (ej: tipo de receptor). El modificador se suma al precio base.
+              </Alert>
+              
+              {(!formData.options || formData.options.length === 0) && (
+                <Button
+                  variant="outlined"
+                  size="small"
+                  sx={{ mb: 2 }}
+                  onClick={() => onFormChange({ options: [...DEFAULT_DRONE_OPTIONS] })}
+                >
+                  Cargar opciones predeterminadas
+                </Button>
+              )}
+
+              {(formData.options || []).map((opt, idx) => (
+                <Box key={idx} sx={{ display: 'flex', gap: 1, mb: 1, alignItems: 'center' }}>
+                  <TextField
+                    label="Etiqueta"
+                    value={opt.label || ''}
+                    onChange={(e) => {
+                      const newOptions = [...(formData.options || [])]
+                      newOptions[idx] = { ...newOptions[idx], label: e.target.value }
+                      onFormChange({ options: newOptions })
+                    }}
+                    size="small"
+                    sx={{ flex: 2 }}
+                  />
+                  <TextField
+                    label="Mod ($)"
+                    type="number"
+                    value={opt.priceModifier || 0}
+                    onChange={(e) => {
+                      const newOptions = [...(formData.options || [])]
+                      newOptions[idx] = { ...newOptions[idx], priceModifier: parseFloat(e.target.value) || 0 }
+                      onFormChange({ options: newOptions })
+                    }}
+                    size="small"
+                    sx={{ flex: 1, maxWidth: 100 }}
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start">+</InputAdornment>
+                    }}
+                  />
+                  <Button
+                    size="small"
+                    color="error"
+                    onClick={() => {
+                      const newOptions = (formData.options || []).filter((_, i) => i !== idx)
+                      onFormChange({ options: newOptions })
+                    }}
+                  >
+                    <DeleteIcon fontSize="small" />
+                  </Button>
+                </Box>
+              ))}
+
+              <Button
+                variant="text"
+                size="small"
+                startIcon={<AddIcon />}
+                onClick={() => onFormChange({ options: [...(formData.options || []), { label: '', priceModifier: 0 }] })}
+              >
+                Agregar Opción
+              </Button>
+            </Box>
+          )}
 
           <Divider sx={{ my: 1 }} />
 

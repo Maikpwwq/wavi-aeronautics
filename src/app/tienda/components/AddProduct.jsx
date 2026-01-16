@@ -12,7 +12,7 @@ import { saveCartToFirestore } from '@/services/shoppingCartService'
 import Button from '@mui/material/Button'
 import { motion } from 'framer-motion'
 
-const AddProduct = ({ product, variant = 'icon' }) => {
+const AddProduct = ({ product, selectedOption = null, variant = 'icon' }) => {
   const { shoppingCart, updateCart, updateShowCart } = useContext(ShowCartContext)
 
   const handleAddToCart = (e) => {
@@ -25,15 +25,33 @@ const AddProduct = ({ product, variant = 'icon' }) => {
     const existingProductIndex = currentItems.findIndex(p => p.productID === product.productID)
 
     if (existingProductIndex >= 0) {
-      // Update quantity safely
-      currentItems[existingProductIndex] = {
-        ...currentItems[existingProductIndex],
-        cantidad: (currentItems[existingProductIndex].cantidad || 0) + 1
+      // Check if the same option is selected (for products with options)
+      const existingItem = currentItems[existingProductIndex]
+      const sameOption = !selectedOption || 
+        (existingItem.selectedOption?.label === selectedOption?.label)
+      
+      if (sameOption) {
+        // Update quantity safely
+        currentItems[existingProductIndex] = {
+          ...existingItem,
+          cantidad: (existingItem.cantidad || 0) + 1
+        }
+      } else {
+        // Different option = treat as new item
+        currentItems.push({
+          ...product,
+          selectedOption: selectedOption,
+          // Adjust effective price if option has modifier
+          effectivePrice: (product.price || 0) + (selectedOption?.priceModifier || 0),
+          cantidad: 1
+        })
       }
     } else {
       // Add new product with initial quantity
       currentItems.push({
         ...product,
+        selectedOption: selectedOption,
+        effectivePrice: (product.price || 0) + (selectedOption?.priceModifier || 0),
         cantidad: 1
       })
     }
@@ -44,8 +62,8 @@ const AddProduct = ({ product, variant = 'icon' }) => {
       const totalItems = currentItems.reduce((acc, item) => acc + (item.cantidad || 0), 0)
       
       const totalSum = currentItems.reduce((acc, item) => {
-        // Use the centralized parser to handle "$ 2.000.000" or raw numbers
-        let price = parseCopCurrency(item.price || item.precio);
+        // Use effectivePrice (which includes option modifier) or fallback to legacy parsing
+        let price = item.effectivePrice || parseCopCurrency(item.price || item.precio);
         return acc + (price * (item.cantidad || 0));
       }, 0)
 
@@ -133,6 +151,7 @@ const AddProduct = ({ product, variant = 'icon' }) => {
 
 AddProduct.propTypes = {
   product: PropTypes.object.isRequired,
+  selectedOption: PropTypes.object,
   variant: PropTypes.oneOf(['icon', 'button'])
 }
 

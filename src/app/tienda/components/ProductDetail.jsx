@@ -11,7 +11,10 @@ import {
   Divider, 
   Stack, 
   Paper,
-  CircularProgress
+  CircularProgress,
+  FormControl,
+  Select,
+  MenuItem
 } from '@mui/material'
 import { motion } from 'framer-motion'
 import { 
@@ -132,6 +135,7 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null)
   const [activeImage, setActiveImage] = useState(0)
   const [loading, setLoading] = useState(true)
+  const [selectedOptionIndex, setSelectedOptionIndex] = useState(0)
 
   // ---------------------------------------------------------------------------
   // Data fetching
@@ -184,16 +188,29 @@ const ProductDetail = () => {
   const parsedPackageItems = useMemo(() => parsePackageItems(product?.includes), [product])
   const parsedSpecifications = useMemo(() => parseSpecifications(product?.specifications), [product])
 
+  // Get selected option (if product has options)
+  const selectedOption = useMemo(() => {
+    if (product?.options && product.options.length > 0) {
+      return product.options[selectedOptionIndex] || product.options[0]
+    }
+    return null
+  }, [product, selectedOptionIndex])
+
   const displayPrice = useMemo(() => {
     if (!product) return '$ 0';
-    if (product.price) return calculateCopPrice(product.price);
-    if (product.precio) {
+    let basePrice = 0
+    if (product.price) {
+      basePrice = product.price
+    } else if (product.precio) {
+      // Legacy: parse COP string to number (this case shouldn't happen with new schema)
       return typeof product.precio === 'string' 
         ? product.precio 
         : `$ ${product.precio.toLocaleString()}`;
     }
-    return '$ 0';
-  }, [product]);
+    // Add option price modifier if selected
+    const modifier = selectedOption?.priceModifier || 0
+    return calculateCopPrice(basePrice + modifier);
+  }, [product, selectedOption]);
 
   // ---------------------------------------------------------------------------
   // Render
@@ -255,6 +272,28 @@ const ProductDetail = () => {
                 {product.name}
               </Typography>
               
+              {/* Options Selector */}
+              {product.options && product.options.length > 0 && (
+                <FormControl fullWidth sx={{ mb: 2 }}>
+                  <Select
+                    value={selectedOptionIndex}
+                    onChange={(e) => setSelectedOptionIndex(e.target.value)}
+                    size="small"
+                    sx={{ 
+                      bgcolor: 'white', 
+                      borderRadius: 2,
+                      '& .MuiSelect-select': { py: 1.5 }
+                    }}
+                  >
+                    {product.options.map((opt, idx) => (
+                      <MenuItem key={idx} value={idx}>
+                        {opt.label} {opt.priceModifier > 0 ? `(+$${opt.priceModifier} USD)` : ''}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
+
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                 <Typography variant="h4" sx={{ color: BRAND_COLORS.accent, fontWeight: 'bold', mr: 2 }}>
                   {displayPrice}
@@ -267,7 +306,7 @@ const ProductDetail = () => {
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
                   Recibe este producto en la puerta de tu casa con envío asegurado.
                 </Typography>
-                <AddProduct product={product} variant="button" />
+                <AddProduct product={product} selectedOption={selectedOption} variant="button" />
                 <Typography variant="caption" sx={{ display: 'block', textAlign: 'center', mt: 2, color: 'text.disabled' }}>
                   Pagos seguros vía MercadoPago & PSE
                 </Typography>
