@@ -125,7 +125,7 @@ function ProductValues(props) {
                 Categoria abierta
               </Typography>
               <Typography variant="h5">
-                {'Operación para uso Recreativo personal.'}
+                {'Operación para uso Recreativo personal. '}
                 {'Una aeronave que supera los 200 gramos y no está registrada bajo el RAC 100 RUAS, está volando fuera de la ley.'}
               </Typography>
             </Box>

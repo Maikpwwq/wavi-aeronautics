@@ -42,20 +42,20 @@ const styles = (theme) => ({
 
 // Helper to filter a list based on hook's filter state
 const applyFilters = (products, filters) => {
-  if (!products) return []
+  if (!products || !filters) return []
   return products.filter((product) => {
     // Brand Filter
-    if (filters.marcas.length > 0 && !filters.marcas.includes(product.marca)) {
+    if (filters.brands && filters.brands.length > 0 && !filters.brands.includes(product.brand || product.marca)) {
       return false
     }
     // Price Filter
-    const price = typeof product.precio === 'number' ? product.precio : parseInt(product.precio.replace(/[^0-9]/g, ''), 10) || 0
-    const min = filters.precio.min ? parseInt(filters.precio.min, 10) : 0
-    const max = filters.precio.max ? parseInt(filters.precio.max, 10) : Infinity
-    
+    const price = product.price || (typeof product.precio === 'number' ? product.precio : parseInt(String(product.precio).replace(/[^0-9]/g, ''), 10) || 0)
+    const min = filters.price?.min ? parseInt(filters.price.min, 10) : 0
+    const max = filters.price?.max ? parseInt(filters.price.max, 10) : Infinity
+
     if (price < min) return false
     if (max !== Infinity && price > max) return false
-    
+
     return true
   })
 }
@@ -66,10 +66,10 @@ const TrasmisorReceptor = () => {
   const transmisors = shopState?.transmisors || []
   const receptors = shopState?.receptors || []
   const loadedCategories = shopState?.loadedCategories || []
-  
+
   // Combine for filter initialization (to get all brands)
   const allProducts = [...transmisors, ...receptors]
-  
+
   // Use custom filter hook
   const {
     filters,
@@ -101,7 +101,7 @@ const TrasmisorReceptor = () => {
   return (
     <>
       <Box sx={classes.productShowcase}>
-        <FiltroProducto 
+        <FiltroProducto
           filters={filters}
           availableBrands={availableBrands}
           toggleBrand={toggleBrand}
