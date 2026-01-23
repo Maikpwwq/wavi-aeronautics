@@ -87,7 +87,7 @@ function ProductValues(props) {
                 Vuelos de precisión
               </Typography>
               <Typography variant="h5">
-                {'Pilotos profesionales y empresas de industrias agrícolas, civiles, deportivas y de transporte.'}
+                {'Industrias agrícolas, civiles, deportivas y de transporte. '}
                 {'Usos vigilancia, medición, competencia, filmación, etc.'}
               </Typography>
             </Box>
@@ -122,10 +122,10 @@ function ProductValues(props) {
                 priority
               />
               <Typography variant="h6" sx={classes.title}>
-                Recreación
+                Categoria abierta
               </Typography>
               <Typography variant="h5">
-                {'Categoria abierta de operación para uso personal. '}
+                {'Operación para uso Recreativo personal.'}
                 {'Una aeronave que supera los 200 gramos y no está registrada bajo el RAC 100 RUAS, está volando fuera de la ley.'}
               </Typography>
             </Box>

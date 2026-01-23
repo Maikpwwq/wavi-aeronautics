@@ -15,7 +15,7 @@ export const blogPosts = [
         date: '2024-01-15',
         readTime: '8 min',
         author: 'Michael Arias',
-        avatar: '/images/authors/michael-arias.jpg',
+        avatar: '',
         content: [
             {
                 type: 'paragraph',
