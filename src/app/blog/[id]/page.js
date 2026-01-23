@@ -11,7 +11,8 @@ import {
     Button,
     Paper,
     Chip,
-    CircularProgress
+    CircularProgress,
+    Avatar
 } from '@mui/material'
 import {
     ArrowBack,
@@ -60,6 +61,19 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         gap: 0.5
+    },
+    authorInfo: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 1.5,
+        mt: 3,
+        pt: 3,
+        borderTop: '1px solid rgba(255,255,255,0.2)'
+    },
+    avatar: {
+        width: 48,
+        height: 48,
+        border: '2px solid rgba(255,255,255,0.3)'
     },
     article: {
         maxWidth: 800,
@@ -277,6 +291,27 @@ export default function BlogPostPage() {
                             <Typography variant="body2">{post.readTime} de lectura</Typography>
                         </Box>
                     </Box>
+
+                    {/* Author Info */}
+                    {post.author && (
+                        <Box sx={styles.authorInfo}>
+                            <Avatar
+                                src={post.avatar}
+                                alt={post.author}
+                                sx={styles.avatar}
+                            >
+                                {post.author.charAt(0)}
+                            </Avatar>
+                            <Box>
+                                <Typography variant="body2" sx={{ opacity: 0.7, fontSize: '0.75rem' }}>
+                                    Escrito por
+                                </Typography>
+                                <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                                    {post.author}
+                                </Typography>
+                            </Box>
+                        </Box>
+                    )}
                 </Container>
             </Box>
 

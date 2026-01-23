@@ -14,6 +14,8 @@ export const blogPosts = [
         category: 'Guía para principiantes',
         date: '2024-01-15',
         readTime: '8 min',
+        author: 'Michael Arias',
+        avatar: '/images/authors/michael-arias.jpg',
         content: [
             {
                 type: 'paragraph',
@@ -91,6 +93,8 @@ export const blogPosts = [
         category: 'Mantenimiento',
         date: '2024-02-10',
         readTime: '6 min',
+        author: 'Miguel Parra',
+        avatar: '/images/authors/miguel-parra.jpg',
         content: [
             {
                 type: 'paragraph',
