@@ -94,7 +94,7 @@ export const blogPosts = [
         date: '2024-02-10',
         readTime: '6 min',
         author: 'Miguel Parra',
-        avatar: '/images/authors/miguel-parra.jpg',
+        avatar: '',
         content: [
             {
                 type: 'paragraph',

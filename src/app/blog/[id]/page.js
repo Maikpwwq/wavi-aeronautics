@@ -141,13 +141,15 @@ function ArticleContent({ content }) {
         <>
             {content.map((block, index) => {
                 if (block.type === 'paragraph') {
-                    return (
+                    return block.isHtml ? (
                         <Typography
                             key={index}
                             sx={styles.paragraph}
-                            dangerouslySetInnerHTML={block.isHtml ? { __html: block.text } : undefined}
-                        >
-                            {!block.isHtml && block.text}
+                            dangerouslySetInnerHTML={{ __html: block.text }}
+                        />
+                    ) : (
+                        <Typography key={index} sx={styles.paragraph}>
+                            {block.text}
                         </Typography>
                     )
                 }
@@ -159,13 +161,17 @@ function ArticleContent({ content }) {
                                 {block.title}
                             </Typography>
                             {block.paragraphs.map((para, pIndex) => (
-                                <Typography
-                                    key={pIndex}
-                                    sx={styles.paragraph}
-                                    dangerouslySetInnerHTML={para.isHtml ? { __html: para.text } : undefined}
-                                >
-                                    {!para.isHtml && para.text}
-                                </Typography>
+                                para.isHtml ? (
+                                    <Typography
+                                        key={pIndex}
+                                        sx={styles.paragraph}
+                                        dangerouslySetInnerHTML={{ __html: para.text }}
+                                    />
+                                ) : (
+                                    <Typography key={pIndex} sx={styles.paragraph}>
+                                        {para.text}
+                                    </Typography>
+                                )
                             ))}
                         </Box>
                     )
