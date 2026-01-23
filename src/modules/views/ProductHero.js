@@ -48,7 +48,7 @@ const styles = (theme) => ({
   }
 })
 
-function ProductHero (props) {
+function ProductHero(props) {
   // const { theme } = props;
   const classes = styles(theme)
   // const navigate = useRouter()
@@ -66,8 +66,8 @@ function ProductHero (props) {
         Necesitas un Dron
       </Typography>
       <Typography color="inherit" align="center" variant="h5" sx={classes.h5}>
-        Somos distribuidores de Technología FPV (vista en primera persona) del tipo VToL (despegue y
-        aterrizaje vertical).
+        Somos distribuidores de tecnología FPV (vista en primera persona) del tipo
+        <br />VToL (despegue y aterrizaje vertical).
         <br /><br />
         Solicita alguno de nuestros productos.
       </Typography>
