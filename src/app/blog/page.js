@@ -14,7 +14,7 @@ const styles = (theme) => ({
   }
 })
 
-function BlogPage () {
+function BlogPage() {
   const classes = styles(theme)
   return (
     <section>
@@ -32,18 +32,20 @@ function BlogPage () {
             </p>
             <br />
             <p className="pt-4 pb-4">
-              En Colombia, volar de forma legal es un acto regulado bajo el RAC 100 para muchos casos requiere de un "Certificado de Idoneidad" 
-              y de permiso de vuelo emitido por la Aeronáutica Civil. Entre 200 g hasta los 25 kg debes registrar tu equipo obligatoriamente en el SiRT.
-              Consulta además el mapa de Zonas Prohibidas (ZNVD), dado que existen lugares donde la presencia es una amenaza como Aeropuertos, Bases Militares, Estaciones de Policia, Parques Nacionales Naturales.
+              En Colombia, volar de forma legal es un acto regulado bajo el RAC 100 para muchos casos requiere de un <a href="https://www.aerocivil.gov.co/publicaciones/3959/usuarios-registrados-ua/" target="_blank" rel="noopener noreferrer" >Certificado de Idoneidad</a>
+              y de <a href="https://sgdea.aerocivil.gov.co/ControlPQR/Tramites" target="_blank" rel="noopener noreferrer" >permiso de vuelo</a> emitido por la Aeronáutica Civil. Entre 200 g hasta los 25 kg debes registrar tu equipo obligatoriamente en el SiRT.
+              Consulta además el <a href="https://aerocivil.maps.arcgis.com/apps/instant/media/index.html?appid=b4be4d501c8d4bcabd0c35297521c16e&center=-74.3578;4.7377&level=10" target="_blank" rel="noopener noreferrer" >mapa de Zonas de No Vuelo Dron (ZNVD)</a> donde la presencia es una amenaza, como son cercanías a Aeropuertos, Bases Militares, Estaciones de Policia, Parques Nacionales Naturales.
             </p>
             <br />
-<p className="pt-4 pb-4">
-              Si bien puedes darle un uso puramente recreativo en categoría abierta, , eres legalmente responsable de cualquier daño. Se recomienda encarecidamente una póliza de responsabilidad civil; un error técnico puede costar más de lo que imaginas.
+            <p className="pt-4 pb-4">
+              Si bien puedes darle un uso puramente recreativo en categoría abierta,
+              eres legalmente responsable de cualquier daño. Se sugiere contar con una
+              póliza de responsabilidad civil; un error técnico puede costar más de lo que imaginas.
             </p>
             <br />
-<br />
-<p className="pt-4 pb-4">
-              Los Límites del Dominio son un techo de 120 metros (400 pies) de altura, un alcance horizontal a máximo 750 metros desde tu posición, y ontacto Visual (VLOS) permanente. Mantén al menos 30 metros de distancia horizontal de personas ajenas a tu operación. y nada de vuelos sobre aglomeraciones.
+            <br />
+            <p className="pt-4 pb-4">
+              Los límites del dominio son: un techo de 120 metros (400 pies) de altura, un alcance horizontal a máximo 750 metros desde tu posición, y contacto Visual (VLOS) permanente. Mantener al menos 30 metros de distancia horizontal de personas ajenas a la operación. y nada de vuelos sobre aglomeraciones.
             </p>
             <br />
             <p className="pt-4 pb-4">
@@ -63,18 +65,19 @@ function BlogPage () {
             <br />
             <p className="pt-4 pb-4">
               Tienes un botón de armado y desarmado de los motores (encendido/apagado), apenas lo
-              activas en la parte superior del mando, las hélices se encenderán y el drone permanecerá en el suelo. Desde una distancia prudente a más de 5 metros,
+              presionas en la parte superior del mando, las hélices se encenderán y el drone permanecerá en el suelo. Desde una distancia prudente a más de 5 metros,
               eleva el drone de forma gradual del suelo, ve deslizando
-              suavemente la palanca del acelerador (throttle), hasta que pueda despegar del suelo.
-              Inicia intentando avanzar y retroceder lentamente algunos metros,
-              esto varias veces antes de continuar con ejercicios más complejos (circuito con trayectoria, desplazamiento circular con foco en el centro, reloj de arena...).{' '}
+              suavemente la palanca del acelerador (throttle), hasta que pueda despegar del suelo. Utiliza la Guiñada (Yaw) para iniciar rotación a en sentido manecillas del reloj o en sentido contrario.
+              Prueba la palanca de Alabeo (Roll) que controla la inclinación lateral a la izquierda y derecha. Intenta avanzar y retroceder lentamente algunos metros ajustando el Cabeceo (Pitch) hacia adelante/atrás.
+              Haz estos movimientos alrededor de un punto fijo varias veces antes de continuar con ejercicios más complejos.{' '}
             </p>
             <br />
             <p className="pt-4 pb-4">
-              Quieres probar tu desempeño, trata ahora de realizar rutas
-              circulares sobre una misma área. Ya que has desarrollado el
+              Quieres probar tu desempeño, trata ahora de realizar rutas sobre una misma área como:
+              circuito sin trayectoria, circuito con trayectoria, desplazamiento circular con foco en el centro,
+              desplazamiento circular con foco hacia afuera, reloj de arena sentido manecillas del reloj, reloj de arena sentido invertido manecillas del reloj. Ya que has desarrollado el
               control sobre la velocidad y ubicación del drone, te invito a ver
-              algunos videos de trucos que te enseñaran las diferentes
+              algunos videos de trucos que te adentraran en diferentes
               modalidades de vuelo: boca abajo, de reverso, flujo...
             </p>
             <br />
