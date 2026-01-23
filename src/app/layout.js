@@ -17,7 +17,7 @@ export const metadata = {
     'msapplication-TileColor': '#ffffff',
     'msapplication-TileImage': '/ms-icon-144x144.png',
     'theme-color': '#ffffff',
-    'google-site-verification': 'HXuPDd0BHjnltDHLqyQkYG5_IRx968JwaWKFEIvOdOI'
+    'google-site-verification': '6r-eSIrLWUsVNJ9XHALfxTClL79n1mxBNunxLyceNt0'
   },
   icons: {
     icon: [
@@ -44,7 +44,7 @@ export const metadata = {
   }
 }
 
-export default function RootLayout ({ children }) {
+export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
