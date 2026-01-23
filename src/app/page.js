@@ -26,15 +26,16 @@ function Home () {
       <RevealOnScroll>
         <ProductHero />
       </RevealOnScroll>
+      <RevealOnScroll>
+        <NuevosProductos />
+      </RevealOnScroll>
       <RevealOnScroll delay={200}>
         <ProductValues />
       </RevealOnScroll>
       <RevealOnScroll>
         <ProductCategories />
       </RevealOnScroll>
-      <RevealOnScroll>
-        <NuevosProductos />
-      </RevealOnScroll>
+      
       <RevealOnScroll>
         <ProductHowItWorks />
       </RevealOnScroll>

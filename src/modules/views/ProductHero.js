@@ -66,10 +66,10 @@ function ProductHero (props) {
         Necesitas un Dron
       </Typography>
       <Typography color="inherit" align="center" variant="h5" sx={classes.h5}>
-        Somos fabricantes y distribuidores de Technología VToL (despegue y
+        Somos distribuidores de Technología FPV (vista en primera persona) del tipo VToL (despegue y
         aterrizaje vertical).
-        <br />
-        Solicita alguno de nuestros servicios.
+        <br /><br />
+        Solicita alguno de nuestros productos.
       </Typography>
       <Button
         color="secondary"
@@ -78,7 +78,7 @@ function ProductHero (props) {
         className="navlink"
         sx={classes.button}
       >
-        <Link href="auth/sign-up/">{'Registrarse'}</Link>
+        <Link href="tienda/">{'Ver Productos'}</Link>
       </Button>
       <Typography variant="body2" color="inherit" sx={classes.more}>
         Disfruta nuestras ofertas

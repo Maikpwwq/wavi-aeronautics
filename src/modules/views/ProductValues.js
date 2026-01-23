@@ -87,8 +87,8 @@ function ProductValues (props) {
                 Vuelos de precisión
               </Typography>
               <Typography variant="h5">
-                {'Industrias agrícolas, deportivas y trasporte de cargas.'}
-                {'  Usos competitivos, riego, filmación….'}
+                {'Pilotos profesionales y empresas de industrias agrícolas, civiles, deportivas y de transporte.'}
+                {'Usos vigilancia, medición, competencia, filmación, etc.'}
               </Typography>
             </Box>
           </Grid>
@@ -107,7 +107,7 @@ function ProductValues (props) {
               </Typography>
               <Typography variant="h5">
                 {'Software para mapeo por fotogrametría'}
-                {' y modelado digital.'}
+                {' y modelado digital de lugares.'}
               </Typography>
             </Box>
           </Grid>
@@ -122,11 +122,11 @@ function ProductValues (props) {
                 priority
               />
               <Typography variant="h6" sx={classes.title}>
-                Adquirir Equipos
+                Recreación
               </Typography>
               <Typography variant="h5">
-                {'Al registrarte tendrás acceso a tarifas especiales '}
-                {'y la tecnología más actualizada.'}
+                {'Categoria abierta de operación para uso personal.'}
+                {'Una aeronave que supera los 200 gramos y no está registrada bajo el RAC 100 RUAS, está volando fuera de la ley.'}
               </Typography>
             </Box>
           </Grid>

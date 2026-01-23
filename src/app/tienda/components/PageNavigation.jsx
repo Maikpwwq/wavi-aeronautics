@@ -13,7 +13,7 @@ const CATEGORY_LABELS = {
   'kit-drones': "Kit's Drones",
   'drones-fpv-hd': 'Drones HD',
   'drones': 'Drones RC',
-  'googles': 'Googles',
+  'googles': 'Goggles FPV',
   'radio-control': 'Radio Control',
   'trasmisor-receptor': 'Transmisión/Recepción',
   'digital-vtx': 'Digital VTX',

@@ -18,7 +18,7 @@ export const routes = [
     slug: 'drones'
   },
   {
-    label: 'Googles',
+    label: 'Goggles FPV',
     value: 3,
     href: '/tienda/googles/',
     slug: 'googles'
