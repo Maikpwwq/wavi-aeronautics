@@ -51,7 +51,7 @@ function ProductSmokingHero (props) {
         ¡Escríbenos aquí!
       </Typography>
       <WhatsAppContacto
-        href="https://api.whatsapp.com/send?phone=573196138057"
+        href="https://api.whatsapp.com/send?phone=573204842897"
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -61,7 +61,7 @@ function ProductSmokingHero (props) {
           style={{ color: '#4fcc5d' }}
         />
       </WhatsAppContacto>
-      {/* <Link href={{  pathname: "https://api.whatsapp.com/send?phone=573196138057" }} target="_blank" /> */}
+      {/* <Link href={{  pathname: "https://api.whatsapp.com/send?phone=573204842897" }} target="_blank" /> */}
     </Container>
   )
 }
