@@ -16,6 +16,7 @@ import './page.module.css'
 import Header from './components/Header'
 import ShopMarcas from './components/ShopMarcas'
 import ShopConditions from './components/ShopConditions'
+import AppFooter from '@/modules/views/AppFooter'
 import innerTheme from './innerTheme'
 
 const drawerWidth = 256
@@ -64,7 +65,7 @@ const Main = styled('main')(({ theme }) => ({
   // zIndex: -1,
 }))
 
-function Copyright () {
+function Copyright() {
   const classes = styles(innerTheme)
 
   return (
@@ -79,7 +80,7 @@ function Copyright () {
   )
 }
 
-function Paperbase ({ children }) {
+function Paperbase({ children }) {
   // const { classes } = props;
   const classes = styles(theme)
   const [mobileOpen, setMobileOpen] = React.useState(false)
@@ -125,9 +126,7 @@ function Paperbase ({ children }) {
             <ShopConditions />
           </Box>
           <ShopMarcas />
-          <Footer>
-            <Copyright />
-          </Footer>
+          <AppFooter />
         </Box>
       </Box>
     </ThemeProvider>
