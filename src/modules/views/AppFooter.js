@@ -137,25 +137,45 @@ function AppFooter (props) {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item size={{ xs: 12, sm: 6, md: 4 }}>
+          <Grid item size={{ xs: 12, sm: 6, md: 5 }}>
             <Typography
               className="textWhite"
-              sx={classes.link}
+              sx={{ ...classes.link, fontWeight: 'bold', mb: 1.5 }}
               variant="h6"
               marked="left"
               gutterBottom
             >
-              Legal
+              Documentación Legal
             </Typography>
             <LegalDocuments>
               <LegalItem>
-                <Link href="/terms/" className="textWhite" sx={classes.link}>
-                  {'Terminos'}
+                <Link href="/condiciones-del-servicio" style={{ color: '#ffffff', textDecoration: 'none' }}>
+                  Términos y Condiciones del Servicio
                 </Link>
               </LegalItem>
               <LegalItem>
-                <Link href="/privacy/" className="textWhite" sx={classes.link}>
-                  {'Privacidad'}
+                <Link href="/politica-de-privacidad" style={{ color: '#ffffff', textDecoration: 'none' }}>
+                  Política de Privacidad
+                </Link>
+              </LegalItem>
+              <LegalItem>
+                <Link href="/politica-de-envios" style={{ color: '#ffffff', textDecoration: 'none' }}>
+                  Política de Envíos
+                </Link>
+              </LegalItem>
+              <LegalItem>
+                <Link href="/politica-de-garantia" style={{ color: '#ffffff', textDecoration: 'none' }}>
+                  Política de Garantía
+                </Link>
+              </LegalItem>
+              <LegalItem>
+                <Link href="/politica-de-reembolso" style={{ color: '#ffffff', textDecoration: 'none' }}>
+                  Política de Reembolso
+                </Link>
+              </LegalItem>
+              <LegalItem>
+                <Link href="/politica-de-devoluciones" style={{ color: '#ffffff', textDecoration: 'none' }}>
+                  Política de Devoluciones
                 </Link>
               </LegalItem>
             </LegalDocuments>

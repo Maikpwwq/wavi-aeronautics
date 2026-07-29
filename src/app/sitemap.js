@@ -106,6 +106,30 @@ export default function sitemap() {
       priority: 0.3,
     },
     {
+      url: `${BASE_URL}/politica-de-envios`,
+      lastModified: now,
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
+      url: `${BASE_URL}/politica-de-garantia`,
+      lastModified: now,
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
+      url: `${BASE_URL}/politica-de-reembolso`,
+      lastModified: now,
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
+      url: `${BASE_URL}/politica-de-devoluciones`,
+      lastModified: now,
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
       url: `${BASE_URL}/eliminacion-datos-usuario`,
       lastModified: now,
       changeFrequency: 'yearly',
