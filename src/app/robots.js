@@ -25,6 +25,7 @@ export default function robots() {
           '/tienda/pago-pendiente/',
           '/tienda/pse-resultado/',
           '/tienda/producto/',
+          '/tienda/buscar/',
         ],
       },
     ],
