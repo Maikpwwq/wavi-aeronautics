@@ -42,10 +42,19 @@ const styles = {
 const HeaderLogo = () => {
   return (
     <AppBar color="primary" position="sticky" elevation={0}>
-      <Toolbar sx={{ py: 1, px: { xs: 1, sm: 2 } }}>
-        <Grid container spacing={2} alignItems="center" justifyContent="space-between">
+      <Toolbar sx={{ py: 1, px: { xs: 1.5, sm: 2, md: 3 } }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: '100%',
+            gap: { xs: 1.5, md: 2 }
+          }}
+        >
           {/* Logo */}
-          <Grid item xs={12} sm={4} md={3} lg={3}>
+          <Box sx={{ flexShrink: 0 }}>
             <Link
               href="/"
               variant="h6"
@@ -66,24 +75,29 @@ const HeaderLogo = () => {
               />
               {'Wavi Aeronautics'}
             </Link>
-          </Grid>
+          </Box>
 
-          {/* Search Bar */}
-          <Grid item xs={12} sm={8} md={5} lg={6}>
+          {/* Search Bar - Expands across available desktop width */}
+          <Box
+            sx={{
+              flexGrow: 1,
+              width: '100%',
+              mx: { md: 2, lg: 3 },
+              display: 'flex',
+              justifyContent: 'center'
+            }}
+          >
             <SearchBar />
-          </Grid>
+          </Box>
 
           {/* Social Icons & Blog Button */}
-          <Grid
-            item
-            xs={12}
-            md={4}
-            lg={3}
+          <Box
             sx={{
+              flexShrink: 0,
               display: 'flex',
               alignItems: 'center',
               justifyContent: { xs: 'center', md: 'flex-end' },
-              gap: 1
+              gap: 0.5
             }}
           >
             {/* WhatsApp */}
@@ -178,8 +192,8 @@ const HeaderLogo = () => {
             >
               Blog
             </Button>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Toolbar>
     </AppBar>
   )
