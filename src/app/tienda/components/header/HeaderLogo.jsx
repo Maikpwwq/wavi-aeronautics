@@ -35,7 +35,7 @@ const HeaderLogo = () => {
     <AppBar color="primary" position="sticky" elevation={0}>
       <Toolbar sx={{ py: 1 }}>
         <Grid container spacing={2} alignItems="center" justifyContent="space-between">
-          <Grid item xs={12} sm={4} md={4}>
+          <Grid item xs={12} sm={4} md={4} lg={3}>
             <Link
               href="/"
               variant="h6"
@@ -58,8 +58,8 @@ const HeaderLogo = () => {
             </Link>
           </Grid>
 
-          {/* Center Search Bar */}
-          <Grid item xs={12} sm={8} md={6} lg={5}>
+          {/* Center Search Bar - wider on desktop */}
+          <Grid item xs={12} sm={8} md={8} lg={9}>
             <SearchBar />
           </Grid>
         </Grid>

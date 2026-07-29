@@ -117,7 +117,7 @@ export const SearchBar = () => {
         sx={{
           position: 'relative',
           width: '100%',
-          maxWidth: { xs: '100%', sm: 380, md: 450 },
+          maxWidth: { xs: '100%', sm: 500, md: 900, lg: 950 },
           mx: 'auto',
         }}
       >
