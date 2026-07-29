@@ -1,238 +1,204 @@
+'use client'
+
 import React from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
-import { styled } from '@mui/material/styles'
 import withRoot from '../withRoot'
-import Grid from '@mui/material/Grid'
+import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '../components/Typography'
-// import TextField from '../components/TextField'
-import theme from '../theme'
-// import appFooterFacebook from "public/static/themes/appFooterFacebook.png";
-// import appFooterTwitter from "public/static/themes/appFooterTwitter.png";
-import appFooterLinkedin from 'public/static/themes/appFooterLinkedin.png'
+import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
+import Divider from '@mui/material/Divider'
+import WhatsAppIcon from '@mui/icons-material/WhatsApp'
+import InstagramIcon from '@mui/icons-material/Instagram'
+import FacebookIcon from '@mui/icons-material/Facebook'
+import PaymentMethods from '../components/PaymentMethods'
 
-const appFooterFacebook =
-  'https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2Ficonos%2FappFooterFacebook.png?alt=media&token=b54b1ff2-c2b3-4d57-a7fa-c2e0e06d150e'
-// const appFooterLinkedin =
-// ('https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2Ficonos%2FappFooterLinkedin.png?alt=media&token=d1475fcd-9ae1-4c3c-84f5-ee38d76c2da6')
-
-const SocialIcons = styled('a')(({ theme }) => ({
-  width: 48,
-  height: 48,
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  backgroundColor: theme.palette.warning.main,
-  marginRight: 1,
-  '&:hover': {
-    backgroundColor: theme.palette.warning.dark
+const socialLinks = [
+  {
+    label: 'WhatsApp',
+    href: 'https://api.whatsapp.com/send?phone=573204842897',
+    icon: WhatsAppIcon,
+    hoverColor: '#25D366',
+    hoverBg: 'rgba(37, 211, 102, 0.15)'
+  },
+  {
+    label: 'Instagram @wavi.aeronautics',
+    href: 'https://www.instagram.com/wavi.aeronautics/',
+    icon: InstagramIcon,
+    hoverColor: '#E1306C',
+    hoverBg: 'rgba(225, 48, 108, 0.15)'
+  },
+  {
+    label: 'Facebook @wavi.aeronautics',
+    href: 'https://www.facebook.com/wavi.aeronautics/',
+    icon: FacebookIcon,
+    hoverColor: '#1877F2',
+    hoverBg: 'rgba(24, 119, 242, 0.15)'
   }
-}))
+]
 
-const LegalItem = styled('li')({
-  paddingTop: 0.5,
-  paddingBottom: 0.5,
-  color: 'white'
-})
+const legalLinks = [
+  { label: 'Términos y Condiciones', href: '/condiciones-del-servicio' },
+  { label: 'Política de Privacidad', href: '/politica-de-privacidad' },
+  { label: 'Política de Envíos', href: '/politica-de-envios' },
+  { label: 'Política de Garantía', href: '/politica-de-garantia' },
+  { label: 'Política de Reembolso', href: '/politica-de-reembolso' },
+  { label: 'Política de Devoluciones', href: '/politica-de-devoluciones' }
+]
 
-const LegalDocuments = styled('ul')({
-  margin: 0,
-  listStyle: 'none',
-  padding: 0
-})
-
-// language: {
-//   marginTop: theme.spacing(1),
-//   width: 150,
-// },
-// const LANGUAGES = [
-//   {
-//     code: 'en-US',
-//     name: 'English',
-//   },
-//   {
-//     code: 'fr-FR',
-//     name: 'Français',
-//   },
-// ];
-
-const styles = (theme) => ({
-  link: {
-    fontSize: '21px',
-    textDecoration: 'none',
-    color: 'white'
-  }
-})
-
-function AppFooter (props) {
-  // const { theme } = props; // dont need this anymore
-  const classes = styles(theme)
-
-  function Copyright () {
-    return (
-      <React.Fragment>
-        <Link
-          href="https://maikpwwq.github.io/wavi-aeronautics/"
-          style={{ color: '#fff5f8' }}
-        >
-          Wavi Aeronautics {'© '}
-          {new Date().getFullYear()}
-        </Link>
-      </React.Fragment>
-    )
-  }
-
+function AppFooter () {
   return (
-    <Typography
+    <Box
       component="footer"
       sx={{
-        display: 'flex',
-        backgroundColor: '#1e1e1f'
+        bgcolor: '#1e1e1f',
+        color: 'rgba(255, 255, 255, 0.85)',
+        pt: { xs: 6, md: 8 },
+        pb: { xs: 4, md: 5 }
       }}
     >
-      <Container
-        sx={{
-          marginTop: 8,
-          marginBottom: 8,
-          marginLeft: 8,
-          display: 'flex'
-        }}
-      >
-        <Grid container spacing={5} sx={{ alignItems: 'flex-end' }}>
-          <Grid item size={{ xs: 12, sm: 6, md: 6, lg: 8 }}>
-            <Grid
-              container
-              direction="column"
-              justifyContent="flex-end"
-              sx={{
-                height: 120
-              }}
-              spacing={2}
-            >
-              <Grid
-                item
-                sx={{
-                  display: 'flex'
-                }}
-              >
-                <SocialIcons href="https://www.facebook.com/wavi.aeronautics/">
-                  <Image
-                    src={appFooterFacebook}
-                    alt="Facebook"
-                    width={14}
-                    height={28}
-                    priority
-                  />
-                </SocialIcons>
-                <SocialIcons href="https://www.linkedin.com/company/wavi-aeronautics/">
-                  <Image
-                    src={appFooterLinkedin}
-                    width={28}
-                    height={28}
-                    alt="Linkedin"
-                    priority
-                  />
-                </SocialIcons>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item size={{ xs: 12, sm: 6, md: 5 }}>
+      <Container maxWidth="lg">
+        {/* === Three-Column Row === */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' },
+            gap: { xs: 5, md: 6 }
+          }}
+        >
+          {/* ── Column 1: Social ── */}
+          <Box>
             <Typography
-              className="textWhite"
-              sx={{ ...classes.link, fontWeight: 'bold', mb: 1.5 }}
-              variant="h6"
-              marked="left"
-              gutterBottom
+              variant="subtitle2"
+              sx={{
+                color: 'rgba(255, 255, 255, 0.95)',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: 1.2,
+                mb: 2,
+                fontSize: '0.8rem'
+              }}
+            >
+              Síguenos
+            </Typography>
+
+            <Box sx={{ display: 'flex', gap: 0.5 }}>
+              {socialLinks.map((social) => {
+                const Icon = social.icon
+                return (
+                  <Tooltip key={social.label} title={social.label} arrow>
+                    <IconButton
+                      component="a"
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={social.label}
+                      sx={{
+                        color: 'rgba(255, 255, 255, 0.7)',
+                        transition: 'all 0.25s ease',
+                        '&:hover': {
+                          color: social.hoverColor,
+                          transform: 'translateY(-2px) scale(1.1)',
+                          bgcolor: social.hoverBg
+                        }
+                      }}
+                    >
+                      <Icon />
+                    </IconButton>
+                  </Tooltip>
+                )
+              })}
+            </Box>
+
+            <Typography
+              variant="caption"
+              sx={{ display: 'block', mt: 2, color: 'rgba(255,255,255,0.4)', lineHeight: 1.5, maxWidth: 220 }}
+            >
+              Tecnología aérea, drones y accesorios con envío internacional a Colombia.
+            </Typography>
+          </Box>
+
+          {/* ── Column 2: Legal ── */}
+          <Box>
+            <Typography
+              variant="subtitle2"
+              sx={{
+                color: 'rgba(255, 255, 255, 0.95)',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: 1.2,
+                mb: 2,
+                fontSize: '0.8rem'
+              }}
             >
               Documentación Legal
             </Typography>
-            <LegalDocuments>
-              <LegalItem>
-                <Link href="/condiciones-del-servicio" style={{ color: '#ffffff', textDecoration: 'none' }}>
-                  Términos y Condiciones del Servicio
-                </Link>
-              </LegalItem>
-              <LegalItem>
-                <Link href="/politica-de-privacidad" style={{ color: '#ffffff', textDecoration: 'none' }}>
-                  Política de Privacidad
-                </Link>
-              </LegalItem>
-              <LegalItem>
-                <Link href="/politica-de-envios" style={{ color: '#ffffff', textDecoration: 'none' }}>
-                  Política de Envíos
-                </Link>
-              </LegalItem>
-              <LegalItem>
-                <Link href="/politica-de-garantia" style={{ color: '#ffffff', textDecoration: 'none' }}>
-                  Política de Garantía
-                </Link>
-              </LegalItem>
-              <LegalItem>
-                <Link href="/politica-de-reembolso" style={{ color: '#ffffff', textDecoration: 'none' }}>
-                  Política de Reembolso
-                </Link>
-              </LegalItem>
-              <LegalItem>
-                <Link href="/politica-de-devoluciones" style={{ color: '#ffffff', textDecoration: 'none' }}>
-                  Política de Devoluciones
-                </Link>
-              </LegalItem>
-            </LegalDocuments>
-          </Grid>
-          {/* <Grid item xs={6} sm={8} md={4}>
-            <Typography variant="h6" marked="left" gutterBottom>
-              Lenguaje
-            </Typography>
-            <TextField
-              select
-              SelectProps={{
-                native: true,
-              }}
-              sx={classes.language}
-            >
-              {LANGUAGES.map((language) => (
-                <option value={language.code} key={language.code}>
-                  {language.name}
-                </option>
-              ))}
-            </TextField>
-          </Grid> */}
-          {/* <Grid item>
-            <Typography variant="caption">
-              {"Icons made by "}
-              <Link
-                href="https://www.freepik.com"
-                rel="sponsored"
-                title="Freepik"
+
+            <Box component="nav" aria-label="Documentación legal">
+              <Box
+                component="ul"
+                sx={{
+                  m: 0,
+                  p: 0,
+                  listStyle: 'none',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 0.75
+                }}
               >
-                Freepik
-              </Link>
-              {" from "}
-              <Link
-                href="https://www.flaticon.com"
-                rel="sponsored"
-                title="Flaticon"
-              >
-                www.flaticon.com
-              </Link>
-              {" is licensed by "}
-              <Link
-                href="https://creativecommons.org/licenses/by/3.0/"
-                title="Creative Commons BY 3.0"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                CC 3.0 BY
-              </Link>
-            </Typography>
-          </Grid> */}
-          <Grid item>
-                <Copyright />
-              </Grid>
-        </Grid>
+                {legalLinks.map((link) => (
+                  <Box component="li" key={link.href}>
+                    <Link
+                      href={link.href}
+                      style={{
+                        color: 'rgba(255, 255, 255, 0.65)',
+                        textDecoration: 'none',
+                        fontSize: '0.85rem',
+                        transition: 'color 0.2s ease'
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.color = '#00aCe4' }}
+                      onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255, 255, 255, 0.65)' }}
+                    >
+                      {link.label}
+                    </Link>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          </Box>
+
+          {/* ── Column 3: Payment Methods ── */}
+          <Box>
+            <PaymentMethods />
+          </Box>
+        </Box>
+
+        {/* === Copyright bar === */}
+        <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)', mt: { xs: 5, md: 6 }, mb: 3 }} />
+
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            justifyContent: 'space-between',
+            alignItems: { xs: 'center', sm: 'center' },
+            gap: 1
+          }}
+        >
+          <Link
+            href="https://maikpwwq.github.io/wavi-aeronautics/"
+            style={{ color: 'rgba(255,255,255,0.45)', textDecoration: 'none', fontSize: '0.8rem' }}
+          >
+            Wavi Aeronautics © {new Date().getFullYear()}
+          </Link>
+
+          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.75rem' }}>
+            Todos los derechos reservados
+          </Typography>
+        </Box>
       </Container>
-    </Typography>
+    </Box>
   )
 }
 
