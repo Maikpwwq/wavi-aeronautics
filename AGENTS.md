@@ -39,26 +39,28 @@ pnpm start
 src/
 ├── app/                        # Next.js App Router pages, layouts, and components
 │   ├── admin/                  # Admin dashboard routes (/admin/*)
+│   │   ├── orders/             # Orders management (/admin/orders)
+│   │   ├── questions/          # Technical questions moderation (/admin/questions)
+│   │   ├── reviews/            # Reviews approval & moderation (/admin/reviews)
+│   │   └── products/           # Product catalog management (/admin/products)
 │   ├── auth/                   # Authentication routes (/auth/*)
 │   ├── tienda/                 # Store routes (/tienda/*)
 │   │   ├── buscar/             # Search results page (/tienda/buscar)
-│   │   ├── components/         # Storefront components (ProductCard, ProductItem, ProductDetail, etc.)
-│   │   │   └── header/         # Header components (HeaderLogo, SearchBar, StoreBanner, CategoriesNavigation)
+│   │   ├── components/         # Storefront components (ProductCard, ProductFeedbackSection, etc.)
+│   │   │   └── header/         # Header components (HeaderLogo, SearchBar, StoreBanner)
 │   │   ├── hooks/              # Custom hooks (useProductFilter, useProducts)
 │   │   └── producto/           # Product detail page route (/tienda/producto)
-│   ├── (legal routes)/         # /politica-de-privacidad, /politica-de-envios, /politica-de-garantia, etc.
+│   ├── (legal routes)/         # /politica-de-privacidad, /politica-de-envios, etc.
 │   ├── robots.js               # Dynamic /robots.txt
 │   └── sitemap.js              # Dynamic /sitemap.xml
-├── firebase/                   # Firebase initialization (firebaseClient.js, firebaseAdmin.js, firebaseConfig.js)
-├── modules/                    # Shared UI modules (Atomic design components, AppFooter, withRoot wrapper)
-│   ├── components/             # PaymentMethods, Typography, etc.
-│   └── views/                  # AppFooter, AppHeader
+├── firebase/                   # Firebase initialization (firebaseClient.js, firebaseAdmin.js)
+├── modules/                    # Shared UI modules (Atomic design components, AppFooter, withRoot)
 ├── services/                   # Data fetching & Firestore API service layer
-│   ├── productInteractionService.js # Customer reviews & technical questions
+│   ├── productInteractionService.js # Customer reviews, technical questions, purchaser check & admin CRUD
 │   ├── FirebaseSearchProducts.js    # Header & page search service
 │   ├── shoppingCartService.js       # Shopping cart operations
 │   ├── ordersService.js             # Order creation & retrieval
-│   └── adminService.js              # Admin CRUD operations
+│   └── adminService.js              # Admin aggregated stats & KPIs
 ├── store/                      # Redux store, slices, and root reducer
 │   └── states/                 # Product, user, cart slices
 └── utilities/                  # Helper utilities (priceUtils.js, price calculation, validation)
@@ -127,5 +129,5 @@ Always prefer **English field names**. Handle legacy Spanish keys as fallback ge
 1. **Client Components**: Next.js App Router interactive components in `src/app/` must start with `'use client'`.
 2. **Never swallow errors**: Do not handle exceptions by returning dummy fallback data or empty objects silently.
 3. **Preserve API Contracts**: If function signatures or Redux action signatures change, update all caller sites.
-4. **Verification**: Always run `npm run build` after editing code to verify clean compilation.
+4. **Verification**: Always run `pnpm run build` after editing code to verify clean compilation.
 5. **Clean Commits**: Make concise git commits following conventional commit prefixing (`feat:`, `fix:`, `style:`, `refactor:`).

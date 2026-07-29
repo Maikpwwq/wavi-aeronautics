@@ -9,6 +9,8 @@ import {
   getDocs
 } from 'firebase/firestore'
 
+import { fetchPendingReviewsCount, fetchUnansweredQuestionsCount } from '@/services/productInteractionService'
+
 /**
  * Fetches aggregated statistics for the admin dashboard
  * Uses server-side aggregation for performance
@@ -19,10 +21,6 @@ export const getAdminStats = async () => {
     const usersRef = collection(firestore, 'users')
 
     // 1. Calculate Total Income
-    // We only want to sum 'paid', 'shipped', 'delivered'.
-    // Firestore aggregation doesn't easily support "IN" queries combined with sum efficiently 
-    // without matching indexes or separate queries. 
-    // For simplicity and accuracy with the requested filter:
     const incomeQuery = query(ordersRef, where('status', 'in', ['paid', 'shipped', 'delivered']))
     const incomeSnapshot = await getDocs(incomeQuery)
     const totalIncome = incomeSnapshot.docs.reduce((acc, doc) => acc + (doc.data().total || 0), 0)
@@ -34,7 +32,6 @@ export const getAdminStats = async () => {
     const totalOrders = ordersCountSnapshot.data().totalOrders || 0
 
     // 3. Count Pending Orders (Issues + In Process)
-    // Using client-side count to avoid potential composite index issues with 'in' queries
     const pendingOrdersQuery = query(ordersRef, where('status', 'in', ['pending', 'verification_required', 'processing', 'failed']))
     const pendingSnapshot = await getDocs(pendingOrdersQuery)
     const pendingOrders = pendingSnapshot.size
@@ -45,11 +42,19 @@ export const getAdminStats = async () => {
     })
     const totalUsers = usersCountSnapshot.data().totalUsers || 0
 
+    // 5. Moderation KPIs
+    const [pendingReviews, unansweredQuestions] = await Promise.all([
+      fetchPendingReviewsCount(),
+      fetchUnansweredQuestionsCount()
+    ])
+
     return {
       totalIncome,
       totalOrders,
       pendingOrders,
-      totalUsers
+      totalUsers,
+      pendingReviews,
+      unansweredQuestions
     }
   } catch (error) {
     console.error("Error fetching admin stats:", error)

@@ -248,11 +248,12 @@ Beyond the store, Wavi Aeronautics provides professional services:
 
 ## 🆕 Recent Updates (July 2026)
 
-- **Product Reviews & Technical Questions:** Added interactive `Opiniones de clientes` and `Preguntas técnicas` components to the product detail page backed by Firestore (`product_reviews`, `product_questions`) with auth checks and submission modals.
+- **Admin Moderation Modules:** Created dedicated admin panels `/admin/reviews` and `/admin/questions` for approving product reviews, answering technical questions, editing formulation/orthography, and marking duplicate/inappropriate questions.
+- **Moderation KPIs:** Added "Opiniones Pendientes" and "Preguntas sin Responder" KPI metric cards to the main Admin Dashboard (`/admin`).
+- **Verified Purchaser Protection:** Enforced order history verification (`checkUserPurchasedProduct`) so only clients who have bought a product can leave reviews or ask technical questions, preventing spam and bot abuse.
+- **Product Reviews & Technical Questions:** Added interactive `Opiniones de clientes` and `Preguntas técnicas` components to the product detail page backed by Firestore (`product_reviews`, `product_questions`).
 - **Header Search Bar Module:** Integrated a debounced autocomplete search bar in the header menu that queries products across title, brand, category, and tags, with a dedicated `/tienda/buscar?q=...` search results page.
 - **Payment Methods & Footer Layout:** Restructured footer into a responsive 3-column layout (Socials, Legal Docs, Accepted Payments) featuring official vector logos for Mercado Pago, PSE, PayPal, Visa, Mastercard, American Express, and Codensa.
-- **Legal Policies:** Created accessible policy pages for Privacy (`/politica-de-privacidad`), Shipping (`/politica-de-envios`), Warranty (`/politica-de-garantia`), Refund (`/politica-de-reembolso`), and Returns (`/politica-de-devoluciones`).
-- **Product Stock & Availability:** Decoupled product market price display from inventory status (`availability` boolean), displaying explicit `AGOTADO` badges over product image containers when out of stock.
 - **SEO & Indexing:** Implemented native dynamic `/sitemap.xml` and `/robots.txt` using Next.js App Router metadata API.
 
 ---

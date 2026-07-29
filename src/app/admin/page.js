@@ -16,8 +16,11 @@ import { getAdminStats } from '@/services/adminService'
 import { motion } from 'framer-motion'
 import { formatCurrency } from '@/utilities/priceUtils'
 
+import RateReviewIcon from '@mui/icons-material/RateReview'
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer'
+
 const StatCard = ({ title, value, icon, color, delay = 0 }) => (
-  <Grid item xs={12} sm={6} md={3}>
+  <Grid item xs={12} sm={6} md={4}>
     <Card 
       component={motion.div}
       initial={{ opacity: 0, y: 20 }}
@@ -116,11 +119,25 @@ export default function AdminDashboard() {
           delay={0.3}
         />
         <StatCard 
+          title="Opiniones Pendientes" 
+          value={stats?.pendingReviews || 0} 
+          icon={<RateReviewIcon />} 
+          color="#e91e63" 
+          delay={0.4}
+        />
+        <StatCard 
+          title="Preguntas sin Responder" 
+          value={stats?.unansweredQuestions || 0} 
+          icon={<QuestionAnswerIcon />} 
+          color="#00bcd4" 
+          delay={0.5}
+        />
+        <StatCard 
           title="Usuarios Registrados" 
           value={stats?.totalUsers || 0} 
           icon={<PeopleAltIcon />} 
           color="#9c27b0" 
-          delay={0.4}
+          delay={0.6}
         />
       </Grid>
 

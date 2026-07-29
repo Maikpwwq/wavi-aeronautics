@@ -15,31 +15,41 @@ import Link from 'next/link'
 import { useSelector } from 'react-redux'
 import { auth } from '@/firebase/firebaseClient'
 import { onAuthStateChanged } from 'firebase/auth'
-import { fetchProductReviews, fetchProductQuestions } from '@/services/productInteractionService'
+import { fetchProductReviews, fetchProductQuestions, checkUserPurchasedProduct } from '@/services/productInteractionService'
 import ProductReviews from './ProductReviews'
 import ProductQuestions from './ProductQuestions'
 
-const ProductFeedbackSection = ({ productId }) => {
+const ProductFeedbackSection = ({ productId, productName }) => {
   const reduxUser = useSelector((state) => state.user)
   const [currentUser, setCurrentUser] = useState(null)
+  const [isVerifiedPurchaser, setIsVerifiedPurchaser] = useState(false)
   const [reviews, setReviews] = useState([])
   const [questions, setQuestions] = useState([])
   const [authDialogOpen, setAuthDialogOpen] = useState(false)
+  const [unverifiedDialogOpen, setUnverifiedDialogOpen] = useState(false)
 
-  // Sync auth state
+  // Sync auth state and check purchaser status
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setCurrentUser(user)
-      } else if (reduxUser && (reduxUser.uid || reduxUser.id || reduxUser.email)) {
-        setCurrentUser(reduxUser)
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      const activeUser = user || (reduxUser && (reduxUser.uid || reduxUser.id) ? reduxUser : null)
+      setCurrentUser(activeUser)
+
+      if (activeUser && productId) {
+        const uid = activeUser.uid || activeUser.id
+        const isAdminUser = activeUser.role === 'admin' || activeUser.rol === 'admin'
+        if (isAdminUser) {
+          setIsVerifiedPurchaser(true)
+        } else {
+          const purchased = await checkUserPurchasedProduct(uid, productId)
+          setIsVerifiedPurchaser(purchased)
+        }
       } else {
-        setCurrentUser(null)
+        setIsVerifiedPurchaser(false)
       }
     })
 
     return () => unsubscribe()
-  }, [reduxUser])
+  }, [reduxUser, productId])
 
   // Load reviews and questions
   const loadData = useCallback(async () => {
@@ -66,8 +76,11 @@ const ProductFeedbackSection = ({ productId }) => {
           <ProductReviews
             reviews={reviews}
             productId={productId}
+            productName={productName}
             currentUser={currentUser}
+            isVerifiedPurchaser={isVerifiedPurchaser}
             onAuthRequired={() => setAuthDialogOpen(true)}
+            onUnverifiedRequired={() => setUnverifiedDialogOpen(true)}
             onReviewAdded={loadData}
           />
         </Grid>
@@ -77,8 +90,11 @@ const ProductFeedbackSection = ({ productId }) => {
           <ProductQuestions
             questions={questions}
             productId={productId}
+            productName={productName}
             currentUser={currentUser}
+            isVerifiedPurchaser={isVerifiedPurchaser}
             onAuthRequired={() => setAuthDialogOpen(true)}
+            onUnverifiedRequired={() => setUnverifiedDialogOpen(true)}
             onQuestionAdded={loadData}
           />
         </Grid>
@@ -89,7 +105,7 @@ const ProductFeedbackSection = ({ productId }) => {
         <DialogTitle sx={{ textAlign: 'center', pt: 3 }}>
           <LockOutlinedIcon sx={{ fontSize: 40, color: '#00aCe4', mb: 1 }} />
           <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-            Inicia Sesión Requerido
+            Inicio de Sesión Requerido
           </Typography>
         </DialogTitle>
         <DialogContent sx={{ textAlign: 'center', pb: 2 }}>
@@ -108,6 +124,25 @@ const ProductFeedbackSection = ({ productId }) => {
             sx={{ bgcolor: '#00aCe4', '&:hover': { bgcolor: '#0086b3' } }}
           >
             Iniciar Sesión
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Unverified Purchaser Dialog */}
+      <Dialog open={unverifiedDialogOpen} onClose={() => setUnverifiedDialogOpen(false)} maxWidth="xs" fullWidth>
+        <DialogTitle sx={{ textAlign: 'center', pt: 3 }}>
+          <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#ff6f00' }}>
+            Compra Verificada Requerida
+          </Typography>
+        </DialogTitle>
+        <DialogContent sx={{ textAlign: 'center', pb: 2 }}>
+          <Typography variant="body2" color="text.secondary">
+            Para evitar comentarios spam y proteger la comunidad, únicamente los clientes que hayan adquirido este producto en Wavi Aeronautics pueden dejar opiniones y realizar preguntas técnicas.
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: 'center', pb: 3 }}>
+          <Button onClick={() => setUnverifiedDialogOpen(false)} variant="contained" sx={{ bgcolor: '#ff6f00' }}>
+            Entendido
           </Button>
         </DialogActions>
       </Dialog>

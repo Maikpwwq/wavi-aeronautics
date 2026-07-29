@@ -18,7 +18,7 @@ import StarIcon from '@mui/icons-material/Star'
 import PersonIcon from '@mui/icons-material/Person'
 import { addProductReview } from '@/services/productInteractionService'
 
-const ProductReviews = ({ reviews = [], productId, currentUser, onAuthRequired, onReviewAdded }) => {
+const ProductReviews = ({ reviews = [], productId, productName, currentUser, isVerifiedPurchaser, onAuthRequired, onUnverifiedRequired, onReviewAdded }) => {
   const [open, setOpen] = useState(false)
   const [rating, setRating] = useState(5)
   const [title, setTitle] = useState('')
@@ -29,6 +29,10 @@ const ProductReviews = ({ reviews = [], productId, currentUser, onAuthRequired, 
   const handleOpen = () => {
     if (!currentUser) {
       onAuthRequired()
+      return
+    }
+    if (!isVerifiedPurchaser) {
+      onUnverifiedRequired()
       return
     }
     setError('')
@@ -58,6 +62,7 @@ const ProductReviews = ({ reviews = [], productId, currentUser, onAuthRequired, 
     try {
       await addProductReview({
         productId,
+        productName,
         userId: currentUser.uid || currentUser.id,
         userName: currentUser.displayName || currentUser.name || currentUser.email?.split('@')[0] || 'Usuario Wavi',
         userEmail: currentUser.email || '',

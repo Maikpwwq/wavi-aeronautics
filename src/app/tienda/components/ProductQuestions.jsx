@@ -18,7 +18,7 @@ import PersonIcon from '@mui/icons-material/Person'
 import SupportAgentIcon from '@mui/icons-material/SupportAgent'
 import { addProductQuestion } from '@/services/productInteractionService'
 
-const ProductQuestions = ({ questions = [], productId, currentUser, onAuthRequired, onQuestionAdded }) => {
+const ProductQuestions = ({ questions = [], productId, productName, currentUser, isVerifiedPurchaser, onAuthRequired, onUnverifiedRequired, onQuestionAdded }) => {
   const [open, setOpen] = useState(false)
   const [question, setQuestion] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -27,6 +27,10 @@ const ProductQuestions = ({ questions = [], productId, currentUser, onAuthRequir
   const handleOpen = () => {
     if (!currentUser) {
       onAuthRequired()
+      return
+    }
+    if (!isVerifiedPurchaser) {
+      onUnverifiedRequired()
       return
     }
     setError('')
@@ -54,6 +58,7 @@ const ProductQuestions = ({ questions = [], productId, currentUser, onAuthRequir
     try {
       await addProductQuestion({
         productId,
+        productName,
         userId: currentUser.uid || currentUser.id,
         userName: currentUser.displayName || currentUser.name || currentUser.email?.split('@')[0] || 'Usuario Wavi',
         userEmail: currentUser.email || '',
