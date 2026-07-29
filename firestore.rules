@@ -114,6 +114,48 @@ service cloud.firestore {
     }
 
     // =========================================================
+    // PRODUCT REVIEWS
+    // =========================================================
+    match /product_reviews/{reviewId} {
+      // Anyone can read reviews (public product page)
+      allow read: if true;
+
+      // Authenticated users can create reviews — userId must match their auth UID
+      allow create: if isAuthenticated()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.productId is string
+        && request.resource.data.rating is number
+        && request.resource.data.rating >= 1
+        && request.resource.data.rating <= 5;
+
+      // Only the review author or admin can update/delete their own review
+      allow update, delete: if isAdmin()
+        || (isAuthenticated() && resource.data.userId == request.auth.uid);
+    }
+
+    // =========================================================
+    // PRODUCT QUESTIONS
+    // =========================================================
+    match /product_questions/{questionId} {
+      // Anyone can read questions (public product page)
+      allow read: if true;
+
+      // Authenticated users can create questions — userId must match their auth UID
+      allow create: if isAuthenticated()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.productId is string
+        && request.resource.data.question is string;
+
+      // Admin can update any question (to add answer/answeredAt)
+      // Original author cannot modify their question after submission
+      allow update: if isAdmin();
+
+      // Admin or the original author can delete the question
+      allow delete: if isAdmin()
+        || (isAuthenticated() && resource.data.userId == request.auth.uid);
+    }
+
+    // =========================================================
     // DEFAULT CATCH-ALL (Deny by default)
     // =========================================================
     match /{document=**} {
