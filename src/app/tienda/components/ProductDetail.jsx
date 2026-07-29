@@ -34,6 +34,8 @@ import { calculateCopPrice } from '@/utilities/priceUtils'
 // Local imports
 import { BRAND_COLORS } from '../innerTheme'
 import AddProduct from './AddProduct'
+import ProductLink from './ProductLink'
+import ProductFeedbackSection from './ProductFeedbackSection'
 import PageNavigation from './PageNavigation'
 import { 
   ProductPackageList, 
@@ -414,6 +416,9 @@ const ProductDetail = () => {
             </Grid>
           </Grid>
         </Box>
+
+        {/* Customer Reviews & Technical Questions Section */}
+        <ProductFeedbackSection productId={product.productID || product.id} />
       </Container>
     </Box>
   )

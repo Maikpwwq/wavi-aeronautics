@@ -5,7 +5,7 @@
 We offer representative brands and the best products in the market including:
 **TeamBlackSheep, Geprc, RadioMaster, Betafpv, Emax, Ethix, Flywoo, iFlight.**
 
-🔗 **Live Site:** [https://wavi-aeronautics.web.app/](https://wavi-aeronautics.web.app/)
+🔗 **Live Site:** [https://wavi-aeronautics.vercel.app/](https://wavi-aeronautics.vercel.app/)
 
 ---
 
@@ -23,25 +23,27 @@ We offer representative brands and the best products in the market including:
 
 ## 🛠 Tech Stack
 
-| Category          | Technology                                     |
-| ----------------- | ---------------------------------------------- |
-| **Framework**     | [Next.js 16](https://nextjs.org/) (App Router) |
-| **UI Library**    | [Material UI (MUI) v7](https://mui.com/)       |
-| **State**         | [Redux Toolkit](https://redux-toolkit.js.org/) |
-| **Backend**       | [Firebase](https://firebase.google.com/) (Auth, Firestore, Storage, Hosting) |
-| **Payments**      | [MercadoPago](https://www.mercadopago.com/)    |
-| **Storage**       | [Firebase Storage](https://firebase.google.com/products/storage) (Hierarchical: `category/brand/product`) |
-| **File Uploads**  | [react-dropzone](https://react-dropzone.js.org/) |
-| **Package Mgr**   | pnpm                                           |
+| Category         | Technology                                                                                                |
+| ---------------- | --------------------------------------------------------------------------------------------------------- |
+| **Framework**    | [Next.js 16](https://nextjs.org/) (App Router)                                                            |
+| **UI Library**   | [Material UI (MUI) v7](https://mui.com/)                                                                  |
+| **State**        | [Redux Toolkit](https://redux-toolkit.js.org/)                                                            |
+| **Backend**      | [Firebase](https://firebase.google.com/) (Auth, Firestore, Storage, Hosting)                              |
+| **Payments**     | [MercadoPago](https://www.mercadopago.com/)                                                               |
+| **Storage**      | [Firebase Storage](https://firebase.google.com/products/storage) (Hierarchical: `category/brand/product`) |
+| **File Uploads** | [react-dropzone](https://react-dropzone.js.org/)                                                          |
+| **Package Mgr**  | pnpm                                                                                                      |
 
 ---
 
 ## 🏗 Data Architecture
 
 ### Firestore Schema
+
 We use a **hierarchical data structure** to optimize for brand-based browsing while maintaining global query capabilities.
 
 #### Collections
+
 - **Users:** `users/{uid}`
 - **Orders:** `orders/{orderId}` (Flat collection for easy admin reporting)
 - **Products:** Nested structure for organization:
@@ -52,12 +54,15 @@ We use a **hierarchical data structure** to optimize for brand-based browsing wh
   - **Organization:** Products are physically stored under their specific Brand folder.
 
 ### Storage Bucket
+
 Images are organized in parallel with the database structure:
+
 ```text
 product-images/{category}/{brand}/{filename}
 ```
 
 ### Standardized Product Schema
+
 All new products use **English field names**. Legacy Spanish fields are read via normalization for backwards compatibility.
 
 ```javascript
@@ -65,28 +70,28 @@ All new products use **English field names**. Legacy Spanish fields are read via
   // Identifiers
   productID: string,        // SKU (Document ID)
   slug: string,             // URL-friendly
-  
+
   // Core Info
   name: string,             // Display name (legacy: titulo)
   brand: string,            // Indexed (legacy: marca)
   category: string,         // Category key (legacy: categoria)
   tags: string[],           // Searchable array
-  
+
   // Pricing & Inventory
   price: number,            // USD (legacy: precio)
   discount: number,         // Percentage
   stock: number,
   availability: boolean,
-  
+
   // Content
   description: string,      // (legacy: descripcion)
   specifications: string,   // (legacy: especificaciones)
   includes: string,         // (legacy: incluye)
-  
+
   // Media
   images: string[],         // URLs (legacy: imagenes)
   video: string,            // YouTube URL
-  
+
   // Metadata
   active: boolean,
   createdAt: Timestamp,
@@ -100,83 +105,85 @@ All new products use **English field names**. Legacy Spanish fields are read via
 
 ### Public Pages (Storefront)
 
-| Route                         | Description                            |
-| ----------------------------- | -------------------------------------- |
-| `/`                           | Homepage                               |
-| `/tienda/kit-drones`          | Drone Kit category                     |
-| `/tienda/drones`              | RC Drones category                     |
-| `/tienda/drones-fpv-hd`       | FPV HD Drones category                 |
-| `/tienda/googles`             | FPV Goggles category                   |
-| `/tienda/radio-control`       | Radio Control Transmitters             |
-| `/tienda/trasmisor-receptor`  | VTX/Receivers                          |
-| `/tienda/digital-vtx`         | Digital Video Transmitters             |
-| `/tienda/accesorios`          | Accessories                            |
-| `/tienda/software`            | Software & Tools                       |
-| `/tienda/escuela`             | FPV School / Training                  |
-| `/tienda/producto`            | Product Detail Page (dynamic)          |
-| `/tienda/ver-carrito`         | Shopping Cart                          |
-| `/tienda/detalles-envio`      | Shipping Details / Checkout            |
-| `/tienda/pago-exitoso`        | Payment Success                        |
-| `/tienda/pago-fallido`        | Payment Failed                         |
-| `/tienda/pago-pendiente`      | Payment Pending                        |
-| `/tienda/pse-resultado`       | PSE Payment Result                     |
+| Route                        | Description                   |
+| ---------------------------- | ----------------------------- |
+| `/`                          | Homepage                      |
+| `/tienda/kit-drones`         | Drone Kit category            |
+| `/tienda/drones`             | RC Drones category            |
+| `/tienda/drones-fpv-hd`      | FPV HD Drones category        |
+| `/tienda/googles`            | FPV Goggles category          |
+| `/tienda/radio-control`      | Radio Control Transmitters    |
+| `/tienda/trasmisor-receptor` | VTX/Receivers                 |
+| `/tienda/digital-vtx`        | Digital Video Transmitters    |
+| `/tienda/accesorios`         | Accessories                   |
+| `/tienda/software`           | Software & Tools              |
+| `/tienda/escuela`            | FPV School / Training         |
+| `/tienda/producto`           | Product Detail Page (dynamic) |
+| `/tienda/ver-carrito`        | Shopping Cart                 |
+| `/tienda/detalles-envio`     | Shipping Details / Checkout   |
+| `/tienda/pago-exitoso`       | Payment Success               |
+| `/tienda/pago-fallido`       | Payment Failed                |
+| `/tienda/pago-pendiente`     | Payment Pending               |
+| `/tienda/pse-resultado`      | PSE Payment Result            |
 
 ### Authentication
 
-| Route                        | Description            |
-| ---------------------------- | ---------------------- |
-| `/auth/sign-in`              | Login                  |
-| `/auth/sign-up`              | Registration           |
-| `/auth/forgot-password`      | Password Recovery      |
-| `/security/change-password`  | Change Password        |
+| Route                       | Description       |
+| --------------------------- | ----------------- |
+| `/auth/sign-in`             | Login             |
+| `/auth/sign-up`             | Registration      |
+| `/auth/forgot-password`     | Password Recovery |
+| `/security/change-password` | Change Password   |
 
 ### User Account
 
-| Route       | Description        |
-| ----------- | ------------------ |
-| `/profile`  | User Profile       |
-| `/orders`   | Order History      |
+| Route      | Description   |
+| ---------- | ------------- |
+| `/profile` | User Profile  |
+| `/orders`  | Order History |
 
 ### Blog / Posts
 
-| Route               | Description          |
-| ------------------- | -------------------- |
-| `/blog`             | Blog Listing         |
-| `/posts`            | Posts Listing        |
-| `/posts/[id]`       | Single Post          |
-| `/posts/[id]/comments` | Post Comments     |
+| Route                  | Description   |
+| ---------------------- | ------------- |
+| `/blog`                | Blog Listing  |
+| `/posts`               | Posts Listing |
+| `/posts/[id]`          | Single Post   |
+| `/posts/[id]/comments` | Post Comments |
 
 ### Legal Pages
 
-| Route                          | Description                  |
-| ------------------------------ | ---------------------------- |
-| `/politica-de-privacidad`      | Privacy Policy               |
-| `/condiciones-del-servicio`    | Terms of Service             |
-| `/eliminacion-datos-usuario`   | User Data Deletion Request   |
+| Route                        | Description                |
+| ---------------------------- | -------------------------- |
+| `/politica-de-privacidad`    | Privacy Policy             |
+| `/condiciones-del-servicio`  | Terms of Service           |
+| `/eliminacion-datos-usuario` | User Data Deletion Request |
 
 ### Admin Dashboard (`/admin/*`)
 
-| Route                    | Description                      |
-| ------------------------ | -------------------------------- |
-| `/admin`                 | Dashboard Overview               |
-| `/admin/orders`          | Order Management                 |
-| `/admin/orders/issues`   | Order Issues / Problems          |
-| `/admin/users`           | User Management                  |
-| `/admin/products`        | Product Management (CRUD)        |
-| `/admin/settings`        | Store Settings                   |
-| `/admin/promotions`      | Promotions / Discount Codes      |
-| `/admin/publications`    | Blog Post Management             |
+| Route                  | Description                 |
+| ---------------------- | --------------------------- |
+| `/admin`               | Dashboard Overview          |
+| `/admin/orders`        | Order Management            |
+| `/admin/orders/issues` | Order Issues / Problems     |
+| `/admin/users`         | User Management             |
+| `/admin/products`      | Product Management (CRUD)   |
+| `/admin/settings`      | Store Settings              |
+| `/admin/promotions`    | Promotions / Discount Codes |
+| `/admin/publications`  | Blog Post Management        |
 
 ---
 
 ## 📝 Recent Updates (January 2026)
 
 ### Storefront Enhancements
+
 - **ProductItem Cards:** Redesigned with responsive square images (`object-fit: contain`), cleaner typography, hover animations, and proper COP price formatting.
 - **NuevosProductos Carousel:** Implemented CSS-based infinite auto-scroll with pause-on-hover. Products sorted by `createdAt`/`updatedAt` (most recent first) with localized date display.
 - **ProductDetail Page:** Added Video embed section (YouTube) and Tags display component for enhanced product information.
 
 ### Admin Dashboard
+
 - **ProductEditDialog:** Fixed Brand/Category dropdowns (aligned `CATEGORY_OPTIONS` with `CATEGORIES` keys). Added Video URL input and Tags field with chip preview.
 - **Firestore Rules:** Added `collectionGroup('items')` permission rule for global product queries.
 - **Dashboard Services:** Updated `FirebaseDroneProducts.jsx` to fetch from new hierarchical structure (`products/{cat}/brands/{brand}/items`) and merge with legacy data.
@@ -187,8 +194,8 @@ All new products use **English field names**. Legacy Spanish fields are read via
 
 ### Prerequisites
 
-- Node.js (v18 or higher)
-- pnpm
+- Node.js (v22 or higher)
+- pnpm (v10 or higher)
 
 ### Installation
 
@@ -238,15 +245,17 @@ Beyond the store, Wavi Aeronautics provides professional services:
 - **LinkedIn:** [Wavi Aeronautics](https://www.linkedin.com/company/wavi-aeronautics/)
 
 ---
- 
- ## 🆕 Recent Updates (Jan 2026)
- 
- - **Admin Image Management:** Added drag-and-drop image reordering to the `NewProductForm`, allowing easy sorting of product galleries.
- - **Price Formatting Engine:** Implemented robust currency handling that differentiates between legacy static prices (COP) and new dynamic prices (USD), applying exchange rates automatically.
- - **Schema Standardization:** Unified the product data model across the application (Cards, Details, Forms) to prioritize English field names with seamless legacy fallback.
- - **UI/UX Polish:** Fixed link color inheritance in product cards and resolved specific crash scenarios in form validation.
- 
- ---
+
+## 🆕 Recent Updates (July 2026)
+
+- **Product Reviews & Technical Questions:** Added interactive `Opiniones de clientes` and `Preguntas técnicas` components to the product detail page backed by Firestore (`product_reviews`, `product_questions`) with auth checks and submission modals.
+- **Header Search Bar Module:** Integrated a debounced autocomplete search bar in the header menu that queries products across title, brand, category, and tags, with a dedicated `/tienda/buscar?q=...` search results page.
+- **Payment Methods & Footer Layout:** Restructured footer into a responsive 3-column layout (Socials, Legal Docs, Accepted Payments) featuring official vector logos for Mercado Pago, PSE, PayPal, Visa, Mastercard, American Express, and Codensa.
+- **Legal Policies:** Created accessible policy pages for Privacy (`/politica-de-privacidad`), Shipping (`/politica-de-envios`), Warranty (`/politica-de-garantia`), Refund (`/politica-de-reembolso`), and Returns (`/politica-de-devoluciones`).
+- **Product Stock & Availability:** Decoupled product market price display from inventory status (`availability` boolean), displaying explicit `AGOTADO` badges over product image containers when out of stock.
+- **SEO & Indexing:** Implemented native dynamic `/sitemap.xml` and `/robots.txt` using Next.js App Router metadata API.
+
+---
 
 ## 📄 License
 
