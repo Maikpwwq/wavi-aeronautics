@@ -94,9 +94,9 @@ const Chip = ({ label, color }) => (
     borderRadius: 1, 
     fontSize: '0.75rem', 
     fontWeight: 'bold', 
-    bgcolor: color === 'success' ? 'rgba(76, 175, 80, 0.1)' : 'rgba(0,0,0,0.05)',
-    color: color === 'success' ? BRAND_COLORS.success : 'inherit',
-    border: `1px solid ${color === 'success' ? BRAND_COLORS.success : '#ddd'}`
+    bgcolor: color === 'success' ? 'rgba(76, 175, 80, 0.1)' : color === 'error' ? 'rgba(211, 47, 47, 0.1)' : 'rgba(0,0,0,0.05)',
+    color: color === 'success' ? BRAND_COLORS.success : color === 'error' ? '#d32f2f' : 'inherit',
+    border: `1px solid ${color === 'success' ? BRAND_COLORS.success : color === 'error' ? '#d32f2f' : '#ddd'}`
   }}>
     {label}
   </Box>
@@ -298,7 +298,11 @@ const ProductDetail = () => {
                 <Typography variant="h4" sx={{ color: BRAND_COLORS.accent, fontWeight: 'bold', mr: 2 }}>
                   {displayPrice}
                 </Typography>
-                <Chip label="En Stock" color="success" />
+                {product.availability !== false ? (
+                  <Chip label="En Stock" color="success" />
+                ) : (
+                  <Chip label="Agotado" color="error" />
+                )}
               </Box>
 
               {/* Action Area */}

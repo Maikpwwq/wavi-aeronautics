@@ -68,7 +68,7 @@ export const FirebaseCompareShoppingCartIds = async ({ products, updateCart }) =
            totalItems += p.cantidad;
            
            // Sum logic using formatted 'precio' (COP string)
-           if (p.precio && p.precio !== 'Agotado') {
+           if (p.precio && p.availability !== false) {
                const unitPriceCOP = parseCopCurrency(p.precio);
                totalSum += unitPriceCOP * p.cantidad;
            }

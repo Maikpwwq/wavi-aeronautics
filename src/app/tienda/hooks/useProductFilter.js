@@ -117,8 +117,8 @@ export const useProductFilter = (products) => {
       // Helper to get consistent price for sorting
       const getPrice = (p) => parsePrice(p.precio || p.price)
       
-      // Helper to check if product is "agotado" (out of stock / price = 0)
-      const isAgotado = (p) => getPrice(p) === 0
+      // Helper to check if product is "agotado" (out of stock / availability === false)
+      const isAgotado = (p) => p.availability === false
 
       // Always push agotado products to the end, regardless of sort order
       const aAgotado = isAgotado(a)

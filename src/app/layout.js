@@ -8,6 +8,7 @@ export const viewport = {
 }
 
 export const metadata = {
+  metadataBase: new URL('https://wavi-aeronautics.vercel.app'),
   title: 'Wavi Aeronautics',
   description: 'Manufacture, distribution and maintenance of Drones. Get updated with the latest trends in technology and advanced VToL equipment.',
   keywords: 'drone, pilotos fpv, fpv, controladora, receptora, baterias para drone, googles, gafas fpv, props, hélices, Kits FPV, Drones RC, Control remoto',

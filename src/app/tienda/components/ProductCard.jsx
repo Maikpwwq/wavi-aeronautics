@@ -56,6 +56,9 @@ const ProductCard = ({ products, category }) => {
       : `$ ${producto.precio.toLocaleString()}`;
   }
 
+  const isAgotado = producto.availability === false
+  const firstImage = images && images.length > 0 ? (typeof images[0] === 'string' ? images[0] : images[0]?.url || '') : ''
+
   const handleSelect = () => {
     console.log('producto', producto)
     try {
@@ -70,32 +73,78 @@ const ProductCard = ({ products, category }) => {
       <Box className="" maxWidth="sm" style={{ height: '100%' }}>
         <Card 
           className="product-card" 
-          style={{ height: '100%' }}
+          style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
           sx={{
-            transition: 'border-radius 0.3s ease',
+            transition: 'all 0.3s ease',
+            opacity: isAgotado ? 0.85 : 1,
             '&:hover': {
               borderRadius: '16px' // Augment border radius on hover
             }
           }}
         >
-          <CardActionArea>
-            {producto !== undefined && images && images.length > 0 && (
-              <ProductLink
-                product={producto}
-                style={classes.imageCentered}
+          <CardActionArea sx={{ flexGrow: 1 }}>
+            <ProductLink
+              product={producto}
+              style={{ display: 'block', textDecoration: 'none' }}
+            >
+              <Box 
+                className="product-card-image-container"
+                sx={{
+                  position: 'relative',
+                  width: '100%',
+                  pt: '80%', // Consistent aspect ratio container even if image fails to load
+                  bgcolor: '#fff',
+                  overflow: 'hidden',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
               >
-                <div className="product-card-image-container">
+                {firstImage && (
                   <CardMedia
                     className="product-card-image"
                     component="img"
-                    style={classes.imageSize}
-                    image={typeof images[0] === 'string' ? images[0] : images[0]?.url || ''}
+                    sx={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'contain',
+                      p: 2,
+                      filter: isAgotado ? 'grayscale(50%)' : 'none'
+                    }}
+                    image={firstImage}
                     alt={name}
                     onClick={handleSelect}
                   />
-                </div>
-              </ProductLink>
-            )}
+                )}
+
+                {/* Agotado Badge Overlay */}
+                {isAgotado && (
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: 12,
+                      right: 12,
+                      bgcolor: 'rgba(211, 47, 47, 0.9)', // Red badge
+                      color: '#ffffff',
+                      px: 1.5,
+                      py: 0.5,
+                      borderRadius: 1.5,
+                      fontSize: '0.75rem',
+                      fontWeight: 'bold',
+                      letterSpacing: 0.5,
+                      textTransform: 'uppercase',
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+                      zIndex: 2
+                    }}
+                  >
+                    Agotado
+                  </Box>
+                )}
+              </Box>
+            </ProductLink>
           </CardActionArea>
           <CardHeader
             title={name}
@@ -108,7 +157,7 @@ const ProductCard = ({ products, category }) => {
             }}
             subheader={displayPrice}
             action={
-              <AddProduct product={producto}/>
+              <AddProduct product={producto} disabled={isAgotado} />
             }
           ></CardHeader>
         </Card>

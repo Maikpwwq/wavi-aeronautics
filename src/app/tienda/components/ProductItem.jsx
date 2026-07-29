@@ -88,24 +88,49 @@ const ProductItem = ({ products, category }) => {
           borderBottom: '1px solid',
           borderColor: 'divider'
         }}>
-           <Box 
-             component="img"
-             src={imageUrl}
-             alt={name}
-             sx={{
-               position: 'absolute',
-               top: 0,
-               left: 0,
-               width: '100%',
-               height: '100%',
-               objectFit: 'contain',
-               padding: 3,
-               transition: 'transform 0.5s ease',
-               '.MuiCardActionArea-root:hover &': {
-                 transform: 'scale(1.05)'
-               }
-             }}
-           />
+           {imageUrl && (
+             <Box 
+               component="img"
+               src={imageUrl}
+               alt={name}
+               sx={{
+                 position: 'absolute',
+                 top: 0,
+                 left: 0,
+                 width: '100%',
+                 height: '100%',
+                 objectFit: 'contain',
+                 padding: 3,
+                 transition: 'transform 0.5s ease',
+                 filter: producto.availability === false ? 'grayscale(50%)' : 'none',
+                 '.MuiCardActionArea-root:hover &': {
+                   transform: 'scale(1.05)'
+                 }
+               }}
+             />
+           )}
+           {producto.availability === false && (
+             <Box
+               sx={{
+                 position: 'absolute',
+                 top: 12,
+                 right: 12,
+                 bgcolor: 'rgba(211, 47, 47, 0.9)',
+                 color: '#ffffff',
+                 px: 1.5,
+                 py: 0.5,
+                 borderRadius: 1.5,
+                 fontSize: '0.75rem',
+                 fontWeight: 'bold',
+                 letterSpacing: 0.5,
+                 textTransform: 'uppercase',
+                 boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+                 zIndex: 2
+               }}
+             >
+               Agotado
+             </Box>
+           )}
         </Box>
 
         <CardContent sx={{ flexGrow: 1, p: 2, width: '100%' }}>

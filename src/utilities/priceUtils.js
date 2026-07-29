@@ -8,8 +8,8 @@ const IMPORTATION_FACTOR = 1.5;
  * @returns {string} Formatted price in COP or original string if not a number/Agotado
  */
 export const calculateCopPrice = (priceInUsd) => {
-  if (!priceInUsd || priceInUsd === 'Agotado') {
-    return 'Agotado';
+  if (priceInUsd === undefined || priceInUsd === null || priceInUsd === '') {
+    return '$ 0';
   }
 
   // Handle "$ 100" or just "100"
@@ -18,7 +18,7 @@ export const calculateCopPrice = (priceInUsd) => {
     : priceInUsd;
 
   if (isNaN(numericPrice)) {
-    return priceInUsd;
+    return '$ 0';
   }
 
   const exchangeRateStr = process.env.NEXT_PUBLIC_DOLARTOCOP;
@@ -85,13 +85,7 @@ export const parseProductPrices = (products) => {
       product.precio = calculateCopPrice(product.price);
     } 
     // Case 2: Legacy Product (has 'precio' in COP formatted string or number)
-    else if (product.precio && product.precio !== 'Agotado') {
-      // Preserve original USD price for Admin reference (Wait, legacy 'precio' IS COP?)
-      // Actually legacy 'precio' was treated as USD by calculateCopPrice logic previously?
-      // Re-reading logic: calculateCopPrice takes input, strips chars, multiply by rate. 
-      // So legacy system treated 'precio' as USD input?
-      // Yes, calculateCopPrice(priceInUsd). 
-      // So we keep this behavior for legacy items.
+    else if (product.precio) {
       product.priceUSD = product.precio;
       product.precio = calculateCopPrice(product.precio);
     }

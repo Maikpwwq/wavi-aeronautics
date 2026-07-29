@@ -12,11 +12,14 @@ import { saveCartToFirestore } from '@/services/shoppingCartService'
 import Button from '@mui/material/Button'
 import { motion } from 'framer-motion'
 
-const AddProduct = ({ product, selectedOption = null, variant = 'icon' }) => {
+const AddProduct = ({ product, selectedOption = null, variant = 'icon', disabled = false }) => {
   const { shoppingCart, updateCart, updateShowCart } = useContext(ShowCartContext)
+
+  const isUnavailable = disabled || product?.availability === false
 
   const handleAddToCart = (e) => {
     if (e) e.preventDefault()
+    if (isUnavailable) return
     
     // Create a working copy of the cart items or empty array
     const currentItems = shoppingCart.productos ? [...shoppingCart.productos] : []
@@ -112,11 +115,12 @@ const AddProduct = ({ product, selectedOption = null, variant = 'icon' }) => {
     return (
       <Button
         component={motion.button}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        whileHover={!isUnavailable ? { scale: 1.02 } : {}}
+        whileTap={!isUnavailable ? { scale: 0.98 } : {}}
         fullWidth
         variant="contained"
         size="large"
+        disabled={isUnavailable}
         onClick={handleAddToCart}
         startIcon={<AddShoppingCartIcon />}
         sx={{
@@ -124,16 +128,16 @@ const AddProduct = ({ product, selectedOption = null, variant = 'icon' }) => {
           fontSize: '1.1rem',
           fontWeight: 'bold',
           borderRadius: 3,
-          backgroundColor: '#00bcd4', // Electric Blue
+          backgroundColor: isUnavailable ? '#9e9e9e' : '#00bcd4', // Electric Blue or Gray
           '&:hover': {
-            backgroundColor: '#0097a7',
+            backgroundColor: isUnavailable ? '#9e9e9e' : '#0097a7',
           },
-          boxShadow: '0 8px 24px rgba(0, 188, 212, 0.3)',
+          boxShadow: isUnavailable ? 'none' : '0 8px 24px rgba(0, 188, 212, 0.3)',
           textTransform: 'none',
           letterSpacing: 1
         }}
       >
-        AGREGAR AL CARRITO
+        {isUnavailable ? 'AGOTADO' : 'AGREGAR AL CARRITO'}
       </Button>
     )
   }
@@ -141,8 +145,10 @@ const AddProduct = ({ product, selectedOption = null, variant = 'icon' }) => {
   return (
     <IconButton
       color="inherit"
+      disabled={isUnavailable}
       onClick={handleAddToCart}
       aria-label="Agregar al carrito"
+      sx={{ opacity: isUnavailable ? 0.4 : 1 }}
     >
       <AddShoppingCartIcon fontSize="large" />
     </IconButton>
@@ -152,7 +158,8 @@ const AddProduct = ({ product, selectedOption = null, variant = 'icon' }) => {
 AddProduct.propTypes = {
   product: PropTypes.object.isRequired,
   selectedOption: PropTypes.object,
-  variant: PropTypes.oneOf(['icon', 'button'])
+  variant: PropTypes.oneOf(['icon', 'button']),
+  disabled: PropTypes.bool
 }
 
 export default AddProduct

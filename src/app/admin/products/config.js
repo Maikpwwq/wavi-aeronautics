@@ -214,7 +214,7 @@ export const buildProductPayload = (formData) => {
     price: parseFloat(formData.price) || 0,
     discount: parseFloat(formData.discount) || 0,
     stock: parseInt(formData.stock) || 0,
-    availability: Boolean((formData.stock || 0) > 0),
+    availability: formData.availability !== undefined ? Boolean(formData.availability) : Boolean((formData.stock || 0) > 0),
     options: (formData.options || []).filter(opt => opt?.label?.trim()).map(opt => ({
       label: opt.label.trim(),
       priceModifier: parseFloat(opt.priceModifier) || 0
