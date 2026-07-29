@@ -10,6 +10,7 @@ import Box from '@mui/material/Box'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
+import { formatCurrency } from '@/utilities/priceUtils'
 import ShoppingCart from '../ShoppingCart'
 import UserDropdown from '@/app/components/UserDropdown'
 
@@ -22,6 +23,7 @@ const styles = {
 const StoreBanner = () => {
   const { shoppingCart, updateShowCart } = useContext(ShowCartContext)
   const cartItemCount = shoppingCart?.items || 0
+  const cartTotal = shoppingCart?.suma || 0
 
   return (
     <AppBar
@@ -42,7 +44,11 @@ const StoreBanner = () => {
             </Typography>
           </Grid>
 
-          <Grid item sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Grid item sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <Typography variant="body2" sx={{ fontWeight: 600, color: 'inherit', whiteSpace: 'nowrap' }}>
+              {formatCurrency(cartTotal)} COP
+            </Typography>
+
             <Tooltip title="Carrito de compras">
               <IconButton
                 onClick={() => updateShowCart(!shoppingCart.show)}
@@ -75,6 +81,7 @@ const StoreBanner = () => {
                 </Box>
               </IconButton>
             </Tooltip>
+
             <UserDropdown showLoginLabel={false} />
           </Grid>
         </Grid>
