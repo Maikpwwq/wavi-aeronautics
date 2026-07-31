@@ -46,7 +46,35 @@ const styles = (theme) => ({
 const DetallesEnvio = (props) => {
   const classes = styles(theme)
   const { shoppingCart, removeFromCart } = useContext(ShowCartContext)
-  const productsCart = shoppingCart?.productos
+  const rawProducts = shoppingCart?.productos || []
+  
+  // Filter products by selectedCartItems in sessionStorage (if set)
+  const selectedCartItems = typeof window !== 'undefined' ? sessionStorage.getItem('selectedCartItems') : null
+  const selectedProductIds = selectedCartItems ? JSON.parse(selectedCartItems) : null
+
+  const productsCart = React.useMemo(() => {
+    if (!selectedProductIds || !Array.isArray(selectedProductIds)) return rawProducts
+    return rawProducts.filter(item => selectedProductIds.includes(item.productID))
+  }, [rawProducts, selectedProductIds])
+
+  // Custom filtered cart for summary display
+  const filteredShoppingCart = React.useMemo(() => {
+    if (!selectedProductIds || !Array.isArray(selectedProductIds)) return shoppingCart
+    const { parseCopCurrency } = require('@/utilities/priceUtils')
+    let total = 0
+    let itemsCount = 0
+    productsCart.forEach(item => {
+      const qty = parseInt(item.cantidad) || 1
+      itemsCount += qty
+      total += parseCopCurrency(item.precio) * qty
+    })
+    return {
+      ...shoppingCart,
+      productos: productsCart,
+      items: itemsCount,
+      suma: total
+    }
+  }, [shoppingCart, productsCart, selectedProductIds])
   
   const [userInfo, setUserInfo] = useState({
     userName: '',
@@ -152,7 +180,7 @@ const DetallesEnvio = (props) => {
           {/* Order Summary Section */}
           {!!productsCart && (
             <CheckoutOrderSummary 
-              shoppingCart={shoppingCart}
+              shoppingCart={filteredShoppingCart}
               productsCart={productsCart}
               userInfo={userInfo}
               shippingInfo={shippingInfo}
