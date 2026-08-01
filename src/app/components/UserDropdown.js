@@ -8,6 +8,8 @@ import ReceiptIcon from '@mui/icons-material/Receipt'
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
 import LoginIcon from '@mui/icons-material/Login'
 import LogoutIcon from '@mui/icons-material/Logout'
+import SellIcon from '@mui/icons-material/Sell'
+import InventoryIcon from '@mui/icons-material/Inventory'
 import Avatar from '@mui/material/Avatar'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -179,6 +181,24 @@ const UserDropdown = ({ showLoginLabel = true }) => {
               <ReceiptIcon fontSize="small" />
             </ListItemIcon>
             Mis Pedidos
+          </MenuItem>
+        </Link>
+
+        <Link href="/tienda/mis-publicaciones" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <MenuItem sx={classes.menuItem}>
+            <ListItemIcon sx={classes.menuIcon}>
+              <InventoryIcon fontSize="small" />
+            </ListItemIcon>
+            Mis Publicaciones (Usados)
+          </MenuItem>
+        </Link>
+
+        <Link href="/tienda/vender" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <MenuItem sx={{ ...classes.menuItem, color: '#00aCe4' }}>
+            <ListItemIcon sx={{ ...classes.menuIcon, color: '#00aCe4' }}>
+              <SellIcon fontSize="small" />
+            </ListItemIcon>
+            Vender mi equipo
           </MenuItem>
         </Link>
 

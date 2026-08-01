@@ -18,6 +18,7 @@ import { formatCurrency } from '@/utilities/priceUtils'
 
 import RateReviewIcon from '@mui/icons-material/RateReview'
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer'
+import SellIcon from '@mui/icons-material/Sell'
 
 const StatCard = ({ title, value, icon, color, delay = 0 }) => (
   <Grid item xs={12} sm={6} md={4}>
@@ -133,11 +134,18 @@ export default function AdminDashboard() {
           delay={0.5}
         />
         <StatCard 
+          title="Usados Por Verificar" 
+          value={stats?.pendingUsed || 0} 
+          icon={<SellIcon />} 
+          color="#ff6f00" 
+          delay={0.6}
+        />
+        <StatCard 
           title="Usuarios Registrados" 
           value={stats?.totalUsers || 0} 
           icon={<PeopleAltIcon />} 
           color="#9c27b0" 
-          delay={0.6}
+          delay={0.7}
         />
       </Grid>
 

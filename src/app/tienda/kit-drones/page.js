@@ -11,6 +11,7 @@ import Typography from '@/modules/components/Typography'
 import ProductCard from '@/app/tienda/components/ProductCard'
 import ProductSkeleton from '@/app/tienda/components/ProductSkeleton'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
+import UsedProductsShowcase from '@/app/tienda/components/UsedProductsShowcase'
 import { useProductFilter } from '@/app/tienda/hooks/useProductFilter'
 
 const styles = (theme) => ({
@@ -112,6 +113,9 @@ const DroneProducts = () => {
               </Typography>
             )}
           </Suspense>
+
+          {/* Second-Hand Used Products Section */}
+          <UsedProductsShowcase categoryKey="dronesKits" categoryTitle="Kits de Dron" />
         </Box>
       </Box>
     </>

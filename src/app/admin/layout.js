@@ -87,6 +87,7 @@ const StyledAppBar = styled(AppBar, { shouldForwardProp: (prop) => prop !== 'ope
 
 import RateReviewIcon from '@mui/icons-material/RateReview'
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer'
+import SellIcon from '@mui/icons-material/Sell'
 
 const NAV_ITEMS = [
   { text: 'Dashboard', icon: <DashboardIcon />, path: '/admin' },
@@ -94,6 +95,7 @@ const NAV_ITEMS = [
   { text: 'Problemas de Pedidos', icon: <ReportProblemIcon />, path: '/admin/orders/issues' },
   { text: 'Opiniones', icon: <RateReviewIcon />, path: '/admin/reviews' },
   { text: 'Preguntas Técnicas', icon: <QuestionAnswerIcon />, path: '/admin/questions' },
+  { text: 'Moderación de Usados', icon: <SellIcon />, path: '/admin/used-products' },
   { text: 'Usuarios', icon: <PeopleIcon />, path: '/admin/users' },
   { text: 'Gestión de Productos', icon: <SettingsIcon />, path: '/admin/products' },
   { text: 'Migrar Productos', icon: <SettingsIcon />, path: '/admin/products/migrate' },

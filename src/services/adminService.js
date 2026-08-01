@@ -43,9 +43,13 @@ export const getAdminStats = async () => {
     const totalUsers = usersCountSnapshot.data().totalUsers || 0
 
     // 5. Moderation KPIs
-    const [pendingReviews, unansweredQuestions] = await Promise.all([
+    const usedRef = collection(firestore, 'usedProducts')
+    const pendingUsedQuery = query(usedRef, where('status', '==', 'pending'))
+
+    const [pendingReviews, unansweredQuestions, pendingUsedSnap] = await Promise.all([
       fetchPendingReviewsCount(),
-      fetchUnansweredQuestionsCount()
+      fetchUnansweredQuestionsCount(),
+      getDocs(pendingUsedQuery)
     ])
 
     return {
@@ -54,7 +58,8 @@ export const getAdminStats = async () => {
       pendingOrders,
       totalUsers,
       pendingReviews,
-      unansweredQuestions
+      unansweredQuestions,
+      pendingUsed: pendingUsedSnap.size
     }
   } catch (error) {
     console.error("Error fetching admin stats:", error)
