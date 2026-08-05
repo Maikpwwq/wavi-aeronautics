@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { markListingAsSold } from '../usedProductsService'
+import { markListingAsSold } from '@/services/usedProductsService'
 import * as firestoreModule from 'firebase/firestore'
 
 vi.mock('@/firebase/firebaseClient', () => ({

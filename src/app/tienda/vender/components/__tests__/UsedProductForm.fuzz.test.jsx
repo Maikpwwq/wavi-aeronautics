@@ -4,9 +4,9 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 import fc from 'fast-check'
-import UsedProductForm from '../UsedProductForm'
-import productReducer from '../../../../../store/states/product'
-import shoppingCartReducer from '../../../../../store/states/shopping_cart'
+import UsedProductForm from '@/app/tienda/vender/components/UsedProductForm'
+import productReducer from '@/store/states/product'
+import shoppingCartReducer from '@/store/states/shopping_cart'
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({

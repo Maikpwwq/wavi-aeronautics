@@ -2,7 +2,7 @@ import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import UsedProductsShowcase from '../UsedProductsShowcase'
+import UsedProductsShowcase from '@/app/tienda/components/UsedProductsShowcase'
 import * as usedProductsService from '@/services/usedProductsService'
 
 // Mock next/navigation

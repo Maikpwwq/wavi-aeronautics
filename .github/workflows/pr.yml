@@ -1,0 +1,51 @@
+name: PR & Push Integration Quality Gate
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-and-lint:
+    name: Lint, Unit Tests, Rules & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.25.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run ESLint Gate
+        run: pnpm lint
+
+      - name: Run Unit & Component Tests with Coverage
+        run: pnpm run test:coverage
+
+      - name: Setup Java for Firebase Emulators
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install Firebase CLI
+        run: pnpm add -g firebase-tools
+
+      - name: Run Firebase Security Rules Tests via Emulators
+        run: pnpm exec firebase emulators:exec "pnpm test"
+
+      - name: Verify Production Build
+        run: pnpm run build

@@ -5,7 +5,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 
-import UsedProductForm from '../UsedProductForm'
+import UsedProductForm from '@/app/tienda/vender/components/UsedProductForm'
 import { USED_DRAFT_STORAGE_KEY } from '@/utilities/usedProductsConfig'
 import * as usedProductsService from '@/services/usedProductsService'
 

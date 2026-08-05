@@ -7,7 +7,7 @@ import {
   renewListingDuration,
   updateListingStatusByAdmin,
   deleteUsedListing
-} from '../usedProductsService'
+} from '@/services/usedProductsService'
 import * as firestoreModule from 'firebase/firestore'
 import * as storageModule from 'firebase/storage'
 

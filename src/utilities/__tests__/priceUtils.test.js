@@ -5,7 +5,7 @@ import {
   parseCopCurrency,
   formatCurrency,
   parseProductPrices
-} from '../priceUtils'
+} from '@/utilities/priceUtils'
 
 describe('priceUtils - Unit & Property Tests', () => {
   const originalEnv = process.env.NEXT_PUBLIC_DOLARTOCOP

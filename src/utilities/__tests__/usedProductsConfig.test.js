@@ -9,7 +9,7 @@ import {
   LISTING_DURATION_DAYS,
   LISTING_DURATION_MS,
   USED_DRAFT_STORAGE_KEY
-} from '../usedProductsConfig'
+} from '@/utilities/usedProductsConfig'
 
 describe('usedProductsConfig - Unit & Property Tests', () => {
   describe('formatCopCurrency', () => {

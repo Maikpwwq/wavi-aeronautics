@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
-import UsedProductCard from '../UsedProductCard'
+import UsedProductCard from '@/app/tienda/components/UsedProductCard'
 
 describe('UsedProductCard Component Tests', () => {
   const mockProduct = {

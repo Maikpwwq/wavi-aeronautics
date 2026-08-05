@@ -4,14 +4,14 @@ import productReducer, {
   modifyDetail,
   unmountDetail,
   initialProduct
-} from '../states/product'
+} from '@/store/states/product'
 import shoppingCartReducer, {
   createCart,
   setCart,
   eliminateFromCart,
   deleteCart,
   initialCart
-} from '../states/shopping_cart'
+} from '@/store/states/shopping_cart'
 
 describe('Redux Slices - Unit Tests', () => {
   describe('productSlice', () => {
