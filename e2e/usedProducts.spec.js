@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import AxeBuilder from '@axe-core/playwright'
 
 test.describe('E2E: Second-Hand Equipment Module (C2C Classifieds)', () => {
   test('1. Visitor can navigate to store category page and check page elements', async ({ page }) => {
@@ -28,5 +29,21 @@ test.describe('E2E: Second-Hand Equipment Module (C2C Classifieds)', () => {
     await page.waitForURL(/\/(auth\/sign-in|tienda\/mis-publicaciones)/)
     const isSignIn = page.url().includes('auth/sign-in')
     expect(isSignIn || page.url().includes('mis-publicaciones')).toBe(true)
+  })
+
+  test('4. Accessibility Audit (A11y): /tienda/vender meets WCAG standards', async ({ page }) => {
+    await page.goto('/tienda/vender')
+    await page.waitForLoadState('domcontentloaded')
+
+    const accessibilityScanResults = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+      .analyze()
+
+    // Log violations if any exist
+    if (accessibilityScanResults.violations.length > 0) {
+      console.log('Accessibility violations found:', JSON.stringify(accessibilityScanResults.violations, null, 2))
+    }
+
+    expect(accessibilityScanResults.violations).toEqual([])
   })
 })

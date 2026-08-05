@@ -12,6 +12,18 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
+      include: [
+        'src/utilities/priceUtils.js',
+        'src/utilities/usedProductsConfig.js',
+        'src/store/states/product.js',
+        'src/store/states/shopping_cart.js'
+      ],
+      thresholds: {
+        statements: 70,
+        branches: 70,
+        functions: 70,
+        lines: 70
+      },
       exclude: ['node_modules/', '.next/']
     }
   },
