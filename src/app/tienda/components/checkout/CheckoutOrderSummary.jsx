@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton'
 import PersonIcon from '@mui/icons-material/Person'
 import HomeIcon from '@mui/icons-material/Home'
 import DeleteIcon from '@mui/icons-material/Delete'
-import ProductLink from '../ProductLink'
+import ProductLink from '@/app/tienda/components/ProductLink'
 
 const CheckoutOrderSummary = ({ shoppingCart, productsCart, userInfo, shippingInfo, removeFromCart }) => {
   return (

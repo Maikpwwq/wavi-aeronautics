@@ -32,7 +32,7 @@ import { sharingInformationService } from '@/services/sharing-information'
 import { calculateCopPrice } from '@/utilities/priceUtils'
 
 // Local imports
-import { BRAND_COLORS } from '../innerTheme'
+import { BRAND_COLORS } from '@/app/tienda/innerTheme'
 import AddProduct from './AddProduct'
 import ProductLink from './ProductLink'
 import ProductFeedbackSection from './ProductFeedbackSection'

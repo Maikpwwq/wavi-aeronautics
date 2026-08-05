@@ -225,11 +225,101 @@ src/
 │   ├── tienda/         # Store category & product pages
 │   └── ...
 ├── firebase/           # Firebase config & admin services
+│   └── __tests__/      # Firestore & Storage security rules tests
 ├── modules/            # Shared UI components (Atomic Design)
 ├── services/           # Data fetching services
+│   └── __tests__/      # Service unit & concurrency tests
 ├── store/              # Redux store & slices
+│   └── __tests__/      # Redux slice unit tests
 └── utilities/          # Helper functions (price, validation, etc.)
+    └── __tests__/      # Utility unit & property-based tests
 ```
+
+### Project Root Configuration
+
+```
+├── vitest.config.mjs       # Vitest config (jsdom, coverage thresholds, @/ alias)
+├── playwright.config.js    # Playwright E2E configuration
+├── stryker.config.mjs      # Stryker mutation testing configuration
+├── eslint.config.mjs       # ESLint 9 flat config (Next.js + JSX)
+├── load-test.js            # k6 load testing script
+├── e2e/                    # Playwright E2E specs
+└── .github/workflows/      # CI/CD pipelines (pr.yml, nightly.yml)
+```
+
+---
+
+## 🧪 Testing & Quality Assurance
+
+### Testing Stack
+
+| Tool                      | Purpose                                         |
+| ------------------------- | ----------------------------------------------- |
+| **Vitest**                | Unit & component test runner (jsdom)             |
+| **React Testing Library** | Component rendering & interaction assertions     |
+| **fast-check**            | Property-based testing & fuzzing                 |
+| **Playwright**            | E2E browser tests & visual regression            |
+| **@axe-core/playwright**  | WCAG 2.1 AA accessibility audits                 |
+| **Stryker Mutator**       | Mutation testing (vitest-runner)                 |
+| **@vitest/coverage-v8**   | Code coverage with enforced thresholds           |
+| **Firebase Emulators**    | Firestore & Storage security rules testing       |
+| **k6**                    | Load & performance testing                       |
+
+### Commands
+
+```bash
+pnpm test              # Run all unit & component tests (84+ tests, 12 suites)
+pnpm test:watch        # Watch mode
+pnpm test:coverage     # Coverage with 70% threshold enforcement
+pnpm test:e2e          # Playwright E2E + A11y (requires dev server)
+pnpm test:mutate       # Stryker mutation testing (score: 89%)
+pnpm lint              # ESLint 9 flat config
+```
+
+### Quality Metrics
+
+| Metric                    | Value      |
+| ------------------------- | ---------- |
+| **Unit Test Suites**      | 12         |
+| **Total Tests**           | 84+ passed |
+| **Code Coverage (core)**  | >98%       |
+| **Mutation Score**        | 89.07%     |
+| **Coverage Threshold**    | 70% enforced (stmts/branches/funcs/lines) |
+| **Mutation Threshold**    | 80% enforced |
+
+### CI/CD Pipelines (GitHub Actions)
+
+- **`pr.yml`** (on push/PR to `main`): ESLint → Unit Tests + Coverage → Firebase Emulator Rules → Production Build.
+- **`nightly.yml`** (daily 03:00 UTC): Playwright E2E + A11y → Stryker Mutation → Artifact upload.
+
+---
+
+## 🆕 Recent Updates (July 2026)
+
+- **Admin Moderation Modules:** Created dedicated admin panels `/admin/reviews` and `/admin/questions` for approving product reviews, answering technical questions, editing formulation/orthography, and marking duplicate/inappropriate questions.
+- **Moderation KPIs:** Added "Opiniones Pendientes" and "Preguntas sin Responder" KPI metric cards to the main Admin Dashboard (`/admin`).
+- **Verified Purchaser Protection:** Enforced order history verification (`checkUserPurchasedProduct`) so only clients who have bought a product can leave reviews or ask technical questions, preventing spam and bot abuse.
+- **Product Reviews & Technical Questions:** Added interactive `Opiniones de clientes` and `Preguntas técnicas` components to the product detail page backed by Firestore (`product_reviews`, `product_questions`).
+- **Header Search Bar Module:** Integrated a debounced autocomplete search bar in the header menu that queries products across title, brand, category, and tags, with a dedicated `/tienda/buscar?q=...` search results page.
+- **Payment Methods & Footer Layout:** Restructured footer into a responsive 3-column layout (Socials, Legal Docs, Accepted Payments) featuring official vector logos for Mercado Pago, PSE, PayPal, Visa, Mastercard, American Express, and Codensa.
+- **SEO & Indexing:** Implemented native dynamic `/sitemap.xml` and `/robots.txt` using Next.js App Router metadata API.
+
+---
+
+## 🆕 Recent Updates (August 2026)
+
+### Testing Infrastructure (Complete 9-Phase Implementation)
+
+- **Unit & Property-Based Testing**: Comprehensive test suites for `priceUtils`, `usedProductsConfig`, and Redux slices (`product`, `shopping_cart`) using Vitest and fast-check.
+- **Component Tests (RTL)**: Full rendering and interaction tests for `UsedProductCard`, `UsedProductsShowcase`, and `UsedProductForm`.
+- **Firebase Security Rules Tests**: Emulator-based integration tests for Firestore and Storage security rules with graceful skip when emulators are offline.
+- **E2E & Accessibility**: Playwright browser tests with `@axe-core/playwright` WCAG 2.1 AA audits on store pages.
+- **Mutation Testing**: Stryker Mutator achieving 89.07% mutation score across business logic modules.
+- **Fuzzing & Stress Tests**: XSS payload injection, Unicode fuzzing with fast-check, and 50-concurrent-request race condition simulations.
+- **Load Testing**: k6 script with progressive ramp-up to 50 VUs and strict performance thresholds.
+- **CI/CD Pipelines**: GitHub Actions workflows for PR gates and nightly quality runs.
+- **Import Standardization**: All test and production imports migrated from relative paths (`../../`) to absolute `@/` aliases per `jsconfig.json`.
+- **ESLint 9 Migration**: Created `eslint.config.mjs` flat config compatible with Next.js 16 and ESLint 9.
 
 ---
 
@@ -243,18 +333,6 @@ Beyond the store, Wavi Aeronautics provides professional services:
 
 - **Facebook:** [Wavi Aeronautics](https://www.facebook.com/wavi.aeronautics/)
 - **LinkedIn:** [Wavi Aeronautics](https://www.linkedin.com/company/wavi-aeronautics/)
-
----
-
-## 🆕 Recent Updates (July 2026)
-
-- **Admin Moderation Modules:** Created dedicated admin panels `/admin/reviews` and `/admin/questions` for approving product reviews, answering technical questions, editing formulation/orthography, and marking duplicate/inappropriate questions.
-- **Moderation KPIs:** Added "Opiniones Pendientes" and "Preguntas sin Responder" KPI metric cards to the main Admin Dashboard (`/admin`).
-- **Verified Purchaser Protection:** Enforced order history verification (`checkUserPurchasedProduct`) so only clients who have bought a product can leave reviews or ask technical questions, preventing spam and bot abuse.
-- **Product Reviews & Technical Questions:** Added interactive `Opiniones de clientes` and `Preguntas técnicas` components to the product detail page backed by Firestore (`product_reviews`, `product_questions`).
-- **Header Search Bar Module:** Integrated a debounced autocomplete search bar in the header menu that queries products across title, brand, category, and tags, with a dedicated `/tienda/buscar?q=...` search results page.
-- **Payment Methods & Footer Layout:** Restructured footer into a responsive 3-column layout (Socials, Legal Docs, Accepted Payments) featuring official vector logos for Mercado Pago, PSE, PayPal, Visa, Mastercard, American Express, and Codensa.
-- **SEO & Indexing:** Implemented native dynamic `/sitemap.xml` and `/robots.txt` using Next.js App Router metadata API.
 
 ---
 

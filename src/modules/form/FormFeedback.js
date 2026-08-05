@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 // import { styled } from '@mui/material/styles'
-import withRoot from '../withRoot'
-import theme from '../theme'
-import Typography from '../components/Typography'
+import withRoot from '@/modules/withRoot'
+import theme from '@/modules/theme'
+import Typography from '@/modules/components/Typography'
 
 const styles = (theme) => ({
   root: {

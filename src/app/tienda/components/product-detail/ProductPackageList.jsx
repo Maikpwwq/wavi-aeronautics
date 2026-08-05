@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Typography } from '@mui/material'
-import { BRAND_COLORS } from '../../innerTheme'
+import { BRAND_COLORS } from '@/app/tienda/innerTheme'
 
 /**
  * Renders a list of package items from parsed data.

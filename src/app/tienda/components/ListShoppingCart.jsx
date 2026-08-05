@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, Suspense } from 'react'
 import { useRouter } from 'next/navigation'
 import withRoot from '@/modules/withRoot'
-import theme from '../innerTheme'
+import theme from '@/app/tienda/innerTheme'
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
 import CircularProgress from '@mui/material/CircularProgress'
 

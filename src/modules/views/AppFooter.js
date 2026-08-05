@@ -2,17 +2,17 @@
 
 import React from 'react'
 import Link from 'next/link'
-import withRoot from '../withRoot'
+import withRoot from '@/modules/withRoot'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
-import Typography from '../components/Typography'
+import Typography from '@/modules/components/Typography'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import Divider from '@mui/material/Divider'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import InstagramIcon from '@mui/icons-material/Instagram'
 import FacebookIcon from '@mui/icons-material/Facebook'
-import PaymentMethods from '../components/PaymentMethods'
+import PaymentMethods from '@/modules/components/PaymentMethods'
 
 const socialLinks = [
   {

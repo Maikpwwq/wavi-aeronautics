@@ -22,7 +22,7 @@ import {
 } from '@mui/icons-material'
 import AppFooter from '@/modules/views/AppFooter'
 import AppAppBar from '@/modules/views/AppAppBar'
-import { getPostById, getAdjacentPosts } from '../blogPosts'
+import { getPostById, getAdjacentPosts } from '@/app/blog/blogPosts'
 
 // ============================================================================
 // STYLES

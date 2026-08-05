@@ -4,7 +4,7 @@ import React, { useCallback, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { Box, Button, Breadcrumbs, Link, Typography } from '@mui/material'
 import { ArrowBack, ChevronRight } from '@mui/icons-material'
-import { BRAND_COLORS } from '../innerTheme'
+import { BRAND_COLORS } from '@/app/tienda/innerTheme'
 
 /**
  * Category slug to display label mapping

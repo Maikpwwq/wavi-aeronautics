@@ -22,7 +22,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 // Services & Config
 import { createNewProduct } from '@/firebase/adminServices'
-import { buildProductPayload } from '../config'
+import { buildProductPayload } from '@/app/admin/products/config'
 
 /**
  * MigrationTool Component

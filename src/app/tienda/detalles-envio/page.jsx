@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useContext, useEffect } from 'react'
 import withRoot from '@/modules/withRoot'
-import theme from '../innerTheme'
+import theme from '@/app/tienda/innerTheme'
 import GestionarMercadoPago from '@/app/tienda/components/GestionarMercadoPago'
 import GestionarPSE from '@/app/tienda/components/GestionarPSE'
 import Typography from '@/modules/components/Typography'

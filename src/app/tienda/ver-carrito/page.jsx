@@ -3,7 +3,7 @@ import React, { useContext, useState, useMemo, Suspense } from 'react'
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
 import { useRouter } from 'next/navigation'
 import { parseCopCurrency } from '@/utilities/priceUtils'
-import ProductLink from '../components/ProductLink'
+import ProductLink from '@/app/tienda/components/ProductLink'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Paper from '@mui/material/Paper'
@@ -16,7 +16,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import withRoot from '@/modules/withRoot'
-import theme from '../innerTheme'
+import theme from '@/app/tienda/innerTheme'
 
 const styles = (theme) => ({
   root: {

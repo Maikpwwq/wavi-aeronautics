@@ -4,7 +4,7 @@ import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
 import withRoot from '@/modules/withRoot'
 import theme from '@/modules/theme'
-import Paper from '../components/Paper'
+import Paper from '@/modules/components/Paper'
 const appCurvyLines = 'public/static/themes/appCurvyLines.png'
 
 const styles = (theme) => ({

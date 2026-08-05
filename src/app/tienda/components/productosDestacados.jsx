@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react'
 import { useSelector } from 'react-redux'
 import withRoot from '@/modules/withRoot'
-import theme from '../innerTheme'
+import theme from '@/app/tienda/innerTheme'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'

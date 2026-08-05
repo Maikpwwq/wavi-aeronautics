@@ -4,9 +4,9 @@ import React from 'react'
 import { styled } from '@mui/material/styles'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
-import withRoot from '../withRoot'
-import theme from '../theme'
-import Typography from '../components/Typography'
+import withRoot from '@/modules/withRoot'
+import theme from '@/modules/theme'
+import Typography from '@/modules/components/Typography'
 // import producBuoy from "public/static/themes/producBuoy.svg";
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 

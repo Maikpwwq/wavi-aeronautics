@@ -12,7 +12,7 @@ let testEnv
 
 describe('Firestore Security Rules Unit Tests', () => {
   beforeAll(async () => {
-    const rulesPath = path.resolve(import.meta.dirname, '../../../firestore.rules')
+    const rulesPath = path.resolve(process.cwd(), 'firestore.rules')
     const rules = fs.readFileSync(rulesPath, 'utf8')
 
     try {

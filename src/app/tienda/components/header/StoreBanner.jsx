@@ -11,7 +11,7 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
 import { formatCurrency } from '@/utilities/priceUtils'
-import ShoppingCart from '../ShoppingCart'
+import ShoppingCart from '@/app/tienda/components/ShoppingCart'
 import UserDropdown from '@/app/components/UserDropdown'
 
 const styles = {

@@ -12,7 +12,7 @@ let testEnv
 
 describe('Storage Security Rules Unit Tests', () => {
   beforeAll(async () => {
-    const rulesPath = path.resolve(import.meta.dirname, '../../../storage.rules')
+    const rulesPath = path.resolve(process.cwd(), 'storage.rules')
     const rules = fs.readFileSync(rulesPath, 'utf8')
 
     try {

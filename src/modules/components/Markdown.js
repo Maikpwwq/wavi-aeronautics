@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles'
 // import MuiTypography from '@mui/material/Typography'
 import Typography from '@mui/material/Typography'
 import Link from '@mui/material/Link'
-import theme from '../theme'
+import theme from '@/modules/theme'
 // import remarkGfm from 'remark-gfm';
 
 const styles = (theme) => ({

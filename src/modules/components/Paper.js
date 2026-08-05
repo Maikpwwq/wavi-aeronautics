@@ -3,8 +3,8 @@ import clsx from 'clsx'
 import PropTypes from 'prop-types'
 import MuiPaper from '@mui/material/Paper'
 import { capitalize } from '@mui/material/utils'
-import withRoot from '../withRoot'
-import theme from '../theme'
+import withRoot from '@/modules/withRoot'
+import theme from '@/modules/theme'
 // import { styled } from '@mui/material/styles'
 
 const styles = (theme) => ({

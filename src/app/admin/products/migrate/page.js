@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import MigrationTool from '../components/MigrationTool'
+import MigrationTool from '@/app/admin/products/components/MigrationTool'
 
 /**
  * Admin Migration Page

@@ -23,7 +23,7 @@ import {
 } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { CATEGORY_OPTIONS, BRAND_OPTIONS, DEFAULT_DRONE_OPTIONS } from '../config'
+import { CATEGORY_OPTIONS, BRAND_OPTIONS, DEFAULT_DRONE_OPTIONS } from '@/app/admin/products/config'
 
 // Components
 import ReorderableImageList from './molecules/ReorderableImageList'

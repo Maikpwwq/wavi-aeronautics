@@ -5,7 +5,7 @@ import Box from '@mui/material/Box'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import Typography from '@/modules/components/Typography'
 import withRoot from '@/modules/withRoot'
-import theme from '../innerTheme'
+import theme from '@/app/tienda/innerTheme'
 
 const styles = (theme) => ({
   presentationProducts: {

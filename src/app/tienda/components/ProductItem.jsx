@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import Link from 'next/link'
 import { loadDetail } from '@/store/states/product'
 import { calculateCopPrice } from '@/utilities/priceUtils'
-import { BRAND_COLORS } from '../innerTheme'
+import { BRAND_COLORS } from '@/app/tienda/innerTheme'
 
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'

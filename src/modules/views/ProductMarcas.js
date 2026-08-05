@@ -1,12 +1,12 @@
 import React from 'react'
 import Image from 'next/image'
 // import PropTypes from 'prop-types'
-import withRoot from '../withRoot'
-import theme from '../theme'
+import withRoot from '@/modules/withRoot'
+import theme from '@/modules/theme'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
-import Typography from '../components/Typography'
+import Typography from '@/modules/components/Typography'
 
 import productCurvyLines from 'public/static/themes/productCurvyLines.png'
 // import Betafpv from "public/static/img/marcas/betafpv_180x.webp";

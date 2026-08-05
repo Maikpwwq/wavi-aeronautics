@@ -1,7 +1,7 @@
 'use client'
 
 import { FormControl, InputLabel, Select, MenuItem, Typography, Box } from '@mui/material'
-import { CATEGORIES } from '../config'
+import { CATEGORIES } from '@/app/admin/products/config'
 
 /**
  * CategorySelector - Molecule component for selecting product category

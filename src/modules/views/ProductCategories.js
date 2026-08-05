@@ -8,7 +8,7 @@ import theme from '@/modules/theme'
 import Box from '@mui/material/Box'
 import ButtonBase from '@mui/material/ButtonBase'
 import Container from '@mui/material/Container'
-import Typography from '../components/Typography'
+import Typography from '@/modules/components/Typography'
 
 const DJI1 =
   'https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FDJI-1.png?alt=media&token=f4f153a2-45fd-415d-884c-6964d3bb582b'

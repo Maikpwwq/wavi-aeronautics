@@ -27,9 +27,27 @@ pnpm build
 
 # Start production server
 pnpm start
+
+# Run all unit & component tests
+pnpm test
+
+# Run tests in watch mode
+pnpm test:watch
+
+# Run tests with coverage enforcement (thresholds: 70% stmts/branches/funcs/lines)
+pnpm test:coverage
+
+# Run Playwright E2E & accessibility tests (requires dev server)
+pnpm test:e2e
+
+# Run Stryker mutation testing (threshold: 80%, current score: 89%)
+pnpm test:mutate
+
+# Run ESLint (flat config, ESLint 9)
+pnpm lint
 ```
 
-> **Note for Agents**: Always run `pnpm run build` or `dlx next build` to verify code correctness and route compilation before declaring a task complete.
+> **Note for Agents**: Always run `pnpm run build` after editing code to verify clean compilation. Run `pnpm test` to verify test suite integrity after modifying business logic or Redux slices.
 
 ---
 
@@ -54,16 +72,36 @@ src/
 │   ├── robots.js               # Dynamic /robots.txt
 │   └── sitemap.js              # Dynamic /sitemap.xml
 ├── firebase/                   # Firebase initialization (firebaseClient.js, firebaseAdmin.js)
+│   └── __tests__/              # Firestore & Storage security rules tests (emulator-based)
 ├── modules/                    # Shared UI modules (Atomic design components, AppFooter, withRoot)
 ├── services/                   # Data fetching & Firestore API service layer
+│   ├── __tests__/              # Service unit tests (usedProductsService, concurrency)
 │   ├── productInteractionService.js # Customer reviews, technical questions, purchaser check & admin CRUD
 │   ├── FirebaseSearchProducts.js    # Header & page search service
 │   ├── shoppingCartService.js       # Shopping cart operations
 │   ├── ordersService.js             # Order creation & retrieval
 │   └── adminService.js              # Admin aggregated stats & KPIs
 ├── store/                      # Redux store, slices, and root reducer
+│   ├── __tests__/              # Redux slice unit tests (product, shopping_cart)
 │   └── states/                 # Product, user, cart slices
 └── utilities/                  # Helper utilities (priceUtils.js, price calculation, validation)
+    └── __tests__/              # Utility unit & property-based tests (fast-check)
+```
+
+### Additional Project Root Files
+
+```text
+├── vitest.config.mjs           # Vitest configuration (jsdom, coverage thresholds, @/ alias)
+├── vitest.setup.js             # Test environment setup (DOM cleanup)
+├── playwright.config.js        # Playwright E2E configuration
+├── stryker.config.mjs          # Stryker mutation testing configuration
+├── eslint.config.mjs           # ESLint 9 flat config (Next.js + JSX)
+├── load-test.js                # k6 load testing script
+├── e2e/                        # Playwright E2E specs
+│   └── usedProducts.spec.js    # E2E + A11y (Axe) tests for Used Products flow
+└── .github/workflows/          # CI/CD pipelines
+    ├── pr.yml                  # PR gate: lint, test:coverage, emulators, build
+    └── nightly.yml             # Nightly: E2E, mutation testing, report artifacts
 ```
 
 ---
@@ -131,3 +169,49 @@ Always prefer **English field names**. Handle legacy Spanish keys as fallback ge
 3. **Preserve API Contracts**: If function signatures or Redux action signatures change, update all caller sites.
 4. **Verification**: Always run `pnpm run build` after editing code to verify clean compilation.
 5. **Clean Commits**: Make concise git commits following conventional commit prefixing (`feat:`, `fix:`, `style:`, `refactor:`).
+6. **Import Aliases**: Always use `@/` absolute path aliases (e.g., `@/utilities/priceUtils`, `@/store/states/product`). Never use deep relative paths like `../../../`. The alias is defined in `jsconfig.json` as `@/* → ./src/*` and mirrored in `vitest.config.mjs`.
+7. **Testing Requirements**:
+   - Add or update tests when modifying business logic in `src/utilities/`, `src/store/states/`, or `src/services/`.
+   - Run `pnpm test` before committing to verify the full suite passes (84+ tests, 12 suites).
+   - Coverage thresholds are enforced at 70% for statements, branches, functions, and lines on core modules.
+   - Firebase Firestore/Storage rules tests require the Local Emulator Suite (ports 8080/9199). They auto-skip gracefully when emulators are not running.
+
+---
+
+## 🧪 Testing Infrastructure
+
+### Testing Stack
+
+| Tool                     | Purpose                                        |
+| ------------------------ | ---------------------------------------------- |
+| **Vitest**               | Unit & component test runner (jsdom)            |
+| **React Testing Library**| Component rendering & interaction assertions    |
+| **fast-check**           | Property-based testing & fuzzing                |
+| **Playwright**           | E2E browser tests & visual regression           |
+| **@axe-core/playwright** | WCAG 2.1 AA accessibility audits                |
+| **Stryker Mutator**      | Mutation testing (vitest-runner)                 |
+| **@vitest/coverage-v8**  | Code coverage with enforced thresholds           |
+| **Firebase Emulators**   | Firestore & Storage security rules testing       |
+| **k6**                   | Load & performance testing script                |
+
+### Test Suites Summary
+
+| Suite                        | Type           | File                                                      |
+| ---------------------------- | -------------- | --------------------------------------------------------- |
+| priceUtils                   | Unit + PBT     | `src/utilities/__tests__/priceUtils.test.js`              |
+| usedProductsConfig           | Unit + PBT     | `src/utilities/__tests__/usedProductsConfig.test.js`      |
+| Redux slices                 | Unit           | `src/store/__tests__/slices.test.js`                      |
+| UsedProductCard              | Component/RTL  | `src/app/tienda/components/__tests__/UsedProductCard.test.jsx` |
+| UsedProductsShowcase         | Component/RTL  | `src/app/tienda/components/__tests__/UsedProductsShowcase.test.jsx` |
+| UsedProductForm              | Component/RTL  | `src/app/tienda/vender/components/__tests__/UsedProductForm.test.jsx` |
+| UsedProductForm (Fuzz)       | Fuzzing/XSS    | `src/app/tienda/vender/components/__tests__/UsedProductForm.fuzz.test.jsx` |
+| usedProductsService          | Service/Mock   | `src/services/__tests__/usedProductsService.test.js`      |
+| Concurrency (Race)           | Stress         | `src/services/__tests__/concurrency.test.js`              |
+| Firestore Rules              | Integration    | `src/firebase/__tests__/firestoreRules.test.js`           |
+| Storage Rules                | Integration    | `src/firebase/__tests__/storageRules.test.js`             |
+| E2E + A11y                   | E2E/Axe        | `e2e/usedProducts.spec.js`                                |
+
+### CI/CD Pipelines
+
+- **`pr.yml`** (on push/PR to `main`): ESLint → Unit Tests + Coverage → Firebase Emulator Rules → Production Build.
+- **`nightly.yml`** (daily 03:00 UTC): Playwright E2E + A11y → Stryker Mutation → Artifact upload.

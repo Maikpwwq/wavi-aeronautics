@@ -1,6 +1,6 @@
 import React from 'react'
 import MuiButton from '@mui/material/Button'
-import theme from '../theme'
+import theme from '@/modules/theme'
 
 const styles = (theme) => ({
   root: {

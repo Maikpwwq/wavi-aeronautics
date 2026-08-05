@@ -8,7 +8,7 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import productHeroWonder from 'public/static/themes/productHeroWonder.png'
 import productHeroArrowDown from 'public/static/themes/productHeroArrowDown.png'
-// import Typography from '../components/Typography'
+// import Typography from '@/modules/components/Typography'
 
 const styles = (theme) => ({
   root: {

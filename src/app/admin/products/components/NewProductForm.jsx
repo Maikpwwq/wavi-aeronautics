@@ -48,7 +48,7 @@ import {
   generateProductID,
   generateSlug,
   buildProductPayload
-} from '../config'
+} from '@/app/admin/products/config'
 
 // Components
 import DragAndDropUploader from './molecules/DragAndDropUploader'

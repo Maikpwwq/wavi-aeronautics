@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Box from '@mui/material/Box'
 import Typography from '@/modules/components/Typography'
 import withRoot from '@/modules/withRoot'
-import theme from '../innerTheme'
+import theme from '@/app/tienda/innerTheme'
 
 const styles = (theme) => ({
   presentationProducts: {

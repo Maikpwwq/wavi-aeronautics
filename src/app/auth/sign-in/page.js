@@ -15,9 +15,9 @@ import { Button, Divider } from '@mui/material'
 import GoogleIcon from '@mui/icons-material/Google' 
 import FacebookIcon from '@mui/icons-material/Facebook'
 
-import AuthLayout from '../components/AuthLayout'
+import AuthLayout from '@/app/auth/components/AuthLayout'
 import authService from '@/services/authService'
-import useAuthForm from '../hooks/useAuthForm'
+import useAuthForm from '@/app/auth/hooks/useAuthForm'
 
 const styles = (theme) => ({
   button: {
