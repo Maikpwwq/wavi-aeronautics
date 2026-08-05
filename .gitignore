@@ -30,3 +30,7 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# Stryker mutation testing
+.stryker-tmp/
+reports/
