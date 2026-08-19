@@ -84,8 +84,8 @@ const styles = (theme) => ({
 const UserDropdown = ({ showLoginLabel = true }) => {
   const classes = styles(theme)
   const user = useSelector((state) => state.user)
-  const userAuth = !user
-  const isAdmin = user?.rol === 'admin'
+  const userAuth = Boolean(user)
+  const isAdmin = user?.role === 'admin' || user?.rol === 'admin'
   
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)

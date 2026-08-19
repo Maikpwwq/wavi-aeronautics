@@ -106,8 +106,8 @@ function AppAppBar() {
               alignItems: 'center',
               justifyContent: 'center',
               gap: { xs: 1, sm: 1.5 },
-              maxWidth: { xs: '100%', sm: 480, md: 620, lg: 750 },
-              mx: { xs: 0.5, sm: 1.5, md: 2 },
+              maxWidth: { xs: '100%', sm: 520, md: 680, lg: 820 },
+              mx: { xs: 0.5, sm: 1, md: 1.5 },
               minWidth: 0
             }}
           >
@@ -115,8 +115,8 @@ function AppAppBar() {
               <SearchBar />
             </Box>
 
-            {/* PSE Payment Badge */}
-            <Tooltip title="Pagos 100% Seguros en Línea con PSE" arrow placement="bottom">
+            {/* PSE Payment Badge - Enlarged and Seamless */}
+            <Tooltip title="Pagos 100% Seguros con PSE y Mercado Pago" arrow placement="bottom">
               <Box
                 component="div"
                 sx={{
@@ -125,17 +125,19 @@ function AppAppBar() {
                   justifyContent: 'center',
                   bgcolor: '#ffffff',
                   borderRadius: '10px',
-                  px: 1.25,
-                  py: 0.5,
-                  height: 38,
-                  boxShadow: '0 2px 6px rgba(0,0,0,0.18)',
-                  border: '1px solid rgba(255,255,255,0.4)',
+                  px: 1.2,
+                  py: 0.25,
+                  height: 42,
+                  width: { sm: 56, md: 66 },
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.22)',
+                  border: '1.5px solid rgba(255,255,255,0.6)',
                   transition: 'all 0.25s ease',
                   flexShrink: 0,
                   cursor: 'pointer',
+                  overflow: 'hidden',
                   '&:hover': {
-                    transform: 'scale(1.05)',
-                    boxShadow: '0 4px 12px rgba(0, 172, 228, 0.35)',
+                    transform: 'scale(1.08)',
+                    boxShadow: '0 4px 14px rgba(0, 172, 228, 0.45)',
                     borderColor: '#00aCe4'
                   }
                 }}
@@ -143,10 +145,10 @@ function AppAppBar() {
                 <Box
                   component="img"
                   src="/logos/pse-logo.png"
-                  alt="PSE Pagos Seguros"
+                  alt="PSE Pagos Seguros en Línea"
                   sx={{
-                    height: 26,
-                    width: 'auto',
+                    height: 34,
+                    width: '100%',
                     display: 'block',
                     objectFit: 'contain'
                   }}
