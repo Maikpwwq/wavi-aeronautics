@@ -1,23 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { calculateCopPrice } from '@/utilities/priceUtils'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import ProductLink from './ProductLink'
 import { loadDetail } from '@/store/states/product'
 import AddProduct from '@/app/tienda/components/AddProduct'
-
-// import "sessionstorage-polyfill";
-// import "localstorage-polyfill";
-// global.sessionstorage;
-// global.localStorage;
+import { useFavorites } from '@/app/providers/FavoritesProvider'
 
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import CardMedia from '@mui/material/CardMedia'
+import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
+import Snackbar from '@mui/material/Snackbar'
+import Alert from '@mui/material/Alert'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import { CardActionArea } from '@mui/material'
 import PropTypes from 'prop-types'
-
-// import { useQuery } from "react-query";
 
 const styles = () => ({
   imageCentered: {
@@ -36,6 +36,10 @@ const styles = () => ({
 const ProductCard = ({ products, category }) => {
   const classes = styles()
   const dispatch = useDispatch()
+  const user = useSelector((state) => state.user)
+  const { isFavorite, toggleFavorite } = useFavorites()
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' })
+  
   const categoria = category || 'tienda'
   const producto = products || {}
   
@@ -43,28 +47,57 @@ const ProductCard = ({ products, category }) => {
   const name = producto.name || ''
   const images = producto.images || []
   const brand = producto.brand || ''
-  const id = producto.productID || ''
+  const id = String(producto.productID || producto.id || '')
 
   // Price Handling: 'price' is USD (Number), 'precio' is COP (String/Number)
-  // If we have 'price', calculate COP. If 'precio', use as legacy display.
-  let displayPrice = '$ 0';
+  let displayPrice = '$ 0'
   if (producto.price) {
-    displayPrice = calculateCopPrice(producto.price);
+    displayPrice = calculateCopPrice(producto.price)
   } else if (producto.precio) {
     displayPrice = typeof producto.precio === 'string' 
       ? producto.precio 
-      : `$ ${producto.precio.toLocaleString()}`;
+      : `$ ${producto.precio.toLocaleString()}`
   }
 
   const isAgotado = producto.availability === false
   const firstImage = images && images.length > 0 ? (typeof images[0] === 'string' ? images[0] : images[0]?.url || '') : ''
+  const isFav = isFavorite(id)
 
   const handleSelect = () => {
-    console.log('producto', producto)
     try {
       dispatch(loadDetail(producto))
     } catch (e) {
-      return console.error(e.message)
+      console.error(e.message)
+    }
+  }
+
+  const handleFavoriteClick = async (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (!user?.uid) {
+      setSnackbar({
+        open: true,
+        message: 'Inicia sesión para guardar tus productos favoritos',
+        severity: 'warning'
+      })
+      return
+    }
+
+    try {
+      await toggleFavorite(producto)
+      setSnackbar({
+        open: true,
+        message: isFav ? 'Producto eliminado de favoritos' : '¡Producto guardado en favoritos!',
+        severity: 'success'
+      })
+    } catch (err) {
+      console.error('Error toggling favorite:', err)
+      setSnackbar({
+        open: true,
+        message: 'Error al actualizar favoritos',
+        severity: 'error'
+      })
     }
   }
 
@@ -77,11 +110,39 @@ const ProductCard = ({ products, category }) => {
           sx={{
             transition: 'all 0.3s ease',
             opacity: isAgotado ? 0.85 : 1,
+            position: 'relative',
             '&:hover': {
-              borderRadius: '16px' // Augment border radius on hover
+              borderRadius: '16px'
             }
           }}
         >
+          {/* Favorite Toggle Button */}
+          <Tooltip title={isFav ? 'Eliminar de favoritos' : 'Guardar en favoritos'} arrow>
+            <IconButton
+              aria-label="Favorito"
+              onClick={handleFavoriteClick}
+              size="small"
+              sx={{
+                position: 'absolute',
+                top: 10,
+                left: 10,
+                zIndex: 4,
+                bgcolor: 'rgba(255, 255, 255, 0.85)',
+                backdropFilter: 'blur(4px)',
+                color: isFav ? '#e91e63' : 'rgba(0, 0, 0, 0.54)',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
+                transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                '&:hover': {
+                  bgcolor: '#ffffff',
+                  color: '#e91e63',
+                  transform: 'scale(1.15)'
+                }
+              }}
+            >
+              {isFav ? <FavoriteIcon fontSize="small" /> : <FavoriteBorderIcon fontSize="small" />}
+            </IconButton>
+          </Tooltip>
+
           <CardActionArea sx={{ flexGrow: 1 }}>
             <ProductLink
               product={producto}
@@ -92,7 +153,7 @@ const ProductCard = ({ products, category }) => {
                 sx={{
                   position: 'relative',
                   width: '100%',
-                  pt: '80%', // Consistent aspect ratio container even if image fails to load
+                  pt: '80%',
                   bgcolor: '#fff',
                   overflow: 'hidden',
                   display: 'flex',
@@ -127,7 +188,7 @@ const ProductCard = ({ products, category }) => {
                       position: 'absolute',
                       top: 12,
                       right: 12,
-                      bgcolor: 'rgba(211, 47, 47, 0.9)', // Red badge
+                      bgcolor: 'rgba(211, 47, 47, 0.9)',
                       color: '#ffffff',
                       px: 1.5,
                       py: 0.5,
@@ -159,9 +220,26 @@ const ProductCard = ({ products, category }) => {
             action={
               <AddProduct product={producto} disabled={isAgotado} />
             }
-          ></CardHeader>
+          />
         </Card>
       </Box>
+
+      {/* Snackbar feedback */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          severity={snackbar.severity}
+          variant="filled"
+          sx={{ width: '100%', borderRadius: 2 }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </>
   )
 }
@@ -172,3 +250,4 @@ ProductCard.propTypes = {
 }
 
 export default ProductCard
+

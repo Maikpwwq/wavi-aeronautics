@@ -1,14 +1,23 @@
 'use client'
+
 import React from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-// import PropTypes from 'prop-types'
-import withRoot from '@/modules/withRoot'
-import theme from '@/modules/theme'
 import Box from '@mui/material/Box'
-import ButtonBase from '@mui/material/ButtonBase'
 import Container from '@mui/material/Container'
 import Typography from '@/modules/components/Typography'
+import Chip from '@mui/material/Chip'
+import withRoot from '@/modules/withRoot'
+
+import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff'
+import SportsEsportsIcon from '@mui/icons-material/SportsEsports'
+import VideocamIcon from '@mui/icons-material/Videocam'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import SettingsRemoteIcon from '@mui/icons-material/SettingsRemote'
+import SensorsIcon from '@mui/icons-material/Sensors'
+import TvIcon from '@mui/icons-material/Tv'
+import BatteryChargingFullIcon from '@mui/icons-material/BatteryChargingFull'
+import SchoolIcon from '@mui/icons-material/School'
+import LocalOfferIcon from '@mui/icons-material/LocalOffer'
 
 const DJI1 =
   'https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FDJI-1.png?alt=media&token=f4f153a2-45fd-415d-884c-6964d3bb582b'
@@ -29,185 +38,316 @@ const DJI8 =
 const DJI9 =
   'https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FDJI-9.png?alt=media&token=860cfe8b-8eb2-4e1c-80e0-c7c98e4a850b'
 
-const styles = (theme) => ({
-  root: {
-    marginTop: theme.spacing(8),
-    marginBottom: theme.spacing(4)
+const categories = [
+  {
+    title: 'Kit Drones',
+    subtitle: 'Listos para ensamblar y volar',
+    url: DJI1,
+    href: '/tienda/kit-drones',
+    icon: FlightTakeoffIcon,
+    width: { xs: '100%', sm: '50%', md: '33.33%' }
   },
-  images: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexWrap: 'wrap'
+  {
+    title: 'Drones FPV HD',
+    subtitle: 'Transmisión digital de alta definición',
+    url: DJI2,
+    href: '/tienda/drones-fpv-hd',
+    icon: VideocamIcon,
+    width: { xs: '100%', sm: '50%', md: '33.33%' }
   },
-  imageWrapper: {
-    position: 'relative',
-    display: 'block',
-    padding: 0,
-    borderRadius: 0,
-    height: '40vh',
-    [theme.breakpoints.down('sm')]: {
-      width: '100% !important',
-      height: 100
-    },
-    '&:hover': {
-      zIndex: 1
-    },
-    '&:hover $imageBackdrop': {
-      opacity: 0.15
-    },
-    '&:hover $imageMarked': {
-      opacity: 0
-    },
-    '&:hover $imageTitle': {
-      border: '4px solid currentColor'
-    }
+  {
+    title: 'Drones RC',
+    subtitle: 'Acrobacia, freestyle y competición',
+    url: DJI3,
+    href: '/tienda/drones',
+    icon: SportsEsportsIcon,
+    width: { xs: '100%', sm: '100%', md: '33.33%' }
   },
-  imageButton: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: theme.palette.common.white
+  {
+    title: 'Goggles FPV',
+    subtitle: 'Inmersión visual en primera persona',
+    url: DJI4,
+    href: '/tienda/googles',
+    icon: VisibilityIcon,
+    width: { xs: '100%', sm: '50%', md: '30%' }
   },
-  imageSrc: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center 40%'
+  {
+    title: 'Radio Control',
+    subtitle: 'Emisoras y módulos ELRS / TBS',
+    url: DJI5,
+    href: '/tienda/radio-control',
+    icon: SettingsRemoteIcon,
+    width: { xs: '100%', sm: '50%', md: '40%' }
   },
-  imageBackdrop: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    background: theme.palette.common.black,
-    opacity: 0.5,
-    transition: theme.transitions.create('opacity')
+  {
+    title: 'Transmisores & VTX',
+    subtitle: 'Antenas, módulos y receptores',
+    url: DJI6,
+    href: '/tienda/trasmisor-receptor',
+    icon: SensorsIcon,
+    width: { xs: '100%', sm: '100%', md: '30%' }
   },
-  imageTitle: {
-    position: 'relative',
-    padding: `${theme.spacing(2)} ${theme.spacing(4)} 14px`
+  {
+    title: 'Digital VTX',
+    subtitle: 'Sistemas Walksnail, Caddx y DJI O3',
+    url: DJI7,
+    href: '/tienda/digital-vtx',
+    icon: TvIcon,
+    width: { xs: '100%', sm: '50%', md: '30%' }
   },
-  imageMarked: {
-    height: 3,
-    width: 18,
-    background: theme.palette.common.white,
-    position: 'absolute',
-    bottom: -2,
-    left: 'calc(50% - 9px)',
-    transition: theme.transitions.create('opacity')
+  {
+    title: 'Accesorios & Baterías',
+    subtitle: 'LiPo LiHV, hélices, marcos y herramientas',
+    url: DJI8,
+    href: '/tienda/accesorios',
+    icon: BatteryChargingFullIcon,
+    width: { xs: '100%', sm: '50%', md: '35%' }
+  },
+  {
+    title: 'Escuela & Software',
+    subtitle: 'Cursos profesionales y simuladores FPV',
+    url: DJI9,
+    href: '/tienda/escuela',
+    icon: SchoolIcon,
+    width: { xs: '100%', sm: '100%', md: '35%' }
+  },
+  {
+    title: 'Promociones & Descuentos',
+    subtitle: 'Ofertas exclusivas por tiempo limitado en equipos seleccionados',
+    url: '/static/img/Portada-DJI-Mavic-Air-2.png',
+    href: '/tienda/buscar?q=oferta',
+    icon: LocalOfferIcon,
+    isPromo: true,
+    promoBadge: '¡Hasta 30% OFF!',
+    width: '100%'
   }
-})
+]
 
-function ProductCategories (props) {
-  // const { classes } = props;
-  const classes = styles(theme)
-  const navigate = useRouter()
-
-  const handleImageClick = () => {
-    navigate.push('/tienda/drones/')
-  }
-
-  const images = [
-    {
-      url: DJI1,
-      title: 'Deportivo',
-      width: '40%'
-    },
-    {
-      url: DJI2,
-      title: 'Publicidad',
-      width: '20%'
-    },
-    {
-      url: DJI3,
-      title: 'Excursión',
-      width: '40%'
-    },
-    {
-      url: DJI4,
-      title: 'Turismo',
-      width: '38%'
-    },
-    {
-      url: DJI5,
-      title: 'Inventario',
-      width: '38%'
-    },
-    {
-      url: DJI6,
-      title: 'Vigilancia',
-      width: '24%'
-    },
-    {
-      url: DJI7,
-      title: 'Eventos',
-      width: '40%'
-    },
-    {
-      url: DJI8,
-      title: 'Agricultura',
-      width: '20%'
-    },
-    {
-      url: DJI9,
-      title: 'Mapeo',
-      width: '40%'
-    }
-  ]
-
+function ProductCategories() {
   return (
-    <Container sx={classes.root} component="section">
-      <Typography variant="h4" marked="center" align="center" component="h2">
-        Para todas las tareas y todas las edades
-      </Typography>
-      <Box sx={classes.images}>
-        {images.map((image) => (
-          <ButtonBase
-            onClick={handleImageClick}
-            key={image.title}
-            sx={classes.imageWrapper}
-            style={{
-              width: image.width
-            }}
-          >
-            <Link href="/tienda/drones">
-              <Box
-                sx={classes.imageSrc}
+    <Container sx={{ mt: 8, mb: 6 }} component="section">
+      <Box sx={{ textAlign: 'center', mb: 5 }}>
+        <Typography variant="h4" marked="center" align="center" component="h2" sx={{ fontWeight: 800 }}>
+          Categorías de Nuestra Tienda
+        </Typography>
+        <Typography
+          variant="body1"
+          sx={{
+            mt: 2,
+            color: 'text.secondary',
+            maxWidth: 680,
+            mx: 'auto',
+            fontSize: { xs: '0.95rem', md: '1.05rem' }
+          }}
+        >
+          Explora nuestra selección completa de drones, gafas FPV, radiocontroles, componentes de transmisión y accesorios con garantía y envío nacional.
+        </Typography>
+      </Box>
+
+      {/* Categories Grid */}
+      <Box
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: { xs: 1.5, sm: 2 },
+          justifyContent: 'center'
+        }}
+      >
+        {categories.map((cat) => {
+          const Icon = cat.icon
+          const isPromo = cat.isPromo
+
+          return (
+            <Box
+              key={cat.title}
+              sx={{
+                position: 'relative',
+                display: 'block',
+                borderRadius: 3,
+                overflow: 'hidden',
+                height: isPromo ? { xs: 200, sm: 220, md: 240 } : { xs: 180, sm: 220, md: 260 },
+                width: {
+                  xs: '100%',
+                  sm: typeof cat.width === 'object' ? cat.width.sm : cat.width,
+                  md: typeof cat.width === 'object' ? `calc(${cat.width.md} - 16px)` : `calc(${cat.width} - 16px)`
+                },
+                flexBasis: {
+                  xs: '100%',
+                  sm: typeof cat.width === 'object' ? cat.width.sm : cat.width,
+                  md: typeof cat.width === 'object' ? `calc(${cat.width.md} - 16px)` : `calc(${cat.width} - 16px)`
+                },
+                boxShadow: isPromo
+                  ? '0 8px 24px rgba(255, 111, 0, 0.35)'
+                  : '0 4px 16px rgba(0, 0, 0, 0.12)',
+                border: isPromo
+                  ? '2px solid #ff6f00'
+                  : '1px solid rgba(255, 255, 255, 0.1)',
+                transition: 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  boxShadow: isPromo
+                    ? '0 16px 36px rgba(255, 111, 0, 0.45)'
+                    : '0 12px 28px rgba(0, 172, 228, 0.3)',
+                  borderColor: isPromo ? '#ff9100' : '#00aCe4',
+                  '& .category-bg': {
+                    transform: 'scale(1.08)'
+                  },
+                  '& .category-overlay': {
+                    bgcolor: isPromo ? 'rgba(18, 12, 5, 0.55)' : 'rgba(10, 25, 45, 0.55)'
+                  },
+                  '& .category-arrow': {
+                    transform: 'translateX(4px)',
+                    color: isPromo ? '#ff9100' : '#00aCe4'
+                  }
+                }
+              }}
+            >
+              <Link
+                href={cat.href}
                 style={{
-                  backgroundImage: `url(${image.url})`
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  height: '100%',
+                  width: '100%',
+                  position: 'relative'
                 }}
-              />
-              <Box sx={classes.imageBackdrop} />
-              <Box sx={classes.imageButton}>
-                <Typography
-                  component="h3"
-                  variant="h6"
-                  color="inherit"
-                  sx={classes.imageTitle}
+              >
+                {/* Background Image with smooth zoom */}
+                <Box
+                  className="category-bg"
+                  sx={{
+                    position: 'absolute',
+                    inset: 0,
+                    backgroundImage: `url(${cat.url})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+                  }}
+                />
+
+                {/* Dark Gradient Overlay for Contrast */}
+                <Box
+                  className="category-overlay"
+                  sx={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: isPromo
+                      ? 'linear-gradient(180deg, rgba(20, 10, 0, 0.4) 0%, rgba(20, 10, 0, 0.85) 100%)'
+                      : 'linear-gradient(180deg, rgba(10, 15, 25, 0.35) 0%, rgba(10, 15, 25, 0.85) 100%)',
+                    transition: 'background-color 0.3s ease'
+                  }}
+                />
+
+                {/* Card Content */}
+                <Box
+                  sx={{
+                    position: 'relative',
+                    zIndex: 2,
+                    p: { xs: 2, sm: 2.5 },
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    height: '100%'
+                  }}
                 >
-                  {image.title}
-                  <Box sx={classes.imageMarked} />
-                </Typography>
-              </Box>
-            </Link>
-          </ButtonBase>
-        ))}
+                  {/* Top Badges & Icon */}
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                    <Box
+                      sx={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: { xs: 36, sm: 42 },
+                        height: { xs: 36, sm: 42 },
+                        borderRadius: '50%',
+                        bgcolor: isPromo ? 'rgba(255, 111, 0, 0.35)' : 'rgba(0, 172, 228, 0.25)',
+                        backdropFilter: 'blur(6px)',
+                        border: isPromo ? '1px solid rgba(255, 111, 0, 0.6)' : '1px solid rgba(0, 172, 228, 0.5)',
+                        color: isPromo ? '#ffb74d' : '#00aCe4'
+                      }}
+                    >
+                      <Icon sx={{ fontSize: { xs: 20, sm: 24 } }} />
+                    </Box>
+
+                    {isPromo && (
+                      <Chip
+                        icon={<LocalOfferIcon sx={{ fontSize: '1rem !important', color: '#ffffff !important' }} />}
+                        label={cat.promoBadge}
+                        size="small"
+                        sx={{
+                          fontWeight: 800,
+                          bgcolor: 'secondary.main',
+                          color: '#ffffff',
+                          boxShadow: '0 2px 8px rgba(255, 111, 0, 0.5)',
+                          letterSpacing: 0.5,
+                          fontSize: '0.75rem',
+                          textTransform: 'uppercase'
+                        }}
+                      />
+                    )}
+                  </Box>
+
+                  {/* Bottom Text and CTA */}
+                  <Box>
+                    <Typography
+                      variant="h6"
+                      component="h3"
+                      sx={{
+                        color: '#ffffff',
+                        fontWeight: 800,
+                        fontSize: isPromo ? { xs: '1.2rem', sm: '1.4rem' } : { xs: '1.05rem', sm: '1.2rem' },
+                        lineHeight: 1.2,
+                        textShadow: '0 2px 4px rgba(0,0,0,0.6)'
+                      }}
+                    >
+                      {cat.title}
+                    </Typography>
+
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: 'rgba(255, 255, 255, 0.8)',
+                        fontSize: { xs: '0.75rem', sm: '0.825rem' },
+                        mt: 0.5,
+                        textShadow: '0 1px 3px rgba(0,0,0,0.5)',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical'
+                      }}
+                    >
+                      {cat.subtitle}
+                    </Typography>
+
+                    <Box
+                      className="category-arrow"
+                      sx={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 0.5,
+                        mt: 1,
+                        fontSize: '0.8rem',
+                        fontWeight: 700,
+                        color: isPromo ? '#ffb74d' : '#00aCe4',
+                        transition: 'all 0.25s ease'
+                      }}
+                    >
+                      <span>Ver productos</span>
+                      <Box component="span" sx={{ fontSize: '1rem', lineHeight: 1 }}>→</Box>
+                    </Box>
+                  </Box>
+                </Box>
+              </Link>
+            </Box>
+          )
+        })}
       </Box>
     </Container>
   )
 }
 
-ProductCategories.propTypes = {
-  // classes: PropTypes.object.isRequired,
-}
-
 export default withRoot(ProductCategories)
+

@@ -23,7 +23,7 @@ service cloud.firestore {
     }
 
     // =========================================================
-    // USERS COLLECTION
+    // USERS COLLECTION & SUBCOLLECTIONS
     // =========================================================
     match /users/{userId} {
       // Users can read their own profile, Admins can read all
@@ -35,7 +35,22 @@ service cloud.firestore {
       
       // Only system/admin should technically create users via Auth triggers, 
       // but if client creates document after signup:
-      allow create: if isOwner(userId); 
+      allow create: if isOwner(userId);
+
+      // User Favorites subcollection
+      match /favorites/{favoriteId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
+
+      // User Fiscal Billing Profile subcollection
+      match /billingInfo/{infoId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
+
+      // User Saved Payment Methods subcollection
+      match /paymentMethods/{methodId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
     }
 
     // =========================================================

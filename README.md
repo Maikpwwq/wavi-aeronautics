@@ -137,10 +137,14 @@ All new products use **English field names**. Legacy Spanish fields are read via
 
 ### User Account
 
-| Route      | Description   |
-| ---------- | ------------- |
-| `/profile` | User Profile  |
-| `/orders`  | Order History |
+| Route            | Description                                            |
+| ---------------- | ------------------------------------------------------ |
+| `/profile`       | User Profile & Contact Info                            |
+| `/orders`        | Active Order Tracking & Shipping Stepper               |
+| `/favoritos`     | Mis Favoritos (Wishlist) & Quick Rebuy                 |
+| `/mis-opiniones` | Mis Opiniones (Customer Reviews Management)            |
+| `/mis-compras`   | Mis Compras (Consolidated History & Printable Invoice) |
+| `/facturacion`   | Facturación & PCI-Compliant Saved Payment Methods      |
 
 ### Blog / Posts
 
@@ -268,20 +272,20 @@ src/
 ### Commands
 
 ```bash
-pnpm test              # Run all unit & component tests (84+ tests, 12 suites)
+pnpm test              # Run all unit & component tests (102+ tests, 14 suites)
 pnpm test:watch        # Watch mode
 pnpm test:coverage     # Coverage with 70% threshold enforcement
 pnpm test:e2e          # Playwright E2E + A11y (requires dev server)
 pnpm test:mutate       # Stryker mutation testing (score: 89%)
-pnpm lint              # ESLint 9 flat config
+pnpm lint              # ESLint 9/10 flat config
 ```
 
 ### Quality Metrics
 
 | Metric                    | Value      |
 | ------------------------- | ---------- |
-| **Unit Test Suites**      | 12         |
-| **Total Tests**           | 84+ passed |
+| **Unit Test Suites**      | 14         |
+| **Total Tests**           | 102+ passed |
 | **Code Coverage (core)**  | >98%       |
 | **Mutation Score**        | 89.07%     |
 | **Coverage Threshold**    | 70% enforced (stmts/branches/funcs/lines) |
@@ -308,9 +312,18 @@ pnpm lint              # ESLint 9 flat config
 
 ## 🆕 Recent Updates (August 2026)
 
-### Testing Infrastructure (Complete 9-Phase Implementation)
+### Full-Stack User Profile Modules
 
-- **Unit & Property-Based Testing**: Comprehensive test suites for `priceUtils`, `usedProductsConfig`, and Redux slices (`product`, `shopping_cart`) using Vitest and fast-check.
+- **Mis Favoritos (`/favoritos`)**: Reactive wishlist with real-time Firestore sync via `FavoritesProvider` and one-click heart toggles across catalog cards and product detail views.
+- **Mis Opiniones (`/mis-opiniones`)**: Moderation-aware customer review center with rating breakdown, edit/delete capabilities, and unreviewed purchased products queue.
+- **Mis Compras (`/mis-compras`)**: Accounting and transaction history displaying completed orders with printable digital invoice / receipt generation (`window.print()`).
+- **Facturación & Métodos de Pago (`/facturacion`)**: Fiscal profile management (NIT/RUT, CC) and PCI-DSS compliant saved payment methods (masked card metadata and tokens).
+- **Firestore Security Rules**: Published ownership-restricted rules (`isOwner(userId)`) protecting `favorites`, `billingInfo`, and `paymentMethods` subcollections.
+- **Header & Navigation Enhancements**: Integrated PSE & Search bar in main app bar, added "Promociones" category with discount badge, and added direct links in `UserDropdown`.
+
+### Testing Infrastructure & Engineering
+
+- **Unit & Property-Based Testing**: Comprehensive test suites for `priceUtils`, `usedProductsConfig`, `favoritesService`, `billingService`, and Redux slices (`product`, `shopping_cart`) using Vitest and fast-check.
 - **Component Tests (RTL)**: Full rendering and interaction tests for `UsedProductCard`, `UsedProductsShowcase`, and `UsedProductForm`.
 - **Firebase Security Rules Tests**: Emulator-based integration tests for Firestore and Storage security rules with graceful skip when emulators are offline.
 - **E2E & Accessibility**: Playwright browser tests with `@axe-core/playwright` WCAG 2.1 AA audits on store pages.
@@ -319,7 +332,7 @@ pnpm lint              # ESLint 9 flat config
 - **Load Testing**: k6 script with progressive ramp-up to 50 VUs and strict performance thresholds.
 - **CI/CD Pipelines**: GitHub Actions workflows for PR gates and nightly quality runs.
 - **Import Standardization**: All test and production imports migrated from relative paths (`../../`) to absolute `@/` aliases per `jsconfig.json`.
-- **ESLint 9 Migration**: Created `eslint.config.mjs` flat config compatible with Next.js 16 and ESLint 9.
+- **ESLint 9/10 Flat Config**: Modernized lint configuration compatible with Next.js 16.
 
 ---
 

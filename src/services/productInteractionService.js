@@ -184,6 +184,124 @@ export const deleteReview = async (reviewId) => {
   await deleteDoc(reviewRef)
 }
 
+/**
+ * Fetches all reviews written by a specific user
+ * @param {string} userId
+ * @returns {Promise<Array>}
+ */
+export const fetchUserReviews = async (userId) => {
+  if (!userId) return []
+
+  try {
+    const reviewsRef = collection(firestore, 'product_reviews')
+    const q = query(
+      reviewsRef,
+      where('userId', '==', userId),
+      orderBy('createdAt', 'desc')
+    )
+    const querySnapshot = await getDocs(q)
+
+    return querySnapshot.docs.map((docSnap) => ({
+      id: docSnap.id,
+      ...docSnap.data(),
+      createdAtFormatted: docSnap.data().createdAt?.toDate
+        ? docSnap.data().createdAt.toDate().toLocaleDateString('es-CO', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          })
+        : 'Reciente'
+    }))
+  } catch (error) {
+    console.error('Error fetching user reviews:', error)
+    return []
+  }
+}
+
+/**
+ * Updates an existing user review
+ * @param {string} reviewId
+ * @param {Object} updateData
+ * @returns {Promise<void>}
+ */
+export const updateProductReview = async (reviewId, { rating, title, comment }) => {
+  if (!reviewId) throw new Error('reviewId is required')
+
+  try {
+    const reviewRef = doc(firestore, 'product_reviews', reviewId)
+    await updateDoc(reviewRef, {
+      rating: Number(rating) || 5,
+      title: title?.trim() || '',
+      comment: comment?.trim() || '',
+      approved: false, // Sent back to moderation on edit
+      updatedAt: serverTimestamp()
+    })
+  } catch (error) {
+    console.error('Error updating review:', error)
+    throw error
+  }
+}
+
+/**
+ * Fetches purchased products by a user that have not been reviewed yet
+ * @param {string} userId
+ * @returns {Promise<Array>} List of unreviewed purchased items
+ */
+export const fetchUnreviewedPurchasedProducts = async (userId) => {
+  if (!userId) return []
+
+  try {
+    // 1. Fetch user orders
+    const ordersRef = collection(firestore, 'orders')
+    const qOrders = query(ordersRef, where('userId', '==', userId))
+    const ordersSnapshot = await getDocs(qOrders)
+
+    if (ordersSnapshot.empty) return []
+
+    // 2. Extract purchased items from completed/valid orders
+    const purchasedItemsMap = new Map()
+    ordersSnapshot.docs.forEach((docSnap) => {
+      const order = docSnap.data()
+      const isPaid = !['cancelled', 'failed', 'rejected'].includes(order.status)
+      if (!isPaid) return
+
+      const items = order.items || order.products || order.cartItems || []
+      items.forEach((item) => {
+        const pId = String(item.id || item.productID || item.sku || '')
+        if (pId && !purchasedItemsMap.has(pId)) {
+          purchasedItemsMap.set(pId, {
+            productId: pId,
+            name: item.name || 'Producto Wavi',
+            brand: item.brand || 'Wavi Aeronautics',
+            image: item.firstImage || item.image || (Array.isArray(item.images) ? item.images[0] : '') || '',
+            orderId: docSnap.id,
+            purchasedAt: order.createdAt
+          })
+        }
+      })
+    })
+
+    if (purchasedItemsMap.size === 0) return []
+
+    // 3. Fetch user's existing reviews
+    const existingReviews = await fetchUserReviews(userId)
+    const reviewedProductIds = new Set(existingReviews.map((r) => String(r.productId)))
+
+    // 4. Filter out already reviewed products
+    const unreviewed = []
+    purchasedItemsMap.forEach((item, pId) => {
+      if (!reviewedProductIds.has(pId)) {
+        unreviewed.push(item)
+      }
+    })
+
+    return unreviewed
+  } catch (error) {
+    console.error('Error fetching unreviewed products:', error)
+    return []
+  }
+}
+
 // --- TECHNICAL QUESTIONS ---
 
 /**

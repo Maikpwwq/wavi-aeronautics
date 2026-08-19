@@ -62,6 +62,11 @@ src/
 │   │   ├── reviews/            # Reviews approval & moderation (/admin/reviews)
 │   │   └── products/           # Product catalog management (/admin/products)
 │   ├── auth/                   # Authentication routes (/auth/*)
+│   ├── favoritos/              # Wishlist / Favorites page (/favoritos)
+│   ├── mis-opiniones/          # Customer reviews management (/mis-opiniones)
+│   ├── mis-compras/            # Consolidated purchase history & printable invoices (/mis-compras)
+│   ├── facturacion/            # Fiscal billing profile & saved payment methods (/facturacion)
+│   ├── providers/              # App providers (FavoritesProvider)
 │   ├── tienda/                 # Store routes (/tienda/*)
 │   │   ├── buscar/             # Search results page (/tienda/buscar)
 │   │   ├── components/         # Storefront components (ProductCard, ProductFeedbackSection, etc.)
@@ -75,7 +80,9 @@ src/
 │   └── __tests__/              # Firestore & Storage security rules tests (emulator-based)
 ├── modules/                    # Shared UI modules (Atomic design components, AppFooter, withRoot)
 ├── services/                   # Data fetching & Firestore API service layer
-│   ├── __tests__/              # Service unit tests (usedProductsService, concurrency)
+│   ├── __tests__/              # Service unit tests (favorites, billing, usedProducts, concurrency)
+│   ├── favoritesService.js     # User wishlist & favorites real-time subscriptions
+│   ├── billingService.js       # Fiscal profile & PCI-compliant payment methods
 │   ├── productInteractionService.js # Customer reviews, technical questions, purchaser check & admin CRUD
 │   ├── FirebaseSearchProducts.js    # Header & page search service
 │   ├── shoppingCartService.js       # Shopping cart operations
@@ -84,6 +91,7 @@ src/
 ├── store/                      # Redux store, slices, and root reducer
 │   ├── __tests__/              # Redux slice unit tests (product, shopping_cart)
 │   └── states/                 # Product, user, cart slices
+├── types/                      # TypeScript data models and interfaces (userModules.ts)
 └── utilities/                  # Helper utilities (priceUtils.js, price calculation, validation)
     └── __tests__/              # Utility unit & property-based tests (fast-check)
 ```
@@ -117,10 +125,13 @@ products/{category}/brands/{brand}/items/{productID}
 ```
 
 - Global queries cross-category use `collectionGroup('items')`.
-- Top-level collections:
+- Top-level collections & User Subcollections:
   - `users/{uid}`
+    - `users/{uid}/favorites/{productId}` (Wishlist items)
+    - `users/{uid}/billingInfo/{infoId}` (Fiscal billing details)
+    - `users/{uid}/paymentMethods/{methodId}` (PCI-compliant masked cards / tokens)
   - `orders/{orderId}`
-  - `product_reviews/{reviewId}` (fields: `productId`, `userId`, `userName`, `rating`, `title`, `comment`, `createdAt`)
+  - `product_reviews/{reviewId}` (fields: `productId`, `userId`, `userName`, `rating`, `title`, `comment`, `approved`, `createdAt`)
   - `product_questions/{questionId}` (fields: `productId`, `userId`, `userName`, `question`, `answer`, `answeredAt`, `createdAt`)
 
 ### 2. Standardized Field Schema
@@ -172,7 +183,7 @@ Always prefer **English field names**. Handle legacy Spanish keys as fallback ge
 6. **Import Aliases**: Always use `@/` absolute path aliases (e.g., `@/utilities/priceUtils`, `@/store/states/product`). Never use deep relative paths like `../../../`. The alias is defined in `jsconfig.json` as `@/* → ./src/*` and mirrored in `vitest.config.mjs`.
 7. **Testing Requirements**:
    - Add or update tests when modifying business logic in `src/utilities/`, `src/store/states/`, or `src/services/`.
-   - Run `pnpm test` before committing to verify the full suite passes (84+ tests, 12 suites).
+   - Run `pnpm test` before committing to verify the full suite passes (102+ tests, 14 suites).
    - Coverage thresholds are enforced at 70% for statements, branches, functions, and lines on core modules.
    - Firebase Firestore/Storage rules tests require the Local Emulator Suite (ports 8080/9199). They auto-skip gracefully when emulators are not running.
 
@@ -198,6 +209,8 @@ Always prefer **English field names**. Handle legacy Spanish keys as fallback ge
 
 | Suite                        | Type           | File                                                      |
 | ---------------------------- | -------------- | --------------------------------------------------------- |
+| favoritesService             | Unit/Service   | `src/services/__tests__/favoritesService.test.js`         |
+| billingService               | Unit/Service   | `src/services/__tests__/billingService.test.js`           |
 | priceUtils                   | Unit + PBT     | `src/utilities/__tests__/priceUtils.test.js`              |
 | usedProductsConfig           | Unit + PBT     | `src/utilities/__tests__/usedProductsConfig.test.js`      |
 | Redux slices                 | Unit           | `src/store/__tests__/slices.test.js`                      |

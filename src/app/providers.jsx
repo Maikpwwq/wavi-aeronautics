@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Provider } from 'react-redux'
 import PropTypes from 'prop-types'
 import ShoppingCartProvider from '@/app/tienda/providers/ShoppingCartProvider'
+import FavoritesProvider from '@/app/providers/FavoritesProvider'
 import ConfigureAppStore from '@/store/store'
 import initialState from '@/store/initialState'
 import React, { useState } from 'react'
@@ -33,10 +34,12 @@ export default function Providers ({ children }) {
     <QueryClientProvider client={client}>
       <Provider store={store}>
         <ShoppingCartProvider>
-          <AuthListener />
-          <DataInitializer />
-          {children}
-          <ReactQueryDevtools />
+          <FavoritesProvider>
+            <AuthListener />
+            <DataInitializer />
+            {children}
+            <ReactQueryDevtools />
+          </FavoritesProvider>
         </ShoppingCartProvider>
       </Provider>
     </QueryClientProvider>

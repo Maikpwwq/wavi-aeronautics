@@ -23,8 +23,16 @@ import {
   MonitorWeight,
   BatteryChargingFull,
   SettingsInputAntenna,
-  Security
+  Security,
+  Favorite,
+  FavoriteBorder
 } from '@mui/icons-material'
+import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
+import Snackbar from '@mui/material/Snackbar'
+import Alert from '@mui/material/Alert'
+import Button from '@mui/material/Button'
+import { useFavorites } from '@/app/providers/FavoritesProvider'
 
 // Services & Utilities
 import { getProductById } from '@/services/sharedServices'
@@ -134,10 +142,14 @@ const ProductDetail = () => {
   const marca = searchParams.get('marca')
 
   const reduxProduct = useSelector((state) => state.product)
+  const user = useSelector((state) => state.user)
+  const { isFavorite, toggleFavorite } = useFavorites()
+
   const [product, setProduct] = useState(null)
   const [activeImage, setActiveImage] = useState(0)
   const [loading, setLoading] = useState(true)
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0)
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' })
 
   // ---------------------------------------------------------------------------
   // Data fetching
@@ -309,11 +321,74 @@ const ProductDetail = () => {
 
               {/* Action Area */}
               <Box sx={styles.actionBox}>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                   Recibe este producto en la puerta de tu casa con envío asegurado.
                 </Typography>
-                <AddProduct product={product} selectedOption={selectedOption} variant="button" />
-                <Typography variant="caption" sx={{ display: 'block', textAlign: 'center', mt: 2, color: 'text.disabled' }}>
+                
+                <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', mb: 2 }}>
+                  <Box sx={{ flex: 1 }}>
+                    <AddProduct product={product} selectedOption={selectedOption} variant="button" />
+                  </Box>
+                  <Tooltip title={isFavorite(product.productID || product.id) ? 'Eliminar de favoritos' : 'Guardar en favoritos'} arrow>
+                    <Button
+                      variant={isFavorite(product.productID || product.id) ? 'contained' : 'outlined'}
+                      color={isFavorite(product.productID || product.id) ? 'secondary' : 'primary'}
+                      onClick={async () => {
+                        if (!user?.uid) {
+                          setSnackbar({
+                            open: true,
+                            message: 'Inicia sesión para guardar tus productos favoritos',
+                            severity: 'warning'
+                          })
+                          return
+                        }
+                        try {
+                          const currentlyFav = isFavorite(product.productID || product.id)
+                          await toggleFavorite(product)
+                          setSnackbar({
+                            open: true,
+                            message: currentlyFav ? 'Eliminado de tus favoritos' : '¡Guardado en tus favoritos!',
+                            severity: 'success'
+                          })
+                        } catch (err) {
+                          setSnackbar({
+                            open: true,
+                            message: 'Error al actualizar favoritos',
+                            severity: 'error'
+                          })
+                        }
+                      }}
+                      sx={{
+                        minWidth: 48,
+                        height: 48,
+                        borderRadius: 3,
+                        px: 2,
+                        borderColor: isFavorite(product.productID || product.id) ? 'secondary.main' : 'rgba(0, 172, 228, 0.4)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1
+                      }}
+                    >
+                      {isFavorite(product.productID || product.id) ? (
+                        <>
+                          <Favorite sx={{ color: '#ffffff' }} />
+                          <Typography variant="body2" sx={{ display: { xs: 'none', sm: 'inline' }, fontWeight: 700 }}>
+                            Favorito
+                          </Typography>
+                        </>
+                      ) : (
+                        <>
+                          <FavoriteBorder sx={{ color: '#00aCe4' }} />
+                          <Typography variant="body2" sx={{ display: { xs: 'none', sm: 'inline' }, fontWeight: 700 }}>
+                            Favoritos
+                          </Typography>
+                        </>
+                      )}
+                    </Button>
+                  </Tooltip>
+                </Box>
+
+                <Typography variant="caption" sx={{ display: 'block', textAlign: 'center', mt: 1.5, color: 'text.disabled' }}>
                   Pagos seguros vía MercadoPago & PSE
                 </Typography>
               </Box>
@@ -420,6 +495,23 @@ const ProductDetail = () => {
         {/* Customer Reviews & Technical Questions Section */}
         <ProductFeedbackSection productId={product.productID || product.id} />
       </Container>
+
+      {/* Snackbar feedback */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          severity={snackbar.severity}
+          variant="filled"
+          sx={{ width: '100%', borderRadius: 2 }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   )
 }

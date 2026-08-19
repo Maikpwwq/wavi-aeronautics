@@ -5,6 +5,10 @@ import { auth } from '@/firebase/firebaseClient'
 import PersonIcon from '@mui/icons-material/Person'
 import SecurityIcon from '@mui/icons-material/Security'
 import ReceiptIcon from '@mui/icons-material/Receipt'
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBag'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import RateReviewIcon from '@mui/icons-material/RateReview'
+import CreditCardIcon from '@mui/icons-material/CreditCard'
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
 import LoginIcon from '@mui/icons-material/Login'
 import LogoutIcon from '@mui/icons-material/Logout'
@@ -20,7 +24,6 @@ import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Link from 'next/link'
-import { styled } from '@mui/material/styles'
 import theme from '@/modules/theme'
 
 const styles = (theme) => ({
@@ -35,16 +38,20 @@ const styles = (theme) => ({
     }
   },
   menuPaper: {
-    backgroundColor: 'rgba(30, 30, 40, 0.9)', // Glassmorphism dark
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
+    backgroundColor: 'rgba(30, 30, 40, 0.95)',
+    backdropFilter: 'blur(12px)',
+    border: '1px solid rgba(255, 255, 255, 0.12)',
     color: 'white',
     borderRadius: '12px',
     marginTop: '10px',
-    minWidth: '200px',
-    boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
+    minWidth: '220px',
+    boxShadow: '0 12px 32px 0 rgba(0, 0, 0, 0.45)'
   },
   menuItem: {
+    py: 1,
+    px: 2,
+    fontSize: '0.9rem',
+    transition: 'background-color 0.2s ease',
     '&:hover': {
       backgroundColor: 'rgba(255, 255, 255, 0.1)'
     }
@@ -54,8 +61,11 @@ const styles = (theme) => ({
     minWidth: '36px'
   },
   logoutItem: {
+    py: 1,
+    px: 2,
+    fontSize: '0.9rem',
     '&:hover': {
-      backgroundColor: 'rgba(255, 0, 0, 0.1)',
+      backgroundColor: 'rgba(255, 0, 0, 0.15)',
       color: '#ff6b6b'
     }
   },
@@ -74,7 +84,7 @@ const styles = (theme) => ({
 const UserDropdown = ({ showLoginLabel = true }) => {
   const classes = styles(theme)
   const user = useSelector((state) => state.user)
-  const userAuth = !!user
+  const userAuth = !user
   const isAdmin = user?.rol === 'admin'
   
   const [anchorEl, setAnchorEl] = useState(null)
@@ -156,8 +166,8 @@ const UserDropdown = ({ showLoginLabel = true }) => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <Box sx={{ px: 2, py: 1 }}>
-          <Typography variant="subtitle2" noWrap>
+        <Box sx={{ px: 2, py: 1.25 }}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 700 }} noWrap>
             {user?.displayName || 'Usuario'}
           </Typography>
           <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)' }} noWrap>
@@ -166,6 +176,7 @@ const UserDropdown = ({ showLoginLabel = true }) => {
         </Box>
         <Divider sx={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
         
+        {/* Profile */}
         <Link href="/profile" style={{ textDecoration: 'none', color: 'inherit' }}>
           <MenuItem sx={classes.menuItem}>
             <ListItemIcon sx={classes.menuIcon}>
@@ -175,6 +186,7 @@ const UserDropdown = ({ showLoginLabel = true }) => {
           </MenuItem>
         </Link>
         
+        {/* Mis Pedidos (Active Tracking) */}
         <Link href="/orders" style={{ textDecoration: 'none', color: 'inherit' }}>
           <MenuItem sx={classes.menuItem}>
             <ListItemIcon sx={classes.menuIcon}>
@@ -184,6 +196,49 @@ const UserDropdown = ({ showLoginLabel = true }) => {
           </MenuItem>
         </Link>
 
+        {/* Mis Compras (Completed History & Invoices) */}
+        <Link href="/mis-compras" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <MenuItem sx={classes.menuItem}>
+            <ListItemIcon sx={classes.menuIcon}>
+              <ShoppingBagIcon fontSize="small" />
+            </ListItemIcon>
+            Mis Compras
+          </MenuItem>
+        </Link>
+
+        {/* Mis Favoritos */}
+        <Link href="/favoritos" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <MenuItem sx={classes.menuItem}>
+            <ListItemIcon sx={{ ...classes.menuIcon, color: '#e91e63' }}>
+              <FavoriteIcon fontSize="small" />
+            </ListItemIcon>
+            Mis Favoritos
+          </MenuItem>
+        </Link>
+
+        {/* Mis Opiniones */}
+        <Link href="/mis-opiniones" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <MenuItem sx={classes.menuItem}>
+            <ListItemIcon sx={{ ...classes.menuIcon, color: '#ffb74d' }}>
+              <RateReviewIcon fontSize="small" />
+            </ListItemIcon>
+            Mis Opiniones
+          </MenuItem>
+        </Link>
+
+        {/* Facturación */}
+        <Link href="/facturacion" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <MenuItem sx={classes.menuItem}>
+            <ListItemIcon sx={classes.menuIcon}>
+              <CreditCardIcon fontSize="small" />
+            </ListItemIcon>
+            Facturación
+          </MenuItem>
+        </Link>
+
+        <Divider sx={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
+
+        {/* Used Marketplace */}
         <Link href="/tienda/mis-publicaciones" style={{ textDecoration: 'none', color: 'inherit' }}>
           <MenuItem sx={classes.menuItem}>
             <ListItemIcon sx={classes.menuIcon}>
@@ -211,7 +266,7 @@ const UserDropdown = ({ showLoginLabel = true }) => {
           </MenuItem>
         </Link>
 
-        {/* Admin Dashboard - Only visible for admin users */}
+        {/* Admin Dashboard */}
         {isAdmin && [
           <Divider key="admin-divider" sx={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />,
           <Link key="admin-link" href="/admin" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -238,3 +293,4 @@ const UserDropdown = ({ showLoginLabel = true }) => {
 }
 
 export default UserDropdown
+
