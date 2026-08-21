@@ -67,7 +67,7 @@ const USE_CASES = [
     description:
       'Tomas cinemáticas de alta velocidad y planos secuencia en 4K/6K. Cinemasters y cinelifters diseñados para portar cámaras profesionales en eventos, comerciales y películas.',
     recommendedGear: 'Drones VToL estabilizados, Transmisores Digitales VTX, Cámaras HD, Hélices de bajo ruido.',
-    link: '/tienda/digital-vtx'
+    link: '/tienda/drones-fpv-hd'
   },
   {
     id: 'agricultura',
@@ -79,7 +79,7 @@ const USE_CASES = [
     description:
       'Diagnóstico de cultivos, análisis multiespectral de índice NDVI, aspersión focalizada y monitoreo de estrés hídrico para maximizar la productividad agrícola en el campo colombiano.',
     recommendedGear: 'Plataformas de gran autonomía, Sensores térmicos/multiespectrales, Controladores de vuelo avanzados.',
-    link: '/tienda/drones'
+    link: '/tienda/drones-fpv-hd'
   },
   {
     id: 'mapeo',
@@ -91,7 +91,7 @@ const USE_CASES = [
     description:
       'Generación de ortomosaicos georreferenciados, modelos digitales de terreno (DEM) 3D, curvas de nivel y cálculo volumétrico para obras civiles y minería.',
     recommendedGear: 'Drones con posicionamiento RTK/PPK, Software de procesamiento fotogramétrico, Telemetría de largo alcance.',
-    link: '/tienda/software'
+    link: '/tienda/drones-fpv-hd'
   },
   {
     id: 'inspeccion',
@@ -103,7 +103,7 @@ const USE_CASES = [
     description:
       'Supervisión de infraestructura crítica: torres de energía, paneles solares, techos, puentes y vigilancia perimetral sin poner en riesgo vidas humanas.',
     recommendedGear: 'Drones con zoom óptico y sensor térmico, Transmisores receptores de video protegidos, Motores de alto torque.',
-    link: '/tienda/trasmisor-receptor'
+    link: '/tienda/drones-fpv-hd'
   },
   {
     id: 'turismo',
@@ -111,11 +111,11 @@ const USE_CASES = [
     category: 'Exploración y Naturaleza',
     icon: LandscapeIcon,
     color: '#0d9488',
-    bgGradient: 'linear-gradient(135deg, rgba(13, 148, 136, 0.12) 0%, rgba(13, 148, 136, 0.02) 100%)',
+    bgGradient: 'linear-gradient(135deg, rgba(139, 92, 246, 0.12) 0%, rgba(139, 92, 246, 0.02) 100%)',
     description:
       'Exploración de la geografía y paisajes naturales de Colombia. Captura de tomas panorámicas en senderismo y expediciones respetando los ecosistemas protegidos.',
     recommendedGear: 'Kits portátiles ultralivianos (<249g), Baterías de repuesto, Cargadores portátiles.',
-    link: '/tienda/accesorios'
+    link: '/tienda/drones-fpv-hd'
   }
 ]
 
@@ -391,13 +391,14 @@ function ProductValues() {
                       {/* Action Link */}
                       <Button
                         component={Link}
-                        href={item.link}
+                        href="/tienda/drones-fpv-hd"
                         endIcon={<ArrowForwardIcon />}
                         sx={{
                           alignSelf: 'flex-start',
                           textTransform: 'none',
                           fontWeight: 800,
                           color: item.color,
+                          fontSize: '0.85rem',
                           p: 0,
                           '&:hover': {
                             bgcolor: 'transparent',
@@ -405,7 +406,7 @@ function ProductValues() {
                           }
                         }}
                       >
-                        Ver equipos para {item.title.split('&')[0].trim()}
+                        Visitar Tienda
                       </Button>
                     </Card>
                   )
@@ -731,7 +732,7 @@ function ProductValues() {
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
                       <WarningAmberIcon sx={{ color: '#f59e0b', fontSize: 30 }} />
                       <Typography variant="h6" sx={{ fontWeight: 800, color: '#ffffff' }}>
-                        Reglas de Oro del Piloto & Explotador en Colombia
+                        Requisitos Esenciales de Operación UAS en Colombia
                       </Typography>
                     </Box>
 
