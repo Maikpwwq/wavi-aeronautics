@@ -35,9 +35,11 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
 import PolicyIcon from '@mui/icons-material/Policy'
 import VerifiedIcon from '@mui/icons-material/Verified'
-import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
+import BlockIcon from '@mui/icons-material/Block'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew'
+import ReportProblemIcon from '@mui/icons-material/ReportProblem'
 import LabelImportantIcon from '@mui/icons-material/LabelImportant'
+import ShieldIcon from '@mui/icons-material/Shield'
 
 import withRoot from '@/modules/withRoot'
 
@@ -129,7 +131,7 @@ const OPERATIONAL_RANGES = [
     title: 'EVLOS (Extended Visual Line of Sight)',
     badge: 'Hasta 3 km',
     badgeBg: '#8b5cf6',
-    desc: 'Línea de vista extendida utilizando observadores visuales capacitados enlazados por radio cada 750 metros.'
+    desc: 'Línea de vista extendida utilizando observadores visuales capacitados enlazados por comunicación en tiempo real cada 750 metros.'
   },
   {
     title: 'BVLOS (Beyond Visual Line of Sight)',
@@ -486,7 +488,7 @@ function ProductValues() {
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
                         <CheckCircleIcon sx={{ fontSize: 20, color: '#16a34a', mt: 0.2, flexShrink: 0 }} />
                         <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
-                          <strong>Registro en el RUAS:</strong> Obligatorio registrar el dron ante el <em>Registro Único de Aeronaves No Tripuladas</em> de Aerocivil para equipos de más de 250 g hasta 25 kg.
+                          <strong>Registro en el RUAS:</strong> Obligatorio registrar el dron ante el <em>Registro Único de Aeronaves No Tripuladas</em> de la Aerocivil para equipos de más de 250 g hasta 25 kg.
                         </Typography>
                       </Box>
 
@@ -501,6 +503,13 @@ function ProductValues() {
                         <CheckCircleIcon sx={{ fontSize: 20, color: '#16a34a', mt: 0.2, flexShrink: 0 }} />
                         <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
                           <strong>Alcance VLOS:</strong> Vuelo en línea de vista visual permanente hasta <strong>750 metros</strong> de distancia y altura máxima de <strong>120 metros (400 ft) AGL</strong>.
+                        </Typography>
+                      </Box>
+
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
+                        <CheckCircleIcon sx={{ fontSize: 20, color: '#16a34a', mt: 0.2, flexShrink: 0 }} />
+                        <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
+                          <strong>Prohibición sobre Concentraciones de Personas:</strong> <u>Prohibición estricta</u> de volar sobre concentraciones de personas al aire libre, eventos masivos y zonas urbanas congestionadas, respetando la privacidad ciudadana.
                         </Typography>
                       </Box>
 
@@ -588,9 +597,30 @@ function ProductValues() {
 
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
                         <CheckCircleIcon sx={{ fontSize: 20, color: '#ea580c', mt: 0.2, flexShrink: 0 }} />
-                        <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
-                          <strong>Certificación CIAC:</strong> El piloto al mando debe contar con certificado de idoneidad emitido por un <em>Centro de Instrucción Aeronáutica Civil (CIAC)</em> avalado por la UAEAC.
-                        </Typography>
+                        <Box>
+                          <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
+                            <strong>Certificación CIAC:</strong> El piloto al mando debe contar con certificado de idoneidad emitido por un <em>Centro de Instrucción Aeronáutico (CIAC)</em> avalado por la Aeronáutica Civil (UAEAC).
+                          </Typography>
+                          <Box
+                            component="a"
+                            href="https://www.aerocivil.gov.co/autoridad_aeronautica/publicaciones/3738/centros-instruccion-entrenamiento/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            sx={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: 0.5,
+                              mt: 0.5,
+                              fontSize: '0.78rem',
+                              fontWeight: 800,
+                              color: '#ea580c',
+                              textDecoration: 'underline',
+                              '&:hover': { color: '#c2410c' }
+                            }}
+                          >
+                            Ver CIAC autorizados por Aerocivil <OpenInNewIcon sx={{ fontSize: 13 }} />
+                          </Box>
+                        </Box>
                       </Box>
 
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
@@ -603,7 +633,7 @@ function ProductValues() {
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
                         <CheckCircleIcon sx={{ fontSize: 20, color: '#ea580c', mt: 0.2, flexShrink: 0 }} />
                         <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
-                          <strong>Póliza RCE:</strong> Obligatorio contar con póliza de <em>Responsabilidad Civil Extendida (RCE)</em> que ampare daños a terceros. Se pueden solicitar permisos por un solo día o anuales.
+                          <strong>Póliza RCE:</strong> Obligatorio contar con póliza de <em>Responsabilidad Civil Extendida (RCE)</em> que ampare daños a terceros. Se pueden solicitar pólizas y permisos por periodos flexibles que van desde un solo día hasta pólizas anuales.
                         </Typography>
                       </Box>
 
@@ -675,7 +705,7 @@ function ProductValues() {
                 </Box>
               </Box>
 
-              {/* Golden Rules Banner & Sanciones */}
+              {/* Golden Rules Banner (Seguridad Operacional) */}
               <Card
                 elevation={0}
                 sx={{
@@ -684,7 +714,8 @@ function ProductValues() {
                   bgcolor: '#0f172a',
                   color: '#ffffff',
                   boxShadow: '0 12px 32px rgba(15, 23, 42, 0.25)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)'
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  mb: 4
                 }}
               >
                 <Box
@@ -704,25 +735,25 @@ function ProductValues() {
                       </Typography>
                     </Box>
 
-                    <Stack spacing={1} sx={{ mt: 1.5, mb: 2.5 }}>
-                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+                    <Stack spacing={1.5} sx={{ mt: 2, mb: 2.5 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
                         <LabelImportantIcon sx={{ color: '#38bdf8', fontSize: 18, mt: 0.3, flexShrink: 0 }} />
                         <Typography variant="body2" sx={{ color: '#cbd5e1', lineHeight: 1.5 }}>
-                          <strong>Pegatina de Identificación Obligatoria:</strong> Tras registrar el dron en el RUAS, se debe adherir una <u>pegatina física con el identificador asignado</u> y enviar evidencia fotográfica por correo a Aerocivil para obtener la aprobación definitiva.
+                          <strong>Pegatina de Identificación Obligatoria:</strong> Luego de registrar el dron en el RUAS, se debe colocar una <u>pegatina física con el identificador asignado</u> y enviar correo de evidencia fotográfica a la Aerocivil para que sea oficialmente aprobado.
                         </Typography>
                       </Box>
 
-                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
                         <LabelImportantIcon sx={{ color: '#38bdf8', fontSize: 18, mt: 0.3, flexShrink: 0 }} />
                         <Typography variant="body2" sx={{ color: '#cbd5e1', lineHeight: 1.5 }}>
-                          <strong>Visor Geográfico Aerocivil:</strong> Consulta permanente de zonas prohibidas, restringidas y helipuertos antes de encender el radiocontrol.
+                          <strong>Póliza RCE Vigente:</strong> Toda operación que represente riesgo o actividad comercial debe ampararse con póliza de <u>Responsabilidad Civil Extendida (RCE)</u> para daños a terceros en superficie.
                         </Typography>
                       </Box>
 
-                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
                         <LabelImportantIcon sx={{ color: '#38bdf8', fontSize: 18, mt: 0.3, flexShrink: 0 }} />
                         <Typography variant="body2" sx={{ color: '#cbd5e1', lineHeight: 1.5 }}>
-                          <strong>Régimen Sancionatorio:</strong> Las infracciones de orden técnico y administrativo conllevan <u>multas económicas severas, inmovilización de equipos y retiro del certificado de idoneidad y explotación</u>.
+                          <strong>Visor Aerocivil & Privacidad:</strong> Validación previa de zonas en el <em>Visor Geográfico de Aerocivil</em>, respeto al límite de 120m AGL, distancia de 9 km a aeródromos y <u>no volar sobre concentraciones de personas</u>.
                         </Typography>
                       </Box>
                     </Stack>
@@ -770,6 +801,91 @@ function ProductValues() {
                   </Box>
                 </Box>
               </Card>
+
+              {/* DEDICATED SECTION: Régimen Sancionatorio & Infracciones */}
+              <Paper
+                elevation={0}
+                sx={{
+                  p: { xs: 3, sm: 4 },
+                  borderRadius: 3.5,
+                  border: '2px solid #fca5a5',
+                  bgcolor: '#ffffff',
+                  background: 'linear-gradient(180deg, rgba(254, 242, 242, 0.7) 0%, #ffffff 100%)',
+                  boxShadow: '0 8px 24px rgba(239, 68, 68, 0.08)'
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, flexWrap: 'wrap', gap: 1 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                    <Box
+                      sx={{
+                        width: 44,
+                        height: 44,
+                        borderRadius: '12px',
+                        bgcolor: 'rgba(239, 68, 68, 0.12)',
+                        color: '#dc2626',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      <ReportProblemIcon sx={{ fontSize: 26 }} />
+                    </Box>
+                    <Box>
+                      <Typography variant="h6" sx={{ fontWeight: 900, color: '#991b1b' }}>
+                        Régimen Sancionatorio & Infracciones Aeronáuticas
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: '#b91c1c', fontWeight: 700 }}>
+                        Consecuencias legales por incumplimiento del RAC 100 (UAEAC)
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Chip
+                    icon={<BlockIcon sx={{ fontSize: '0.9rem !important', color: '#dc2626 !important' }} />}
+                    label="Cumplimiento Legal Obligatorio"
+                    size="small"
+                    sx={{ fontWeight: 800, bgcolor: 'rgba(239, 68, 68, 0.1)', color: '#b91c1c', border: '1px solid #fca5a5' }}
+                  />
+                </Box>
+
+                <Typography variant="body2" sx={{ color: '#475569', lineHeight: 1.6, mb: 2.5 }}>
+                  El uso indebido del espacio aéreo o la operación no autorizada constituye una <strong>infracción de orden técnico y administrativo</strong> supervisada por la Aeronáutica Civil y la Policía Nacional:
+                </Typography>
+
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+                    gap: 2
+                  }}
+                >
+                  <Box sx={{ p: 2, bgcolor: '#ffffff', borderRadius: 2.5, border: '1px solid #fecaca' }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#dc2626', mb: 0.5, display: 'flex', alignItems: 'center', gap: 0.75 }}>
+                      <BlockIcon sx={{ fontSize: 18 }} /> Inmovilización y Decomiso
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: '#64748b', lineHeight: 1.4, display: 'block' }}>
+                      Retención preventiva de la aeronave y equipo de radiocontrol por operar en zonas restringidas, sobre aglomeraciones o sin RUAS.
+                    </Typography>
+                  </Box>
+
+                  <Box sx={{ p: 2, bgcolor: '#ffffff', borderRadius: 2.5, border: '1px solid #fecaca' }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#dc2626', mb: 0.5, display: 'flex', alignItems: 'center', gap: 0.75 }}>
+                      <GavelIcon sx={{ fontSize: 18 }} /> Multas Económicas
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: '#64748b', lineHeight: 1.4, display: 'block' }}>
+                      Sanciones monetarias tasadas en salarios mínimos legales vigentes por volar sin permiso en espacio controlado o lucrarse sin acreditación.
+                    </Typography>
+                  </Box>
+
+                  <Box sx={{ p: 2, bgcolor: '#ffffff', borderRadius: 2.5, border: '1px solid #fecaca' }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#dc2626', mb: 0.5, display: 'flex', alignItems: 'center', gap: 0.75 }}>
+                      <ShieldIcon sx={{ fontSize: 18 }} /> Cancelación de Certificados
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: '#64748b', lineHeight: 1.4, display: 'block' }}>
+                      Suspensión temporal o revocación definitiva del Certificado de Idoneidad de Piloto y de la acreditación como Explotador UAS.
+                    </Typography>
+                  </Box>
+                </Box>
+              </Paper>
             </motion.div>
           )}
         </AnimatePresence>
