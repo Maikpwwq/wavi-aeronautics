@@ -5,9 +5,7 @@ import Link from 'next/link'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
-import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
 import Paper from '@mui/material/Paper'
@@ -15,7 +13,6 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Divider from '@mui/material/Divider'
 import Stack from '@mui/material/Stack'
-import Tooltip from '@mui/material/Tooltip'
 import { motion, AnimatePresence } from 'framer-motion'
 
 // Icons
@@ -281,7 +278,7 @@ function ProductValues() {
           </Tabs>
         </Box>
 
-        {/* TAB 0: Use Cases Grid */}
+        {/* TAB 0: Use Cases Grid (3x2 on desktop md) */}
         <AnimatePresence mode="wait">
           {activeTab === 0 && (
             <motion.div
@@ -291,117 +288,127 @@ function ProductValues() {
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
             >
-              <Grid container spacing={3}>
-                {USE_CASES.map((item, index) => {
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: {
+                    xs: '1fr',
+                    sm: 'repeat(2, 1fr)',
+                    md: 'repeat(3, 1fr)'
+                  },
+                  gap: { xs: 2.5, sm: 3 },
+                  alignItems: 'stretch'
+                }}
+              >
+                {USE_CASES.map((item) => {
                   const Icon = item.icon
                   return (
-                    <Grid item xs={12} sm={6} md={4} key={item.id}>
-                      <Card
-                        elevation={0}
+                    <Card
+                      key={item.id}
+                      elevation={0}
+                      sx={{
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        borderRadius: 3.5,
+                        border: '1px solid #e2e8f0',
+                        bgcolor: '#ffffff',
+                        background: item.bgGradient,
+                        p: { xs: 2.5, sm: 3 },
+                        position: 'relative',
+                        overflow: 'hidden',
+                        transition: 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
+                        '&:hover': {
+                          transform: 'translateY(-6px)',
+                          boxShadow: '0 16px 32px rgba(0, 0, 0, 0.08)',
+                          borderColor: item.color
+                        }
+                      }}
+                    >
+                      <Box>
+                        {/* Header with Icon & Category */}
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+                          <Box
+                            sx={{
+                              width: 48,
+                              height: 48,
+                              borderRadius: '12px',
+                              bgcolor: '#ffffff',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              color: item.color,
+                              boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
+                              border: '1px solid rgba(0,0,0,0.04)'
+                            }}
+                          >
+                            <Icon sx={{ fontSize: 28 }} />
+                          </Box>
+                          <Chip
+                            label={item.category}
+                            size="small"
+                            sx={{
+                              fontWeight: 700,
+                              fontSize: '0.7rem',
+                              bgcolor: '#ffffff',
+                              color: item.color,
+                              border: `1px solid ${item.color}40`
+                            }}
+                          />
+                        </Box>
+
+                        {/* Title & Description */}
+                        <Typography variant="h6" sx={{ fontWeight: 800, color: '#0f172a', mb: 1, lineHeight: 1.3 }}>
+                          {item.title}
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: '#475569', lineHeight: 1.6, mb: 2 }}>
+                          {item.description}
+                        </Typography>
+
+                        {/* Recommended Gear */}
+                        <Box
+                          sx={{
+                            p: 1.5,
+                            bgcolor: 'rgba(255, 255, 255, 0.8)',
+                            backdropFilter: 'blur(4px)',
+                            borderRadius: 2,
+                            border: '1px solid rgba(226, 232, 240, 0.8)',
+                            mb: 2.5
+                          }}
+                        >
+                          <Typography variant="caption" sx={{ fontWeight: 800, color: '#334155', display: 'block', mb: 0.5 }}>
+                            🛠 Equipamiento Recomendado:
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: '#64748b', lineHeight: 1.4, display: 'block' }}>
+                            {item.recommendedGear}
+                          </Typography>
+                        </Box>
+                      </Box>
+
+                      {/* Action Link */}
+                      <Button
+                        component={Link}
+                        href={item.link}
+                        endIcon={<ArrowForwardIcon />}
                         sx={{
-                          height: '100%',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'space-between',
-                          borderRadius: 3.5,
-                          border: '1px solid #e2e8f0',
-                          bgcolor: '#ffffff',
-                          background: item.bgGradient,
-                          p: { xs: 2.5, sm: 3 },
-                          position: 'relative',
-                          overflow: 'hidden',
-                          transition: 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
+                          alignSelf: 'flex-start',
+                          textTransform: 'none',
+                          fontWeight: 800,
+                          color: item.color,
+                          p: 0,
                           '&:hover': {
-                            transform: 'translateY(-6px)',
-                            boxShadow: `0 16px 32px rgba(0, 0, 0, 0.08)`,
-                            borderColor: item.color
+                            bgcolor: 'transparent',
+                            textDecoration: 'underline'
                           }
                         }}
                       >
-                        <Box>
-                          {/* Header with Icon & Category */}
-                          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
-                            <Box
-                              sx={{
-                                width: 48,
-                                height: 48,
-                                borderRadius: '12px',
-                                bgcolor: '#ffffff',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: item.color,
-                                boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
-                                border: '1px solid rgba(0,0,0,0.04)'
-                              }}
-                            >
-                              <Icon sx={{ fontSize: 28 }} />
-                            </Box>
-                            <Chip
-                              label={item.category}
-                              size="small"
-                              sx={{
-                                fontWeight: 700,
-                                fontSize: '0.7rem',
-                                bgcolor: '#ffffff',
-                                color: item.color,
-                                border: `1px solid ${item.color}40`
-                              }}
-                            />
-                          </Box>
-
-                          {/* Title & Description */}
-                          <Typography variant="h6" sx={{ fontWeight: 800, color: '#0f172a', mb: 1, lineHeight: 1.3 }}>
-                            {item.title}
-                          </Typography>
-                          <Typography variant="body2" sx={{ color: '#475569', lineHeight: 1.6, mb: 2 }}>
-                            {item.description}
-                          </Typography>
-
-                          {/* Recommended Gear */}
-                          <Box
-                            sx={{
-                              p: 1.5,
-                              bgcolor: 'rgba(255, 255, 255, 0.8)',
-                              backdropFilter: 'blur(4px)',
-                              borderRadius: 2,
-                              border: '1px solid rgba(226, 232, 240, 0.8)',
-                              mb: 2.5
-                            }}
-                          >
-                            <Typography variant="caption" sx={{ fontWeight: 800, color: '#334155', display: 'block', mb: 0.5 }}>
-                              🛠 Equipamiento Recomendado:
-                            </Typography>
-                            <Typography variant="caption" sx={{ color: '#64748b', lineHeight: 1.4, display: 'block' }}>
-                              {item.recommendedGear}
-                            </Typography>
-                          </Box>
-                        </Box>
-
-                        {/* Action Link */}
-                        <Button
-                          component={Link}
-                          href={item.link}
-                          endIcon={<ArrowForwardIcon />}
-                          sx={{
-                            alignSelf: 'flex-start',
-                            textTransform: 'none',
-                            fontWeight: 800,
-                            color: item.color,
-                            p: 0,
-                            '&:hover': {
-                              bgcolor: 'transparent',
-                              textDecoration: 'underline'
-                            }
-                          }}
-                        >
-                          Ver equipos para {item.title.split('&')[0].trim()}
-                        </Button>
-                      </Card>
-                    </Grid>
+                        Ver equipos para {item.title.split('&')[0].trim()}
+                      </Button>
+                    </Card>
                   )
                 })}
-              </Grid>
+              </Box>
             </motion.div>
           )}
 
@@ -414,149 +421,164 @@ function ProductValues() {
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
             >
-              <Grid container spacing={4}>
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: {
+                    xs: '1fr',
+                    md: 'repeat(2, 1fr)'
+                  },
+                  gap: { xs: 3, sm: 4 },
+                  mb: 4
+                }}
+              >
                 {RAC100_PILLARS.map((pillar, idx) => {
                   const PillarIcon = pillar.icon
                   return (
-                    <Grid item xs={12} md={6} key={idx}>
-                      <Paper
-                        elevation={0}
-                        sx={{
-                          p: { xs: 3, sm: 4 },
-                          borderRadius: 3.5,
-                          border: '1px solid #e2e8f0',
-                          bgcolor: '#ffffff',
-                          height: '100%',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'space-between',
-                          boxShadow: '0 8px 24px rgba(0,0,0,0.04)'
-                        }}
-                      >
-                        <Box>
-                          {/* Header */}
-                          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                              <Box
-                                sx={{
-                                  width: 44,
-                                  height: 44,
-                                  borderRadius: '10px',
-                                  bgcolor: `${pillar.badgeColor}15`,
-                                  color: pillar.badgeColor,
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center'
-                                }}
-                              >
-                                <PillarIcon sx={{ fontSize: 24 }} />
-                              </Box>
-                              <Typography variant="h6" sx={{ fontWeight: 800, color: '#0f172a' }}>
-                                {pillar.title}
-                              </Typography>
-                            </Box>
-                            <Chip
-                              label={pillar.badge}
-                              size="small"
+                    <Paper
+                      key={idx}
+                      elevation={0}
+                      sx={{
+                        p: { xs: 3, sm: 4 },
+                        borderRadius: 3.5,
+                        border: '1px solid #e2e8f0',
+                        bgcolor: '#ffffff',
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        boxShadow: '0 8px 24px rgba(0,0,0,0.04)'
+                      }}
+                    >
+                      <Box>
+                        {/* Header */}
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                            <Box
                               sx={{
-                                fontWeight: 800,
+                                width: 44,
+                                height: 44,
+                                borderRadius: '10px',
                                 bgcolor: `${pillar.badgeColor}15`,
                                 color: pillar.badgeColor,
-                                border: `1px solid ${pillar.badgeColor}40`
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
                               }}
-                            />
+                            >
+                              <PillarIcon sx={{ fontSize: 24 }} />
+                            </Box>
+                            <Typography variant="h6" sx={{ fontWeight: 800, color: '#0f172a' }}>
+                              {pillar.title}
+                            </Typography>
                           </Box>
-
-                          <Divider sx={{ mb: 2.5 }} />
-
-                          {/* Rule points */}
-                          <Stack spacing={1.75}>
-                            {pillar.rules.map((rule, rIdx) => (
-                              <Box key={rIdx} sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
-                                <CheckCircleIcon sx={{ fontSize: 18, color: pillar.badgeColor, mt: 0.3, flexShrink: 0 }} />
-                                <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
-                                  {rule}
-                                </Typography>
-                              </Box>
-                            ))}
-                          </Stack>
+                          <Chip
+                            label={pillar.badge}
+                            size="small"
+                            sx={{
+                              fontWeight: 800,
+                              bgcolor: `${pillar.badgeColor}15`,
+                              color: pillar.badgeColor,
+                              border: `1px solid ${pillar.badgeColor}40`
+                            }}
+                          />
                         </Box>
 
-                        <Box sx={{ mt: 3, pt: 2, borderTop: '1px dashed #e2e8f0' }}>
-                          <Typography variant="caption" sx={{ color: '#64748b', display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                            <AssignmentTurnedInIcon sx={{ fontSize: 16, color: '#00aCe4' }} /> Fuente oficial: Unidad Administrativa Especial de Aeronáutica Civil (UAEAC).
-                          </Typography>
-                        </Box>
-                      </Paper>
-                    </Grid>
+                        <Divider sx={{ mb: 2.5 }} />
+
+                        {/* Rule points */}
+                        <Stack spacing={1.75}>
+                          {pillar.rules.map((rule, rIdx) => (
+                            <Box key={rIdx} sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
+                              <CheckCircleIcon sx={{ fontSize: 18, color: pillar.badgeColor, mt: 0.3, flexShrink: 0 }} />
+                              <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
+                                {rule}
+                              </Typography>
+                            </Box>
+                          ))}
+                        </Stack>
+                      </Box>
+
+                      <Box sx={{ mt: 3, pt: 2, borderTop: '1px dashed #e2e8f0' }}>
+                        <Typography variant="caption" sx={{ color: '#64748b', display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                          <AssignmentTurnedInIcon sx={{ fontSize: 16, color: '#00aCe4' }} /> Fuente oficial: Unidad Administrativa Especial de Aeronáutica Civil (UAEAC).
+                        </Typography>
+                      </Box>
+                    </Paper>
                   )
                 })}
+              </Box>
 
-                {/* Golden Rules Banner for Pilot Safety */}
-                <Grid item xs={12}>
-                  <Card
-                    elevation={0}
-                    sx={{
-                      p: { xs: 3, sm: 4 },
-                      borderRadius: 3.5,
-                      bgcolor: '#0f172a',
-                      color: '#ffffff',
-                      boxShadow: '0 12px 32px rgba(15, 23, 42, 0.25)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)'
-                    }}
-                  >
-                    <Grid container spacing={3} alignItems="center">
-                      <Grid item xs={12} md={8}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
-                          <WarningAmberIcon sx={{ color: '#f59e0b', fontSize: 28 }} />
-                          <Typography variant="h6" sx={{ fontWeight: 800, color: '#ffffff' }}>
-                            Reglas de Oro para Volar Seguro en Colombia
-                          </Typography>
-                        </Box>
-                        <Typography variant="body2" sx={{ color: '#94a3b8', lineHeight: 1.6, mb: 2 }}>
-                          1. Nunca vueles sobre aglomeraciones o zonas residenciales sin permiso.<br />
-                          2. Mantén contacto visual directo con tu aeronave en todo momento.<br />
-                          3. Respeta el límite de altura de 120 metros AGL.<br />
-                          4. No operes bajo los efectos del alcohol o sustancias psicoactivas.
-                        </Typography>
-                        <Chip
-                          label="Cumplimiento RUAS obligatorio para drones >250g"
-                          size="small"
-                          sx={{
-                            fontWeight: 800,
-                            bgcolor: 'rgba(245, 158, 11, 0.15)',
-                            color: '#fbbf24',
-                            border: '1px solid rgba(245, 158, 11, 0.4)'
-                          }}
-                        />
-                      </Grid>
+              {/* Golden Rules Banner for Pilot Safety */}
+              <Card
+                elevation={0}
+                sx={{
+                  p: { xs: 3, sm: 4 },
+                  borderRadius: 3.5,
+                  bgcolor: '#0f172a',
+                  color: '#ffffff',
+                  boxShadow: '0 12px 32px rgba(15, 23, 42, 0.25)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)'
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: { xs: 'column', md: 'row' },
+                    alignItems: { xs: 'flex-start', md: 'center' },
+                    justifyContent: 'space-between',
+                    gap: 3
+                  }}
+                >
+                  <Box sx={{ flex: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
+                      <WarningAmberIcon sx={{ color: '#f59e0b', fontSize: 28 }} />
+                      <Typography variant="h6" sx={{ fontWeight: 800, color: '#ffffff' }}>
+                        Reglas de Oro para Volar Seguro en Colombia
+                      </Typography>
+                    </Box>
+                    <Typography variant="body2" sx={{ color: '#94a3b8', lineHeight: 1.6, mb: 2 }}>
+                      1. Nunca vueles sobre aglomeraciones o zonas residenciales sin permiso.<br />
+                      2. Mantén contacto visual directo con tu aeronave en todo momento.<br />
+                      3. Respeta el límite de altura de 120 metros AGL.<br />
+                      4. No operes bajo los efectos del alcohol o sustancias psicoactivas.
+                    </Typography>
+                    <Chip
+                      label="Cumplimiento RUAS obligatorio para drones >250g"
+                      size="small"
+                      sx={{
+                        fontWeight: 800,
+                        bgcolor: 'rgba(245, 158, 11, 0.15)',
+                        color: '#fbbf24',
+                        border: '1px solid rgba(245, 158, 11, 0.4)'
+                      }}
+                    />
+                  </Box>
 
-                      <Grid item xs={12} md={4} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
-                        <Button
-                          component={Link}
-                          href="/tienda/escuela"
-                          variant="contained"
-                          color="primary"
-                          startIcon={<SchoolIcon />}
-                          sx={{
-                            px: 3,
-                            py: 1.25,
-                            borderRadius: 2.5,
-                            fontWeight: 800,
-                            textTransform: 'none',
-                            bgcolor: '#00aCe4',
-                            color: '#ffffff',
-                            boxShadow: '0 4px 16px rgba(0, 172, 228, 0.4)',
-                            '&:hover': { bgcolor: '#0095c7' }
-                          }}
-                        >
-                          Aprende con Escuela FPV
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  </Card>
-                </Grid>
-              </Grid>
+                  <Box sx={{ flexShrink: 0 }}>
+                    <Button
+                      component={Link}
+                      href="/tienda/escuela"
+                      variant="contained"
+                      color="primary"
+                      startIcon={<SchoolIcon />}
+                      sx={{
+                        px: 3,
+                        py: 1.25,
+                        borderRadius: 2.5,
+                        fontWeight: 800,
+                        textTransform: 'none',
+                        bgcolor: '#00aCe4',
+                        color: '#ffffff',
+                        boxShadow: '0 4px 16px rgba(0, 172, 228, 0.4)',
+                        '&:hover': { bgcolor: '#0095c7' }
+                      }}
+                    >
+                      Aprende con Escuela FPV
+                    </Button>
+                  </Box>
+                </Box>
+              </Card>
             </motion.div>
           )}
         </AnimatePresence>
