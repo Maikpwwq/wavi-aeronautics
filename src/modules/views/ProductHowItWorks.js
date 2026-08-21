@@ -13,12 +13,12 @@ import RocketLaunchIcon from '@mui/icons-material/RocketLaunch'
 import SpeedIcon from '@mui/icons-material/Speed'
 import BuildCircleIcon from '@mui/icons-material/BuildCircle'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import withRoot from '@/modules/withRoot'
 
 const VALUE_PROPOSITIONS = [
   {
-    step: '01',
     title: 'Tendencias & Vanguardia FPV',
     description: 'Acceso prioritario a los últimos lanzamientos de la industria: sistemas HD digitales, ecosistemas ELRS, radiocontroles de alta precisión y tecnología VToL.',
     icon: <RocketLaunchIcon sx={{ fontSize: 32 }} />,
@@ -27,16 +27,14 @@ const VALUE_PROPOSITIONS = [
     highlights: ['Transmisión digital HD', 'Compatibilidad garantizada', 'Lanzamientos globales']
   },
   {
-    step: '02',
     title: 'Optimización de tu Tiempo',
     description: 'Configuraciones listas para volar (RTF/BNF), asesoría técnica experta y soporte integral para que te concentres exclusivamente en volar o producir sin demoras.',
     icon: <SpeedIcon sx={{ fontSize: 32 }} />,
-    color: '#ea580c',
-    badgeBg: 'rgba(234, 88, 12, 0.1)',
+    color: '#9333ea',
+    badgeBg: 'rgba(147, 51, 234, 0.1)',
     highlights: ['Equipos pre-configurados', 'Despliegue inmediato', 'Asesoría especializada']
   },
   {
-    step: '03',
     title: 'Taller Técnico & Mantenimiento',
     description: 'Servicio de mantenimiento preventivo y correctivo, soldadura especializada de microelectrónica, calibración de sensores y repuestos originales con garantía.',
     icon: <BuildCircleIcon sx={{ fontSize: 32 }} />,
@@ -107,7 +105,7 @@ function ProductHowItWorks() {
           </Typography>
         </Box>
 
-        {/* Value Cards Grid (3x1) */}
+        {/* Value Cards Grid (3x1) without numbers */}
         <Box
           sx={{
             display: 'grid',
@@ -116,9 +114,9 @@ function ProductHowItWorks() {
             mb: { xs: 6, md: 8 }
           }}
         >
-          {VALUE_PROPOSITIONS.map((item) => (
+          {VALUE_PROPOSITIONS.map((item, idx) => (
             <Paper
-              key={item.step}
+              key={idx}
               elevation={0}
               sx={{
                 p: { xs: 3.5, sm: 4 },
@@ -137,8 +135,8 @@ function ProductHowItWorks() {
                 }
               }}
             >
-              {/* Header: Step Number & Icon */}
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+              {/* Header: Icon Only (Numbers Removed) */}
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                 <Box
                   sx={{
                     width: 56,
@@ -154,17 +152,6 @@ function ProductHowItWorks() {
                 >
                   {item.icon}
                 </Box>
-                <Typography
-                  variant="h5"
-                  sx={{
-                    fontWeight: 900,
-                    color: '#94a3b8',
-                    letterSpacing: '1px',
-                    fontFamily: 'monospace'
-                  }}
-                >
-                  {item.step}
-                </Typography>
               </Box>
 
               {/* Title */}
@@ -197,8 +184,8 @@ function ProductHowItWorks() {
 
               {/* Bullet highlights */}
               <Stack spacing={1} sx={{ pt: 2, borderTop: '1px solid #f1f5f9' }}>
-                {item.highlights.map((highlight, idx) => (
-                  <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                {item.highlights.map((highlight, hIdx) => (
+                  <Box key={hIdx} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <CheckCircleOutlineIcon sx={{ fontSize: 16, color: item.color }} />
                     <Typography variant="caption" sx={{ fontWeight: 700, color: '#334155' }}>
                       {highlight}
@@ -226,7 +213,7 @@ function ProductHowItWorks() {
               endIcon={<ArrowForwardIcon />}
               sx={{
                 background: 'linear-gradient(135deg, #00aCe4 0%, #0284c7 100%)',
-                color: '#ffffff',
+                color: '#ffffff !important',
                 fontWeight: 800,
                 fontSize: '1rem',
                 px: 4,
@@ -244,29 +231,40 @@ function ProductHowItWorks() {
               Explorar Catálogo de Equipos
             </Button>
 
+            {/* High-contrast 'Crear Cuenta de Piloto' button */}
             <Button
               component={Link}
               href="/auth/sign-up"
               variant="outlined"
               size="large"
+              startIcon={<PersonAddAltIcon sx={{ color: '#0284c7 !important' }} />}
               sx={{
-                borderColor: '#cbd5e1',
-                color: '#334155',
-                fontWeight: 700,
+                border: '2px solid #0284c7 !important',
+                color: '#0284c7 !important',
+                bgcolor: '#ffffff !important',
+                fontWeight: 800,
                 fontSize: '1rem',
                 px: 3.5,
-                py: 1.5,
+                py: 1.4,
                 borderRadius: 3,
                 textTransform: 'none',
-                bgcolor: '#ffffff',
+                boxShadow: '0 2px 8px rgba(2, 132, 199, 0.08)',
+                transition: 'all 0.25s ease',
+                '& .MuiTypography-root, & span': {
+                  color: '#0284c7 !important'
+                },
                 '&:hover': {
-                  borderColor: '#0284c7',
-                  color: '#0284c7',
-                  bgcolor: 'rgba(2, 132, 199, 0.04)'
+                  border: '2px solid #0284c7 !important',
+                  bgcolor: 'rgba(2, 132, 199, 0.08) !important',
+                  color: '#0369a1 !important',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 6px 16px rgba(2, 132, 199, 0.18)'
                 }
               }}
             >
-              Crear Cuenta de Piloto
+              <Typography component="span" sx={{ fontWeight: 800, fontSize: '1rem', color: 'inherit !important' }}>
+                Crear Cuenta de Piloto
+              </Typography>
             </Button>
           </Stack>
         </Box>
