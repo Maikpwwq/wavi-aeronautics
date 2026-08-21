@@ -537,20 +537,20 @@ function ProductValues() {
                   </Box>
                 </Paper>
 
-                {/* 2. Categoría Específica */}
+                {/* 2. Categoría Específica (Blue Theme) */}
                 <Paper
                   elevation={0}
                   sx={{
                     p: { xs: 3, sm: 4 },
                     borderRadius: 3.5,
-                    border: '2px solid #fdba74',
+                    border: '2px solid #7dd3fc',
                     bgcolor: '#ffffff',
-                    background: 'linear-gradient(180deg, rgba(255, 247, 237, 0.6) 0%, #ffffff 100%)',
+                    background: 'linear-gradient(180deg, rgba(240, 249, 255, 0.7) 0%, #ffffff 100%)',
                     height: '100%',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
-                    boxShadow: '0 8px 24px rgba(234, 88, 12, 0.06)'
+                    boxShadow: '0 8px 24px rgba(2, 132, 199, 0.06)'
                   }}
                 >
                   <Box>
@@ -561,8 +561,8 @@ function ProductValues() {
                             width: 46,
                             height: 46,
                             borderRadius: '12px',
-                            bgcolor: 'rgba(234, 88, 12, 0.15)',
-                            color: '#ea580c',
+                            bgcolor: 'rgba(2, 132, 199, 0.15)',
+                            color: '#0284c7',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center'
@@ -574,7 +574,7 @@ function ProductValues() {
                           <Typography variant="h6" sx={{ fontWeight: 900, color: '#0f172a', lineHeight: 1.2 }}>
                             Categoría Específica
                           </Typography>
-                          <Typography variant="caption" sx={{ color: '#ea580c', fontWeight: 800 }}>
+                          <Typography variant="caption" sx={{ color: '#0284c7', fontWeight: 800 }}>
                             Vuelo Comercial & Profesional (Con Lucro)
                           </Typography>
                         </Box>
@@ -582,7 +582,7 @@ function ProductValues() {
                       <Chip
                         label="Comercial / Lucro"
                         size="small"
-                        sx={{ fontWeight: 800, bgcolor: 'rgba(234, 88, 12, 0.12)', color: '#c2410c', border: '1px solid #fdba74' }}
+                        sx={{ fontWeight: 800, bgcolor: 'rgba(2, 132, 199, 0.12)', color: '#0369a1', border: '1px solid #7dd3fc' }}
                       />
                     </Box>
 
@@ -590,14 +590,14 @@ function ProductValues() {
 
                     <Stack spacing={2}>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
-                        <CheckCircleIcon sx={{ fontSize: 20, color: '#ea580c', mt: 0.2, flexShrink: 0 }} />
+                        <CheckCircleIcon sx={{ fontSize: 20, color: '#0284c7', mt: 0.2, flexShrink: 0 }} />
                         <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
                           <strong>Explotador de UAS:</strong> Quien se lucre debe estar acreditado formalmente como <strong>Explotador de UAS</strong> ante Aerocivil (no basta con ser solo piloto).
                         </Typography>
                       </Box>
 
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
-                        <CheckCircleIcon sx={{ fontSize: 20, color: '#ea580c', mt: 0.2, flexShrink: 0 }} />
+                        <CheckCircleIcon sx={{ fontSize: 20, color: '#0284c7', mt: 0.2, flexShrink: 0 }} />
                         <Box>
                           <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
                             <strong>Certificación CIAC:</strong> El piloto al mando debe contar con certificado de idoneidad emitido por un <em>Centro de Instrucción Aeronáutico (CIAC)</em> avalado por la Aeronáutica Civil (UAEAC).
@@ -614,9 +614,9 @@ function ProductValues() {
                               mt: 0.5,
                               fontSize: '0.78rem',
                               fontWeight: 800,
-                              color: '#ea580c',
+                              color: '#0284c7',
                               textDecoration: 'underline',
-                              '&:hover': { color: '#c2410c' }
+                              '&:hover': { color: '#0369a1' }
                             }}
                           >
                             Ver CIAC autorizados por Aerocivil <OpenInNewIcon sx={{ fontSize: 13 }} />
@@ -625,28 +625,28 @@ function ProductValues() {
                       </Box>
 
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
-                        <CheckCircleIcon sx={{ fontSize: 20, color: '#ea580c', mt: 0.2, flexShrink: 0 }} />
+                        <CheckCircleIcon sx={{ fontSize: 20, color: '#0284c7', mt: 0.2, flexShrink: 0 }} />
                         <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
                           <strong>Solicitud Permiso de Vuelo:</strong> <u>Requiere solicitud previa de Permiso de Vuelo</u> ante la Aerocivil para cada operación puntual, evento o zona controlada.
                         </Typography>
                       </Box>
 
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
-                        <CheckCircleIcon sx={{ fontSize: 20, color: '#ea580c', mt: 0.2, flexShrink: 0 }} />
+                        <CheckCircleIcon sx={{ fontSize: 20, color: '#0284c7', mt: 0.2, flexShrink: 0 }} />
                         <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
                           <strong>Póliza RCE:</strong> Obligatorio contar con póliza de <em>Responsabilidad Civil Extendida (RCE)</em> que ampare daños a terceros. Se pueden solicitar pólizas y permisos por periodos flexibles que van desde un solo día hasta pólizas anuales.
                         </Typography>
                       </Box>
 
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
-                        <CheckCircleIcon sx={{ fontSize: 20, color: '#ea580c', mt: 0.2, flexShrink: 0 }} />
+                        <CheckCircleIcon sx={{ fontSize: 20, color: '#0284c7', mt: 0.2, flexShrink: 0 }} />
                         <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
                           <strong>Bitácoras de Vuelo & Logbook:</strong> Registro estricto en la <em>Bitácora de Vuelo del Piloto</em> y el <em>Libro de Vuelo de la Aeronave</em> (horas, mantenimiento e inspecciones).
                         </Typography>
                       </Box>
 
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
-                        <CheckCircleIcon sx={{ fontSize: 20, color: '#ea580c', mt: 0.2, flexShrink: 0 }} />
+                        <CheckCircleIcon sx={{ fontSize: 20, color: '#0284c7', mt: 0.2, flexShrink: 0 }} />
                         <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
                           <strong>Flota &gt; 3 Drones:</strong> Si el explotador excede 3 drones, debe registrar y designar ante Aerocivil a un <strong>Jefe de Pilotos UA</strong> y un <strong>Gerente de Seguridad Operacional</strong>.
                         </Typography>
@@ -654,8 +654,8 @@ function ProductValues() {
                     </Stack>
                   </Box>
 
-                  <Box sx={{ mt: 3, pt: 2, borderTop: '1px dashed #fed7aa' }}>
-                    <Typography variant="caption" sx={{ color: '#c2410c', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                  <Box sx={{ mt: 3, pt: 2, borderTop: '1px dashed #bae6fd' }}>
+                    <Typography variant="caption" sx={{ color: '#0369a1', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 0.5 }}>
                       <PolicyIcon sx={{ fontSize: 16 }} /> Requerido para topografía, agricultura, filmación comercial y servicios industriales.
                     </Typography>
                   </Box>
@@ -803,16 +803,16 @@ function ProductValues() {
                 </Box>
               </Card>
 
-              {/* DEDICATED SECTION: Régimen Sancionatorio & Infracciones */}
+              {/* DEDICATED SECTION: Régimen Sancionatorio & Infracciones (Orange Theme) */}
               <Paper
                 elevation={0}
                 sx={{
                   p: { xs: 3, sm: 4 },
                   borderRadius: 3.5,
-                  border: '2px solid #fca5a5',
+                  border: '2px solid #fdba74',
                   bgcolor: '#ffffff',
-                  background: 'linear-gradient(180deg, rgba(254, 242, 242, 0.7) 0%, #ffffff 100%)',
-                  boxShadow: '0 8px 24px rgba(239, 68, 68, 0.08)'
+                  background: 'linear-gradient(180deg, rgba(255, 247, 237, 0.7) 0%, #ffffff 100%)',
+                  boxShadow: '0 8px 24px rgba(234, 88, 12, 0.08)'
                 }}
               >
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, flexWrap: 'wrap', gap: 1 }}>
@@ -822,8 +822,8 @@ function ProductValues() {
                         width: 44,
                         height: 44,
                         borderRadius: '12px',
-                        bgcolor: 'rgba(239, 68, 68, 0.12)',
-                        color: '#dc2626',
+                        bgcolor: 'rgba(234, 88, 12, 0.12)',
+                        color: '#ea580c',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center'
@@ -832,19 +832,19 @@ function ProductValues() {
                       <ReportProblemIcon sx={{ fontSize: 26 }} />
                     </Box>
                     <Box>
-                      <Typography variant="h6" sx={{ fontWeight: 900, color: '#991b1b' }}>
+                      <Typography variant="h6" sx={{ fontWeight: 900, color: '#9a3412' }}>
                         Régimen Sancionatorio & Infracciones Aeronáuticas
                       </Typography>
-                      <Typography variant="caption" sx={{ color: '#b91c1c', fontWeight: 700 }}>
+                      <Typography variant="caption" sx={{ color: '#c2410c', fontWeight: 700 }}>
                         Consecuencias legales por incumplimiento del RAC 100 (UAEAC)
                       </Typography>
                     </Box>
                   </Box>
                   <Chip
-                    icon={<BlockIcon sx={{ fontSize: '0.9rem !important', color: '#dc2626 !important' }} />}
+                    icon={<BlockIcon sx={{ fontSize: '0.9rem !important', color: '#ea580c !important' }} />}
                     label="Cumplimiento Legal Obligatorio"
                     size="small"
-                    sx={{ fontWeight: 800, bgcolor: 'rgba(239, 68, 68, 0.1)', color: '#b91c1c', border: '1px solid #fca5a5' }}
+                    sx={{ fontWeight: 800, bgcolor: 'rgba(234, 88, 12, 0.1)', color: '#c2410c', border: '1px solid #fdba74' }}
                   />
                 </Box>
 
@@ -859,8 +859,8 @@ function ProductValues() {
                     gap: 2
                   }}
                 >
-                  <Box sx={{ p: 2, bgcolor: '#ffffff', borderRadius: 2.5, border: '1px solid #fecaca' }}>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#dc2626', mb: 0.5, display: 'flex', alignItems: 'center', gap: 0.75 }}>
+                  <Box sx={{ p: 2, bgcolor: '#ffffff', borderRadius: 2.5, border: '1px solid #fed7aa' }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#ea580c', mb: 0.5, display: 'flex', alignItems: 'center', gap: 0.75 }}>
                       <BlockIcon sx={{ fontSize: 18 }} /> Inmovilización y Decomiso
                     </Typography>
                     <Typography variant="caption" sx={{ color: '#64748b', lineHeight: 1.4, display: 'block' }}>
@@ -868,8 +868,8 @@ function ProductValues() {
                     </Typography>
                   </Box>
 
-                  <Box sx={{ p: 2, bgcolor: '#ffffff', borderRadius: 2.5, border: '1px solid #fecaca' }}>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#dc2626', mb: 0.5, display: 'flex', alignItems: 'center', gap: 0.75 }}>
+                  <Box sx={{ p: 2, bgcolor: '#ffffff', borderRadius: 2.5, border: '1px solid #fed7aa' }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#ea580c', mb: 0.5, display: 'flex', alignItems: 'center', gap: 0.75 }}>
                       <GavelIcon sx={{ fontSize: 18 }} /> Multas Económicas
                     </Typography>
                     <Typography variant="caption" sx={{ color: '#64748b', lineHeight: 1.4, display: 'block' }}>
@@ -877,8 +877,8 @@ function ProductValues() {
                     </Typography>
                   </Box>
 
-                  <Box sx={{ p: 2, bgcolor: '#ffffff', borderRadius: 2.5, border: '1px solid #fecaca' }}>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#dc2626', mb: 0.5, display: 'flex', alignItems: 'center', gap: 0.75 }}>
+                  <Box sx={{ p: 2, bgcolor: '#ffffff', borderRadius: 2.5, border: '1px solid #fed7aa' }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#ea580c', mb: 0.5, display: 'flex', alignItems: 'center', gap: 0.75 }}>
                       <ShieldIcon sx={{ fontSize: 18 }} /> Cancelación de Certificados
                     </Typography>
                     <Typography variant="caption" sx={{ color: '#64748b', lineHeight: 1.4, display: 'block' }}>
