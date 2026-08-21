@@ -30,10 +30,18 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
 import ExploreIcon from '@mui/icons-material/Explore'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import SchoolIcon from '@mui/icons-material/School'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
+import MenuBookIcon from '@mui/icons-material/MenuBook'
+import PolicyIcon from '@mui/icons-material/Policy'
+import VerifiedIcon from '@mui/icons-material/Verified'
+import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
+import LabelImportantIcon from '@mui/icons-material/LabelImportant'
 
 import withRoot from '@/modules/withRoot'
 
-// Data for Equipment Use Cases extracted from catalog knowledge
+// Data for Equipment Use Cases
 const USE_CASES = [
   {
     id: 'deportivo',
@@ -109,33 +117,25 @@ const USE_CASES = [
   }
 ]
 
-// RAC 100 Regulation Categories
-const RAC100_PILLARS = [
+// Modalidades de Alcance Visual según RAC 100
+const OPERATIONAL_RANGES = [
   {
-    title: 'Categoría Abierta (Recreativo & Formativo)',
-    badge: 'Uso Personal / Recreativo',
-    badgeColor: '#16a34a',
-    icon: FlightTakeoffIcon,
-    rules: [
-      'Vuelo en línea de vista visual permanente (VLOS) hasta 120 metros (400 ft) de altura sobre el terreno.',
-      'Aeronaves no tripuladas de hasta 25 kg de peso máximo de despegue.',
-      'Registro obligatorio en el RUAS (Registro Único de Aeronaves No Tripuladas de la Aerocivil) para equipos de más de 250 g.',
-      'Prohibido volar a menos de 9 km (5 NM) de aeropuertos y bases militares sin autorización ATC.',
-      'Respeto irrestricto de la privacidad ciudadana y prohibición de volar sobre concentraciones de personas al aire libre.'
-    ]
+    title: 'VLOS (Visual Line of Sight)',
+    badge: 'Hasta 750 m',
+    badgeBg: '#0284c7',
+    desc: 'Línea de vista visual directa y permanente del piloto al mando sin ayuda óptica (máx. 120 m / 400 ft de altura AGL).'
   },
   {
-    title: 'Categoría Específica (Comercial & Profesional)',
-    badge: 'Uso Comercial / Especializado',
-    badgeColor: '#ff6f00',
-    icon: GavelIcon,
-    rules: [
-      'Aplica para fotogrametría, publicidad, inspección técnica, filmación comercial o vuelos fuera de línea de vista (BVLOS).',
-      'El piloto al mando debe contar con Certificado de Idoneidad emitido por un Centro de Instrucción Aeronáutica (CIA) avalado por Aerocivil.',
-      'La empresa u operador debe estar acreditado ante la UAEAC con Manual de Operaciones y Análisis de Riesgos (SORA).',
-      'Póliza de Responsabilidad Civil Extracontractual vigente que ampare daños a terceros en superficie.',
-      'Aprobación de plan de vuelo y coordinación en espacios aéreos controlados mediante NOTAM o canales oficiales.'
-    ]
+    title: 'EVLOS (Extended Visual Line of Sight)',
+    badge: 'Hasta 3 km',
+    badgeBg: '#8b5cf6',
+    desc: 'Línea de vista extendida utilizando observadores visuales capacitados enlazados por radio cada 750 metros.'
+  },
+  {
+    title: 'BVLOS (Beyond Visual Line of Sight)',
+    badge: '> 3 km (Fuera de vista)',
+    badgeBg: '#ea580c',
+    desc: 'Vuelo a más de 3 km donde se pierde el contacto visual. Exige autorización de Aerocivil, transponder y análisis SORA.'
   }
 ]
 
@@ -153,7 +153,7 @@ function ProductValues() {
         overflow: 'hidden'
       }}
     >
-      {/* Background Decorative Gradients */}
+      {/* Decorative Gradients */}
       <Box
         sx={{
           position: 'absolute',
@@ -212,14 +212,14 @@ function ProductValues() {
             variant="body1"
             sx={{
               color: '#64748b',
-              maxWidth: 720,
+              maxWidth: 760,
               mx: 'auto',
               mt: 1.5,
               fontSize: { xs: '0.95rem', md: '1.1rem' },
               lineHeight: 1.6
             }}
           >
-            Desde la emoción del FPV deportivo hasta la ingeniería de precisión. Conoce los campos de aplicación y opera siempre con seguridad bajo la normativa aeronáutica <strong>RAC 100</strong>.
+            Desde la pasión del FPV deportivo hasta la ingeniería civil y comercial. Conoce las aplicaciones y opera legalmente bajo la normativa <strong>RAC 100 de la Aeronáutica Civil</strong>.
           </Typography>
         </Box>
 
@@ -262,7 +262,7 @@ function ProductValues() {
             <Tab
               icon={<GavelIcon sx={{ fontSize: 20 }} />}
               iconPosition="start"
-              label="Normativa RAC 100 (Aerocivil)"
+              label="Comparativa Normativa RAC 100"
               sx={{
                 textTransform: 'none',
                 fontWeight: 800,
@@ -412,7 +412,7 @@ function ProductValues() {
             </motion.div>
           )}
 
-          {/* TAB 1: RAC 100 Regulation Guide */}
+          {/* TAB 1: Detailed RAC 100 Comparison (Recreational vs Commercial) */}
           {activeTab === 1 && (
             <motion.div
               key="rac100-guide"
@@ -421,95 +421,261 @@ function ProductValues() {
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
             >
+              {/* Main Comparison: Open Category (Recreational) vs Specific Category (Commercial) */}
               <Box
                 sx={{
                   display: 'grid',
-                  gridTemplateColumns: {
-                    xs: '1fr',
-                    md: 'repeat(2, 1fr)'
-                  },
-                  gap: { xs: 3, sm: 4 },
-                  mb: 4
+                  gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' },
+                  gap: { xs: 3, md: 4 },
+                  mb: 4,
+                  alignItems: 'stretch'
                 }}
               >
-                {RAC100_PILLARS.map((pillar, idx) => {
-                  const PillarIcon = pillar.icon
-                  return (
-                    <Paper
-                      key={idx}
-                      elevation={0}
-                      sx={{
-                        p: { xs: 3, sm: 4 },
-                        borderRadius: 3.5,
-                        border: '1px solid #e2e8f0',
-                        bgcolor: '#ffffff',
-                        height: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        boxShadow: '0 8px 24px rgba(0,0,0,0.04)'
-                      }}
-                    >
-                      <Box>
-                        {/* Header */}
-                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                            <Box
-                              sx={{
-                                width: 44,
-                                height: 44,
-                                borderRadius: '10px',
-                                bgcolor: `${pillar.badgeColor}15`,
-                                color: pillar.badgeColor,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                              }}
-                            >
-                              <PillarIcon sx={{ fontSize: 24 }} />
-                            </Box>
-                            <Typography variant="h6" sx={{ fontWeight: 800, color: '#0f172a' }}>
-                              {pillar.title}
-                            </Typography>
-                          </Box>
-                          <Chip
-                            label={pillar.badge}
-                            size="small"
-                            sx={{
-                              fontWeight: 800,
-                              bgcolor: `${pillar.badgeColor}15`,
-                              color: pillar.badgeColor,
-                              border: `1px solid ${pillar.badgeColor}40`
-                            }}
-                          />
+                {/* 1. Categoría Abierta */}
+                <Paper
+                  elevation={0}
+                  sx={{
+                    p: { xs: 3, sm: 4 },
+                    borderRadius: 3.5,
+                    border: '2px solid #86efac',
+                    bgcolor: '#ffffff',
+                    background: 'linear-gradient(180deg, rgba(240, 253, 244, 0.5) 0%, #ffffff 100%)',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    boxShadow: '0 8px 24px rgba(22, 163, 74, 0.06)'
+                  }}
+                >
+                  <Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, flexWrap: 'wrap', gap: 1 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                        <Box
+                          sx={{
+                            width: 46,
+                            height: 46,
+                            borderRadius: '12px',
+                            bgcolor: 'rgba(22, 163, 74, 0.15)',
+                            color: '#16a34a',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          }}
+                        >
+                          <FlightTakeoffIcon sx={{ fontSize: 26 }} />
                         </Box>
-
-                        <Divider sx={{ mb: 2.5 }} />
-
-                        {/* Rule points */}
-                        <Stack spacing={1.75}>
-                          {pillar.rules.map((rule, rIdx) => (
-                            <Box key={rIdx} sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
-                              <CheckCircleIcon sx={{ fontSize: 18, color: pillar.badgeColor, mt: 0.3, flexShrink: 0 }} />
-                              <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
-                                {rule}
-                              </Typography>
-                            </Box>
-                          ))}
-                        </Stack>
+                        <Box>
+                          <Typography variant="h6" sx={{ fontWeight: 900, color: '#0f172a', lineHeight: 1.2 }}>
+                            Categoría Abierta
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: '#16a34a', fontWeight: 800 }}>
+                            Vuelo Recreativo & Formativo (Sin Lucro)
+                          </Typography>
+                        </Box>
                       </Box>
+                      <Chip
+                        label="Uso Personal / Hobby"
+                        size="small"
+                        sx={{ fontWeight: 800, bgcolor: 'rgba(22, 163, 74, 0.12)', color: '#15803d', border: '1px solid #86efac' }}
+                      />
+                    </Box>
 
-                      <Box sx={{ mt: 3, pt: 2, borderTop: '1px dashed #e2e8f0' }}>
-                        <Typography variant="caption" sx={{ color: '#64748b', display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                          <AssignmentTurnedInIcon sx={{ fontSize: 16, color: '#00aCe4' }} /> Fuente oficial: Unidad Administrativa Especial de Aeronáutica Civil (UAEAC).
+                    <Divider sx={{ my: 2 }} />
+
+                    <Stack spacing={2}>
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
+                        <CheckCircleIcon sx={{ fontSize: 20, color: '#16a34a', mt: 0.2, flexShrink: 0 }} />
+                        <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
+                          <strong>Registro en el RUAS:</strong> Obligatorio registrar el dron ante el <em>Registro Único de Aeronaves No Tripuladas</em> de Aerocivil para equipos de más de 250 g hasta 25 kg.
                         </Typography>
                       </Box>
-                    </Paper>
-                  )
-                })}
+
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
+                        <CheckCircleIcon sx={{ fontSize: 20, color: '#16a34a', mt: 0.2, flexShrink: 0 }} />
+                        <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
+                          <strong>Permiso de Vuelo:</strong> <u>No requiere</u> solicitud previa de permiso de vuelo ante Aerocivil, siempre que se opere en espacio aéreo no controlado y fuera de zonas restringidas.
+                        </Typography>
+                      </Box>
+
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
+                        <CheckCircleIcon sx={{ fontSize: 20, color: '#16a34a', mt: 0.2, flexShrink: 0 }} />
+                        <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
+                          <strong>Alcance VLOS:</strong> Vuelo en línea de vista visual permanente hasta <strong>750 metros</strong> de distancia y altura máxima de <strong>120 metros (400 ft) AGL</strong>.
+                        </Typography>
+                      </Box>
+
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
+                        <CheckCircleIcon sx={{ fontSize: 20, color: '#16a34a', mt: 0.2, flexShrink: 0 }} />
+                        <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
+                          <strong>Visor Aerocivil:</strong> Obligatorio validar zonas en el <em>Visor Geográfico de Aerocivil</em>. Prohibido volar a menos de 9 km (5 NM) de aeropuertos o bases militares.
+                        </Typography>
+                      </Box>
+
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
+                        <CheckCircleIcon sx={{ fontSize: 20, color: '#16a34a', mt: 0.2, flexShrink: 0 }} />
+                        <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
+                          <strong>Sin Lucro:</strong> Prohibido cobrar o percibir retribución económica por los vuelos o contenidos capturados.
+                        </Typography>
+                      </Box>
+                    </Stack>
+                  </Box>
+
+                  <Box sx={{ mt: 3, pt: 2, borderTop: '1px dashed #bbf7d0' }}>
+                    <Typography variant="caption" sx={{ color: '#15803d', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                      <VerifiedIcon sx={{ fontSize: 16 }} /> Ideal para aficionados, carreras FPV recreativas y fotografía de viaje.
+                    </Typography>
+                  </Box>
+                </Paper>
+
+                {/* 2. Categoría Específica */}
+                <Paper
+                  elevation={0}
+                  sx={{
+                    p: { xs: 3, sm: 4 },
+                    borderRadius: 3.5,
+                    border: '2px solid #fdba74',
+                    bgcolor: '#ffffff',
+                    background: 'linear-gradient(180deg, rgba(255, 247, 237, 0.6) 0%, #ffffff 100%)',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    boxShadow: '0 8px 24px rgba(234, 88, 12, 0.06)'
+                  }}
+                >
+                  <Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, flexWrap: 'wrap', gap: 1 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                        <Box
+                          sx={{
+                            width: 46,
+                            height: 46,
+                            borderRadius: '12px',
+                            bgcolor: 'rgba(234, 88, 12, 0.15)',
+                            color: '#ea580c',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          }}
+                        >
+                          <GavelIcon sx={{ fontSize: 26 }} />
+                        </Box>
+                        <Box>
+                          <Typography variant="h6" sx={{ fontWeight: 900, color: '#0f172a', lineHeight: 1.2 }}>
+                            Categoría Específica
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: '#ea580c', fontWeight: 800 }}>
+                            Vuelo Comercial & Profesional (Con Lucro)
+                          </Typography>
+                        </Box>
+                      </Box>
+                      <Chip
+                        label="Comercial / Lucro"
+                        size="small"
+                        sx={{ fontWeight: 800, bgcolor: 'rgba(234, 88, 12, 0.12)', color: '#c2410c', border: '1px solid #fdba74' }}
+                      />
+                    </Box>
+
+                    <Divider sx={{ my: 2 }} />
+
+                    <Stack spacing={2}>
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
+                        <CheckCircleIcon sx={{ fontSize: 20, color: '#ea580c', mt: 0.2, flexShrink: 0 }} />
+                        <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
+                          <strong>Explotador de UAS:</strong> Quien se lucre debe estar acreditado formalmente como <strong>Explotador de UAS</strong> ante Aerocivil (no basta con ser solo piloto).
+                        </Typography>
+                      </Box>
+
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
+                        <CheckCircleIcon sx={{ fontSize: 20, color: '#ea580c', mt: 0.2, flexShrink: 0 }} />
+                        <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
+                          <strong>Certificación CIAC:</strong> El piloto al mando debe contar con certificado de idoneidad emitido por un <em>Centro de Instrucción Aeronáutica Civil (CIAC)</em> avalado por la UAEAC.
+                        </Typography>
+                      </Box>
+
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
+                        <CheckCircleIcon sx={{ fontSize: 20, color: '#ea580c', mt: 0.2, flexShrink: 0 }} />
+                        <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
+                          <strong>Solicitud Permiso de Vuelo:</strong> <u>Requiere solicitud previa de Permiso de Vuelo</u> ante la Aerocivil para cada operación puntual, evento o zona controlada.
+                        </Typography>
+                      </Box>
+
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
+                        <CheckCircleIcon sx={{ fontSize: 20, color: '#ea580c', mt: 0.2, flexShrink: 0 }} />
+                        <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
+                          <strong>Póliza RCE:</strong> Obligatorio contar con póliza de <em>Responsabilidad Civil Extendida (RCE)</em> que ampare daños a terceros. Se pueden solicitar permisos por un solo día o anuales.
+                        </Typography>
+                      </Box>
+
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
+                        <CheckCircleIcon sx={{ fontSize: 20, color: '#ea580c', mt: 0.2, flexShrink: 0 }} />
+                        <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
+                          <strong>Bitácoras de Vuelo & Logbook:</strong> Registro estricto en la <em>Bitácora de Vuelo del Piloto</em> y el <em>Libro de Vuelo de la Aeronave</em> (horas, mantenimiento e inspecciones).
+                        </Typography>
+                      </Box>
+
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
+                        <CheckCircleIcon sx={{ fontSize: 20, color: '#ea580c', mt: 0.2, flexShrink: 0 }} />
+                        <Typography variant="body2" sx={{ color: '#334155', lineHeight: 1.5 }}>
+                          <strong>Flota &gt; 3 Drones:</strong> Si el explotador excede 3 drones, debe registrar y designar ante Aerocivil a un <strong>Jefe de Pilotos UA</strong> y un <strong>Gerente de Seguridad Operacional</strong>.
+                        </Typography>
+                      </Box>
+                    </Stack>
+                  </Box>
+
+                  <Box sx={{ mt: 3, pt: 2, borderTop: '1px dashed #fed7aa' }}>
+                    <Typography variant="caption" sx={{ color: '#c2410c', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                      <PolicyIcon sx={{ fontSize: 16 }} /> Requerido para topografía, agricultura, filmación comercial y servicios industriales.
+                    </Typography>
+                  </Box>
+                </Paper>
               </Box>
 
-              {/* Golden Rules Banner for Pilot Safety */}
+              {/* Modalidades de Alcance Visual (VLOS / EVLOS / BVLOS) */}
+              <Box sx={{ mb: 4 }}>
+                <Typography variant="h6" sx={{ fontWeight: 800, color: '#0f172a', mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <VisibilityIcon sx={{ color: '#00aCe4' }} /> Modalidades de Alcance Visual según RAC 100
+                </Typography>
+
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+                    gap: 2.5
+                  }}
+                >
+                  {OPERATIONAL_RANGES.map((range, i) => (
+                    <Card
+                      key={i}
+                      elevation={0}
+                      sx={{
+                        p: 2.5,
+                        borderRadius: 3,
+                        border: '1px solid #e2e8f0',
+                        bgcolor: '#ffffff',
+                        transition: 'transform 0.25s ease',
+                        '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 8px 20px rgba(0,0,0,0.06)' }
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 900, color: '#0f172a' }}>
+                          {range.title}
+                        </Typography>
+                        <Chip
+                          label={range.badge}
+                          size="small"
+                          sx={{ fontWeight: 800, bgcolor: `${range.badgeBg}15`, color: range.badgeBg, border: `1px solid ${range.badgeBg}40`, fontSize: '0.72rem' }}
+                        />
+                      </Box>
+                      <Typography variant="body2" sx={{ color: '#64748b', lineHeight: 1.5 }}>
+                        {range.desc}
+                      </Typography>
+                    </Card>
+                  ))}
+                </Box>
+              </Box>
+
+              {/* Golden Rules Banner & Sanciones */}
               <Card
                 elevation={0}
                 sx={{
@@ -532,27 +698,52 @@ function ProductValues() {
                 >
                   <Box sx={{ flex: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
-                      <WarningAmberIcon sx={{ color: '#f59e0b', fontSize: 28 }} />
+                      <WarningAmberIcon sx={{ color: '#f59e0b', fontSize: 30 }} />
                       <Typography variant="h6" sx={{ fontWeight: 800, color: '#ffffff' }}>
-                        Reglas de Oro para Volar Seguro en Colombia
+                        Reglas de Oro del Piloto & Explotador en Colombia
                       </Typography>
                     </Box>
-                    <Typography variant="body2" sx={{ color: '#94a3b8', lineHeight: 1.6, mb: 2 }}>
-                      1. Nunca vueles sobre aglomeraciones o zonas residenciales sin permiso.<br />
-                      2. Mantén contacto visual directo con tu aeronave en todo momento.<br />
-                      3. Respeta el límite de altura de 120 metros AGL.<br />
-                      4. No operes bajo los efectos del alcohol o sustancias psicoactivas.
-                    </Typography>
-                    <Chip
-                      label="Cumplimiento RUAS obligatorio para drones >250g"
-                      size="small"
-                      sx={{
-                        fontWeight: 800,
-                        bgcolor: 'rgba(245, 158, 11, 0.15)',
-                        color: '#fbbf24',
-                        border: '1px solid rgba(245, 158, 11, 0.4)'
-                      }}
-                    />
+
+                    <Stack spacing={1} sx={{ mt: 1.5, mb: 2.5 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+                        <LabelImportantIcon sx={{ color: '#38bdf8', fontSize: 18, mt: 0.3, flexShrink: 0 }} />
+                        <Typography variant="body2" sx={{ color: '#cbd5e1', lineHeight: 1.5 }}>
+                          <strong>Pegatina de Identificación Obligatoria:</strong> Tras registrar el dron en el RUAS, se debe adherir una <u>pegatina física con el identificador asignado</u> y enviar evidencia fotográfica por correo a Aerocivil para obtener la aprobación definitiva.
+                        </Typography>
+                      </Box>
+
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+                        <LabelImportantIcon sx={{ color: '#38bdf8', fontSize: 18, mt: 0.3, flexShrink: 0 }} />
+                        <Typography variant="body2" sx={{ color: '#cbd5e1', lineHeight: 1.5 }}>
+                          <strong>Visor Geográfico Aerocivil:</strong> Consulta permanente de zonas prohibidas, restringidas y helipuertos antes de encender el radiocontrol.
+                        </Typography>
+                      </Box>
+
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+                        <LabelImportantIcon sx={{ color: '#38bdf8', fontSize: 18, mt: 0.3, flexShrink: 0 }} />
+                        <Typography variant="body2" sx={{ color: '#cbd5e1', lineHeight: 1.5 }}>
+                          <strong>Régimen Sancionatorio:</strong> Las infracciones de orden técnico y administrativo conllevan <u>multas económicas severas, inmovilización de equipos y retiro del certificado de idoneidad y explotación</u>.
+                        </Typography>
+                      </Box>
+                    </Stack>
+
+                    <Stack direction="row" spacing={1} flexWrap="wrap" gap={1}>
+                      <Chip
+                        label="Registro RUAS + Pegatina visible"
+                        size="small"
+                        sx={{ fontWeight: 800, bgcolor: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', border: '1px solid rgba(56, 189, 248, 0.4)' }}
+                      />
+                      <Chip
+                        label="Póliza RCE por día o anual"
+                        size="small"
+                        sx={{ fontWeight: 800, bgcolor: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24', border: '1px solid rgba(245, 158, 11, 0.4)' }}
+                      />
+                      <Chip
+                        label="Certificación CIAC Aerocivil"
+                        size="small"
+                        sx={{ fontWeight: 800, bgcolor: 'rgba(34, 197, 94, 0.15)', color: '#4ade80', border: '1px solid rgba(34, 197, 94, 0.4)' }}
+                      />
+                    </Stack>
                   </Box>
 
                   <Box sx={{ flexShrink: 0 }}>
