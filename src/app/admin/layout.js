@@ -17,23 +17,31 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import MenuIcon from '@mui/icons-material/Menu'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import DashboardIcon from '@mui/icons-material/Dashboard'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import PeopleIcon from '@mui/icons-material/People'
-import SettingsIcon from '@mui/icons-material/Settings'
-import HomeIcon from '@mui/icons-material/Home'
-import ReportProblemIcon from '@mui/icons-material/ReportProblem'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+
+// Premium differentiated Material UI Icons for Admin
+import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard'
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
+import ReportProblemIcon from '@mui/icons-material/ReportProblem'
+import Inventory2Icon from '@mui/icons-material/Inventory2'
+import LocalOfferIcon from '@mui/icons-material/LocalOffer'
+import FactCheckIcon from '@mui/icons-material/FactCheck'
+import RateReviewIcon from '@mui/icons-material/RateReview'
+import ContactSupportIcon from '@mui/icons-material/ContactSupport'
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
+import ArticleIcon from '@mui/icons-material/Article'
+import CloudSyncIcon from '@mui/icons-material/CloudSync'
+import TuneIcon from '@mui/icons-material/Tune'
+import StorefrontIcon from '@mui/icons-material/Storefront'
+
 import AdminGuard from '@/app/components/admin/AdminGuard'
 import UserDropdown from '@/app/components/UserDropdown'
 
 const WaviPixelLogo =
   'https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FWaviPixelLogo.png?alt=media&token=7edcec69-8b24-4b95-b970-6b9acfddbdeb'
 
-const drawerWidth = 240
-
-// Custom hook section removed - inlining logic
+const drawerWidth = 250
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -43,20 +51,20 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    marginLeft: 0, // Default for mobile (no margin shift needed usually for temporary)
+    marginLeft: 0,
     [theme.breakpoints.up('md')]: {
-        marginLeft: `-${drawerWidth}px`, // Desktop: starts shifted left (hidden)
-        ...(open && {
+      marginLeft: `-${drawerWidth}px`,
+      ...(open && {
         transition: theme.transitions.create('margin', {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
+          easing: theme.transitions.easing.easeOut,
+          duration: theme.transitions.duration.enteringScreen,
         }),
-        marginLeft: 0, // Desktop: Shifted back to 0 when open (push content)
-        }),
+        marginLeft: 0,
+      }),
     },
     minHeight: '100vh',
-    backgroundColor: '#f5f7fa',
-    width: '100%', // Ensure full width
+    backgroundColor: '#f8fafc',
+    width: '100%',
     maxWidth: '100vw',
     overflowX: 'hidden'
   }),
@@ -64,42 +72,40 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
 
 const StyledAppBar = styled(AppBar, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
-    zIndex: theme.zIndex.drawer + 1, // Ensure AppBar is above drawer and content
-    backgroundColor: 'white',
-    color: '#1a2744',
-    boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
+    zIndex: theme.zIndex.drawer + 1,
+    backgroundColor: '#ffffff',
+    color: '#0f172a',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
     [theme.breakpoints.up('md')]: {
-        ...(open && {
+      ...(open && {
         width: `calc(100% - ${drawerWidth}px)`,
         marginLeft: `${drawerWidth}px`,
         transition: theme.transitions.create(['margin', 'width'], {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
+          easing: theme.transitions.easing.easeOut,
+          duration: theme.transitions.duration.enteringScreen,
         }),
-        }),
+      }),
     }
   }),
 )
 
-import RateReviewIcon from '@mui/icons-material/RateReview'
-import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer'
-import SellIcon from '@mui/icons-material/Sell'
-
 const NAV_ITEMS = [
-  { text: 'Dashboard', icon: <DashboardIcon />, path: '/admin' },
-  { text: 'Pedidos', icon: <ShoppingCartIcon />, path: '/admin/orders' },
+  { text: 'Dashboard', icon: <SpaceDashboardIcon />, path: '/admin' },
+  { text: 'Pedidos', icon: <ReceiptLongIcon />, path: '/admin/orders' },
   { text: 'Problemas de Pedidos', icon: <ReportProblemIcon />, path: '/admin/orders/issues' },
+  { text: 'Gestión de Productos', icon: <Inventory2Icon />, path: '/admin/products' },
+  { text: 'Promociones', icon: <LocalOfferIcon />, path: '/admin/promotions' },
+  { text: 'Moderación de Usados', icon: <FactCheckIcon />, path: '/admin/used-products' },
   { text: 'Opiniones', icon: <RateReviewIcon />, path: '/admin/reviews' },
-  { text: 'Preguntas Técnicas', icon: <QuestionAnswerIcon />, path: '/admin/questions' },
-  { text: 'Moderación de Usados', icon: <SellIcon />, path: '/admin/used-products' },
-  { text: 'Usuarios', icon: <PeopleIcon />, path: '/admin/users' },
-  { text: 'Gestión de Productos', icon: <SettingsIcon />, path: '/admin/products' },
-  { text: 'Migrar Productos', icon: <SettingsIcon />, path: '/admin/products/migrate' },
-  { text: 'Configuración', icon: <SettingsIcon />, path: '/admin/settings' },
+  { text: 'Preguntas Técnicas', icon: <ContactSupportIcon />, path: '/admin/questions' },
+  { text: 'Usuarios', icon: <ManageAccountsIcon />, path: '/admin/users' },
+  { text: 'Publicaciones', icon: <ArticleIcon />, path: '/admin/publications' },
+  { text: 'Migrar Productos', icon: <CloudSyncIcon />, path: '/admin/products/migrate' },
+  { text: 'Configuración', icon: <TuneIcon />, path: '/admin/settings' },
 ]
 
 export default function AdminLayout({ children }) {
@@ -107,7 +113,6 @@ export default function AdminLayout({ children }) {
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'))
   const [open, setOpen] = useState(true)
 
-  // Auto-set initial state based on screen size
   useEffect(() => {
     setOpen(isDesktop)
   }, [isDesktop])
@@ -118,72 +123,99 @@ export default function AdminLayout({ children }) {
 
   const pathname = usePathname()
 
-  // Drawer Content (Same for both Mobile and Desktop)
   const drawerContent = (
     <>
-      <Toolbar sx={{ display: { xs: 'block', md: 'none' } }} /> {/* Spacer visible only on mobile */}
-      <Box sx={{ p: 3, textAlign: 'center' }}>
-        <Link href="/" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+      <Toolbar sx={{ display: { xs: 'block', md: 'none' } }} />
+      <Box sx={{ p: 2.5, textAlign: 'center' }}>
+        <Link href="/" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Box
             component="img"
             src={WaviPixelLogo}
             alt="Wavi Aeronautics"
-            sx={{ height: 48, width: 48, marginRight: 2, borderRadius: '50%' }}
+            sx={{ height: 44, width: 44, marginRight: 1.5, borderRadius: '50%' }}
           />
-          <Typography variant="h6" sx={{ color: 'white', fontWeight: 'bold' }}>
+          <Typography variant="h6" sx={{ color: '#ffffff', fontWeight: 800, fontSize: '1.05rem', letterSpacing: '-0.2px' }}>
             Wavi Aeronautics
           </Typography>
         </Link>
       </Box>
-      <Divider sx={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
-      <List sx={{ mt: 2 }}>
-        {NAV_ITEMS.map((item) => (
-          <ListItem key={item.text} disablePadding>
-            <ListItemButton 
-              component={Link} 
-              href={item.path}
-              selected={pathname === item.path}
-              onClick={() => !isDesktop && setOpen(false)} // Close on mobile navigation
-              sx={{
-                mx: 1,
-                borderRadius: 2,
-                mb: 1,
-                '&.Mui-selected': {
-                    backgroundColor: 'rgba(0, 188, 212, 0.2)',
-                    color: '#00bcd4',
-                    '& .MuiListItemIcon-root': { color: '#00bcd4' }
-                },
-                '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                }
-              }}
-            >
-              <ListItemIcon sx={{ color: 'rgba(255,255,255,0.7)', minWidth: 40 }}>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+      <Divider sx={{ backgroundColor: 'rgba(255,255,255,0.08)' }} />
+      
+      <List sx={{ mt: 1.5, px: 1, flex: 1 }}>
+        {NAV_ITEMS.map((item) => {
+          const isSelected = pathname === item.path
+          return (
+            <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
+              <ListItemButton 
+                component={Link} 
+                href={item.path}
+                selected={isSelected}
+                onClick={() => !isDesktop && setOpen(false)}
+                sx={{
+                  borderRadius: 2,
+                  py: 1,
+                  px: 1.5,
+                  transition: 'all 0.2s ease',
+                  '&.Mui-selected': {
+                    backgroundColor: 'rgba(0, 172, 228, 0.18)',
+                    color: '#38bdf8',
+                    fontWeight: 700,
+                    '& .MuiListItemIcon-root': { color: '#38bdf8' },
+                    '&:hover': {
+                      backgroundColor: 'rgba(0, 172, 228, 0.24)'
+                    }
+                  },
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                    color: '#ffffff',
+                    '& .MuiListItemIcon-root': { color: '#ffffff' }
+                  }
+                }}
+              >
+                <ListItemIcon sx={{ color: isSelected ? '#38bdf8' : 'rgba(255,255,255,0.65)', minWidth: 38 }}>
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText 
+                  primary={item.text} 
+                  primaryTypographyProps={{ 
+                    fontSize: '0.875rem', 
+                    fontWeight: isSelected ? 700 : 500,
+                    letterSpacing: '0.1px'
+                  }} 
+                />
+              </ListItemButton>
+            </ListItem>
+          )
+        })}
       </List>
       
-      <Box sx={{ mt: 'auto', p: 2 }}>
-          <Divider sx={{ backgroundColor: 'rgba(255,255,255,0.1)', mb: 2 }} />
-          <ListItem disablePadding>
-            <ListItemButton 
-              component={Link} 
-              href="/"
-              sx={{
-                borderRadius: 2,
-                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.05)' }
-              }}
-            >
-              <ListItemIcon sx={{ color: 'rgba(255,255,255,0.7)', minWidth: 40 }}>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Volver al Sitio" />
-            </ListItemButton>
-          </ListItem>
+      <Box sx={{ mt: 'auto', p: 1.5 }}>
+        <Divider sx={{ backgroundColor: 'rgba(255,255,255,0.08)', mb: 1.5 }} />
+        <ListItem disablePadding>
+          <ListItemButton 
+            component={Link} 
+            href="/"
+            sx={{
+              borderRadius: 2,
+              py: 1,
+              px: 1.5,
+              color: 'rgba(255,255,255,0.75)',
+              '&:hover': { 
+                backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                color: '#38bdf8',
+                '& .MuiListItemIcon-root': { color: '#38bdf8' }
+              }
+            }}
+          >
+            <ListItemIcon sx={{ color: 'rgba(255,255,255,0.75)', minWidth: 38 }}>
+              <StorefrontIcon />
+            </ListItemIcon>
+            <ListItemText 
+              primary="Volver a la Tienda" 
+              primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 600 }}
+            />
+          </ListItemButton>
+        </ListItem>
       </Box>
     </>
   )
@@ -193,9 +225,11 @@ export default function AdminLayout({ children }) {
     '& .MuiDrawer-paper': {
       width: drawerWidth,
       boxSizing: 'border-box',
-      backgroundColor: '#1a2744',
-      color: 'white',
-      borderRight: '1px solid rgba(255, 255, 255, 0.1)',
+      backgroundColor: '#0f172a',
+      color: '#ffffff',
+      borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+      display: 'flex',
+      flexDirection: 'column'
     },
   }
 
@@ -203,7 +237,7 @@ export default function AdminLayout({ children }) {
     <AdminGuard>
       <Box sx={{ display: 'flex' }}>
         <StyledAppBar position="fixed" open={open}>
-          <Toolbar>
+          <Toolbar sx={{ minHeight: '64px !important' }}>
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -213,7 +247,7 @@ export default function AdminLayout({ children }) {
             >
               {open && isDesktop ? <ChevronLeftIcon /> : <MenuIcon />}
             </IconButton>
-            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, fontWeight: 'bold', fontSize: { xs: '1rem', sm: '1.25rem' } }}>
+            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, fontWeight: 800, color: '#0f172a', fontSize: { xs: '1rem', sm: '1.25rem' } }}>
               Panel de Administración
             </Typography>
             <UserDropdown showLoginLabel={false} />
@@ -250,8 +284,8 @@ export default function AdminLayout({ children }) {
         )}
 
         <Main open={open}>
-          <Toolbar /> {/* Spacer for fixed AppBar */}
-          <Box sx={{ maxWidth: '100%', mx: 'auto', p: { xs: 0, md: 2 } }}>
+          <Toolbar sx={{ minHeight: '64px !important' }} />
+          <Box sx={{ maxWidth: '100%', mx: 'auto', p: { xs: 0, md: 1 } }}>
             {children}
           </Box>
         </Main>
