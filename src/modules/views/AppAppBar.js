@@ -115,7 +115,7 @@ function AppAppBar() {
               <SearchBar />
             </Box>
 
-            {/* PSE Payment Badge - Enlarged and Seamless */}
+            {/* PSE Payment Badge - Transparent & Optimized */}
             <Tooltip title="Pagos 100% Seguros con PSE y Mercado Pago" arrow placement="bottom">
               <Box
                 component="div"
@@ -123,22 +123,14 @@ function AppAppBar() {
                   display: { xs: 'none', sm: 'inline-flex' },
                   alignItems: 'center',
                   justifyContent: 'center',
-                  bgcolor: '#ffffff',
-                  borderRadius: '10px',
-                  px: 1.2,
-                  py: 0.25,
-                  height: 42,
-                  width: { sm: 56, md: 66 },
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.22)',
-                  border: '1.5px solid rgba(255,255,255,0.6)',
-                  transition: 'all 0.25s ease',
+                  bgcolor: 'transparent',
+                  p: 0,
+                  transition: 'transform 0.25s ease, filter 0.25s ease',
                   flexShrink: 0,
                   cursor: 'pointer',
-                  overflow: 'hidden',
                   '&:hover': {
-                    transform: 'scale(1.08)',
-                    boxShadow: '0 4px 14px rgba(0, 172, 228, 0.45)',
-                    borderColor: '#00aCe4'
+                    transform: 'scale(1.06)',
+                    filter: 'drop-shadow(0 2px 8px rgba(0, 172, 228, 0.5))'
                   }
                 }}
               >
@@ -147,10 +139,12 @@ function AppAppBar() {
                   src="/logos/pse-logo.png"
                   alt="PSE Pagos Seguros en Línea"
                   sx={{
-                    height: 34,
-                    width: '100%',
+                    height: { sm: 34, md: 38 },
+                    width: 'auto',
+                    maxWidth: 120,
                     display: 'block',
-                    objectFit: 'contain'
+                    objectFit: 'contain',
+                    filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.35))'
                   }}
                 />
               </Box>
