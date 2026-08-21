@@ -1,163 +1,278 @@
+'use client'
+
 import React from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
-// import PropTypes from 'prop-types'
-import withRoot from '@/modules/withRoot'
-import theme from '@/modules/theme'
 import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
 import Container from '@mui/material/Container'
-import Button from '@/modules/components/Button'
-import Typography from '@/modules/components/Typography'
-import productCurvyLines from 'public/static/themes/productCurvyLines.png'
-import productHowItWorks1 from 'public/static/themes/productHowItWorks1.svg'
-import productHowItWorks2 from 'public/static/themes/productHowItWorks2.svg'
-import productHowItWorks3 from 'public/static/themes/productHowItWorks3.svg'
+import Typography from '@mui/material/Typography'
+import Button from '@mui/material/Button'
+import Paper from '@mui/material/Paper'
+import Chip from '@mui/material/Chip'
+import Stack from '@mui/material/Stack'
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch'
+import SpeedIcon from '@mui/icons-material/Speed'
+import BuildCircleIcon from '@mui/icons-material/BuildCircle'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
+import withRoot from '@/modules/withRoot'
 
-const styles = (theme) => ({
-  root: {
-    display: 'flex',
-    backgroundColor: theme.palette.secondary.light,
-    overflow: 'hidden'
+const VALUE_PROPOSITIONS = [
+  {
+    step: '01',
+    title: 'Tendencias & Vanguardia FPV',
+    description: 'Acceso prioritario a los últimos lanzamientos de la industria: sistemas HD digitales, ecosistemas ELRS, radiocontroles de alta precisión y tecnología VToL.',
+    icon: <RocketLaunchIcon sx={{ fontSize: 32 }} />,
+    color: '#0284c7',
+    badgeBg: 'rgba(2, 132, 199, 0.1)',
+    highlights: ['Transmisión digital HD', 'Compatibilidad garantizada', 'Lanzamientos globales']
   },
-  container: {
-    paddingTop: theme.spacing(10),
-    paddingBottom: theme.spacing(15),
-    position: 'relative',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
+  {
+    step: '02',
+    title: 'Optimización de tu Tiempo',
+    description: 'Configuraciones listas para volar (RTF/BNF), asesoría técnica experta y soporte integral para que te concentres exclusivamente en volar o producir sin demoras.',
+    icon: <SpeedIcon sx={{ fontSize: 32 }} />,
+    color: '#ea580c',
+    badgeBg: 'rgba(234, 88, 12, 0.1)',
+    highlights: ['Equipos pre-configurados', 'Despliegue inmediato', 'Asesoría especializada']
   },
-  item: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: theme.spacing(0, 5)
-  },
-  title: {
-    paddingBottom: theme.spacing(8)
-  },
-  number: {
-    fontSize: 24,
-    fontFamily: theme.typography.fontFamily,
-    color: theme.palette.secondary.main,
-    fontWeight: theme.typography.fontWeightMedium
-  },
-  image: {
-    height: 70,
-    marginTop: theme.spacing(4),
-    marginBottom: theme.spacing(4)
-  },
-  curvyLines: {
-    pointerEvents: 'none',
-    position: 'absolute',
-    top: -180,
-    opacity: 0.7
-  },
-  beneficios: {
-    marginBottom: `${theme.spacing(8)} !important`
-  },
-  button: {
-    minWidth: 200
+  {
+    step: '03',
+    title: 'Taller Técnico & Mantenimiento',
+    description: 'Servicio de mantenimiento preventivo y correctivo, soldadura especializada de microelectrónica, calibración de sensores y repuestos originales con garantía.',
+    icon: <BuildCircleIcon sx={{ fontSize: 32 }} />,
+    color: '#16a34a',
+    badgeBg: 'rgba(22, 163, 74, 0.1)',
+    highlights: ['Diagnóstico electrónico', 'Calibración de software', 'Repuestos certificados']
   }
-})
+]
 
-function ProductHowItWorks (props) {
-  // const { classes } = props;
-  const classes = styles(theme)
-
+function ProductHowItWorks() {
   return (
-    <Box sx={classes.root}>
-      <Container sx={classes.container} style={{ textAlign: 'center' }}>
-        <Image
-          src={productCurvyLines}
-          style={classes.curvyLines}
-          alt="curvy lines"
-          // style={{ position: "absolute" }}
-          // width={100}
-          // height={100}
-          priority
-        />
-        <Typography
-          variant="h4"
-          marked="center"
-          sx={classes.title}
-          component="h2"
-        >
-          Te ofrecemos
-        </Typography>
-        <Box sx={classes.beneficios}>
-          <Grid container spacing={5}>
-            <Grid item size={{ xs: 12, md: 4 }}>
-              <Box sx={classes.item}>
-                <Box sx={classes.number}>1.</Box>
-                <Image
-                  src={productHowItWorks1}
-                  alt="tendencias"
-                  style={classes.image}
-                  width={100}
-                  height={100}
-                  priority
-                />
-                <Typography variant="h5" align="center">
-                  {'Actualizaciones de las últimas tendencias del mercado.'}
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item size={{ xs: 12, md: 4 }}>
-              <Box sx={classes.item}>
-                <Box sx={classes.number}>2.</Box>
-                <Image
-                  src={productHowItWorks2}
-                  alt="actividades"
-                  style={classes.image}
-                  width={100}
-                  height={100}
-                  priority
-                />
-                <Typography variant="h5" align="center">
-                  {
-                    'Mejorar el tiempo que inviertes en realizar tus actividades.'
-                  }
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item size={{ xs: 12, md: 4 }}>
-              <Box sx={classes.item}>
-                <Box sx={classes.number}>3.</Box>
-                <Image
-                  src={productHowItWorks3}
-                  alt="equipos"
-                  style={classes.image}
-                  width={100}
-                  height={100}
-                  priority
-                />
-                <Typography variant="h5" align="center">
-                  {
-                    'Mantenimiento técnico preventivo y correctivo para tus equipos.'
-                  }
-                </Typography>
-              </Box>
-            </Grid>
-          </Grid>
+    <Box
+      component="section"
+      sx={{
+        py: { xs: 8, md: 12 },
+        bgcolor: '#f8fafc',
+        position: 'relative',
+        overflow: 'hidden'
+      }}
+    >
+      <Container maxWidth="lg">
+        {/* Section Header */}
+        <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 }, maxWidth: 720, mx: 'auto' }}>
+          <Chip
+            label="VALOR AGREGADO WAVI"
+            size="small"
+            sx={{
+              fontWeight: 800,
+              letterSpacing: '1px',
+              bgcolor: 'rgba(0, 172, 228, 0.12)',
+              color: '#0284c7',
+              mb: 2,
+              px: 1
+            }}
+          />
+          <Typography
+            variant="h3"
+            component="h2"
+            sx={{
+              fontWeight: 900,
+              color: '#0f172a',
+              letterSpacing: '-0.5px',
+              fontSize: { xs: '1.85rem', sm: '2.5rem' },
+              mb: 2
+            }}
+          >
+            Te Ofrecemos Respaldo Integral
+          </Typography>
+          <Box
+            sx={{
+              width: 60,
+              height: 4,
+              bgcolor: '#00aCe4',
+              borderRadius: 2,
+              mx: 'auto',
+              mb: 2.5
+            }}
+          />
+          <Typography
+            variant="body1"
+            sx={{
+              color: '#64748b',
+              fontSize: { xs: '1rem', md: '1.125rem' },
+              lineHeight: 1.6
+            }}
+          >
+            Más que una tienda de drones, somos tu aliado técnico y comercial en Colombia para impulsar tus proyectos recreativos y profesionales.
+          </Typography>
         </Box>
-        <Button
-          color="secondary"
-          size="large"
-          variant="contained"
-          className="navlink"
-          sx={classes.button}
+
+        {/* Value Cards Grid (3x1) */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+            gap: { xs: 3, md: 4 },
+            mb: { xs: 6, md: 8 }
+          }}
         >
-          <Link href="auth/sign-up/">{'Comenzar'}</Link>
-        </Button>
+          {VALUE_PROPOSITIONS.map((item) => (
+            <Paper
+              key={item.step}
+              elevation={0}
+              sx={{
+                p: { xs: 3.5, sm: 4 },
+                borderRadius: 4,
+                bgcolor: '#ffffff',
+                border: '1px solid rgba(226, 232, 240, 0.9)',
+                boxShadow: '0 8px 30px rgba(15, 23, 42, 0.04)',
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                '&:hover': {
+                  transform: 'translateY(-8px)',
+                  boxShadow: '0 20px 40px rgba(15, 23, 42, 0.09)',
+                  borderColor: item.color
+                }
+              }}
+            >
+              {/* Header: Step Number & Icon */}
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+                <Box
+                  sx={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: 3,
+                    bgcolor: item.badgeBg,
+                    color: item.color,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: `0 4px 14px ${item.color}20`
+                  }}
+                >
+                  {item.icon}
+                </Box>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    fontWeight: 900,
+                    color: '#94a3b8',
+                    letterSpacing: '1px',
+                    fontFamily: 'monospace'
+                  }}
+                >
+                  {item.step}
+                </Typography>
+              </Box>
+
+              {/* Title */}
+              <Typography
+                variant="h6"
+                component="h3"
+                sx={{
+                  fontWeight: 800,
+                  color: '#0f172a',
+                  mb: 1.5,
+                  fontSize: '1.2rem',
+                  lineHeight: 1.3
+                }}
+              >
+                {item.title}
+              </Typography>
+
+              {/* Description */}
+              <Typography
+                variant="body2"
+                sx={{
+                  color: '#64748b',
+                  lineHeight: 1.65,
+                  mb: 3,
+                  flexGrow: 1
+                }}
+              >
+                {item.description}
+              </Typography>
+
+              {/* Bullet highlights */}
+              <Stack spacing={1} sx={{ pt: 2, borderTop: '1px solid #f1f5f9' }}>
+                {item.highlights.map((highlight, idx) => (
+                  <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <CheckCircleOutlineIcon sx={{ fontSize: 16, color: item.color }} />
+                    <Typography variant="caption" sx={{ fontWeight: 700, color: '#334155' }}>
+                      {highlight}
+                    </Typography>
+                  </Box>
+                ))}
+              </Stack>
+            </Paper>
+          ))}
+        </Box>
+
+        {/* Call to Action Buttons */}
+        <Box sx={{ textAlign: 'center' }}>
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={2}
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Button
+              component={Link}
+              href="/tienda"
+              variant="contained"
+              size="large"
+              endIcon={<ArrowForwardIcon />}
+              sx={{
+                background: 'linear-gradient(135deg, #00aCe4 0%, #0284c7 100%)',
+                color: '#ffffff',
+                fontWeight: 800,
+                fontSize: '1rem',
+                px: 4,
+                py: 1.5,
+                borderRadius: 3,
+                textTransform: 'none',
+                boxShadow: '0 8px 24px rgba(0, 172, 228, 0.35)',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #0099cc 0%, #0369a1 100%)',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 12px 28px rgba(0, 172, 228, 0.45)'
+                }
+              }}
+            >
+              Explorar Catálogo de Equipos
+            </Button>
+
+            <Button
+              component={Link}
+              href="/auth/sign-up"
+              variant="outlined"
+              size="large"
+              sx={{
+                borderColor: '#cbd5e1',
+                color: '#334155',
+                fontWeight: 700,
+                fontSize: '1rem',
+                px: 3.5,
+                py: 1.5,
+                borderRadius: 3,
+                textTransform: 'none',
+                bgcolor: '#ffffff',
+                '&:hover': {
+                  borderColor: '#0284c7',
+                  color: '#0284c7',
+                  bgcolor: 'rgba(2, 132, 199, 0.04)'
+                }
+              }}
+            >
+              Crear Cuenta de Piloto
+            </Button>
+          </Stack>
+        </Box>
       </Container>
     </Box>
   )
-}
-
-ProductHowItWorks.propTypes = {
-  // classes: PropTypes.object.isRequired,
 }
 
 export default withRoot(ProductHowItWorks)
