@@ -140,14 +140,14 @@ export default function AdminLayout({ children }) {
         </Link>
       </Box>
       <Divider sx={{ backgroundColor: 'rgba(255,255,255,0.08)' }} />
-      
+
       <List sx={{ mt: 1.5, px: 1, flex: 1 }}>
         {NAV_ITEMS.map((item) => {
           const isSelected = pathname === item.path
           return (
             <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
-              <ListItemButton 
-                component={Link} 
+              <ListItemButton
+                component={Link}
                 href={item.path}
                 selected={isSelected}
                 onClick={() => !isDesktop && setOpen(false)}
@@ -175,32 +175,32 @@ export default function AdminLayout({ children }) {
                 <ListItemIcon sx={{ color: isSelected ? '#38bdf8' : 'rgba(255,255,255,0.65)', minWidth: 38 }}>
                   {item.icon}
                 </ListItemIcon>
-                <ListItemText 
-                  primary={item.text} 
-                  primaryTypographyProps={{ 
-                    fontSize: '0.875rem', 
+                <ListItemText
+                  primary={item.text}
+                  primaryTypographyProps={{
+                    fontSize: '0.875rem',
                     fontWeight: isSelected ? 700 : 500,
                     letterSpacing: '0.1px'
-                  }} 
+                  }}
                 />
               </ListItemButton>
             </ListItem>
           )
         })}
       </List>
-      
+
       <Box sx={{ mt: 'auto', p: 1.5 }}>
         <Divider sx={{ backgroundColor: 'rgba(255,255,255,0.08)', mb: 1.5 }} />
         <ListItem disablePadding>
-          <ListItemButton 
-            component={Link} 
-            href="/"
+          <ListItemButton
+            component={Link}
+            href="/tienda/drones-fpv-hd"
             sx={{
               borderRadius: 2,
               py: 1,
               px: 1.5,
               color: 'rgba(255,255,255,0.75)',
-              '&:hover': { 
+              '&:hover': {
                 backgroundColor: 'rgba(255, 255, 255, 0.08)',
                 color: '#38bdf8',
                 '& .MuiListItemIcon-root': { color: '#38bdf8' }
@@ -210,8 +210,8 @@ export default function AdminLayout({ children }) {
             <ListItemIcon sx={{ color: 'rgba(255,255,255,0.75)', minWidth: 38 }}>
               <StorefrontIcon />
             </ListItemIcon>
-            <ListItemText 
-              primary="Volver a la Tienda" 
+            <ListItemText
+              primary="Volver a la Tienda"
               primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 600 }}
             />
           </ListItemButton>
@@ -253,7 +253,7 @@ export default function AdminLayout({ children }) {
             <UserDropdown showLoginLabel={false} />
           </Toolbar>
         </StyledAppBar>
-        
+
         {/* Desktop Sidebar (Persistent) */}
         {isDesktop ? (
           <Drawer
