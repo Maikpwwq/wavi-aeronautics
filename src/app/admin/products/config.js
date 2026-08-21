@@ -81,6 +81,113 @@ export const BRAND_OPTIONS = [
 ]
 
 // ============================================================
+// CATEGORY-BASED TAG SUGGESTIONS
+// ============================================================
+
+/**
+ * Predefined tag suggestions organized by category.
+ * 
+ * - Each category key maps to an array of suggested tags.
+ * - `_common` tags are available across ALL categories as a fallback.
+ * - Drone-related categories share `_drones` as a base, extended per subcategory.
+ * - The system is extensible: add new category keys as the catalog grows.
+ * 
+ * Usage: merge `_common` + category-specific tags, then deduplicate.
+ */
+export const CATEGORY_TAGS = {
+  // ── Shared base tags (available to every category) ──
+  _common: [
+    'fpv-racing', 'cine-audiovisual', 'agro-precision',
+    'topografia-mapeo', 'inspeccion-industrial', 'turismo-aventura',
+    'nuevo', 'oferta', 'destacado', 'profesional', 'principiante'
+  ],
+
+  // ── Drone-specific product tags ──
+  _drones: [
+    'O4', 'WASP', 'WTFPV', 'FPV', 'KIT', '4K',
+    'HD', 'analógico', 'digital', 'freestyle', 'long-range',
+    'cinewhoop', 'toothpick', 'micro', 'sub-250g',
+    'BNF', 'PNP', 'RTF', '5-pulgadas', '3.5-pulgadas', '7-pulgadas',
+    'GPS', 'RTK', 'ELRS', 'crossfire', 'TBS'
+  ],
+
+  // Drones Kit (inherits _drones)
+  dronesKit: [
+    'kit-completo', 'kit-armado', 'DIY', 'frame', 'carbono', 'motor', 'ESC', 'stack'
+  ],
+
+  // Drones RC (inherits _drones)
+  dronesRC: [
+    'racing', 'acrobático', 'competición', 'velocidad'
+  ],
+
+  // FPV HD (inherits _drones)
+  dronesHD: [
+    'DJI', 'walksnail', 'HDZero', 'O3', 'vista', 'cinematic', 'estabilizado'
+  ],
+
+  // Goggles FPV
+  googles: [
+    'OLED', 'LCD', 'diversity', 'receptor-integrado', 'DVR',
+    'HDZero', 'DJI', 'walksnail', 'analógico', 'digital',
+    'ajuste-dioptrías', 'head-tracker'
+  ],
+
+  // Radio Control
+  radioControl: [
+    'ELRS', 'crossfire', 'TBS', 'ExpressLRS', 'OpenTX', 'EdgeTX',
+    '2.4GHz', '915MHz', '868MHz', 'hall-sensor', 'gimbal',
+    'plegable', 'compacto', 'full-size'
+  ],
+
+  // Baterías y Accesorios
+  baterias: [
+    'LiPo', 'Li-Ion', '1S', '2S', '3S', '4S', '6S',
+    'HV', 'cargador', 'paralelo', 'XT60', 'XT30',
+    'correa', 'antena', 'hélice', 'protector', 'bolsa-seguridad'
+  ],
+
+  // Transmisores de Video
+  transmisors: [
+    'VTX', '5.8GHz', '1.3GHz', 'digital', 'analógico',
+    'O4', 'O3', 'DJI', 'walksnail', 'HDZero',
+    '25mW', '200mW', '400mW', '1W', 'smart-audio', 'IRC-tramp'
+  ],
+
+  // Receptores
+  receptors: [
+    'ELRS', 'crossfire', 'TBS', 'R-XSR', 'XM+',
+    '2.4GHz', '915MHz', '868MHz', 'nano', 'diversidad',
+    'telemetría', 'SBUS', 'CRSF', 'PWM'
+  ],
+
+  // Digital VTX
+  digitalVTX: [
+    'DJI', 'walksnail', 'HDZero', 'O4', 'O3', 'vista',
+    'avatar', 'VRX', 'módulo-receptor', '4K', '1080p', '720p',
+    'baja-latencia', 'antena-patch', 'antena-omni'
+  ],
+}
+
+/**
+ * Get merged tag suggestions for a given category.
+ * Combines _common + _drones (if applicable) + category-specific tags.
+ * Deduplicates and sorts alphabetically.
+ * 
+ * @param {string} categoryKey - The selected category key (e.g. 'dronesHD')
+ * @returns {string[]} Sorted, deduplicated array of suggested tags
+ */
+export const getTagSuggestionsForCategory = (categoryKey) => {
+  const common = CATEGORY_TAGS._common || []
+  const isDroneCategory = ['dronesKit', 'dronesRC', 'dronesHD'].includes(categoryKey)
+  const droneBase = isDroneCategory ? (CATEGORY_TAGS._drones || []) : []
+  const specific = CATEGORY_TAGS[categoryKey] || []
+
+  const merged = [...new Set([...common, ...droneBase, ...specific])]
+  return merged.sort((a, b) => a.localeCompare(b, 'es'))
+}
+
+// ============================================================
 // STANDARDIZED PRODUCT SCHEMA (English Field Names)
 // ============================================================
 

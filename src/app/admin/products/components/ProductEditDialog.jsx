@@ -19,11 +19,12 @@ import {
   Stack,
   Divider,
   Alert,
-  InputAdornment
+  InputAdornment,
+  Autocomplete
 } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { CATEGORY_OPTIONS, BRAND_OPTIONS, DEFAULT_DRONE_OPTIONS } from '@/app/admin/products/config'
+import { CATEGORY_OPTIONS, BRAND_OPTIONS, DEFAULT_DRONE_OPTIONS, getTagSuggestionsForCategory } from '@/app/admin/products/config'
 
 // Components
 import ReorderableImageList from './molecules/ReorderableImageList'
@@ -79,6 +80,11 @@ export default function ProductEditDialog({
   const handleTagDelete = (indexToDelete) => {
     const newTags = (formData.tags || []).filter((_, idx) => idx !== indexToDelete)
     onFormChange({ tags: newTags })
+  }
+
+  const handleTagsAutocomplete = (_, newValue) => {
+    const cleaned = newValue.map(v => v.trim()).filter(Boolean)
+    onFormChange({ tags: [...new Set(cleaned)] })
   }
 
   const tagsDisplayValue = Array.isArray(formData.tags) ? formData.tags.join(', ') : ''
@@ -284,34 +290,42 @@ export default function ProductEditDialog({
 
           <Divider sx={{ my: 1 }} />
 
-          {/* Tags Section */}
+          {/* Tags Section — Autocomplete con sugerencias */}
           <Box>
             <Typography variant="subtitle2" gutterBottom>
               Tags
             </Typography>
-            <TextField
-              label="Agregar tags (separadas por coma)"
-              value={tagsDisplayValue}
-              onChange={handleTagsChange}
-              fullWidth
-              size="small"
-              placeholder="fpv, drone, racing, geprc"
-              helperText="Escribe tags separadas por comas y presiona fuera del campo"
-            />
-            {formData.tags && formData.tags.length > 0 && (
-              <Stack direction="row" spacing={1} flexWrap="wrap" rowGap={1} sx={{ mt: 1 }}>
-                {formData.tags.map((tag, i) => (
-                  <Chip 
-                    key={i} 
-                    label={tag} 
-                    size="small" 
-                    onDelete={() => handleTagDelete(i)}
+            <Autocomplete
+              multiple
+              freeSolo
+              options={getTagSuggestionsForCategory(formData.category).filter(
+                (opt) => !(formData.tags || []).includes(opt)
+              )}
+              value={formData.tags || []}
+              onChange={handleTagsAutocomplete}
+              renderTags={(value, getTagProps) =>
+                value.map((tag, index) => (
+                  <Chip
+                    {...getTagProps({ index })}
+                    key={tag}
+                    label={tag}
+                    size="small"
                     color="primary"
                     variant="outlined"
                   />
-                ))}
-              </Stack>
-            )}
+                ))
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Tags del producto"
+                  placeholder={formData.category ? 'Selecciona o escribe tags...' : 'Selecciona categoría primero'}
+                  size="small"
+                  helperText="Selecciona sugerencias o escribe tags personalizados y presiona Enter"
+                />
+              )}
+              size="small"
+            />
           </Box>
 
           <Divider sx={{ my: 1 }} />

@@ -30,7 +30,8 @@ import {
   Snackbar,
   InputAdornment,
   Chip,
-  CircularProgress
+  CircularProgress,
+  Autocomplete
 } from '@mui/material'
 import SaveIcon from '@mui/icons-material/Save'
 import RestoreIcon from '@mui/icons-material/Restore'
@@ -47,7 +48,8 @@ import {
   DRAFT_STORAGE_KEY,
   generateProductID,
   generateSlug,
-  buildProductPayload
+  buildProductPayload,
+  getTagSuggestionsForCategory
 } from '@/app/admin/products/config'
 
 // Components
@@ -347,32 +349,48 @@ export default function NewProductForm() {
           </FormControl>
         </Box>
 
-        {/* Tags */}
+        {/* Tags — Autocomplete con sugerencias por categoría */}
         <Box sx={{ mt: 2 }}>
-          <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
-            <TextField
-              label="Agregar Tag"
-              placeholder="Tag1, Tag2, Tag3..."
-              value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
-              size="small"
-              sx={{ maxWidth: 200 }}
-            />
-            <Button variant="outlined" size="small" onClick={handleAddTag}>
-              <AddIcon />
-            </Button>
-          </Box>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-            {formData.tags.map((tag) => (
-              <Chip
-                key={tag}
-                label={tag}
-                onDelete={() => handleRemoveTag(tag)}
+          <Autocomplete
+            multiple
+            freeSolo
+            options={getTagSuggestionsForCategory(formData.category).filter(
+              (opt) => !formData.tags.includes(opt)
+            )}
+            value={formData.tags || []}
+            onChange={(_, newValue) => {
+              // newValue comes as array of strings (selected + typed)
+              const cleaned = newValue
+                .map(v => v.trim())
+                .filter(Boolean)
+              setFormData(prev => ({ ...prev, tags: [...new Set(cleaned)] }))
+            }}
+            inputValue={tagInput}
+            onInputChange={(_, newInputValue) => setTagInput(newInputValue)}
+            renderTags={(value, getTagProps) =>
+              value.map((tag, index) => (
+                <Chip
+                  {...getTagProps({ index })}
+                  key={tag}
+                  label={tag}
+                  size="small"
+                  color="primary"
+                  variant="outlined"
+                />
+              ))
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Tags del Producto"
+                placeholder={formData.category ? 'Selecciona o escribe tags...' : 'Selecciona una categoría primero'}
                 size="small"
+                helperText="Selecciona sugerencias del menú o escribe tags personalizados y presiona Enter"
               />
-            ))}
-          </Box>
+            )}
+            size="small"
+            sx={{ maxWidth: 600 }}
+          />
         </Box>
 
         <Divider sx={{ my: 3 }} />
