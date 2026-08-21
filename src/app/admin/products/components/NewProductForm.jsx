@@ -359,14 +359,32 @@ export default function NewProductForm() {
             )}
             value={formData.tags || []}
             onChange={(_, newValue) => {
-              // newValue comes as array of strings (selected + typed)
+              // Split any comma-containing entries into multiple tags
               const cleaned = newValue
+                .flatMap(v => v.split(/[,;]+/))
                 .map(v => v.trim())
                 .filter(Boolean)
               setFormData(prev => ({ ...prev, tags: [...new Set(cleaned)] }))
             }}
             inputValue={tagInput}
-            onInputChange={(_, newInputValue) => setTagInput(newInputValue)}
+            onInputChange={(_, newInputValue, reason) => {
+              // Auto-split when user types a comma
+              if (reason === 'input' && newInputValue.includes(',')) {
+                const parts = newInputValue
+                  .split(/[,;]+/)
+                  .map(v => v.trim())
+                  .filter(v => v && !formData.tags.includes(v))
+                if (parts.length > 0) {
+                  setFormData(prev => ({
+                    ...prev,
+                    tags: [...new Set([...prev.tags, ...parts])]
+                  }))
+                }
+                setTagInput('')
+              } else {
+                setTagInput(newInputValue)
+              }
+            }}
             renderTags={(value, getTagProps) =>
               value.map((tag, index) => (
                 <Chip
@@ -383,9 +401,9 @@ export default function NewProductForm() {
               <TextField
                 {...params}
                 label="Tags del Producto"
-                placeholder={formData.category ? 'Selecciona o escribe tags...' : 'Selecciona una categoría primero'}
+                placeholder={formData.category ? 'Selecciona o escribe tags (separa con comas)...' : 'Selecciona una categoría primero'}
                 size="small"
-                helperText="Selecciona sugerencias del menú o escribe tags personalizados y presiona Enter"
+                helperText="Escribe múltiples tags separados por comas, selecciona del menú, o presiona Enter"
               />
             )}
             size="small"

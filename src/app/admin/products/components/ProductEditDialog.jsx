@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { 
   Dialog, 
   DialogTitle, 
@@ -70,10 +71,12 @@ export default function ProductEditDialog({
     onFormChange({ images: newUrls })
   }
 
-  // Tags handler (comma-separated input)
+  const [tagInput, setTagInput] = useState('')
+
+  // Tags handler (comma-separated input & suggestions)
   const handleTagsChange = (e) => {
     const tagsString = e.target.value
-    const tagsArray = tagsString.split(',').map(t => t.trim()).filter(Boolean)
+    const tagsArray = tagsString.split(/[,;]+/).map(t => t.trim()).filter(Boolean)
     onFormChange({ tags: tagsArray })
   }
 
@@ -83,7 +86,10 @@ export default function ProductEditDialog({
   }
 
   const handleTagsAutocomplete = (_, newValue) => {
-    const cleaned = newValue.map(v => v.trim()).filter(Boolean)
+    const cleaned = newValue
+      .flatMap(v => v.split(/[,;]+/))
+      .map(v => v.trim())
+      .filter(Boolean)
     onFormChange({ tags: [...new Set(cleaned)] })
   }
 
@@ -303,6 +309,23 @@ export default function ProductEditDialog({
               )}
               value={formData.tags || []}
               onChange={handleTagsAutocomplete}
+              inputValue={tagInput}
+              onInputChange={(_, newInputValue, reason) => {
+                if (reason === 'input' && newInputValue.includes(',')) {
+                  const parts = newInputValue
+                    .split(/[,;]+/)
+                    .map(v => v.trim())
+                    .filter(v => v && !(formData.tags || []).includes(v))
+                  if (parts.length > 0) {
+                    onFormChange({
+                      tags: [...new Set([...(formData.tags || []), ...parts])]
+                    })
+                  }
+                  setTagInput('')
+                } else {
+                  setTagInput(newInputValue)
+                }
+              }}
               renderTags={(value, getTagProps) =>
                 value.map((tag, index) => (
                   <Chip
@@ -319,9 +342,9 @@ export default function ProductEditDialog({
                 <TextField
                   {...params}
                   label="Tags del producto"
-                  placeholder={formData.category ? 'Selecciona o escribe tags...' : 'Selecciona categoría primero'}
+                  placeholder={formData.category ? 'Selecciona o escribe tags (separa con comas)...' : 'Selecciona categoría primero'}
                   size="small"
-                  helperText="Selecciona sugerencias o escribe tags personalizados y presiona Enter"
+                  helperText="Escribe múltiples tags separados por comas, selecciona del menú, o presiona Enter"
                 />
               )}
               size="small"
