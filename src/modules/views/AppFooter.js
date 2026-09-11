@@ -12,6 +12,10 @@ import SocialContactIcons from '@/modules/components/SocialContactIcons'
 
 const legalLinks = [
   { label: 'Términos y Condiciones', href: '/condiciones-del-servicio' },
+  { label: 'Eliminación de Datos', href: '/eliminacion-datos-usuario' }
+]
+
+const policyLinks = [
   { label: 'Política de Privacidad', href: '/politica-de-privacidad' },
   { label: 'Política de Envíos', href: '/politica-de-envios' },
   { label: 'Política de Garantía', href: '/politica-de-garantia' },
@@ -31,12 +35,17 @@ function AppFooter () {
       }}
     >
       <Container maxWidth="lg">
-        {/* === Three-Column Row === */}
+        {/* === Four-Column Row === */}
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' },
-            gap: { xs: 5, md: 6 }
+            gridTemplateColumns: {
+              xs: '1fr',
+              sm: 'repeat(2, 1fr)',
+              md: '1.2fr 1fr 1.15fr 1.25fr',
+              lg: '1.2fr 1fr 1.15fr 1.25fr'
+            },
+            gap: { xs: 5, sm: 4, md: 4, lg: 5 }
           }}
         >
           {/* ── Column 1: Social ── */}
@@ -114,7 +123,56 @@ function AppFooter () {
             </Box>
           </Box>
 
-          {/* ── Column 3: Payment Methods ── */}
+          {/* ── Column 3: Políticas ── */}
+          <Box>
+            <Typography
+              variant="subtitle2"
+              sx={{
+                color: 'rgba(255, 255, 255, 0.95)',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: 1.2,
+                mb: 2,
+                fontSize: '0.8rem'
+              }}
+            >
+              Políticas
+            </Typography>
+
+            <Box component="nav" aria-label="Políticas de la tienda">
+              <Box
+                component="ul"
+                sx={{
+                  m: 0,
+                  p: 0,
+                  listStyle: 'none',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 0.75
+                }}
+              >
+                {policyLinks.map((link) => (
+                  <Box component="li" key={link.href}>
+                    <Link
+                      href={link.href}
+                      style={{
+                        color: 'rgba(255, 255, 255, 0.65)',
+                        textDecoration: 'none',
+                        fontSize: '0.85rem',
+                        transition: 'color 0.2s ease'
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.color = '#00aCe4' }}
+                      onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255, 255, 255, 0.65)' }}
+                    >
+                      {link.label}
+                    </Link>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          </Box>
+
+          {/* ── Column 4: Payment Methods ── */}
           <Box>
             <PaymentMethods />
           </Box>
