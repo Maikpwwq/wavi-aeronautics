@@ -40,6 +40,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import ReportProblemIcon from '@mui/icons-material/ReportProblem'
 import LabelImportantIcon from '@mui/icons-material/LabelImportant'
 import ShieldIcon from '@mui/icons-material/Shield'
+import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 
 import withRoot from '@/modules/withRoot'
 
@@ -780,24 +781,30 @@ function ProductValues() {
 
                   <Box sx={{ flexShrink: 0 }}>
                     <Button
-                      component={Link}
-                      href="/tienda/escuela"
+                      component="a"
+                      href="https://api.whatsapp.com/send?phone=573204842897&text=Hola%20Wavi%20Aeronautics,%20quiero%20programar%20una%20clase%20de%20vuelo%20de%20drones."
+                      target="_blank"
+                      rel="noopener noreferrer"
                       variant="contained"
-                      color="primary"
-                      startIcon={<SchoolIcon />}
+                      startIcon={<WhatsAppIcon />}
                       sx={{
                         px: 3,
                         py: 1.25,
                         borderRadius: 2.5,
                         fontWeight: 800,
                         textTransform: 'none',
-                        bgcolor: '#00aCe4',
+                        bgcolor: '#25D366',
                         color: '#ffffff',
-                        boxShadow: '0 4px 16px rgba(0, 172, 228, 0.4)',
-                        '&:hover': { bgcolor: '#0095c7' }
+                        boxShadow: '0 4px 16px rgba(37, 211, 102, 0.4)',
+                        transition: 'all 0.25s ease',
+                        '&:hover': {
+                          bgcolor: '#20ba5a',
+                          boxShadow: '0 6px 20px rgba(37, 211, 102, 0.5)',
+                          transform: 'translateY(-1px)'
+                        }
                       }}
                     >
-                      Aprende con Escuela FPV
+                      Agendar Sesión de Vuelo
                     </Button>
                   </Box>
                 </Box>

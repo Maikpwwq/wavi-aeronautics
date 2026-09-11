@@ -69,15 +69,16 @@ function ProductCTA() {
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
         <Grid container spacing={4} sx={{ alignItems: 'center' }}>
           {/* Form Column */}
-          <Grid size={{ xs: 12, md: 6, lg: 5 }}>
+          <Grid size={{ xs: 12, md: 6, lg: 5 }} sx={{ position: 'relative', zIndex: 2 }}>
             <Box
               sx={{
                 bgcolor: '#0f172a',
                 borderRadius: 4,
                 p: { xs: 4, sm: 5 },
                 position: 'relative',
+                zIndex: 2,
                 overflow: 'hidden',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.35)',
               }}
             >
               {/* Card inner glow */}
@@ -207,18 +208,24 @@ function ProductCTA() {
           </Grid>
 
           {/* Image Column */}
-          <Grid size={{ xs: 12, md: 6, lg: 7 }}>
+          <Grid size={{ xs: 12, md: 6, lg: 7 }} sx={{ position: 'relative', zIndex: 1 }}>
             <Box sx={{ display: { xs: 'none', md: 'block' }, position: 'relative' }}>
               <Box
+                aria-hidden="true"
                 sx={{
                   position: 'absolute',
-                  top: -67,
-                  left: -67,
-                  right: 0,
-                  bottom: 0,
+                  top: -24,
+                  right: -24,
                   width: '100%',
+                  height: '100%',
+                  maxWidth: 580,
+                  maxHeight: 380,
                   background: `url(${productCTAImageDots.src || productCTAImageDots})`,
+                  mixBlendMode: 'multiply',
+                  opacity: 0.6,
+                  borderRadius: 4,
                   zIndex: 0,
+                  pointerEvents: 'none',
                 }}
               />
               <Image

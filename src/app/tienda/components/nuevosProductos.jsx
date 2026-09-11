@@ -54,13 +54,6 @@ const styles = (theme) => ({
     padding: theme.spacing(2, 1.5), // Vertical headroom prevents hover zoom/shadow from being clipped
     width: 310, // Fixed width for consistent scrolling
     flexShrink: 0
-  },
-  dateText: {
-    fontSize: '0.72rem',
-    color: '#94a3b8',
-    fontWeight: 500,
-    marginTop: theme.spacing(1),
-    letterSpacing: '0.01em'
   }
 })
 
@@ -106,23 +99,6 @@ function NuevosProductos() {
     return [...sortedProducts, ...sortedProducts]
   }, [sortedProducts])
 
-  // Date Formatter
-  const formatDate = (product) => {
-    const ts = product.updatedAt || product.createdAt
-    if (!ts) return ''
-    const date = ts.seconds ? new Date(ts.seconds * 1000) : new Date(ts)
-    
-    return new Intl.DateTimeFormat('es-CO', {
-      day: 'numeric',
-      month: 'long', 
-      year: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      second: 'numeric',
-      hour12: true,
-      timeZoneName: 'short'
-    }).format(date)
-  }
 
   const showSkeleton = !loadedCategories.includes('drones') && sortedProducts.length === 0
 
@@ -218,9 +194,6 @@ function NuevosProductos() {
                       products={product}
                       productID={k}
                     />
-                    <Typography sx={classes.dateText}>
-                      {formatDate(product)}
-                    </Typography>
                   </Box>
                 ))}
               </Box>
