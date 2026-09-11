@@ -3,10 +3,11 @@ import React, { Suspense, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import withRoot from '@/modules/withRoot'
 import theme from '@/app/tienda/innerTheme'
-import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
-import Typography from '@/modules/components/Typography'
+import Typography from '@mui/material/Typography'
+import Chip from '@mui/material/Chip'
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch'
 import ProductItem from '@/app/tienda/components/ProductItem'
 import ProductSkeleton from '@/app/tienda/components/ProductSkeleton'
 
@@ -21,13 +22,15 @@ const marqueeKeyframes = `
 const styles = (theme) => ({
   root: {
     display: 'flex',
-    backgroundColor: '#eaeff1',
+    position: 'relative',
+    background: 'linear-gradient(180deg, #f8fafc 0%, #f1f5f9 50%, #ffffff 100%)',
     overflow: 'hidden',
     width: '100%',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    py: { xs: 5, sm: 7, md: 8 }
   },
   container: {
-    padding: `${theme.spacing(3)} ${theme.spacing(0)} !important`,
+    padding: `${theme.spacing(0)} ${theme.spacing(0)} !important`,
     margin: 0,
     maxWidth: '100% !important', // Full width for carousel
     position: 'relative',
@@ -36,7 +39,7 @@ const styles = (theme) => ({
     alignItems: 'center',
     textAlign: 'center',
     width: '100%',
-    overflow: 'hidden' // Hide scrollbar
+    zIndex: 1
   },
   // Carousel Track
   carouselTrack: {
@@ -48,20 +51,16 @@ const styles = (theme) => ({
     }
   },
   item: {
-    padding: theme.spacing(0, 2),
-    width: 300, // Fixed width for consistent scrolling
+    padding: theme.spacing(2, 1.5), // Vertical headroom prevents hover zoom/shadow from being clipped
+    width: 310, // Fixed width for consistent scrolling
     flexShrink: 0
   },
-  title: {
-    paddingBottom: theme.spacing(4)
-  },
-  endingTexts: {
-    marginBottom: `${theme.spacing(4)} !important`
-  },
   dateText: {
-    fontSize: '0.75rem',
-    color: theme.palette.text.secondary,
-    marginTop: theme.spacing(1)
+    fontSize: '0.72rem',
+    color: '#94a3b8',
+    fontWeight: 500,
+    marginTop: theme.spacing(1),
+    letterSpacing: '0.01em'
   }
 })
 
@@ -128,19 +127,85 @@ function NuevosProductos() {
   const showSkeleton = !loadedCategories.includes('drones') && sortedProducts.length === 0
 
   return (
-    <Box sx={classes.root}>
+    <Box sx={classes.root} component="section" aria-label="Nuevos productos en tienda">
       {/* Inject Keyframes */}
       <style>{marqueeKeyframes}</style>
+
+      {/* Decorative high-tech ambient background glow */}
+      <Box
+        aria-hidden="true"
+        sx={{
+          position: 'absolute',
+          top: '-15%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '700px',
+          height: '260px',
+          background:
+            'radial-gradient(ellipse at center, rgba(0, 172, 228, 0.08) 0%, rgba(0, 172, 228, 0) 70%)',
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+      />
       
       <Container sx={classes.container}>
-        <Typography variant="h4" marked="center" sx={classes.title} component="h2">
-          Nuevos Productos
-        </Typography>
-        <Typography variant="body1" sx={classes.endingTexts}>
-          Descubre lo último en Drones y productos recién llegados.
-        </Typography>
+        {/* Header & Badging matching FeaturedBrands & recent home sections */}
+        <Box sx={{ textAlign: 'center', mb: { xs: 3, sm: 4, md: 5 }, px: 2 }}>
+          <Chip
+            icon={
+              <RocketLaunchIcon
+                sx={{
+                  fontSize: '15px !important',
+                  color: '#00aCe4 !important',
+                }}
+              />
+            }
+            label="NOVEDADES & LANZAMIENTOS RECIENTES"
+            size="small"
+            sx={{
+              mb: 1.5,
+              fontWeight: 700,
+              fontSize: '0.72rem',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              backgroundColor: 'rgba(0, 172, 228, 0.08)',
+              color: '#0284c7',
+              border: '1px solid rgba(0, 172, 228, 0.25)',
+              px: 1,
+            }}
+          />
+
+          <Typography
+            variant="h4"
+            component="h2"
+            sx={{
+              fontWeight: 800,
+              fontSize: { xs: '1.75rem', sm: '2.25rem', md: '2.5rem' },
+              letterSpacing: '-0.02em',
+              color: '#0f172a',
+              mb: 1.5,
+              textTransform: 'none',
+            }}
+          >
+            Nuevos Productos
+          </Typography>
+
+          <Typography
+            variant="body1"
+            sx={{
+              maxWidth: 640,
+              mx: 'auto',
+              color: '#64748b',
+              fontSize: { xs: '0.92rem', sm: '1.02rem' },
+              lineHeight: 1.6,
+            }}
+          >
+            Descubre lo último en drones, sistemas autónomos y componentes recién llegados a nuestro catálogo.
+          </Typography>
+        </Box>
         
-        <Box sx={{ width: '100%', overflow: 'hidden' }}> {/* Mask */}
+        {/* Mask with vertical padding so zoom & shadow have ample clearance */}
+        <Box sx={{ width: '100%', overflow: 'hidden', py: { xs: 1.5, sm: 2 } }}>
            <Suspense fallback={<ProductSkeleton count={4} />}>
             {showSkeleton ? (
               <ProductSkeleton count={4} />
@@ -160,7 +225,7 @@ function NuevosProductos() {
                 ))}
               </Box>
             ) : (
-              <Typography variant="body2" sx={{ m: 2 }}>
+              <Typography variant="body2" sx={{ m: 2, color: '#64748b' }}>
                 No hay productos disponibles.
               </Typography>
             )}

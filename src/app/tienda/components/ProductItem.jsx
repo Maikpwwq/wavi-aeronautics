@@ -58,14 +58,15 @@ const ProductItem = ({ products, category }) => {
         display: 'flex', 
         flexDirection: 'column',
         borderRadius: 3,
-        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        transformOrigin: 'center center',
+        transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease',
         bgcolor: 'background.paper',
         border: '1px solid',
         borderColor: 'divider',
         '&:hover': {
-          transform: 'translateY(-8px)',
-          boxShadow: '0 12px 24px rgba(0,0,0,0.1)',
-          borderColor: 'transparent'
+          transform: 'scale(1.03)',
+          boxShadow: '0 14px 30px -4px rgba(0, 172, 228, 0.18), 0 8px 16px -4px rgba(15, 23, 42, 0.08)',
+          borderColor: 'rgba(0, 172, 228, 0.35)'
         }
       }}
     >
@@ -104,7 +105,7 @@ const ProductItem = ({ products, category }) => {
                  transition: 'transform 0.5s ease',
                  filter: producto.availability === false ? 'grayscale(50%)' : 'none',
                  '.MuiCardActionArea-root:hover &': {
-                   transform: 'scale(1.05)'
+                   transform: 'scale(1.06)'
                  }
                }}
              />
@@ -135,7 +136,18 @@ const ProductItem = ({ products, category }) => {
 
         <CardContent sx={{ flexGrow: 1, p: 2, width: '100%' }}>
           {/* Brand */}
-          <Typography variant="caption" sx={{ color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 600, mb: 0.5, display: 'block' }}>
+          <Typography 
+            variant="caption" 
+            sx={{ 
+              color: '#64748b', 
+              textTransform: 'uppercase', 
+              letterSpacing: 1.2, 
+              fontWeight: 700, 
+              mb: 0.5, 
+              display: 'block',
+              fontSize: '0.72rem'
+            }}
+          >
             {brand}
           </Typography>
 
@@ -144,22 +156,30 @@ const ProductItem = ({ products, category }) => {
             variant="subtitle1" 
             component="div" 
             sx={{ 
-              fontWeight: 'bold', 
-              lineHeight: 1.2,
+              fontWeight: 700, 
+              lineHeight: 1.3,
               mb: 1,
-              height: '2.4em', // approx 2 lines
+              height: '2.6em', // approx 2 lines
               overflow: 'hidden',
               display: '-webkit-box',
               WebkitLineClamp: 2,
               WebkitBoxOrient: 'vertical',
-              color: BRAND_COLORS.text.primary
+              color: '#0f172a',
+              fontSize: '0.95rem'
             }}
           >
             {name}
           </Typography>
 
           {/* Price */}
-          <Typography variant="h6" color="primary" sx={{ fontWeight: 700 }}>
+          <Typography 
+            variant="h6" 
+            sx={{ 
+              fontWeight: 800, 
+              color: '#00aCe4',
+              fontSize: '1.15rem'
+            }}
+          >
             {displayPrice}
           </Typography>
         </CardContent>

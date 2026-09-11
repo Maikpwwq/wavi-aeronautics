@@ -2,24 +2,21 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-// import { useRouter } from 'next/navigation'
-// import PropTypes from 'prop-types'
-import Button from '@/modules/components/Button'
 import withRoot from '@/modules/withRoot'
 import theme from '@/modules/theme'
-import Typography from '@/modules/components/Typography'
+import Typography from '@mui/material/Typography'
+import Chip from '@mui/material/Chip'
+import Button from '@mui/material/Button'
+import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import ProductHeroLayout from './ProductHeroLayout'
-// import Box from '@mui/material/Box'
-// import MavicAir from "public/static/img/Portada-DJI-Mavic-Air-2.png";
+
 const MavicAir = '/static/img/Portada-DJI-Mavic-Air-2.png'
-// const MavicAir =
-//    "https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FPortada-DJI-Mavic-Air-2.png?alt=media&token=c74ad4fe-459b-47e2-8542-fca74408f429";
 
 const styles = (theme) => ({
   background: {
-    // backgroundImage: `url(${MavicAir})`,
     backgroundImage: 'url("/static/img/Portada-DJI-Mavic-Air-2.png")',
-    backgroundColor: '#7fc7d9', // Average color of the background image.
+    backgroundColor: '#7fc7d9',
     backgroundPosition: 'center',
     position: 'absolute',
     left: 0,
@@ -29,29 +26,11 @@ const styles = (theme) => ({
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     zIndex: -2
-  },
-  button: {
-    minWidth: 200
-  },
-  h5: {
-    marginBottom: theme.spacing(4),
-    marginTop: theme.spacing(4),
-    [theme.breakpoints.up('sm')]: {
-      marginTop: theme.spacing(10)
-    },
-    paddingBottom: '2em',
-    paddingTop: '1.5em'
-  },
-  more: {
-    marginTop: theme.spacing(2),
-    paddingTop: '1em'
   }
 })
 
-function ProductHero(props) {
-  // const { theme } = props;
+function ProductHero() {
   const classes = styles(theme)
-  // const navigate = useRouter()
   return (
     <ProductHeroLayout backgroundClassName={classes.background}>
       {/* Increase the network loading priority of the background image. */}
@@ -62,32 +41,131 @@ function ProductHero(props) {
         width={1300}
         height={650}
       />
-      <Typography color="inherit" align="center" variant="h2" marked="center">
+
+      {/* Badge Chip */}
+      <Chip
+        icon={
+          <FlightTakeoffIcon
+            sx={{
+              fontSize: '15px !important',
+              color: 'rgba(255,255,255,0.9) !important',
+            }}
+          />
+        }
+        label="TIENDA OFICIAL DE TECNOLOGÍA AÉREA"
+        size="small"
+        sx={{
+          mb: 2.5,
+          fontWeight: 700,
+          fontSize: '0.72rem',
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+          backgroundColor: 'rgba(255, 255, 255, 0.12)',
+          color: 'rgba(255, 255, 255, 0.95)',
+          border: '1px solid rgba(255, 255, 255, 0.25)',
+          backdropFilter: 'blur(8px)',
+          px: 1,
+        }}
+      />
+
+      {/* Title */}
+      <Typography
+        variant="h2"
+        component="h1"
+        align="center"
+        sx={{
+          color: '#ffffff',
+          fontWeight: 800,
+          fontSize: { xs: '2rem', sm: '2.75rem', md: '3.25rem' },
+          letterSpacing: '-0.02em',
+          textTransform: 'none',
+          mb: 1,
+          textShadow: '0 2px 16px rgba(0,0,0,0.3)',
+        }}
+      >
         Encuentra tu Dron
       </Typography>
-      <Typography color="inherit" align="center" variant="h5" sx={classes.h5}>
+
+      {/* Accent bar */}
+      <div
+        style={{
+          width: 60,
+          height: 4,
+          backgroundColor: '#00aCe4',
+          borderRadius: 2,
+          margin: '0 auto 20px',
+        }}
+      />
+
+      {/* Subtitle */}
+      <Typography
+        variant="h5"
+        component="p"
+        align="center"
+        sx={{
+          color: 'rgba(255, 255, 255, 0.88)',
+          fontWeight: 400,
+          fontSize: { xs: '0.95rem', sm: '1.1rem', md: '1.2rem' },
+          lineHeight: 1.7,
+          maxWidth: 560,
+          mx: 'auto',
+          mb: { xs: 3, sm: 4 },
+          textShadow: '0 1px 8px rgba(0,0,0,0.25)',
+        }}
+      >
         Tienda de drones, equipos FPV y tecnología VToL.
         <br />
         Todo lo que necesitas para tus proyectos.
       </Typography>
+
+      {/* CTA Button */}
       <Button
-        color="secondary"
-        size="large"
+        component={Link}
+        href="/tienda/"
         variant="contained"
-        className="navlink"
-        sx={classes.button}
+        size="large"
+        endIcon={<ArrowForwardIcon />}
+        sx={{
+          minWidth: 220,
+          py: 1.5,
+          px: 4,
+          borderRadius: 2.5,
+          fontWeight: 700,
+          fontSize: '0.95rem',
+          letterSpacing: '0.04em',
+          textTransform: 'uppercase',
+          bgcolor: '#00aCe4',
+          color: '#ffffff',
+          boxShadow: '0 4px 20px rgba(0, 172, 228, 0.4)',
+          transition: 'all 0.3s ease',
+          '&:hover': {
+            bgcolor: '#0090c0',
+            boxShadow: '0 6px 28px rgba(0, 172, 228, 0.5)',
+            transform: 'translateY(-2px)',
+          },
+        }}
       >
-        <Link href="tienda/">{'Ver Equipos'}</Link>
+        Ver Equipos
       </Button>
-      <Typography variant="body2" color="inherit" sx={classes.more}>
+
+      {/* Tagline */}
+      <Typography
+        variant="body2"
+        align="center"
+        sx={{
+          color: 'rgba(255, 255, 255, 0.6)',
+          fontSize: '0.82rem',
+          fontWeight: 500,
+          letterSpacing: '0.04em',
+          mt: 3,
+        }}
+      >
         Tecnología aérea, drones y accesorios
       </Typography>
     </ProductHeroLayout>
   )
 }
 
-ProductHero.propTypes = {
-  // classes: PropTypes.object.isRequired,
-}
+ProductHero.propTypes = {}
 
 export default withRoot(ProductHero)
