@@ -7,6 +7,8 @@ export { default as ProductHero } from './ProductHero'
 export { default as ProductHeroLayout } from './ProductHeroLayout'
 export { default as ProductHowItWorks } from './ProductHowItWorks'
 export { default as ProductMarcas } from './ProductMarcas'
+export { default as FeaturedBrands } from './FeaturedBrands'
 export { default as ProductSmokingHero } from './ProductSmokingHero'
 export { default as ProductValues } from './ProductValues'
 export { default as HomeCtaBanners } from './HomeCtaBanners'
+

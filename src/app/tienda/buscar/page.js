@@ -48,7 +48,9 @@ const styles = (theme) => ({
 
 function SearchResultsContent() {
   const searchParams = useSearchParams()
-  const queryText = searchParams.get('q') || ''
+  const brandParam = searchParams.get('marca')
+  const queryParam = searchParams.get('q')
+  const queryText = queryParam || brandParam || ''
 
   const dispatch = useDispatch()
   const shopState = useSelector((store) => store?.shop)
@@ -143,7 +145,9 @@ function SearchResultsContent() {
       {/* Main Results View */}
       <Box sx={classes.presentationProducts}>
         <Typography variant="h5" sx={classes.spacingTexts}>
-          Resultados de búsqueda para &quot;{queryText}&quot;:
+          {brandParam && !queryParam
+            ? `Productos de la marca "${brandParam}":`
+            : `Resultados de búsqueda para "${queryText}":`}
         </Typography>
         <Typography variant="body1" sx={classes.endingTexts}>
           {loading

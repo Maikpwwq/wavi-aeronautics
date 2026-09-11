@@ -30,6 +30,17 @@ const nextConfig = {
     return [
       {
         source: '/tienda',
+        has: [
+          {
+            type: 'query',
+            key: 'marca',
+          },
+        ],
+        destination: '/tienda/buscar',
+        permanent: true,
+      },
+      {
+        source: '/tienda',
         destination: '/tienda/kit-drones',
         permanent: true,
       },
