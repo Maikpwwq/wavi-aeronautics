@@ -14,7 +14,8 @@ import ProductCard from '@/app/tienda/components/ProductCard'
 import ProductSkeleton from '@/app/tienda/components/ProductSkeleton'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
 import { useProductFilter } from '@/app/tienda/hooks/useProductFilter'
-import { searchProducts } from '@/services/FirebaseSearchProducts'
+import { searchProducts, searchByBrand } from '@/services/FirebaseSearchProducts'
+import { matchesBrand } from '@/utilities/brandsConfig'
 import { fetchAllProducts } from '@/store/states/shop'
 
 const styles = (theme) => ({
@@ -60,47 +61,49 @@ function SearchResultsContent() {
 
   const hasDispatched = useRef(false)
 
-  // Ensure shop products are fetched if empty
+  // Ensure all shop categories are fetched into Redux if not all are loaded yet
   useEffect(() => {
-    if (
-      !hasDispatched.current &&
-      (!shopState?.loadedCategories || shopState.loadedCategories.length === 0)
-    ) {
+    const requiredCategories = [
+      'drones',
+      'radioControl',
+      'accesorios',
+      'googles',
+      'transmisors',
+      'digitalVTX',
+    ]
+    const hasAll = requiredCategories.every((c) =>
+      shopState?.loadedCategories?.includes(c)
+    )
+
+    if (!hasDispatched.current && !hasAll) {
       hasDispatched.current = true
       dispatch(fetchAllProducts())
     }
   }, [dispatch, shopState?.loadedCategories])
-
-  const localProductsPool = React.useMemo(() => {
-    if (!shopState) return []
-    return [
-      ...(shopState.dronesKit || []),
-      ...(shopState.dronesHD || []),
-      ...(shopState.dronesRC || []),
-      ...(shopState.googles || []),
-      ...(shopState.radioControl || []),
-      ...(shopState.baterias || []),
-      ...(shopState.receptors || []),
-      ...(shopState.transmisors || []),
-      ...(shopState.digitalVTX || []),
-    ]
-  }, [shopState])
 
   useEffect(() => {
     let isMounted = true
     setLoading(true)
 
     async function performSearch() {
-      if (!queryText.trim()) {
-        if (isMounted) {
-          setSearchResults([])
-          setLoading(false)
-        }
-        return
-      }
-
       try {
-        const found = await searchProducts(queryText, localProductsPool)
+        let found = []
+
+        if (brandParam && !queryParam) {
+          // Explicit brand search: filter strictly by brand and its aliases
+          found = await searchByBrand(brandParam)
+        } else if (queryParam && queryParam.trim()) {
+          // Free-text query
+          found = await searchProducts(queryParam.trim())
+          if (brandParam) {
+            found = found.filter((p) =>
+              matchesBrand(p.brand || p.marca, brandParam)
+            )
+          }
+        } else if (brandParam) {
+          found = await searchByBrand(brandParam)
+        }
+
         if (isMounted) {
           setSearchResults(found)
         }
@@ -117,7 +120,11 @@ function SearchResultsContent() {
     return () => {
       isMounted = false
     }
-  }, [queryText, localProductsPool])
+  }, [brandParam, queryParam])
+
+  const initialFilterConfig = React.useMemo(() => {
+    return { brands: brandParam ? [brandParam] : [] }
+  }, [brandParam])
 
   const {
     filters,
@@ -129,7 +136,7 @@ function SearchResultsContent() {
     resetFilters,
     sortOrder,
     setSortOrder,
-  } = useProductFilter(searchResults)
+  } = useProductFilter(searchResults, initialFilterConfig)
 
   const theme = useTheme()
   const classes = styles(theme)

@@ -1,28 +1,45 @@
-import { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { matchesBrand } from '@/utilities/brandsConfig'
 
-export const useProductFilter = (products) => {
+export const useProductFilter = (products, initialFilters = {}) => {
   // --------------------------------------------------------------------------
   // Logic: Filter State
   // --------------------------------------------------------------------------
   const [filterState, setFilterState] = useState({
-    brands: [],
+    brands: initialFilters.brands || [],
     price: {
-      min: '',
-      max: ''
+      min: initialFilters.min || initialFilters.price?.min || '',
+      max: initialFilters.max || initialFilters.price?.max || ''
     }
   })
+
+  // Sync with initialFilters.brands if changed (e.g. URL query param change)
+  const initialBrandsKey = Array.isArray(initialFilters.brands)
+    ? initialFilters.brands.join(',')
+    : ''
+  useEffect(() => {
+    if (initialBrandsKey) {
+      setFilterState((prev) => ({
+        ...prev,
+        brands: initialFilters.brands || []
+      }))
+    }
+  }, [initialBrandsKey])
 
   // --------------------------------------------------------------------------
   // Logic: Actions
   // --------------------------------------------------------------------------
   const toggleBrand = (brand) => {
     setFilterState((prev) => {
-      const isSelected = prev.brands.includes(brand)
+      const isSelected = prev.brands.some(
+        (b) => matchesBrand(b, brand) || b.toLowerCase() === brand.toLowerCase()
+      )
       if (isSelected) {
         return {
           ...prev,
-          brands: prev.brands.filter((m) => m !== brand)
+          brands: prev.brands.filter(
+            (m) => !matchesBrand(m, brand) && m.toLowerCase() !== brand.toLowerCase()
+          )
         }
       } else {
         return {

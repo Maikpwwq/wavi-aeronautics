@@ -10,6 +10,7 @@ import Typography from '@/modules/components/Typography'
 // import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 import { formatCurrency, parseCopCurrency } from '@/utilities/priceUtils'
+import { matchesBrand } from '@/utilities/brandsConfig'
 
 const PriceInput = ({ value, onChange, placeholder }) => {
   const [localValue, setLocalValue] = useState(value ? formatCurrency(value) : '')
@@ -166,7 +167,7 @@ const FiltroProducto = (props) => {
                 availableBrands.map((brand) => (
                   <div
                     key={brand}
-                    className={`filter-pill ${filters.brands.includes(brand) ? 'active' : ''}`}
+                    className={`filter-pill ${filters.brands.some((b) => matchesBrand(brand, b) || b.toLowerCase() === brand.toLowerCase()) ? 'active' : ''}`}
                     onClick={() => toggleBrand(brand)}
                   >
                     {brand}

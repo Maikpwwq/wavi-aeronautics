@@ -61,7 +61,7 @@ export const SearchBar = () => {
     setLoading(true)
     const handler = setTimeout(async () => {
       try {
-        const found = await searchProducts(queryText, localProductsPool)
+        const found = await searchProducts(queryText)
         setResults(found)
         setOpen(true)
       } catch (err) {
@@ -73,7 +73,7 @@ export const SearchBar = () => {
     }, 300)
 
     return () => clearTimeout(handler)
-  }, [queryText, localProductsPool])
+  }, [queryText])
 
   const handleClear = () => {
     setQueryText('')
