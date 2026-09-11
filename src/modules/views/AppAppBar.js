@@ -320,7 +320,7 @@ function AppAppBar({ isHome: propIsHome }) {
                   letterSpacing: '0.2px'
                 }}
               >
-                Envíos gratis
+                Envíos gratis a toda Colombia
               </Typography>
 
               <Typography
@@ -332,7 +332,7 @@ function AppAppBar({ isHome: propIsHome }) {
                   display: { xs: 'none', sm: 'inline' }
                 }}
               >
-                — a toda Colombia en compras seleccionadas
+                — en compras superiores a
               </Typography>
 
               <Box
@@ -350,7 +350,7 @@ function AppAppBar({ isHome: propIsHome }) {
                   ml: 0.5
                 }}
               >
-                100% ASEGURADO
+                $60.000
               </Box>
             </Box>
           </Box>

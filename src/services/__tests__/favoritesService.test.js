@@ -4,7 +4,9 @@ import {
   addFavorite,
   removeFavorite,
   isProductFavorite,
-  subscribeUserFavorites
+  subscribeUserFavorites,
+  formatFavoritesForCart,
+  mergeFavoritesIntoCart
 } from '@/services/favoritesService'
 import * as firestoreModule from 'firebase/firestore'
 
@@ -159,6 +161,98 @@ describe('favoritesService Unit Tests', () => {
       const unsubscribe = subscribeUserFavorites('user-123', mockCallback)
       expect(mockCallback).toHaveBeenCalledWith([{ id: 'p1', name: 'Goggles V2' }])
       expect(typeof unsubscribe).toBe('function')
+    })
+  })
+
+  describe('formatFavoritesForCart', () => {
+    it('returns empty array when input is not an array or empty', () => {
+      expect(formatFavoritesForCart(null)).toEqual([])
+      expect(formatFavoritesForCart(undefined)).toEqual([])
+      expect(formatFavoritesForCart([])).toEqual([])
+    })
+
+    it('formats wishlist items with productID, cantidad: 1 and selected: true', () => {
+      const wishlist = [
+        { productId: 'drone-1', name: 'DJI O3 Air Unit', price: 250 },
+        { id: 'drone-2', name: 'TBS Crossfire', price: 90 }
+      ]
+
+      const formatted = formatFavoritesForCart(wishlist)
+      expect(formatted).toHaveLength(2)
+      expect(formatted[0]).toEqual({
+        productId: 'drone-1',
+        productID: 'drone-1',
+        name: 'DJI O3 Air Unit',
+        price: 250,
+        cantidad: 1,
+        selected: true
+      })
+      expect(formatted[1]).toEqual({
+        id: 'drone-2',
+        productID: 'drone-2',
+        name: 'TBS Crossfire',
+        price: 90,
+        cantidad: 1,
+        selected: true
+      })
+    })
+
+    it('filters out items without valid id/productId/productID', () => {
+      const wishlist = [
+        { name: 'Invalid Product' },
+        { productId: 'valid-1', name: 'Valid Product' }
+      ]
+
+      const formatted = formatFavoritesForCart(wishlist)
+      expect(formatted).toHaveLength(1)
+      expect(formatted[0].productID).toBe('valid-1')
+    })
+  })
+
+  describe('mergeFavoritesIntoCart', () => {
+    it('handles empty inputs gracefully', () => {
+      expect(mergeFavoritesIntoCart([], [])).toEqual([])
+      expect(mergeFavoritesIntoCart(null, null)).toEqual([])
+    })
+
+    it('adds new favorite items into empty cart', () => {
+      const favorites = [
+        { productId: 'p1', name: 'Frame 5 inch', price: 70 }
+      ]
+
+      const result = mergeFavoritesIntoCart([], favorites)
+      expect(result).toHaveLength(1)
+      expect(result[0]).toMatchObject({
+        productID: 'p1',
+        cantidad: 1,
+        selected: true,
+        name: 'Frame 5 inch'
+      })
+    })
+
+    it('preserves existing item quantities and marks them selected: true', () => {
+      const existingCart = [
+        { productID: 'p1', name: 'Frame 5 inch', cantidad: 3, selected: false },
+        { productID: 'p2', name: 'Motors 2207', cantidad: 4, selected: true }
+      ]
+      const favorites = [
+        { productId: 'p1', name: 'Frame 5 inch' },
+        { productId: 'p3', name: 'FC Stack', price: 110 }
+      ]
+
+      const result = mergeFavoritesIntoCart(existingCart, favorites)
+      expect(result).toHaveLength(3)
+
+      const p1 = result.find((item) => item.productID === 'p1')
+      expect(p1.cantidad).toBe(3)
+      expect(p1.selected).toBe(true)
+
+      const p2 = result.find((item) => item.productID === 'p2')
+      expect(p2.cantidad).toBe(4)
+
+      const p3 = result.find((item) => item.productID === 'p3')
+      expect(p3.cantidad).toBe(1)
+      expect(p3.selected).toBe(true)
     })
   })
 })

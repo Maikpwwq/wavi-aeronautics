@@ -1,8 +1,10 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useSelector } from 'react-redux'
+import { v4 as uuidv4 } from 'uuid'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
@@ -22,6 +24,7 @@ import Alert from '@mui/material/Alert'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 
@@ -29,13 +32,86 @@ import AppAppBar from '@/modules/views/AppAppBar'
 import AppFooter from '@/modules/views/AppFooter'
 import withRoot from '@/modules/withRoot'
 import { useFavorites } from '@/app/providers/FavoritesProvider'
-import { calculateCopPrice } from '@/utilities/priceUtils'
+import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
+import { mergeFavoritesIntoCart } from '@/services/favoritesService'
+import { saveCartToFirestore } from '@/services/shoppingCartService'
+import FirebaseCompareShoppingCartIds from '@/services/FirebaseCompareShoppingCartIds'
+import { calculateCopPrice, parseCopCurrency } from '@/utilities/priceUtils'
 import AddProduct from '@/app/tienda/components/AddProduct'
 
 function FavoritosPage() {
+  const router = useRouter()
   const user = useSelector((state) => state.user)
   const { favorites, toggleFavorite, loading } = useFavorites()
+  const { shoppingCart, updateCart, updateShowCart } = useContext(ShowCartContext)
+  const [buyingAll, setBuyingAll] = useState(false)
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' })
+
+  const handleBulkAddToCart = async () => {
+    if (!favorites || favorites.length === 0) return
+    setBuyingAll(true)
+
+    try {
+      const currentCartItems = shoppingCart?.productos ? [...shoppingCart.productos] : []
+      const availableFavorites = favorites.filter((item) => item.availability !== false)
+      const targetFavorites = availableFavorites.length > 0 ? availableFavorites : favorites
+
+      const updatedCartItems = mergeFavoritesIntoCart(currentCartItems, targetFavorites)
+
+      const totalItems = updatedCartItems.reduce(
+        (acc, item) => acc + (Number(item.cantidad) || 0),
+        0
+      )
+      const totalSum = updatedCartItems.reduce((acc, item) => {
+        const price = item.effectivePrice || parseCopCurrency(item.price || item.precio || 0)
+        return acc + price * (Number(item.cantidad) || 1)
+      }, 0)
+
+      updateCart({
+        updated: true,
+        productos: updatedCartItems,
+        items: totalItems,
+        suma: totalSum
+      })
+
+      let cartID = typeof window !== 'undefined' ? sessionStorage.getItem('cartID') : null
+      if (!cartID && !user?.uid) {
+        cartID = uuidv4()
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('cartID', cartID)
+        }
+      }
+
+      const cartToSave = updatedCartItems.map((item) => ({
+        productID: item.productID,
+        cantidad: item.cantidad || 1
+      }))
+
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('cartProducts', JSON.stringify(cartToSave))
+        sessionStorage.setItem('cartItems', totalItems.toString())
+        sessionStorage.setItem('cartSum', totalSum.toString())
+      }
+
+      const targetID = user?.uid || cartID
+      if (targetID) {
+        await saveCartToFirestore(targetID, cartToSave)
+      }
+
+      FirebaseCompareShoppingCartIds({ products: updatedCartItems, updateCart })
+
+      updateShowCart(false)
+      router.push('/tienda/ver-carrito')
+    } catch (err) {
+      console.error('Error adding favorites to cart:', err)
+      setSnackbar({
+        open: true,
+        message: 'No se pudieron agregar todos los productos al carrito',
+        severity: 'error'
+      })
+      setBuyingAll(false)
+    }
+  }
 
   const handleRemoveFavorite = async (item) => {
     try {
@@ -88,15 +164,49 @@ function FavoritosPage() {
           </Box>
 
           {favorites.length > 0 && (
-            <Chip
-              label={`${favorites.length} ${favorites.length === 1 ? 'producto guardado' : 'productos guardados'}`}
-              sx={{
-                fontWeight: 700,
-                bgcolor: 'rgba(0, 172, 228, 0.1)',
-                color: '#00aCe4',
-                border: '1px solid rgba(0, 172, 228, 0.3)'
-              }}
-            />
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
+              <Chip
+                label={`${favorites.length} ${favorites.length === 1 ? 'producto guardado' : 'productos guardados'}`}
+                sx={{
+                  fontWeight: 700,
+                  bgcolor: 'rgba(0, 172, 228, 0.1)',
+                  color: '#00aCe4',
+                  border: '1px solid rgba(0, 172, 228, 0.3)'
+                }}
+              />
+              <Button
+                variant="contained"
+                onClick={handleBulkAddToCart}
+                disabled={buyingAll}
+                startIcon={
+                  buyingAll ? (
+                    <CircularProgress size={18} color="inherit" />
+                  ) : (
+                    <ShoppingCartIcon sx={{ fontSize: 20 }} />
+                  )
+                }
+                endIcon={<ArrowForwardIcon />}
+                sx={{
+                  bgcolor: '#00aCe4',
+                  color: '#ffffff',
+                  fontWeight: 700,
+                  fontSize: '0.875rem',
+                  textTransform: 'none',
+                  px: 2.5,
+                  py: 0.9,
+                  borderRadius: 2.5,
+                  boxShadow: '0 4px 16px rgba(0, 172, 228, 0.35)',
+                  transition: 'all 0.25s ease',
+                  '&:hover': {
+                    bgcolor: '#0284c7',
+                    boxShadow: '0 6px 20px rgba(0, 172, 228, 0.55)',
+                    transform: 'translateY(-1px)'
+                  }
+                }}
+              >
+                {buyingAll ? 'Procesando...' : 'Comprar estos productos'}
+              </Button>
+            </Box>
           )}
         </Box>
 

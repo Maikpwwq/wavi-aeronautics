@@ -33,6 +33,16 @@ const nextConfig = {
         destination: '/tienda/kit-drones',
         permanent: true,
       },
+      {
+        source: '/carrito',
+        destination: '/tienda/ver-carrito',
+        permanent: true,
+      },
+      {
+        source: '/perfil/favoritos',
+        destination: '/favoritos',
+        permanent: true,
+      },
     ]
   },
 }

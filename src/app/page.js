@@ -13,6 +13,7 @@ import ProductHowItWorks from '@/modules/views/ProductHowItWorks'
 import ProductCTA from '@/modules/views/ProductCTA'
 import ProductMarcas from '@/modules/views/ProductMarcas'
 import AppAppBar from '@/modules/views/AppAppBar'
+import HomeCtaBanners from '@/modules/views/HomeCtaBanners'
 
 import NuevosProductos from '@/app/tienda/components/nuevosProductos'
 import RevealOnScroll from '@/modules/components/RevealOnScroll'
@@ -25,6 +26,9 @@ function Home () {
       <AppAppBar isHome />
       <RevealOnScroll>
         <ProductHero />
+      </RevealOnScroll>
+      <RevealOnScroll>
+        <HomeCtaBanners />
       </RevealOnScroll>
       <RevealOnScroll>
         <NuevosProductos />

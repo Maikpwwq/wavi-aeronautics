@@ -153,3 +153,65 @@ export const subscribeUserFavorites = (userId, callback) => {
     return () => {}
   }
 }
+
+/**
+ * Transforms an array of favorite items into cart-ready items with `selected: true` and `cantidad: 1`.
+ * @param {Array} favoritesList
+ * @returns {Array} Cart items ready for insertion into shopping cart
+ */
+export const formatFavoritesForCart = (favoritesList = []) => {
+  if (!Array.isArray(favoritesList)) return []
+  return favoritesList
+    .filter((item) => item && (item.productId || item.id || item.productID))
+    .map((item) => {
+      const productID = String(item.productID || item.productId || item.id)
+      return {
+        ...item,
+        productID,
+        cantidad: Number(item.cantidad) || 1,
+        selected: true
+      }
+    })
+}
+
+/**
+ * Merges favorite items into existing cart products ensuring each is selected for checkout.
+ * If an item is already in the cart, preserves its existing quantity and marks `selected: true`.
+ * If new, appends with `cantidad: 1` and `selected: true`.
+ * @param {Array} currentCartProducts
+ * @param {Array} favoritesList
+ * @returns {Array} Updated cart products list
+ */
+export const mergeFavoritesIntoCart = (currentCartProducts = [], favoritesList = []) => {
+  const currentList = Array.isArray(currentCartProducts) ? currentCartProducts : []
+  const favList = Array.isArray(favoritesList) ? favoritesList : []
+
+  const cartMap = new Map()
+  currentList.forEach((item) => {
+    if (item && item.productID) {
+      cartMap.set(String(item.productID), { ...item })
+    }
+  })
+
+  favList.forEach((fav) => {
+    const pId = String(fav?.productID || fav?.productId || fav?.id || '')
+    if (!pId) return
+
+    if (cartMap.has(pId)) {
+      const existing = cartMap.get(pId)
+      cartMap.set(pId, {
+        ...existing,
+        selected: true
+      })
+    } else {
+      cartMap.set(pId, {
+        ...fav,
+        productID: pId,
+        cantidad: Number(fav.cantidad) || 1,
+        selected: true
+      })
+    }
+  })
+
+  return Array.from(cartMap.values())
+}
