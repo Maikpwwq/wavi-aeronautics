@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, Suspense } from 'react'
+import React, { useState, useEffect, useRef, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTheme } from '@mui/material/styles'
@@ -58,12 +58,18 @@ function SearchResultsContent() {
   const [searchResults, setSearchResults] = useState([])
   const [loading, setLoading] = useState(true)
 
+  const hasDispatched = useRef(false)
+
   // Ensure shop products are fetched if empty
   useEffect(() => {
-    if (!shopState?.loadedCategories || shopState.loadedCategories.length === 0) {
+    if (
+      !hasDispatched.current &&
+      (!shopState?.loadedCategories || shopState.loadedCategories.length === 0)
+    ) {
+      hasDispatched.current = true
       dispatch(fetchAllProducts())
     }
-  }, [dispatch, shopState])
+  }, [dispatch, shopState?.loadedCategories])
 
   const localProductsPool = React.useMemo(() => {
     if (!shopState) return []

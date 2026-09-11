@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { matchesBrand } from '@/utilities/brandsConfig'
 
 export const useProductFilter = (products) => {
   // --------------------------------------------------------------------------
@@ -92,11 +93,15 @@ export const useProductFilter = (products) => {
     const filtered = products.filter((product) => {
       // Brand Filter
       const productBrand = product.brand || product.marca
-      if (
-        filterState.brands.length > 0 &&
-        !filterState.brands.includes(productBrand)
-      ) {
-        return false
+      if (filterState.brands.length > 0) {
+        const matchesAny = filterState.brands.some(
+          (selectedBrand) =>
+            matchesBrand(productBrand, selectedBrand) ||
+            (productBrand &&
+              selectedBrand &&
+              productBrand.toLowerCase() === selectedBrand.toLowerCase())
+        )
+        if (!matchesAny) return false
       }
 
       // Price Filter

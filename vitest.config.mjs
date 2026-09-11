@@ -3,7 +3,19 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react({
+      include: /\.(jsx|js|tsx|ts)$/,
+    }),
+  ],
+  esbuild: {
+    include: /\.[jt]sx?$/,
+    exclude: [],
+  },
+  oxc: {
+    include: /\.[jt]sx?$/,
+    exclude: [],
+  },
   test: {
     environment: 'jsdom',
     globals: true,

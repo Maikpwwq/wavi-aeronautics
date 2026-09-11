@@ -125,6 +125,14 @@ export const fetchAllProducts = createAsyncThunk(
     if (vtxData) {
       payload.digitalVTX = vtxData.storeDigitalVTX
     }
+    payload.loadedCategories = [
+      'drones',
+      'radioControl',
+      'accesorios',
+      'googles',
+      'transmisors',
+      'digitalVTX'
+    ]
     return payload
   }
 )
@@ -216,7 +224,18 @@ const shopSlice = createSlice({
     })
     builder.addCase(fetchAllProducts.fulfilled, (state, action) => {
       state.loading = false
-      return { ...state, ...action.payload }
+      return {
+        ...state,
+        ...action.payload,
+        loadedCategories: action.payload?.loadedCategories || [
+          'drones',
+          'radioControl',
+          'accesorios',
+          'googles',
+          'transmisors',
+          'digitalVTX',
+        ],
+      }
     })
     builder.addCase(fetchAllProducts.rejected, (state) => {
       state.loading = false

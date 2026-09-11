@@ -7,7 +7,6 @@ import Box from '@mui/material/Box'
 import { styled } from '@mui/material/styles'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import Tooltip from '@mui/material/Tooltip'
 import Button from '@mui/material/Button'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
@@ -18,6 +17,7 @@ import withRoot from '@/modules/withRoot'
 import UserDropdown from '@/app/components/UserDropdown'
 import SearchBar from '@/app/tienda/components/header/SearchBar'
 import SocialContactIcons from '@/modules/components/SocialContactIcons'
+import PseBadge from '@/modules/components/PseBadge'
 
 const WHATSAPP_CONSULT_URL =
   'https://api.whatsapp.com/send?phone=573204842897&text=Hola%20Wavi%20Aeronautics%2C%20deseo%20asesor%C3%ADa%20experta%20personalizada'
@@ -220,39 +220,7 @@ function AppAppBar({ isHome: propIsHome }) {
             </Box>
 
             {/* PSE Payment Badge - Transparent & Optimized */}
-            <Tooltip title="Pagos 100% Seguros con PSE y Mercado Pago" arrow placement="bottom">
-              <Box
-                component="div"
-                sx={{
-                  display: { xs: 'none', sm: 'inline-flex' },
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  bgcolor: 'transparent',
-                  p: 0,
-                  transition: 'transform 0.25s ease, filter 0.25s ease',
-                  flexShrink: 0,
-                  cursor: 'pointer',
-                  '&:hover': {
-                    transform: 'scale(1.06)',
-                    filter: 'drop-shadow(0 2px 8px rgba(0, 172, 228, 0.5))'
-                  }
-                }}
-              >
-                <Box
-                  component="img"
-                  src="/logos/pse-logo.png"
-                  alt="PSE Pagos Seguros en Línea"
-                  sx={{
-                    height: { sm: 34, md: 38 },
-                    width: 'auto',
-                    maxWidth: 120,
-                    display: 'block',
-                    objectFit: 'contain',
-                    filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.35))'
-                  }}
-                />
-              </Box>
-            </Tooltip>
+            <PseBadge />
           </Box>
 
           {/* ── Right: Navigation Links & User ── */}

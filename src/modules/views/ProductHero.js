@@ -63,13 +63,12 @@ function ProductHero(props) {
         height={650}
       />
       <Typography color="inherit" align="center" variant="h2" marked="center">
-        Necesitas un Dron
+        Encuentra tu Dron
       </Typography>
       <Typography color="inherit" align="center" variant="h5" sx={classes.h5}>
-        Somos distribuidores de tecnología FPV (vista en primera persona) del tipo
-        <br />VToL (despegue y aterrizaje vertical).
-        <br /><br />
-        Solicita alguno de nuestros productos.
+        Tienda de drones, equipos FPV y tecnología VToL.
+        <br />
+        Todo lo que necesitas para tus proyectos.
       </Typography>
       <Button
         color="secondary"
@@ -78,10 +77,10 @@ function ProductHero(props) {
         className="navlink"
         sx={classes.button}
       >
-        <Link href="tienda/">{'Ver Productos'}</Link>
+        <Link href="tienda/">{'Ver Equipos'}</Link>
       </Button>
       <Typography variant="body2" color="inherit" sx={classes.more}>
-        Disfruta nuestras ofertas
+        Tecnología aérea, drones y accesorios
       </Typography>
     </ProductHeroLayout>
   )

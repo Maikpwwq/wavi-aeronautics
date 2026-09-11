@@ -12,6 +12,7 @@ import ArticleIcon from '@mui/icons-material/Article'
 
 import SearchBar from './SearchBar'
 import SocialContactIcons from '@/modules/components/SocialContactIcons'
+import PseBadge from '@/modules/components/PseBadge'
 
 const WaviPixelLogo =
   'https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FWaviPixelLogo.png?alt=media&token=7edcec69-8b24-4b95-b970-6b9acfddbdeb'
@@ -37,7 +38,7 @@ const styles = {
 
 const HeaderLogo = () => {
   return (
-    <AppBar color="primary" position="sticky" elevation={0}>
+    <AppBar color="primary" position="sticky" elevation={0} sx={{ zIndex: 1200 }}>
       <Toolbar sx={{ py: 1, px: { xs: 1.5, sm: 2, md: 3 } }}>
         <Box
           sx={{
@@ -73,17 +74,23 @@ const HeaderLogo = () => {
             </Link>
           </Box>
 
-          {/* Search Bar - Expands across available desktop width */}
+          {/* Search Bar & PSE Badge - Expands across available desktop width */}
           <Box
             sx={{
               flexGrow: 1,
               width: '100%',
               mx: { md: 2, lg: 3 },
               display: 'flex',
-              justifyContent: 'center'
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: { xs: 1, sm: 1.5 },
+              minWidth: 0
             }}
           >
-            <SearchBar />
+            <Box sx={{ flex: 1, minWidth: 0, width: '100%' }}>
+              <SearchBar />
+            </Box>
+            <PseBadge />
           </Box>
 
           {/* Social Icons & Blog Button */}

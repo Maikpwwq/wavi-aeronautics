@@ -16,7 +16,7 @@ import UserDropdown from '@/app/components/UserDropdown'
 
 const styles = {
   secondaryBar: {
-    zIndex: 1100,
+    zIndex: 10,
     position: 'relative'
   }
 }
