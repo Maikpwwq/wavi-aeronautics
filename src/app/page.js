@@ -22,7 +22,7 @@ import RevealOnScroll from '@/modules/components/RevealOnScroll'
 function Home () {
   return (
     <main>
-      <AppAppBar />
+      <AppAppBar isHome />
       <RevealOnScroll>
         <ProductHero />
       </RevealOnScroll>

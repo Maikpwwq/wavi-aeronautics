@@ -7,15 +7,11 @@ import Toolbar from '@mui/material/Toolbar'
 import Grid from '@mui/material/Grid'
 import Link from '@mui/material/Link'
 import Button from '@mui/material/Button'
-import IconButton from '@mui/material/IconButton'
-import Tooltip from '@mui/material/Tooltip'
 
-import WhatsAppIcon from '@mui/icons-material/WhatsApp'
-import InstagramIcon from '@mui/icons-material/Instagram'
-import FacebookIcon from '@mui/icons-material/Facebook'
 import ArticleIcon from '@mui/icons-material/Article'
 
 import SearchBar from './SearchBar'
+import SocialContactIcons from '@/modules/components/SocialContactIcons'
 
 const WaviPixelLogo =
   'https://firebasestorage.googleapis.com/v0/b/wavi-aeronautics.appspot.com/o/pagina%2FWaviPixelLogo.png?alt=media&token=7edcec69-8b24-4b95-b970-6b9acfddbdeb'
@@ -100,68 +96,8 @@ const HeaderLogo = () => {
               gap: 0.5
             }}
           >
-            {/* WhatsApp */}
-            <Tooltip title="Contacto WhatsApp">
-              <IconButton
-                component="a"
-                href="https://api.whatsapp.com/send?phone=573204842897"
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                  color: 'rgba(255, 255, 255, 0.85)',
-                  transition: 'all 0.25s ease',
-                  '&:hover': {
-                    color: '#25D366',
-                    transform: 'translateY(-2px) scale(1.1)',
-                    bgcolor: 'rgba(37, 211, 102, 0.15)'
-                  }
-                }}
-              >
-                <WhatsAppIcon />
-              </IconButton>
-            </Tooltip>
-
-            {/* Instagram */}
-            <Tooltip title="Instagram @wavi.aeronautics">
-              <IconButton
-                component="a"
-                href="https://www.instagram.com/wavi.aeronautics/"
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                  color: 'rgba(255, 255, 255, 0.85)',
-                  transition: 'all 0.25s ease',
-                  '&:hover': {
-                    color: '#E1306C',
-                    transform: 'translateY(-2px) scale(1.1)',
-                    bgcolor: 'rgba(225, 48, 108, 0.15)'
-                  }
-                }}
-              >
-                <InstagramIcon />
-              </IconButton>
-            </Tooltip>
-
-            {/* Facebook */}
-            <Tooltip title="Facebook @wavi.aeronautics">
-              <IconButton
-                component="a"
-                href="https://www.facebook.com/wavi.aeronautics/"
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                  color: 'rgba(255, 255, 255, 0.85)',
-                  transition: 'all 0.25s ease',
-                  '&:hover': {
-                    color: '#1877F2',
-                    transform: 'translateY(-2px) scale(1.1)',
-                    bgcolor: 'rgba(24, 119, 242, 0.15)'
-                  }
-                }}
-              >
-                <FacebookIcon />
-              </IconButton>
-            </Tooltip>
+            {/* Social & Contact Icons */}
+            <SocialContactIcons size="medium" />
 
             {/* Blog Button */}
             <Button

@@ -6,37 +6,9 @@ import withRoot from '@/modules/withRoot'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@/modules/components/Typography'
-import IconButton from '@mui/material/IconButton'
-import Tooltip from '@mui/material/Tooltip'
 import Divider from '@mui/material/Divider'
-import WhatsAppIcon from '@mui/icons-material/WhatsApp'
-import InstagramIcon from '@mui/icons-material/Instagram'
-import FacebookIcon from '@mui/icons-material/Facebook'
 import PaymentMethods from '@/modules/components/PaymentMethods'
-
-const socialLinks = [
-  {
-    label: 'WhatsApp',
-    href: 'https://api.whatsapp.com/send?phone=573204842897',
-    icon: WhatsAppIcon,
-    hoverColor: '#25D366',
-    hoverBg: 'rgba(37, 211, 102, 0.15)'
-  },
-  {
-    label: 'Instagram @wavi.aeronautics',
-    href: 'https://www.instagram.com/wavi.aeronautics/',
-    icon: InstagramIcon,
-    hoverColor: '#E1306C',
-    hoverBg: 'rgba(225, 48, 108, 0.15)'
-  },
-  {
-    label: 'Facebook @wavi.aeronautics',
-    href: 'https://www.facebook.com/wavi.aeronautics/',
-    icon: FacebookIcon,
-    hoverColor: '#1877F2',
-    hoverBg: 'rgba(24, 119, 242, 0.15)'
-  }
-]
+import SocialContactIcons from '@/modules/components/SocialContactIcons'
 
 const legalLinks = [
   { label: 'Términos y Condiciones', href: '/condiciones-del-servicio' },
@@ -83,33 +55,7 @@ function AppFooter () {
               Síguenos
             </Typography>
 
-            <Box sx={{ display: 'flex', gap: 0.5 }}>
-              {socialLinks.map((social) => {
-                const Icon = social.icon
-                return (
-                  <Tooltip key={social.label} title={social.label} arrow>
-                    <IconButton
-                      component="a"
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={social.label}
-                      sx={{
-                        color: 'rgba(255, 255, 255, 0.7)',
-                        transition: 'all 0.25s ease',
-                        '&:hover': {
-                          color: social.hoverColor,
-                          transform: 'translateY(-2px) scale(1.1)',
-                          bgcolor: social.hoverBg
-                        }
-                      }}
-                    >
-                      <Icon />
-                    </IconButton>
-                  </Tooltip>
-                )
-              })}
-            </Box>
+            <SocialContactIcons size="medium" color="rgba(255, 255, 255, 0.7)" />
 
             <Typography
               variant="caption"

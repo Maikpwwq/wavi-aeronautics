@@ -86,7 +86,10 @@ const CategoriesNavigation = () => {
     <AppBar
         component="div"
         style={styles.secondaryBar}
-        sx={{ zIndex: 0 }}
+        sx={{
+          zIndex: 0,
+          boxShadow: '0 4px 14px -2px rgba(0, 0, 0, 0.12)'
+        }}
         color="primary"
         position="static"
         elevation={0}
