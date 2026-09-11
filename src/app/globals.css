@@ -139,21 +139,8 @@ body {
 }
 
 a {
-  /* font-size: 21px;  */
   text-decoration: none;
-  color: white;
-}
-
-a:link {
-  color: white;
-}
-
-a:visited {
-  color: white;
-}
-
-a:hover {
-  color: white;
+  color: inherit;
 }
 
 .textWhite {

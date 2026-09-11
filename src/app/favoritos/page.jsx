@@ -408,6 +408,9 @@ function FavoritosPage() {
                             lineHeight: 1.3,
                             mt: 0.5,
                             mb: 1,
+                            '&:link, &:visited': {
+                              color: '#1e293b'
+                            },
                             '&:hover': { color: '#00aCe4' }
                           }}
                         >
@@ -441,7 +444,7 @@ function FavoritosPage() {
                           href={detailUrl}
                           variant="outlined"
                           size="small"
-                          startIcon={<VisibilityIcon />}
+                          startIcon={<VisibilityIcon sx={{ color: 'inherit' }} />}
                           sx={{
                             flex: 1,
                             borderRadius: 2,
@@ -449,6 +452,9 @@ function FavoritosPage() {
                             fontWeight: 700,
                             borderColor: '#cbd5e1',
                             color: '#475569',
+                            '&:link, &:visited': {
+                              color: '#475569'
+                            },
                             '&:hover': {
                               borderColor: '#00aCe4',
                               color: '#00aCe4',
