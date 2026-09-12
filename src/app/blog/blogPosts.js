@@ -93,7 +93,7 @@ export const blogPosts = [
         category: 'Mantenimiento',
         date: '2024-02-10',
         readTime: '6 min',
-        author: 'Miguel Parra',
+        author: 'Michael Arias',
         avatar: '',
         content: [
             {
@@ -163,7 +163,7 @@ export const blogPosts = [
         category: 'Video & Transmisión',
         date: '2024-03-18',
         readTime: '9 min',
-        author: 'Miguel Parra',
+        author: 'Michael Arias',
         avatar: '',
         content: [
             {
@@ -259,7 +259,7 @@ export const blogPosts = [
         category: 'Hardware & Señal',
         date: '2024-05-08',
         readTime: '8 min',
-        author: 'Miguel Parra',
+        author: 'Michael Arias',
         avatar: '',
         content: [
             {
@@ -311,7 +311,7 @@ export const blogPosts = [
         category: 'Estructuras & Frames',
         date: '2024-06-12',
         readTime: '6 min',
-        author: 'Miguel Parra',
+        author: 'Michael Arias',
         avatar: '',
         content: [
             {
