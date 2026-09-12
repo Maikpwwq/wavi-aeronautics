@@ -1,227 +1,237 @@
 'use client'
 
-import { Suspense } from 'react'
-import Link from 'next/link'
+import React, { Suspense, useTransition } from 'react'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import {
   Box,
   Container,
   Typography,
-  Card,
-  CardContent,
-  CardMedia,
   Grid,
-  Chip,
-  Skeleton
+  Skeleton,
+  Fade
 } from '@mui/material'
-import { AccessTime, ArrowForward } from '@mui/icons-material'
 import AppFooter from '@/modules/views/AppFooter'
 import AppAppBar from '@/modules/views/AppAppBar'
+import GradientTitle from './components/GradientTitle'
+import BlogPostCard from './components/BlogPostCard'
+import BlogPagination from './components/BlogPagination'
 import { blogPosts } from './blogPosts'
 
-// ============================================================================
-// STYLES
-// ============================================================================
-const styles = {
-  hero: {
-    background: 'linear-gradient(135deg, #1a2744 0%, #2d3e5f 100%)',
-    color: 'white',
-    py: { xs: 6, md: 10 },
-    mb: 6
-  },
-  heroTitle: {
-    fontWeight: 800,
-    mb: 2
-  },
-  heroSubtitle: {
-    opacity: 0.9,
-    maxWidth: 600,
-    mx: 'auto'
-  },
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    transition: 'all 0.3s ease',
-    borderRadius: 3,
-    overflow: 'hidden',
-    '&:hover': {
-      transform: 'translateY(-8px)',
-      boxShadow: '0 20px 40px rgba(0,0,0,0.12)'
-    }
-  },
-  cardMedia: {
-    height: 200,
-    background: 'linear-gradient(135deg, #1976d2 0%, #00bcd4 100%)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  cardContent: {
-    flexGrow: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    p: 3
-  },
-  category: {
-    mb: 1.5,
-    fontSize: '0.75rem',
-    fontWeight: 600
-  },
-  title: {
-    fontWeight: 700,
-    mb: 2,
-    lineHeight: 1.3,
-    color: '#1a2744'
-  },
-  excerpt: {
-    color: 'text.secondary',
-    mb: 2,
-    flexGrow: 1,
-    lineHeight: 1.6
-  },
-  meta: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 2,
-    color: 'text.disabled',
-    fontSize: '0.85rem',
-    mt: 'auto'
-  },
-  readMore: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 0.5,
-    color: '#1976d2',
-    fontWeight: 600,
-    textDecoration: 'none',
-    transition: 'gap 0.2s ease',
-    '&:hover': {
-      gap: 1
-    }
-  }
-}
+const POSTS_PER_PAGE = 6
 
-// ============================================================================
-// COMPONENTS
-// ============================================================================
-
-function BlogCard({ post }) {
+/**
+ * LoadingSkeleton for Blog Cards
+ */
+function BlogLoadingSkeleton() {
   return (
-    <Card sx={styles.card} elevation={0} variant="outlined">
-      <Box sx={styles.cardMedia}>
-        <Typography variant="h3" sx={{ color: 'white', opacity: 0.3, fontWeight: 800 }}>
-          FPV
-        </Typography>
-      </Box>
-      <CardContent sx={styles.cardContent}>
-        <Chip
-          label={post.category}
-          size="small"
-          color="primary"
-          sx={styles.category}
-        />
-        <Typography variant="h6" sx={styles.title}>
-          {post.title}
-        </Typography>
-        <Typography variant="body2" sx={styles.excerpt}>
-          {post.excerpt}
-        </Typography>
-        <Box sx={styles.meta}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-            <AccessTime fontSize="small" />
-            {post.readTime}
-          </Box>
-          <Typography variant="body2">
-            {new Date(post.date).toLocaleDateString('es-CO', {
-              day: 'numeric',
-              month: 'short',
-              year: 'numeric'
-            })}
-          </Typography>
-        </Box>
-        <Box sx={{ mt: 2 }}>
-          <Link href={`/blog/${post.id}`} style={{ textDecoration: 'none' }}>
-            <Box sx={styles.readMore}>
-              Leer artículo <ArrowForward fontSize="small" />
+    <Grid container spacing={3.5}>
+      {[1, 2, 3, 4, 5, 6].map((i) => (
+        <Grid key={i} size={{ xs: 12, md: 6, lg: 4 }}>
+          <Box
+            sx={{
+              height: '100%',
+              bgcolor: '#0f172a',
+              borderRadius: 3,
+              overflow: 'hidden',
+              border: '1px solid rgba(255, 255, 255, 0.08)'
+            }}
+          >
+            <Skeleton
+              variant="rectangular"
+              sx={{ width: '100%', aspectRatio: '16/9', bgcolor: '#1e293b' }}
+            />
+            <Box sx={{ p: 3 }}>
+              <Skeleton width="30%" height={24} sx={{ bgcolor: '#334155', mb: 1.5 }} />
+              <Skeleton width="90%" height={32} sx={{ bgcolor: '#334155', mb: 1 }} />
+              <Skeleton width="100%" height={20} sx={{ bgcolor: '#1e293b' }} />
+              <Skeleton width="75%" height={20} sx={{ bgcolor: '#1e293b', mb: 3 }} />
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: 2 }}>
+                <Skeleton width="25%" height={20} sx={{ bgcolor: '#1e293b' }} />
+                <Skeleton width="35%" height={20} sx={{ bgcolor: '#1e293b' }} />
+              </Box>
             </Box>
-          </Link>
-        </Box>
-      </CardContent>
-    </Card>
-  )
-}
-
-function LoadingSkeleton() {
-  return (
-    <Grid container spacing={4}>
-      {[1, 2, 3].map((i) => (
-        <Grid item xs={12} md={4} key={i}>
-          <Card sx={{ borderRadius: 3 }}>
-            <Skeleton variant="rectangular" height={200} />
-            <CardContent>
-              <Skeleton width="30%" height={24} />
-              <Skeleton width="80%" height={32} sx={{ my: 1 }} />
-              <Skeleton width="100%" />
-              <Skeleton width="60%" />
-            </CardContent>
-          </Card>
+          </Box>
         </Grid>
       ))}
     </Grid>
   )
 }
 
-// ============================================================================
-// MAIN PAGE
-// ============================================================================
+/**
+ * Inner Blog Content that consumes searchParams
+ */
+function BlogContent() {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const [isPending, startTransition] = useTransition()
 
+  const rawPage = parseInt(searchParams.get('page') || '1', 10)
+  const totalPages = Math.ceil(blogPosts.length / POSTS_PER_PAGE) || 1
+  const currentPage = isNaN(rawPage) || rawPage < 1 ? 1 : Math.min(rawPage, totalPages)
+
+  // Sliced posts for current page
+  const startIndex = (currentPage - 1) * POSTS_PER_PAGE
+  const currentPosts = blogPosts.slice(startIndex, startIndex + POSTS_PER_PAGE)
+
+  const handlePageChange = (newPage) => {
+    if (newPage === currentPage) return
+
+    startTransition(() => {
+      const params = new URLSearchParams(searchParams.toString())
+      if (newPage === 1) {
+        params.delete('page')
+      } else {
+        params.set('page', String(newPage))
+      }
+
+      const queryString = params.toString()
+      const targetUrl = queryString ? `${pathname}?${queryString}` : pathname
+      router.push(targetUrl, { scroll: false })
+    })
+
+    // Automated smooth scroll to top
+    if (typeof window !== 'undefined') {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      })
+    }
+  }
+
+  return (
+    <Box sx={{ pb: 10 }}>
+      {blogPosts.length === 0 ? (
+        <Box
+          sx={{
+            textAlign: 'center',
+            py: 12,
+            bgcolor: 'rgba(15, 23, 42, 0.4)',
+            borderRadius: 4,
+            border: '1px dashed rgba(255, 255, 255, 0.15)'
+          }}
+        >
+          <Typography variant="h5" sx={{ color: '#ffffff', fontWeight: 700, mb: 1 }}>
+            No hay artículos disponibles
+          </Typography>
+          <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+            Pronto publicaremos nuevas guías y tutoriales del mundo FPV.
+          </Typography>
+        </Box>
+      ) : (
+        <Fade in={!isPending} timeout={300}>
+          <Box>
+            <Grid container spacing={3.5}>
+              {currentPosts.map((post) => (
+                <Grid key={post.id} size={{ xs: 12, md: 6, lg: 4 }}>
+                  <BlogPostCard post={post} />
+                </Grid>
+              ))}
+            </Grid>
+
+            {/* Pagination Controls */}
+            <BlogPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              siblingCount={1}
+            />
+          </Box>
+        </Fade>
+      )}
+    </Box>
+  )
+}
+
+/**
+ * Main Blog Page
+ */
 export default function BlogPage() {
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#fcfcfc' }}>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        bgcolor: '#080c16',
+        color: '#ffffff',
+        display: 'flex',
+        flexDirection: 'column'
+      }}
+    >
       <Suspense fallback={<Box sx={{ height: 64 }} />}>
         <AppAppBar />
       </Suspense>
 
-      {/* Hero Section */}
-      <Box sx={styles.hero}>
-        <Container maxWidth="lg">
-          <Typography
-            variant="h2"
-            align="center"
-            sx={styles.heroTitle}
+      {/* Hero Section with Dynamic Gradient Typography */}
+      <Box
+        component="header"
+        sx={{
+          position: 'relative',
+          pt: { xs: 8, md: 12 },
+          pb: { xs: 7, md: 10 },
+          overflow: 'hidden',
+          background: 'radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.12) 0%, rgba(112, 0, 255, 0.06) 45%, transparent 75%)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
+        }}
+      >
+        <Container maxWidth="lg" sx={{ textAlign: 'center', position: 'relative', zIndex: 1 }}>
+          {/* Eyebrow badge */}
+          <Box
+            sx={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 1,
+              px: 2,
+              py: 0.6,
+              mb: 3,
+              borderRadius: '9999px',
+              bgcolor: 'rgba(0, 240, 255, 0.08)',
+              border: '1px solid rgba(0, 240, 255, 0.3)',
+              color: '#00F0FF',
+              fontSize: '0.8rem',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.1em'
+            }}
           >
-            Blog FPV
-          </Typography>
+            <span>Wavi Knowledge Hub</span>
+          </Box>
+
+          {/* High-Impact Gradient Title */}
+          <GradientTitle
+            text="Explora las Fronteras del Vuelo FPV"
+            highlight={['Fronteras', 'Vuelo FPV']}
+            variant="h2"
+            component="h1"
+            sx={{
+              fontSize: { xs: '2.25rem', sm: '3.25rem', md: '4rem' },
+              fontWeight: 900,
+              mb: 2.5
+            }}
+          />
+
           <Typography
             variant="h6"
-            align="center"
-            sx={styles.heroSubtitle}
+            component="p"
+            sx={{
+              color: 'rgba(255, 255, 255, 0.72)',
+              maxWidth: 680,
+              mx: 'auto',
+              fontSize: { xs: '1rem', md: '1.15rem' },
+              lineHeight: 1.6,
+              fontWeight: 400
+            }}
           >
-            Guías, tutoriales y noticias del mundo de los drones FPV
+            Guías maestras, análisis de hardware de última generación y tutoriales técnicos
+            para pilotos, constructores e innovadores de drones.
           </Typography>
         </Container>
       </Box>
 
-      {/* Posts Grid */}
-      <Container maxWidth="lg" sx={{ pb: 10 }}>
-        <Suspense fallback={<LoadingSkeleton />}>
-          <Grid container spacing={4}>
-            {blogPosts.map((post) => (
-              <Grid item xs={12} md={6} lg={4} key={post.id}>
-                <BlogCard post={post} />
-              </Grid>
-            ))}
-          </Grid>
+      {/* Main Feed Container */}
+      <Container maxWidth="lg" sx={{ mt: { xs: 5, md: 7 }, flexGrow: 1 }}>
+        <Suspense fallback={<BlogLoadingSkeleton />}>
+          <BlogContent />
         </Suspense>
-
-        {/* Empty State */}
-        {blogPosts.length === 0 && (
-          <Box sx={{ textAlign: 'center', py: 10 }}>
-            <Typography variant="h5" color="text.secondary">
-              Próximamente más contenido
-            </Typography>
-          </Box>
-        )}
       </Container>
 
       <AppFooter />

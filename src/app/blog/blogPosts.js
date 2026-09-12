@@ -2,7 +2,7 @@
 
 /**
  * Blog Posts Data
- * Centralized content for all blog articles
+ * Centralized content for all blog articles and technical guides
  */
 
 export const blogPosts = [
@@ -115,6 +115,215 @@ export const blogPosts = [
                 paragraphs: [
                     {
                         text: 'Almacena las baterías LiPo a voltaje de almacenamiento (3.8V por celda) si no vas a usarlas en varios días. Nunca las dejes completamente cargadas o descargadas por períodos prolongados. Usa una bolsa ignífuga para almacenamiento seguro.'
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        id: 'tuning-pid-betaflight-4-5',
+        title: 'Sintonización PID y Filtros en Betaflight 4.5: Guía Definitiva',
+        excerpt: 'Domina los algoritmos de control de vuelo, optimiza el FeedForward y elimina el propwash para una respuesta quirúrgica.',
+        image: '/images/blog/tuning-betaflight.jpg',
+        category: 'Sintonización & Software',
+        date: '2024-03-01',
+        readTime: '10 min',
+        author: 'Michael Arias',
+        avatar: '',
+        content: [
+            {
+                type: 'paragraph',
+                text: 'Lograr que un quad FPV se sienta como una extensión directa de tus dedos requiere comprender a fondo el lazo de control PID y el filtrado digital en Betaflight 4.5.'
+            },
+            {
+                type: 'section',
+                title: 'Entendiendo el bucle P-I-D y Feedforward',
+                paragraphs: [
+                    {
+                        text: 'El término Proporcional (P) reacciona al error presente; el Integral (I) corrige desviaciones acumuladas por viento o centro de masa; y el Derivativo (D) frena las aceleraciones bruscas evitando sobrepasos. En versiones recientes, el Feedforward (FF) anticipa la reacción al movimiento de los gimbals sin introducir retardo en fase.'
+                    }
+                ]
+            },
+            {
+                type: 'section',
+                title: 'Filtrado RPM con DShot Bidireccional',
+                paragraphs: [
+                    {
+                        text: 'Activar el DShot bidireccional permite que la controladora de vuelo lea las RPM de cada motor en tiempo real, aplicando filtros notch armónicos adaptativos que eliminan el ruido antes de que caliente los motores.'
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        id: 'vtx-digital-vs-analogico',
+        title: 'Sistemas VTX Digital vs Analógico: Walksnail, DJI O3 y HDZero',
+        excerpt: 'Comparativa exhaustiva de latencia, penetración de señal, resolución y costos para elegir tu sistema de transmisión ideal.',
+        image: '/images/blog/vtx-comparison.jpg',
+        category: 'Video & Transmisión',
+        date: '2024-03-18',
+        readTime: '9 min',
+        author: 'Miguel Parra',
+        avatar: '',
+        content: [
+            {
+                type: 'paragraph',
+                text: 'La batalla por la supremacía del video FPV nunca ha sido tan emocionante. Desde la fidelidad cinemática de DJI hasta la latencia ultrabaja de HDZero, cada ecosistema tiene su propósito.'
+            },
+            {
+                type: 'section',
+                title: 'DJI O3 Air Unit: El estándar cinemático',
+                paragraphs: [
+                    {
+                        text: 'Con grabación interna hasta 4K60 y una transmisión nítida a 1080p, DJI O3 es la opción indiscutible para grabaciones comerciales donde la calidad de imagen prima sobre la latencia fija.'
+                    }
+                ]
+            },
+            {
+                type: 'section',
+                title: 'HDZero y Walksnail Avatar',
+                paragraphs: [
+                    {
+                        text: 'HDZero destaca en carreras gracias a su latencia fija de 14ms sin fluctuaciones de frame. Por su parte, Walksnail ofrece un balance versátil con soporte 1080p y amplio ecosistema de micro transmisores.'
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        id: 'baterias-lipo-4s-vs-6s',
+        title: 'Guía de Baterías LiPo: 4S vs 6S y cómo entender el C-Rating',
+        excerpt: 'Aprende la física detrás del voltaje, la resistencia interna y las curvas de descarga para maximizar la vida útil y potencia de tus packs.',
+        image: '/images/blog/lipo-batteries.jpg',
+        category: 'Potencia & Baterías',
+        date: '2024-04-02',
+        readTime: '7 min',
+        author: 'Michael Arias',
+        avatar: '',
+        content: [
+            {
+                type: 'paragraph',
+                text: 'La transición de 4S a 6S en quads de 5 pulgadas transformó la industria del FPV al reducir el voltaje sag y mejorar la eficiencia térmica de los motores.'
+            },
+            {
+                type: 'section',
+                title: 'La ventaja eléctrica de 6S',
+                paragraphs: [
+                    {
+                        text: 'Al aumentar el voltaje nominal a 22.2V, la corriente (amperios) requerida para generar la misma potencia en vatios disminuye en un tercio, reduciendo la caída de voltaje en aceleraciones agresivas.'
+                    }
+                ]
+            },
+            {
+                type: 'section',
+                title: 'Mitos del C-Rating',
+                paragraphs: [
+                    {
+                        text: 'El índice C anunciado por los fabricantes suele ser optimista. Monitorear la Resistencia Interna (IR) con tu cargador balanceador es el método más confiable para determinar la salud de tus celdas.'
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        id: 'cinelifters-produccion-audiovisual',
+        title: 'Cinelifters y Drones Heavy-Duty en Cine y Producción Audiovisual',
+        excerpt: 'Cómo transportar cámaras de cine Red Komodo o Sony FX6 con seguridad, redundancia de motores y perfiles de vuelo cinematográficos.',
+        image: '/images/blog/cinelifter-fpv.jpg',
+        category: 'Cinematografía FPV',
+        date: '2024-04-20',
+        readTime: '11 min',
+        author: 'Michael Arias',
+        avatar: '',
+        content: [
+            {
+                type: 'paragraph',
+                text: 'El cine moderno demanda tomas dinámicas imposibles para grúas o helicópteros convencionales. Aquí es donde los Cinelifters en configuración Octocóptero X8 marcan la diferencia.'
+            },
+            {
+                type: 'section',
+                title: 'Configuraciones X8 coaxial vs Hexacóptero',
+                paragraphs: [
+                    {
+                        text: 'Los marcos coaxiales X8 brindan redundancia en caso de falla de un motor, manteniendo la aeronave controlable y protegiendo cargas útiles que superan los miles de dólares.'
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        id: 'antenas-polarizacion-lhcp-rhcp',
+        title: 'Antenas FPV y Polarización Circular: LHCP vs RHCP en Vuelo Long Range',
+        excerpt: 'Por qué la polarización circular rechaza el rebote de señales y cómo orientar tus antenas omnidireccionales y direccionales.',
+        image: '/images/blog/fpv-antennas.jpg',
+        category: 'Hardware & Señal',
+        date: '2024-05-08',
+        readTime: '8 min',
+        author: 'Miguel Parra',
+        avatar: '',
+        content: [
+            {
+                type: 'paragraph',
+                text: 'Una antena adecuada puede multiplicar el alcance de tu señal de video y radio sin necesidad de aumentar la potencia de transmisión ni sobrecalentar tu VTX.'
+            },
+            {
+                type: 'section',
+                title: 'Polarización Circular Izquierda vs Derecha',
+                paragraphs: [
+                    {
+                        text: 'Al rebotar contra obstáculos sólidos como concreto o tierra, la onda electromagnética invierte su sentido de polarización. Una antena con la polarización correcta atenúa esa señal reflejada evitando el molesto multipath.'
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        id: 'radio-expresslrs-vs-crossfire',
+        title: 'Protocolos de Control RC: ExpressLRS (ELRS) vs TBS Crossfire',
+        excerpt: 'Tasa de paquetes de 1000Hz, telemetría y penetración en 915MHz vs 2.4GHz: ¿cuál es el mejor enlace para tus vuelos?',
+        image: '/images/blog/radio-protocols.jpg',
+        category: 'Radio Control',
+        date: '2024-05-25',
+        readTime: '8 min',
+        author: 'Michael Arias',
+        avatar: '',
+        content: [
+            {
+                type: 'paragraph',
+                text: 'El enlace de control es la línea de vida entre el piloto y el drone. La revolución open-source de ExpressLRS ha desafiado el dominio histórico de Team BlackSheep Crossfire.'
+            },
+            {
+                type: 'section',
+                title: 'Tasas de actualización y latencia',
+                paragraphs: [
+                    {
+                        text: 'ELRS alcanza tasas de sondeo de hasta 1000Hz en 2.4GHz con modulaciones LoRa, reduciendo la latencia de entrada a menos de 2 milisegundos para maniobras acrobáticas milimétricas.'
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        id: 'frame-geometries-deadcat-truex',
+        title: 'Geometrías de Chasis FPV: Deadcat vs True-X y su impacto en vuelo',
+        excerpt: 'Descubre las diferencias dinámicas entre disposiciones de brazos True-X, Stretch-X y Deadcat para eliminar las hélices del encuadre.',
+        image: '/images/blog/frame-geometries.jpg',
+        category: 'Estructuras & Frames',
+        date: '2024-06-12',
+        readTime: '6 min',
+        author: 'Miguel Parra',
+        avatar: '',
+        content: [
+            {
+                type: 'paragraph',
+                text: 'La disposición de los brazos no es solo una decisión estética; determina la distribución del empuje aerodinámico y cómo el giroscopio percibe la inercia de rotación.'
+            },
+            {
+                type: 'section',
+                title: 'Deadcat para planos cinematográficos limpios',
+                paragraphs: [
+                    {
+                        text: 'Los marcos Deadcat desplazan los motores delanteros hacia los costados para que las hélices no aparezcan en el campo de visión de la cámara HD, ideal para grabaciones con lentes gran angular.'
                     }
                 ]
             }
