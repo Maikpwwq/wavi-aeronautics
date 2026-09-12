@@ -124,7 +124,7 @@ const Escuela = () => {
                 lineHeight: 1.15
               }}
             >
-              Clases personalizadas de Vuelo de Drones & FPV
+              Vuelo de Drones & FPV
             </Typography>
 
             {/* Wavi Accent Bar */}
@@ -153,7 +153,7 @@ const Escuela = () => {
                 mb: { xs: 3.5, sm: 4.5 }
               }}
             >
-              ¡Aprende a volar como un experto! Conoce todo sobre el mundo de los drones y la tecnología FPV con entrenamiento práctico, personalizado y enfocado en la seguridad operativa.
+              ¡Vive la experiencia de volar! Conoce todo sobre el mundo de los drones y la tecnología FPV con entrenamiento práctico, personalizado y enfocado en la seguridad operativa.
             </Typography>
 
             {/* CTA Buttons */}
@@ -190,7 +190,7 @@ const Escuela = () => {
                   }
                 }}
               >
-                Programar sesión por WhatsApp
+                Agendar mentoría
               </Button>
 
               <Button
@@ -352,7 +352,7 @@ const Escuela = () => {
               lineHeight: 1.6
             }}
           >
-            Agendá con nosotros hoy mismo horarios, temarios y tarifas especiales.
+            Agenda una mentoría con nosotros, diseñamos el mejor temario y horario para vos.
           </Typography>
 
           <Button
