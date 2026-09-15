@@ -190,7 +190,7 @@ const Escuela = () => {
                   }
                 }}
               >
-                Agendar mentoría
+                Programar mentoría
               </Button>
 
               <Button

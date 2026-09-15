@@ -107,7 +107,7 @@ const categories = [
     title: 'Escuela & Software',
     subtitle: 'Cursos profesionales y simuladores FPV',
     url: DJI9,
-    href: '/tienda/escuela',
+    href: '/escuela',
     icon: SchoolIcon,
     width: { xs: '100%', sm: '100%', md: '35%' }
   },

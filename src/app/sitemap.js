@@ -80,7 +80,7 @@ export default function sitemap() {
       priority: 0.7,
     },
     {
-      url: `${BASE_URL}/tienda/escuela`,
+      url: `${BASE_URL}/escuela`,
       lastModified: now,
       changeFrequency: 'monthly',
       priority: 0.7,

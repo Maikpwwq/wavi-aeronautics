@@ -52,11 +52,5 @@ export const routes = [
     value: 8,
     href: '/tienda/software/',
     slug: 'software'
-  },
-  {
-    label: 'Escuela',
-    value: 9,
-    href: '/tienda/escuela/',
-    slug: 'escuela'
   }
 ]

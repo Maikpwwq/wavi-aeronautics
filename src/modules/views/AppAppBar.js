@@ -238,6 +238,10 @@ function AppAppBar({ isHome: propIsHome }) {
               <ShoppingCartIcon sx={{ ml: { xs: 0, sm: 0.75 }, fontSize: { xs: 22, sm: 20 } }} />
             </StyledNavLink>
 
+            <StyledNavLink href="/escuela" sx={{ display: { xs: 'none', md: 'flex' } }}>
+              Escuela
+            </StyledNavLink>
+
             <StyledNavLink href="/blog" sx={{ display: { xs: 'none', md: 'flex' } }}>
               Blog
             </StyledNavLink>
@@ -318,7 +322,7 @@ function AppAppBar({ isHome: propIsHome }) {
                   ml: 0.5
                 }}
               >
-                $60.000
+                $80.000
               </Box>
             </Box>
           </Box>

@@ -18,8 +18,7 @@ const CATEGORY_LABELS = {
   'trasmisor-receptor': 'Transmisión/Recepción',
   'digital-vtx': 'Digital VTX',
   'accesorios': 'Accesorios',
-  'software': 'Software',
-  'escuela': 'Escuela'
+  'software': 'Software'
 }
 
 /**

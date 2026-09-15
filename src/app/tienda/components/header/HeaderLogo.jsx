@@ -9,6 +9,7 @@ import Link from '@mui/material/Link'
 import Button from '@mui/material/Button'
 
 import ArticleIcon from '@mui/icons-material/Article'
+import SchoolIcon from '@mui/icons-material/School'
 
 import SearchBar from './SearchBar'
 import SocialContactIcons from '@/modules/components/SocialContactIcons'
@@ -105,6 +106,36 @@ const HeaderLogo = () => {
           >
             {/* Social & Contact Icons */}
             <SocialContactIcons size="medium" />
+
+            {/* Escuela Button */}
+            <Button
+              component={Link}
+              href="/escuela"
+              variant="outlined"
+              startIcon={<SchoolIcon />}
+              sx={{
+                ml: 1,
+                color: '#ff6f00',
+                borderColor: 'rgba(255, 111, 0, 0.6)',
+                borderRadius: 2.5,
+                textTransform: 'none',
+                fontWeight: 'bold',
+                px: 2,
+                py: 0.75,
+                fontSize: '0.9rem',
+                backdropFilter: 'blur(4px)',
+                transition: 'all 0.25s ease',
+                '&:hover': {
+                  borderColor: '#ff6f00',
+                  bgcolor: 'rgba(255, 111, 0, 0.15)',
+                  color: '#ffffff',
+                  boxShadow: '0 0 12px rgba(255, 111, 0, 0.3)',
+                  transform: 'translateY(-1px)'
+                }
+              }}
+            >
+              Escuela
+            </Button>
 
             {/* Blog Button */}
             <Button
