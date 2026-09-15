@@ -117,7 +117,6 @@ All new products use **English field names**. Legacy Spanish fields are read via
 | `/tienda/digital-vtx`        | Digital Video Transmitters    |
 | `/tienda/accesorios`         | Accessories                   |
 | `/tienda/software`           | Software & Tools              |
-| `/tienda/escuela`            | FPV School / Training         |
 | `/tienda/producto`           | Product Detail Page (dynamic) |
 | `/tienda/ver-carrito`        | Shopping Cart                 |
 | `/tienda/detalles-envio`     | Shipping Details / Checkout   |
@@ -125,6 +124,7 @@ All new products use **English field names**. Legacy Spanish fields are read via
 | `/tienda/pago-fallido`       | Payment Failed                |
 | `/tienda/pago-pendiente`     | Payment Pending               |
 | `/tienda/pse-resultado`      | PSE Payment Result            |
+| `/escuela`                   | FPV School / Training         |
 
 ### Authentication
 
@@ -146,14 +146,12 @@ All new products use **English field names**. Legacy Spanish fields are read via
 | `/mis-compras`   | Mis Compras (Consolidated History & Printable Invoice) |
 | `/facturacion`   | Facturación & PCI-Compliant Saved Payment Methods      |
 
-### Blog / Posts
+### Blog
 
-| Route                  | Description   |
-| ---------------------- | ------------- |
-| `/blog`                | Blog Listing  |
-| `/posts`               | Posts Listing |
-| `/posts/[id]`          | Single Post   |
-| `/posts/[id]/comments` | Post Comments |
+| Route          | Description                   |
+| -------------- | ----------------------------- |
+| `/blog`        | Blog Listing (paginated)      |
+| `/blog/[id]`   | Single Blog Post (article)    |
 
 ### Legal Pages
 
@@ -272,7 +270,7 @@ src/
 ### Commands
 
 ```bash
-pnpm test              # Run all unit & component tests (102+ tests, 14 suites)
+pnpm test              # Run all unit & component tests (167+ tests, 25 suites)
 pnpm test:watch        # Watch mode
 pnpm test:coverage     # Coverage with 70% threshold enforcement
 pnpm test:e2e          # Playwright E2E + A11y (requires dev server)
@@ -284,8 +282,8 @@ pnpm lint              # ESLint 9/10 flat config
 
 | Metric                    | Value      |
 | ------------------------- | ---------- |
-| **Unit Test Suites**      | 14         |
-| **Total Tests**           | 102+ passed |
+| **Unit Test Suites**      | 25         |
+| **Total Tests**           | 167+ passed |
 | **Code Coverage (core)**  | >98%       |
 | **Mutation Score**        | 89.07%     |
 | **Coverage Threshold**    | 70% enforced (stmts/branches/funcs/lines) |
@@ -333,6 +331,20 @@ pnpm lint              # ESLint 9/10 flat config
 - **CI/CD Pipelines**: GitHub Actions workflows for PR gates and nightly quality runs.
 - **Import Standardization**: All test and production imports migrated from relative paths (`../../`) to absolute `@/` aliases per `jsconfig.json`.
 - **ESLint 9/10 Flat Config**: Modernized lint configuration compatible with Next.js 16.
+
+---
+
+## 🆕 Recent Updates (September 2026)
+
+### Typography Standardization & Design System
+
+- **CategoryHeader Component**: Created reusable `<CategoryHeader>` component (`src/app/tienda/components/CategoryHeader.jsx`) to standardize heading blocks across all 9 store category pages with consistent title (fontWeight 800, color `#0f172a`), Wavi Blue accent bar (`#00aCe4`), and descriptive body text (color `#475569`).
+- **Typography Refactor**: Migrated all store category pages from inconsistent raw `<Typography>` + inline `<Box>` patterns to the centralized `CategoryHeader` component.
+- **Uppercase Fix**: Resolved global theme `textTransform: 'uppercase'` leaking into `body1`/`h6` variants by using explicit `textTransform: 'none'` overrides.
+- **Escuela Route Promotion**: Moved `/tienda/escuela` to top-level `/escuela` route with dedicated header navigation button.
+- **Blog Section**: Full blog module with paginated listing (`/blog`), individual article pages (`/blog/[id]`), reusable `BlogPostCard`, `BlogPagination`, and `GradientTitle` components.
+- **Design System Docs**: Published [`docs/design-system-standards.md`](docs/design-system-standards.md) documenting the complete typography hierarchy, color palette, and reusable component API.
+- **Test Suite Growth**: Expanded from 102 tests / 14 suites to **167 tests / 25 suites** with new coverage for Blog components, CategoryHeader, and Software page.
 
 ---
 

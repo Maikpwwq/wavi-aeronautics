@@ -69,10 +69,14 @@ src/
 │   ├── providers/              # App providers (FavoritesProvider)
 │   ├── tienda/                 # Store routes (/tienda/*)
 │   │   ├── buscar/             # Search results page (/tienda/buscar)
-│   │   ├── components/         # Storefront components (ProductCard, ProductFeedbackSection, etc.)
+│   │   ├── components/         # Storefront components (ProductCard, CategoryHeader, ProductFeedbackSection, etc.)
 │   │   │   └── header/         # Header components (HeaderLogo, SearchBar, StoreBanner)
 │   │   ├── hooks/              # Custom hooks (useProductFilter, useProducts)
 │   │   └── producto/           # Product detail page route (/tienda/producto)
+│   ├── escuela/                # FPV School page (/escuela) — top-level route
+│   ├── blog/                   # Blog listing & article pages (/blog, /blog/[id])
+│   │   ├── [id]/               # Individual blog post (dynamic route)
+│   │   └── components/         # Blog components (BlogPostCard, BlogPagination, GradientTitle)
 │   ├── (legal routes)/         # /politica-de-privacidad, /politica-de-envios, etc.
 │   ├── robots.js               # Dynamic /robots.txt
 │   └── sitemap.js              # Dynamic /sitemap.xml
@@ -162,14 +166,24 @@ Always prefer **English field names**. Handle legacy Spanish keys as fallback ge
 ## 🎨 Design System & Theme Guidelines
 
 - **Theme Base**: Material-UI (MUI) v7.
+- **Theme Files**: Two coexisting themes:
+  - `src/modules/theme.js` — Global (marketing, landing). Applies `textTransform: 'uppercase'` to h1–h4, h6.
+  - `src/app/tienda/innerTheme.js` — Store section. Exports `BRAND_COLORS` constants.
 - **Brand Colors**:
   - Primary Accent: `#00aCe4` (Wavi Blue)
+  - Title Text: `#0f172a` (Slate-900)
+  - Body Text: `#475569` (Slate-600)
   - Secondary Accent: `#ff6f00` / `#e65100` (Orange CTA)
   - Footer / Dark Containers: `#1e1e1f`
   - Success Badge: `#4caf50`
   - Error / Agotado Badge: `rgba(211, 47, 47, 0.9)`
-- **Typography**: Modern clean fonts with explicit `fontWeight` settings (500, 600, 700).
+- **Typography Standardization**:
+  - All store category pages use `<CategoryHeader>` component (`src/app/tienda/components/CategoryHeader.jsx`).
+  - Headings: `fontWeight: 800`, responsive `fontSize`, `color: '#0f172a'`.
+  - Body text: `variant="body1"`, `fontWeight: 400`, `color: '#475569'`, `textTransform: 'none'`.
+  - Accent divider: `#00aCe4` bar (44×3.5px) between title and description.
 - **Responsive Layout**: Always test breakages across `xs` (mobile), `sm` (tablet), `md` (desktop), `lg` (large desktop).
+- **Design System Docs**: See `docs/design-system-standards.md` for comprehensive reference.
 
 ---
 
@@ -183,9 +197,10 @@ Always prefer **English field names**. Handle legacy Spanish keys as fallback ge
 6. **Import Aliases**: Always use `@/` absolute path aliases (e.g., `@/utilities/priceUtils`, `@/store/states/product`). Never use deep relative paths like `../../../`. The alias is defined in `jsconfig.json` as `@/* → ./src/*` and mirrored in `vitest.config.mjs`.
 7. **Testing Requirements**:
    - Add or update tests when modifying business logic in `src/utilities/`, `src/store/states/`, or `src/services/`.
-   - Run `pnpm test` before committing to verify the full suite passes (102+ tests, 14 suites).
+   - Run `pnpm test` before committing to verify the full suite passes (167+ tests, 25 suites).
    - Coverage thresholds are enforced at 70% for statements, branches, functions, and lines on core modules.
    - Firebase Firestore/Storage rules tests require the Local Emulator Suite (ports 8080/9199). They auto-skip gracefully when emulators are not running.
+8. **Typography**: Always use `<CategoryHeader>` for store category page headings. Never use raw `h6` variant for body text (inherits `uppercase` from global theme). Use `textTransform: 'none'` when needed.
 
 ---
 
@@ -222,6 +237,12 @@ Always prefer **English field names**. Handle legacy Spanish keys as fallback ge
 | Concurrency (Race)           | Stress         | `src/services/__tests__/concurrency.test.js`              |
 | Firestore Rules              | Integration    | `src/firebase/__tests__/firestoreRules.test.js`           |
 | Storage Rules                | Integration    | `src/firebase/__tests__/storageRules.test.js`             |
+| CategoryHeader               | Component/RTL  | `src/app/tienda/components/__tests__/CategoryHeader.test.jsx` |
+| SoftwarePage                 | Component/RTL  | `src/app/tienda/software/__tests__/SoftwarePage.test.jsx` |
+| BlogPostCard                 | Component/RTL  | `src/app/blog/components/__tests__/BlogPostCard.test.jsx` |
+| BlogPagination               | Component/RTL  | `src/app/blog/components/__tests__/BlogPagination.test.jsx` |
+| BlogPostPage                 | Component/RTL  | `src/app/blog/[id]/__tests__/BlogPostPage.test.jsx`       |
+| GradientTitle                | Component/RTL  | `src/app/blog/components/__tests__/GradientTitle.test.jsx` |
 | E2E + A11y                   | E2E/Axe        | `e2e/usedProducts.spec.js`                                |
 
 ### CI/CD Pipelines
