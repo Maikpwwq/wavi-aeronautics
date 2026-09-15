@@ -20,6 +20,8 @@ import DevicesIcon from '@mui/icons-material/Devices'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 
 import withRoot from '@/modules/withRoot'
+import AppAppBar from '@/modules/views/AppAppBar'
+import AppFooter from '@/modules/views/AppFooter'
 import ProductValues from '@/modules/views/ProductValues'
 import RevealOnScroll from '@/modules/components/RevealOnScroll'
 
@@ -56,6 +58,7 @@ const HIGHLIGHTS = [
 const Escuela = () => {
   return (
     <Box component="main" sx={{ bgcolor: '#ffffff', minHeight: '100vh' }}>
+      <AppAppBar isHome />
       {/* Hero Section */}
       <Box
         component="section"
@@ -386,6 +389,7 @@ const Escuela = () => {
           </Button>
         </Container>
       </Box>
+      <AppFooter />
     </Box>
   )
 }
