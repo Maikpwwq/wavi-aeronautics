@@ -462,7 +462,7 @@ function PostNavigation({ prev, next }) {
 function NotFoundView() {
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: '#f8fafc' }}>
-      <AppAppBar />
+      <AppAppBar isHome />
       <Container maxWidth="md" sx={{ py: 12, textAlign: 'center' }}>
         <Chip
           label="404"
@@ -541,7 +541,7 @@ export default function BlogPostPage() {
       }}
     >
       <Suspense fallback={<Box sx={{ height: 64 }} />}>
-        <AppAppBar />
+        <AppAppBar isHome />
       </Suspense>
 
       {/* ================================================================= */}

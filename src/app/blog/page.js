@@ -158,7 +158,7 @@ export default function BlogPage() {
       }}
     >
       <Suspense fallback={<Box sx={{ height: 64 }} />}>
-        <AppAppBar />
+        <AppAppBar isHome />
       </Suspense>
 
       {/* Hero Section with Dynamic Gradient Typography */}
