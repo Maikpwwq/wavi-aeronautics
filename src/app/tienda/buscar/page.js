@@ -8,11 +8,12 @@ import withRoot from '@/modules/withRoot'
 
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
-import Typography from '@/modules/components/Typography'
+import Typography from '@mui/material/Typography'
 
 import ProductCard from '@/app/tienda/components/ProductCard'
 import ProductSkeleton from '@/app/tienda/components/ProductSkeleton'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
+import CategoryHeader from '@/app/tienda/components/CategoryHeader'
 import { useProductFilter } from '@/app/tienda/hooks/useProductFilter'
 import { searchProducts, searchByBrand } from '@/services/FirebaseSearchProducts'
 import { matchesBrand } from '@/utilities/brandsConfig'
@@ -157,18 +158,20 @@ function SearchResultsContent() {
 
       {/* Main Results View */}
       <Box sx={classes.presentationProducts}>
-        <Typography variant="h5" sx={classes.spacingTexts}>
-          {brandParam && !queryParam
-            ? `Productos de la marca "${brandParam}":`
-            : `Resultados de búsqueda para "${queryText}":`}
-        </Typography>
-        <Typography variant="body1" sx={classes.endingTexts}>
-          {loading
-            ? 'Buscando productos coincidentes en el catálogo...'
-            : searchResults.length > 0
-            ? `Se encontraron ${searchResults.length} productos coincidentes.`
-            : 'No se encontraron productos que coincidan con tu término de búsqueda.'}
-        </Typography>
+        <CategoryHeader
+          title={
+            brandParam && !queryParam
+              ? `Productos de la marca "${brandParam}":`
+              : `Resultados de búsqueda para "${queryText}":`
+          }
+          description={
+            loading
+              ? 'Buscando productos coincidentes en el catálogo...'
+              : searchResults.length > 0
+              ? `Se encontraron ${searchResults.length} productos coincidentes.`
+              : 'No se encontraron productos que coincidan con tu término de búsqueda.'
+          }
+        />
 
         {loading ? (
           <ProductSkeleton count={6} />

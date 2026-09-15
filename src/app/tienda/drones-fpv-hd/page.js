@@ -6,13 +6,15 @@ import withRoot from '@/modules/withRoot'
 
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
-import Typography from '@/modules/components/Typography'
+import Typography from '@mui/material/Typography'
 
 import ProductCard from '@/app/tienda/components/ProductCard'
 import ProductSkeleton from '@/app/tienda/components/ProductSkeleton'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
 import UsedProductsShowcase from '@/app/tienda/components/UsedProductsShowcase'
 import { useProductFilter } from '@/app/tienda/hooks/useProductFilter'
+
+import CategoryHeader from '@/app/tienda/components/CategoryHeader'
 
 const styles = (theme) => ({
   presentationProducts: {
@@ -26,12 +28,6 @@ const styles = (theme) => ({
     [theme.breakpoints.down('sm')]: {
       paddingLeft: `${theme.spacing(2)} !important`
     }
-  },
-  spacingTexts: {
-    margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`
-  },
-  endingTexts: {
-    marginBottom: `${theme.spacing(2)} !important`
   },
   productShowcase: {
     display: 'flex',
@@ -82,12 +78,10 @@ const DroneProducts = () => {
           setSortOrder={setSortOrder}
         />
         <Box sx={classes.presentationProducts}>
-          <Typography variant="h5" sx={classes.spacingTexts}>
-            Drones FPV digital HD:
-          </Typography>
-          <Typography variant="body1" sx={classes.endingTexts}>
-            Descubre los mejores Drones FPV con transmisión digital de video en HD y preparate para filmar.
-          </Typography>
+          <CategoryHeader
+            title="Drones FPV Digital HD"
+            description="Descubre los mejores Drones FPV con transmisión digital de video en alta definición, diseñados para capturar tomas cinematográficas con máxima estabilidad."
+          />
           <Suspense fallback={<ProductSkeleton count={4} />}>
             {showSkeleton ? (
               <ProductSkeleton count={4} />
@@ -109,7 +103,15 @@ const DroneProducts = () => {
                 ))}
               </Grid>
             ) : (
-              <Typography variant="body2" sx={{ m: 2 }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: '#64748b',
+                  fontSize: '0.95rem',
+                  py: 4,
+                  textAlign: 'center'
+                }}
+              >
                 No hay productos que coincidan con los filtros seleccionados.
               </Typography>
             )}

@@ -7,12 +7,13 @@ import { fetchTransmisorsProducts } from '@/store/states/shop'
 
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
-import Typography from '@/modules/components/Typography'
+import Typography from '@mui/material/Typography'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
 import withRoot from '@/modules/withRoot'
 import { useTheme } from '@mui/material/styles'
 
 import { useProductFilter } from '@/app/tienda/hooks/useProductFilter'
+import CategoryHeader from '@/app/tienda/components/CategoryHeader'
 
 const styles = (theme) => ({
   presentationProducts: {
@@ -21,19 +22,16 @@ const styles = (theme) => ({
     paddingLeft: `${theme.spacing(6)} !important`,
     display: 'flex',
     flexDirection: 'column',
+    flex: 1,
+    minWidth: 0,
     [theme.breakpoints.down('sm')]: {
       paddingLeft: `${theme.spacing(2)} !important`
     }
   },
-  spacingTexts: {
-    margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`
-  },
-  endingTexts: {
-    marginBottom: `${theme.spacing(2)} !important`
-  },
   productShowcase: {
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'flex-start',
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column'
     }
@@ -113,12 +111,10 @@ const TrasmisorReceptor = () => {
         />
         <Box sx={classes.presentationProducts}>
           {/* Seccion de Transmisoras */}
-          <Typography variant="h5" sx={classes.spacingTexts}>
-            Transmisores para drone.
-          </Typography>
-          <Typography variant="body1" sx={classes.endingTexts}>
-            Transmisores para cada necesidad en potencia y distacia de vuelo.
-          </Typography>
+          <CategoryHeader
+            title="Transmisores de Video & Radio (TX)"
+            description="Módulos de enlace y transmisión con potencia escalable, gran penetración de señal y estabilidad en largo alcance."
+          />
           <Suspense fallback={<ProductSkeleton count={4} />}>
             {showSkeleton ? (
               <ProductSkeleton count={4} />
@@ -136,19 +132,28 @@ const TrasmisorReceptor = () => {
                 ))}
               </Grid>
             ) : (
-              <Typography variant="body2" sx={{ m: 2 }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: '#64748b',
+                  fontSize: '0.95rem',
+                  py: 4,
+                  textAlign: 'center'
+                }}
+              >
                 No hay transmisores que coincidan con los filtros.
               </Typography>
             )}
           </Suspense>
 
           {/* Seccion de Receptoras */}
-          <Typography variant="h5" sx={classes.spacingTexts}>
-            Receptor para drone.
-          </Typography>
-          <Typography variant="body1" sx={classes.endingTexts}>
-            Receptor para cada necesidad en potencia y distacia de vuelo.
-          </Typography>
+          <CategoryHeader
+            title="Receptores de Señal (RX)"
+            description="Receptores ultraligeros de diversidad y alta sensibilidad para telemetría continua y enlace de control sin interrupciones."
+            titleComponent="h2"
+            variant="h5"
+            sx={{ mt: 6 }}
+          />
           <Suspense fallback={<ProductSkeleton count={4} />}>
             {showSkeleton ? (
               <ProductSkeleton count={4} />
@@ -166,7 +171,15 @@ const TrasmisorReceptor = () => {
                 ))}
               </Grid>
             ) : (
-              <Typography variant="body2" sx={{ m: 2 }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: '#64748b',
+                  fontSize: '0.95rem',
+                  py: 4,
+                  textAlign: 'center'
+                }}
+              >
                 No hay receptores que coincidan con los filtros.
               </Typography>
             )}

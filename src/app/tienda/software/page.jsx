@@ -142,7 +142,7 @@ function SoftwarePage() {
 
           {/* Subtitle */}
           <Typography
-            variant="h6"
+            variant="body1"
             component="p"
             sx={{
               color: '#475569',
@@ -150,7 +150,8 @@ function SoftwarePage() {
               fontSize: { xs: '0.98rem', sm: '1.12rem', md: '1.2rem' },
               lineHeight: 1.7,
               maxWidth: 760,
-              mx: 'auto'
+              mx: 'auto',
+              textTransform: 'none'
             }}
           >
             Plataformas de entrenamiento inmersivo para dominar el vuelo FPV sin riesgo
@@ -253,7 +254,8 @@ function SoftwarePage() {
                         fontWeight: 800,
                         fontSize: { xs: '1.4rem', sm: '1.65rem' },
                         letterSpacing: '-0.02em',
-                        lineHeight: 1.2
+                        lineHeight: 1.2,
+                        color: '#ffffff'
                       }}
                     >
                       VelociDrone FPV
@@ -485,7 +487,8 @@ function SoftwarePage() {
                         fontWeight: 800,
                         fontSize: { xs: '1.4rem', sm: '1.65rem' },
                         letterSpacing: '-0.02em',
-                        lineHeight: 1.2
+                        lineHeight: 1.2,
+                        color: '#ffffff'
                       }}
                     >
                       Pix4D Digital Mapping
@@ -832,7 +835,8 @@ function SoftwarePage() {
                   fontWeight: 800,
                   fontSize: { xs: '1.4rem', sm: '1.8rem' },
                   letterSpacing: '-0.02em',
-                  mb: 1.2
+                  mb: 1.2,
+                  color: '#ffffff'
                 }}
               >
                 ¿Dudas sobre licencias o configuración de tu control?

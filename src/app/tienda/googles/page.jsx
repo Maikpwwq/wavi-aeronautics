@@ -9,9 +9,10 @@ import ProductCard from '@/app/tienda/components/ProductCard'
 import ProductSkeleton from '@/app/tienda/components/ProductSkeleton'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
-import Typography from '@/modules/components/Typography'
+import Typography from '@mui/material/Typography'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
 import { useProductFilter } from '@/app/tienda/hooks/useProductFilter'
+import CategoryHeader from '@/app/tienda/components/CategoryHeader'
 
 const styles = (theme) => ({
   presentationProducts: {
@@ -25,12 +26,6 @@ const styles = (theme) => ({
     [theme.breakpoints.down('sm')]: {
       paddingLeft: `${theme.spacing(2)} !important`
     }
-  },
-  spacingTexts: {
-    margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`
-  },
-  endingTexts: {
-    marginBottom: `${theme.spacing(2)} !important`
   },
   productShowcase: {
     display: 'flex',
@@ -87,12 +82,10 @@ const Googles = () => {
           setSortOrder={setSortOrder}
         />
         <Box sx={classes.presentationProducts}>
-          <Typography variant="h5" sx={classes.spacingTexts}>
-            Googles para drone.
-          </Typography>
-          <Typography variant="body1" sx={classes.endingTexts}>
-            Googles para cada necesidad en potencia y tiempo de vuelo.
-          </Typography>
+          <CategoryHeader
+            title="Goggles & Gafas FPV"
+            description="Sistemas de inmersión visual analógica y digital HD de ultra baja latencia, con ópticas nítidas y amplio campo de visión (FOV)."
+          />
           <Suspense fallback={<ProductSkeleton count={4} />}>
             {showSkeleton ? (
               <ProductSkeleton count={4} />
@@ -110,7 +103,15 @@ const Googles = () => {
                 ))}
               </Grid>
             ) : (
-              <Typography variant="body2" sx={{ m: 2 }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: '#64748b',
+                  fontSize: '0.95rem',
+                  py: 4,
+                  textAlign: 'center'
+                }}
+              >
                 No hay productos que coincidan con los filtros seleccionados.
               </Typography>
             )}
