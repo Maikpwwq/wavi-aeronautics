@@ -35,13 +35,26 @@ const StoreBanner = () => {
       elevation={0}
     >
       <Toolbar>
-        <Grid container alignItems="center" spacing={1} sx={{ width: '100%', justifyContent: 'space-between' }}>
-          <Grid item xs>
-            <Typography color="inherit" variant="h5" component="h1">
+        <Grid container alignItems="center" spacing={1} sx={{ width: '100%', justifyContent: { xs: 'flex-end', sm: 'space-between' } }}>
+          <Grid item xs sx={{ display: { xs: 'none', sm: 'block' } }}>
+            <Typography
+              color="inherit"
+              variant="h5"
+              component="h1"
+              sx={{ fontSize: { sm: '1.15rem', md: '1.5rem' } }}
+            >
               <span style={{ fontWeight: 'bold' }}>Para lo mejor en equipos FPV y Drones</span>
             </Typography>
-            <Typography color="inherit" variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
-              <LocalShippingIcon sx={{ marginRight: '0.75rem' }} /> Envíos gratis a toda Colombia!
+            <Typography
+              color="inherit"
+              variant="body1"
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                fontSize: { sm: '0.85rem', md: '1rem' }
+              }}
+            >
+              <LocalShippingIcon sx={{ marginRight: '0.75rem', fontSize: { sm: '1.1rem', md: '1.5rem' } }} /> Envíos gratis a toda Colombia!
             </Typography>
           </Grid>
 
