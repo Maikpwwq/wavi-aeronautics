@@ -222,7 +222,7 @@ a {
   width: 100%;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 900px) {
   .filter-panel {
     width: 280px;
     min-width: 280px;

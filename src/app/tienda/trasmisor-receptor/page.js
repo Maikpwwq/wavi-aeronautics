@@ -24,7 +24,7 @@ const styles = (theme) => ({
     flexDirection: 'column',
     flex: 1,
     minWidth: 0,
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       paddingLeft: `${theme.spacing(2)} !important`
     }
   },
@@ -32,7 +32,7 @@ const styles = (theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-start',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       flexDirection: 'column'
     }
   }
