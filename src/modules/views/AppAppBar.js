@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Box from '@mui/material/Box'
@@ -10,6 +10,8 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
+import MenuIcon from '@mui/icons-material/Menu'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 
 import AppBar from '@/modules/components/AppBar'
 import theme from '@/modules/theme'
@@ -18,6 +20,7 @@ import UserDropdown from '@/app/components/UserDropdown'
 import SearchBar from '@/app/tienda/components/header/SearchBar'
 import SocialContactIcons from '@/modules/components/SocialContactIcons'
 import PseBadge from '@/modules/components/PseBadge'
+import CategoriesMenuDialog from '@/modules/components/CategoriesMenuDialog'
 
 const WHATSAPP_CONSULT_URL =
   'https://api.whatsapp.com/send?phone=573204842897&text=Hola%20Wavi%20Aeronautics%2C%20deseo%20asesor%C3%ADa%20experta%20personalizada'
@@ -60,6 +63,7 @@ const StyledNavLink = styled(Link)(({ theme }) => ({
 function AppAppBar({ isHome: propIsHome }) {
   const pathname = usePathname()
   const isHome = propIsHome !== undefined ? propIsHome : (pathname === '/' || pathname === '')
+  const [categoriesOpen, setCategoriesOpen] = useState(false)
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -160,7 +164,7 @@ function AppAppBar({ isHome: propIsHome }) {
         {/* ── Main Navigation Toolbar ── */}
         <StyledToolbar>
           {/* ── Left: Brand & Logo ── */}
-          <Box sx={{ flexShrink: 0, display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: { xs: 0.75, sm: 1.5 } }}>
             <Link
               href="/"
               style={{
@@ -200,6 +204,48 @@ function AppAppBar({ isHome: propIsHome }) {
                 Wavi Aeronautics
               </Typography>
             </Link>
+
+            {/* ── Main Categories Menu Button ── */}
+            <Button
+              onClick={() => setCategoriesOpen(true)}
+              aria-label="Abrir menú de categorías"
+              aria-haspopup="dialog"
+              aria-expanded={categoriesOpen}
+              startIcon={<MenuIcon sx={{ fontSize: { xs: 18, sm: 20 } }} />}
+              endIcon={
+                <KeyboardArrowDownIcon
+                  sx={{
+                    fontSize: { xs: 16, sm: 18 },
+                    transition: 'transform 0.2s ease',
+                    transform: categoriesOpen ? 'rotate(180deg)' : 'none'
+                  }}
+                />
+              }
+              sx={{
+                bgcolor: '#00aCe4',
+                color: '#ffffff',
+                textTransform: 'none',
+                fontWeight: 700,
+                fontSize: { xs: '0.8rem', sm: '0.875rem' },
+                px: { xs: 1.25, sm: 1.75 },
+                py: { xs: 0.75, sm: 0.85 },
+                borderRadius: '8px',
+                boxShadow: '0 2px 6px rgba(0, 172, 228, 0.35)',
+                minWidth: 'auto',
+                lineHeight: 1.3,
+                transition: 'all 0.2s ease',
+                '&:hover': {
+                  bgcolor: '#0284c7',
+                  boxShadow: '0 4px 12px rgba(0, 172, 228, 0.5)',
+                  transform: 'translateY(-1px)'
+                },
+                '&:active': {
+                  transform: 'translateY(0)'
+                }
+              }}
+            >
+              Menú
+            </Button>
           </Box>
 
           {/* ── Center: SearchBar & PSE Logo ── */}
@@ -330,6 +376,9 @@ function AppAppBar({ isHome: propIsHome }) {
       </AppBar>
       {/* Spacer to prevent layout shift beneath fixed AppBar */}
       <Box sx={{ height: isHome ? { xs: 132, sm: 146 } : { xs: 64, sm: 70 } }} />
+
+      {/* ── Main Categories Modal ── */}
+      <CategoriesMenuDialog open={categoriesOpen} onClose={() => setCategoriesOpen(false)} />
     </Box>
   )
 }
