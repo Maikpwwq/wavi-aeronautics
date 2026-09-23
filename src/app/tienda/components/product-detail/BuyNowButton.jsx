@@ -16,6 +16,7 @@ import { addProductToCart } from './cartUtils'
  */
 export const BuyNowButton = ({
   product,
+  selectedVariations = null,
   selectedOption = null,
   quantity = 1,
   disabled = false,
@@ -33,6 +34,7 @@ export const BuyNowButton = ({
 
     const success = addProductToCart({
       product,
+      selectedVariations,
       selectedOption,
       quantity,
       shoppingCart,
@@ -93,6 +95,7 @@ export const BuyNowButton = ({
 
 BuyNowButton.propTypes = {
   product: PropTypes.object.isRequired,
+  selectedVariations: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   selectedOption: PropTypes.object,
   quantity: PropTypes.number,
   disabled: PropTypes.bool,

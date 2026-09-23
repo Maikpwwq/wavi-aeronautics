@@ -10,6 +10,7 @@ import { addProductToCart } from './product-detail/cartUtils'
 
 const AddProduct = ({
   product,
+  selectedVariations = null,
   selectedOption = null,
   variant = 'icon',
   disabled = false,
@@ -25,6 +26,7 @@ const AddProduct = ({
 
     addProductToCart({
       product,
+      selectedVariations,
       selectedOption,
       quantity,
       shoppingCart,
@@ -84,6 +86,7 @@ const AddProduct = ({
 
 AddProduct.propTypes = {
   product: PropTypes.object.isRequired,
+  selectedVariations: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   selectedOption: PropTypes.object,
   variant: PropTypes.oneOf(['icon', 'button']),
   disabled: PropTypes.bool,

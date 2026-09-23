@@ -75,18 +75,18 @@ export const mergeCarts = async (guestCartID, userCartID) => {
             }
 
             // Merge logic: Add guest items to user items
-            // If item exists, update quantity? Or just append?
-            // Simple approach: Map by productID
+            // Map by cartItemId || productID to preserve distinct variations
             const itemMap = new Map();
-            userItems.forEach(item => itemMap.set(item.productID, item));
+            userItems.forEach(item => itemMap.set(item.cartItemId || item.productID, item));
 
             guestItems.forEach(guestItem => {
-                if (itemMap.has(guestItem.productID)) {
+                const key = guestItem.cartItemId || guestItem.productID;
+                if (itemMap.has(key)) {
                     // Update quantity
-                    const existing = itemMap.get(guestItem.productID);
+                    const existing = itemMap.get(key);
                     existing.cantidad = (parseInt(existing.cantidad) || 0) + (parseInt(guestItem.cantidad) || 1);
                 } else {
-                    itemMap.set(guestItem.productID, guestItem);
+                    itemMap.set(key, guestItem);
                 }
             });
 

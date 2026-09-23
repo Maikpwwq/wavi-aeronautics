@@ -12,9 +12,6 @@ import {
   Stack, 
   Paper,
   CircularProgress,
-  FormControl,
-  Select,
-  MenuItem,
   Rating
 } from '@mui/material'
 import { motion } from 'framer-motion'
@@ -44,7 +41,6 @@ import { useFavorites } from '@/app/providers/FavoritesProvider'
 // Services & Utilities
 import { getProductById } from '@/services/sharedServices'
 import { sharingInformationService } from '@/services/sharing-information'
-import { calculateCopPrice } from '@/utilities/priceUtils'
 import { fetchProductReviews, fetchProductQuestions } from '@/services/productInteractionService'
 
 // Local imports
@@ -52,6 +48,7 @@ import { BRAND_COLORS } from '@/app/tienda/innerTheme'
 import AddProduct from './AddProduct'
 import ProductFeedbackSection from './ProductFeedbackSection'
 import PageNavigation from './PageNavigation'
+import { useProductPrice } from '@/app/tienda/hooks/useProductPrice'
 import { 
   ProductPackageList, 
   ProductSpecsList, 
@@ -61,6 +58,8 @@ import {
   RecommendedUses,
   ShippingDetailsModal,
   ProductGallery,
+  ProductVariations,
+  extractVariationGroups,
   parsePackageItems, 
   parseSpecifications 
 } from './product-detail'
@@ -135,10 +134,15 @@ const ProductDetail = () => {
 
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [selectedOptionIndex, setSelectedOptionIndex] = useState(0)
   const [quantity, setQuantity] = useState(1)
   const [shippingModalOpen, setShippingModalOpen] = useState(false)
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' })
+
+  // Variation selection state (replaces legacy selectedOptionIndex)
+  const [selectedVariationsMap, setSelectedVariationsMap] = useState({})
+  const [variationsList, setVariationsList] = useState([])
+  const [allRequiredSelected, setAllRequiredSelected] = useState(true)
+  const [showVariationValidation, setShowVariationValidation] = useState(false)
 
   // Dynamic social proof metrics
   const [reviewsCount, setReviewsCount] = useState(0)
@@ -235,28 +239,20 @@ const ProductDetail = () => {
 
   const isOutOfStock = stock <= 0 || product?.availability === false
 
-  // Selected Option
-  const selectedOption = useMemo(() => {
-    if (product?.options && product.options.length > 0) {
-      return product.options[selectedOptionIndex] || product.options[0]
-    }
-    return null
-  }, [product, selectedOptionIndex])
+  // Dynamic price computation via useProductPrice hook
+  const { displayPrice, totalPriceDisplay } = useProductPrice(product, variationsList, quantity)
 
-  // Price
-  const displayPrice = useMemo(() => {
-    if (!product) return '$ 0';
-    let basePrice = 0
-    if (product.price) {
-      basePrice = product.price
-    } else if (product.precio) {
-      return typeof product.precio === 'string' 
-        ? product.precio 
-        : `$ ${product.precio.toLocaleString()}`;
-    }
-    const modifier = selectedOption?.priceModifier || 0
-    return calculateCopPrice(basePrice + modifier);
-  }, [product, selectedOption]);
+  // Variation groups (extracted from product)
+  const variationGroups = useMemo(() => extractVariationGroups(product), [product])
+  const hasVariations = variationGroups.length > 0
+
+  // Variation change handler
+  const handleVariationChange = (updatedMap, selectedList, allSelected) => {
+    setSelectedVariationsMap(updatedMap)
+    setVariationsList(selectedList)
+    setAllRequiredSelected(allSelected)
+    if (allSelected) setShowVariationValidation(false)
+  }
 
   // Product SKU & Warranty
   const sku = product?.sku || product?.productID || 'N/A'
@@ -351,26 +347,14 @@ const ProductDetail = () => {
                 </Box>
               </Box>
 
-              {/* Product Options Selector (if applicable) */}
-              {product.options && product.options.length > 0 && (
-                <FormControl fullWidth sx={{ mb: 2 }}>
-                  <Select
-                    value={selectedOptionIndex}
-                    onChange={(e) => setSelectedOptionIndex(e.target.value)}
-                    size="small"
-                    sx={{ 
-                      bgcolor: 'white', 
-                      borderRadius: 2,
-                      '& .MuiSelect-select': { py: 1.5 }
-                    }}
-                  >
-                    {product.options.map((opt, idx) => (
-                      <MenuItem key={idx} value={idx}>
-                        {opt.label} {opt.priceModifier > 0 ? `(+$${opt.priceModifier} USD)` : ''}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+              {/* Product Variations Selector (multi-group dynamic) */}
+              {hasVariations && (
+                <ProductVariations
+                  product={product}
+                  selectedVariations={selectedVariationsMap}
+                  onVariationChange={handleVariationChange}
+                  showValidation={showVariationValidation}
+                />
               )}
 
               {/* 3. Price Summary + "Detalles" Shipping link */}
@@ -543,19 +527,19 @@ const ProductDetail = () => {
                 <Stack spacing={1.5}>
                   <BuyNowButton
                     product={product}
-                    selectedOption={selectedOption}
+                    selectedVariations={variationsList}
                     quantity={quantity}
-                    disabled={isOutOfStock}
+                    disabled={isOutOfStock || (hasVariations && !allRequiredSelected)}
                     size="large"
                     fullWidth
                   />
 
                   <AddProduct
                     product={product}
-                    selectedOption={selectedOption}
+                    selectedVariations={variationsList}
                     quantity={quantity}
                     variant="button"
-                    disabled={isOutOfStock}
+                    disabled={isOutOfStock || (hasVariations && !allRequiredSelected)}
                   />
                 </Stack>
 
@@ -806,9 +790,9 @@ const ProductDetail = () => {
           />
           <BuyNowButton
             product={product}
-            selectedOption={selectedOption}
+            selectedVariations={variationsList}
             quantity={quantity}
-            disabled={isOutOfStock}
+            disabled={isOutOfStock || (hasVariations && !allRequiredSelected)}
             size="medium"
             fullWidth={false}
           />

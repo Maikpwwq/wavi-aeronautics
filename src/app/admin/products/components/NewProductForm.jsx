@@ -31,7 +31,9 @@ import {
   InputAdornment,
   Chip,
   CircularProgress,
-  Autocomplete
+  Autocomplete,
+  Checkbox,
+  FormGroup
 } from '@mui/material'
 import SaveIcon from '@mui/icons-material/Save'
 import RestoreIcon from '@mui/icons-material/Restore'
@@ -44,6 +46,9 @@ import {
   CATEGORY_OPTIONS,
   BRAND_OPTIONS,
   DEFAULT_DRONE_OPTIONS,
+  RECEIVER_VARIATION_OPTIONS,
+  DRONE_CATEGORIES_WITH_RECEIVERS,
+  buildReceiverVariationGroup,
   PRODUCT_SCHEMA,
   DRAFT_STORAGE_KEY,
   generateProductID,
@@ -461,79 +466,183 @@ export default function NewProductForm() {
           sx={{ mt: 2 }}
         />
 
-        {/* ==================== Options Section ==================== */}
+        {/* ==================== Variation Groups Section ==================== */}
         <Divider sx={{ my: 3 }} />
         <Typography variant="h6" sx={{ mb: 2 }}>
-          Opciones de Producto
+          Variaciones del Producto
         </Typography>
-        <Alert severity="info" sx={{ mb: 2 }}>
-          Define las variantes disponibles (ej: tipo de receptor, color, tamaño). El modificador de precio se suma al precio base.
-        </Alert>
-        
-        {/* Pre-populate button for drone categories */}
-        {(formData.category === 'dronesRC' || formData.category === 'dronesHD') && 
-         (!formData.options || formData.options.length === 0) && (
-          <Button
-            variant="outlined"
-            size="small"
-            sx={{ mb: 2 }}
-            onClick={() => handleChange('options', [...DEFAULT_DRONE_OPTIONS])}
-          >
-            Cargar opciones predeterminadas (Drones)
-          </Button>
+
+        {/* Receiver Preset for Drone Categories */}
+        {DRONE_CATEGORIES_WITH_RECEIVERS.includes(formData.category) && (
+          <Box sx={{ mb: 3 }}>
+            <Alert severity="info" sx={{ mb: 2 }}>
+              Selecciona las configuraciones de receptor disponibles para este dron. 
+              El delta de precio (USD) se suma al precio base.
+            </Alert>
+
+            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+              Tipos de Receptor Disponibles
+            </Typography>
+
+            <FormGroup sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 0.5 }}>
+              {RECEIVER_VARIATION_OPTIONS.map((opt) => (
+                <FormControlLabel
+                  key={opt.id}
+                  control={
+                    <Checkbox
+                      checked={(formData._selectedReceiverIds || []).includes(opt.id)}
+                      onChange={(e) => {
+                        const current = formData._selectedReceiverIds || []
+                        let updated
+                        if (e.target.checked) {
+                          updated = [...current, opt.id]
+                        } else {
+                          updated = current.filter(id => id !== opt.id)
+                        }
+                        // Build variation group from selected IDs
+                        const receiverGroup = buildReceiverVariationGroup(updated)
+                        const otherGroups = (formData.variationGroups || []).filter(g => g.id !== 'receiver_type')
+                        const newGroups = receiverGroup.options.length > 0
+                          ? [...otherGroups, receiverGroup]
+                          : otherGroups
+
+                        setFormData(prev => ({
+                          ...prev,
+                          _selectedReceiverIds: updated,
+                          variationGroups: newGroups
+                        }))
+                      }}
+                      size="small"
+                    />
+                  }
+                  label={
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                        {opt.label}
+                      </Typography>
+                      {opt.priceDelta > 0 && (
+                        <Chip
+                          label={`+$${opt.priceDelta} USD`}
+                          size="small"
+                          color="primary"
+                          variant="outlined"
+                          sx={{ fontSize: '0.7rem', height: 22 }}
+                        />
+                      )}
+                    </Box>
+                  }
+                  sx={{
+                    mx: 0,
+                    py: 0.5,
+                    px: 1,
+                    borderRadius: 1,
+                    transition: 'background-color 0.15s ease',
+                    '&:hover': { bgcolor: 'rgba(0, 172, 228, 0.04)' }
+                  }}
+                />
+              ))}
+            </FormGroup>
+
+            {/* Quick-fill all / clear all */}
+            <Box sx={{ display: 'flex', gap: 1, mt: 1.5 }}>
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={() => {
+                  const allIds = RECEIVER_VARIATION_OPTIONS.map(o => o.id)
+                  const receiverGroup = buildReceiverVariationGroup(allIds)
+                  const otherGroups = (formData.variationGroups || []).filter(g => g.id !== 'receiver_type')
+                  setFormData(prev => ({
+                    ...prev,
+                    _selectedReceiverIds: allIds,
+                    variationGroups: [...otherGroups, receiverGroup]
+                  }))
+                }}
+              >
+                Seleccionar todos
+              </Button>
+              <Button
+                size="small"
+                variant="text"
+                color="error"
+                onClick={() => {
+                  const otherGroups = (formData.variationGroups || []).filter(g => g.id !== 'receiver_type')
+                  setFormData(prev => ({
+                    ...prev,
+                    _selectedReceiverIds: [],
+                    variationGroups: otherGroups
+                  }))
+                }}
+              >
+                Limpiar
+              </Button>
+            </Box>
+          </Box>
         )}
 
-        {/* Options List */}
-        {(formData.options || []).map((opt, idx) => (
-          <Box key={idx} sx={{ display: 'flex', gap: 1, mb: 1, alignItems: 'center' }}>
-            <TextField
-              label="Etiqueta"
-              value={opt.label || ''}
-              onChange={(e) => {
-                const newOptions = [...(formData.options || [])]
-                newOptions[idx] = { ...newOptions[idx], label: e.target.value }
-                handleChange('options', newOptions)
-              }}
-              size="small"
-              sx={{ flex: 2 }}
-            />
-            <TextField
-              label="Modificador ($)"
-              type="number"
-              value={opt.priceModifier || 0}
-              onChange={(e) => {
-                const newOptions = [...(formData.options || [])]
-                newOptions[idx] = { ...newOptions[idx], priceModifier: parseFloat(e.target.value) || 0 }
-                handleChange('options', newOptions)
-              }}
-              size="small"
-              sx={{ flex: 1 }}
-              InputProps={{
-                startAdornment: <InputAdornment position="start">+$</InputAdornment>
-              }}
-            />
+        {/* Legacy Options Section (non-drone or additional manual options) */}
+        {!DRONE_CATEGORIES_WITH_RECEIVERS.includes(formData.category) && (
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
+              Opciones de Producto (Legacy)
+            </Typography>
+            <Alert severity="info" sx={{ mb: 2 }}>
+              Define las variantes disponibles (ej: color, tamaño). El modificador de precio se suma al precio base.
+            </Alert>
+
+            {/* Options List */}
+            {(formData.options || []).map((opt, idx) => (
+              <Box key={idx} sx={{ display: 'flex', gap: 1, mb: 1, alignItems: 'center' }}>
+                <TextField
+                  label="Etiqueta"
+                  value={opt.label || ''}
+                  onChange={(e) => {
+                    const newOptions = [...(formData.options || [])]
+                    newOptions[idx] = { ...newOptions[idx], label: e.target.value }
+                    handleChange('options', newOptions)
+                  }}
+                  size="small"
+                  sx={{ flex: 2 }}
+                />
+                <TextField
+                  label="Modificador ($)"
+                  type="number"
+                  value={opt.priceModifier || 0}
+                  onChange={(e) => {
+                    const newOptions = [...(formData.options || [])]
+                    newOptions[idx] = { ...newOptions[idx], priceModifier: parseFloat(e.target.value) || 0 }
+                    handleChange('options', newOptions)
+                  }}
+                  size="small"
+                  sx={{ flex: 1 }}
+                  InputProps={{
+                    startAdornment: <InputAdornment position="start">+$</InputAdornment>
+                  }}
+                />
+                <Button
+                  size="small"
+                  color="error"
+                  onClick={() => {
+                    const newOptions = (formData.options || []).filter((_, i) => i !== idx)
+                    handleChange('options', newOptions)
+                  }}
+                >
+                  <DeleteIcon fontSize="small" />
+                </Button>
+              </Box>
+            ))}
+
+            {/* Add Option Button */}
             <Button
+              variant="text"
               size="small"
-              color="error"
-              onClick={() => {
-                const newOptions = (formData.options || []).filter((_, i) => i !== idx)
-                handleChange('options', newOptions)
-              }}
+              startIcon={<AddIcon />}
+              onClick={() => handleChange('options', [...(formData.options || []), { label: '', priceModifier: 0 }])}
             >
-              <DeleteIcon fontSize="small" />
+              Agregar Opción
             </Button>
           </Box>
-        ))}
-
-        {/* Add Option Button */}
-        <Button
-          variant="text"
-          size="small"
-          startIcon={<AddIcon />}
-          onClick={() => handleChange('options', [...(formData.options || []), { label: '', priceModifier: 0 }])}
-        >
-          Agregar Opción
-        </Button>
+        )}
 
         <Divider sx={{ my: 3 }} />
 

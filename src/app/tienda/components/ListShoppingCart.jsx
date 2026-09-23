@@ -15,6 +15,7 @@ import CardMedia from '@mui/material/CardMedia'
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ProductLink from './ProductLink'
+import { formatVariationTag } from '@/app/tienda/components/product-detail/cartUtils'
 
 const styles = (theme) => ({
   image: {
@@ -58,9 +59,9 @@ const ListShoppingCart = (props) => {
   const navigate = useRouter()
   const classes = styles(theme)
 
-  const handleRemove = (productID, titulo) => {
+  const handleRemove = (identifier, titulo) => {
     if (window.confirm(`¿Estás seguro de que deseas eliminar "${titulo}" del carrito?`)) {
-      removeFromCart(productID)
+      removeFromCart(identifier)
     }
   }
 
@@ -91,9 +92,12 @@ const ListShoppingCart = (props) => {
           {shoppingCart.productos &&
             shoppingCart.productos.map(
               (product, index) => {
-                const { titulo, precio, imagenes, productID, cantidad, categoria, marca } = product
+                const { titulo, precio, imagenes, productID, cantidad, cartItemId, selectedVariations, selectedOption } = product
+                const variationTag = formatVariationTag(selectedVariations || selectedOption)
+                const itemIdentifier = cartItemId || productID
+
                 return (
-                  <Card style={{ ...classes.card, width: '100%' }} key={index}>
+                  <Card style={{ ...classes.card, width: '100%' }} key={itemIdentifier || index}>
                     <Typography
                       variant="h6"
                       gutterBottom
@@ -115,12 +119,23 @@ const ListShoppingCart = (props) => {
                     )}
 
                     <CardHeader
-                      title={titulo}
+                      title={
+                        <Box>
+                          <Typography variant="body1" sx={{ fontWeight: 600, lineHeight: 1.2 }}>
+                            {titulo}
+                          </Typography>
+                          {variationTag && (
+                            <Typography variant="caption" sx={{ color: '#00aCe4', fontWeight: 600, display: 'block', mt: 0.25 }}>
+                              {variationTag}
+                            </Typography>
+                          )}
+                        </Box>
+                      }
                       subheader={precio}
                       action={
                         <IconButton 
                           color="error" 
-                          onClick={() => handleRemove(productID, titulo)}
+                          onClick={() => handleRemove(itemIdentifier, titulo)}
                           aria-label="eliminar"
                         >
                           <DeleteIcon />

@@ -139,16 +139,16 @@ const ShoppingCartProvider = ({ children }) => {
     }))
   }
 
-  const removeFromCart = (productID) => {
-    console.log('removeFromCart', productID)
-    
+  const removeFromCart = (identifier) => {
     setShoppingCart((prev) => {
-      const newProductos = prev.productos.filter(item => item.productID !== productID)
-      const newItems = newProductos.reduce((acc, item) => acc + (parseInt(item.cantidad) || 0), 0)
+      const newProductos = prev.productos.filter(
+        (item) => (item.cartItemId || item.productID || item.id) !== identifier && item.productID !== identifier
+      )
+      const newItems = newProductos.reduce((acc, item) => acc + (parseInt(item.cantidad, 10) || 0), 0)
       
       // Fix: Use parseCopCurrency to correctly handle "$ X.XXX.XXX" strings
       const newSum = newProductos.reduce((acc, item) => {
-         return acc + (parseCopCurrency(item.precio) * (parseInt(item.cantidad) || 1));
+        return acc + (parseCopCurrency(item.precio) * (parseInt(item.cantidad, 10) || 1))
       }, 0)
 
       // Update Session Storage
@@ -160,7 +160,16 @@ const ShoppingCartProvider = ({ children }) => {
       
       // Update Firestore
       if (prev.cartID) {
-         saveCartToFirestore(prev.cartID, newProductos.map(p => ({ productID: p.productID, cantidad: p.cantidad || 1 })));
+        saveCartToFirestore(
+          prev.cartID,
+          newProductos.map((p) => ({
+            cartItemId: p.cartItemId || p.productID,
+            productID: p.productID,
+            cantidad: p.cantidad || 1,
+            selectedVariations: p.selectedVariations || [],
+            precio: p.precio
+          }))
+        )
       }
 
       return {
@@ -182,4 +191,10 @@ const ShoppingCartProvider = ({ children }) => {
   )
 }
 
+export const useCart = () => {
+  const context = React.useContext(ShowCartContext)
+  return context
+}
+
 export default ShoppingCartProvider
+

@@ -19,12 +19,8 @@ export const FirebaseCompareShoppingCartIds = async ({ products, updateCart }) =
       return;
     }
 
-    const productsInputMap = new Map();
-    products.forEach(p => {
-        productsInputMap.set(p.productID, p.cantidad);
-    });
-
-    const targetIds = Array.from(productsInputMap.keys()).filter(id => id);
+    // Collect unique target IDs for Firestore query
+    const targetIds = Array.from(new Set(products.map(p => p.productID).filter(Boolean)));
     console.log("Looking for products with IDs:", targetIds);
 
     // Fetch specific products using chunked 'in' queries (Firestore limit 10)
@@ -47,12 +43,41 @@ export const FirebaseCompareShoppingCartIds = async ({ products, updateCart }) =
         snap.forEach(doc => fetchedProducts.push(doc.data()));
     });
 
-    // Hydrate cart products with fetched data
-    const cartProducts = fetchedProducts.map(p => {
-        const qty = productsInputMap.get(p.productID);
+    const fetchedMap = new Map(fetchedProducts.map(doc => [doc.productID, doc]));
+
+    // Hydrate each cart item preserving distinct variant configurations
+    const cartProducts = products.map(inputItem => {
+        const baseDoc = fetchedMap.get(inputItem.productID) || {};
+        const variations = inputItem.selectedVariations || [];
+        const totalDelta = variations.reduce((sum, v) => sum + Number(v.priceDelta ?? v.priceModifier ?? 0), 0);
+
+        let itemPrecio = inputItem.precio;
+        if (!itemPrecio && baseDoc.price !== undefined) {
+          itemPrecio = calculateCopPrice(parseFloat(baseDoc.price) + totalDelta);
+        } else if (!itemPrecio && baseDoc.precio) {
+          itemPrecio = baseDoc.precio;
+        }
+
+        // Active image override from variant if specified
+        let activeImages = baseDoc.images || baseDoc.imagenes || inputItem.imagenes || [];
+        const variantImg = variations.find(v => v.imageUrl || (Array.isArray(v.images) && v.images.length > 0));
+        if (variantImg) {
+          if (variantImg.imageUrl) {
+            activeImages = [variantImg.imageUrl, ...activeImages.filter(img => img !== variantImg.imageUrl)];
+          } else if (Array.isArray(variantImg.images) && variantImg.images.length > 0) {
+            activeImages = variantImg.images;
+          }
+        }
+
         return {
-           ...p,
-           cantidad: qty
+           ...baseDoc,
+           ...inputItem,
+           titulo: baseDoc.name || baseDoc.titulo || inputItem.titulo || inputItem.name || 'Producto',
+           precio: itemPrecio,
+           imagenes: activeImages,
+           cantidad: parseInt(inputItem.cantidad, 10) || 1,
+           cartItemId: inputItem.cartItemId || inputItem.productID,
+           selectedVariations: variations
         };
     });
 

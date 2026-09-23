@@ -3,6 +3,7 @@ import React, { useContext, useState, useMemo, Suspense } from 'react'
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
 import { useRouter } from 'next/navigation'
 import { parseCopCurrency } from '@/utilities/priceUtils'
+import { formatVariationTag } from '@/app/tienda/components/product-detail/cartUtils'
 import ProductLink from '@/app/tienda/components/ProductLink'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -63,10 +64,10 @@ function ShowCartPage () {
   const cart = shoppingCart?.productos || []
   const classes = styles(theme)
 
-  // Selection state — all items selected by default
+  // Selection state — all items selected by default (keyed by cartItemId || productID)
   const [selectedIds, setSelectedIds] = useState(() => {
     const initial = new Set()
-    cart.forEach(item => initial.add(item.productID))
+    cart.forEach(item => initial.add(item.cartItemId || item.productID))
     return initial
   })
 
@@ -75,14 +76,15 @@ function ShowCartPage () {
     setSelectedIds(prev => {
       const updated = new Set(prev)
       cart.forEach(item => {
+        const id = item.cartItemId || item.productID
         // Auto-select newly added items
-        if (!updated.has(item.productID) && prev.size === 0) {
-          updated.add(item.productID)
+        if (!updated.has(id) && prev.size === 0) {
+          updated.add(id)
         }
       })
       // Remove IDs for items no longer in cart
       for (const id of updated) {
-        if (!cart.find(item => item.productID === id)) {
+        if (!cart.find(item => (item.cartItemId || item.productID) === id)) {
           updated.delete(id)
         }
       }
@@ -93,17 +95,17 @@ function ShowCartPage () {
   // On first render with items, select all
   React.useEffect(() => {
     if (cart.length > 0 && selectedIds.size === 0) {
-      setSelectedIds(new Set(cart.map(item => item.productID)))
+      setSelectedIds(new Set(cart.map(item => item.cartItemId || item.productID)))
     }
   }, [cart.length])
 
-  const toggleItem = (productID) => {
+  const toggleItem = (itemId) => {
     setSelectedIds(prev => {
       const updated = new Set(prev)
-      if (updated.has(productID)) {
-        updated.delete(productID)
+      if (updated.has(itemId)) {
+        updated.delete(itemId)
       } else {
-        updated.add(productID)
+        updated.add(itemId)
       }
       return updated
     })
@@ -113,7 +115,7 @@ function ShowCartPage () {
     if (selectedIds.size === cart.length) {
       setSelectedIds(new Set())
     } else {
-      setSelectedIds(new Set(cart.map(item => item.productID)))
+      setSelectedIds(new Set(cart.map(item => item.cartItemId || item.productID)))
     }
   }
 
@@ -122,7 +124,8 @@ function ShowCartPage () {
     let count = 0
     let total = 0
     cart.forEach(item => {
-      if (selectedIds.has(item.productID)) {
+      const id = item.cartItemId || item.productID
+      if (selectedIds.has(id)) {
         const qty = parseInt(item.cantidad) || 1
         count += qty
         total += parseCopCurrency(item.precio) * qty
@@ -144,13 +147,13 @@ function ShowCartPage () {
     navigate.push('detalles-envio', {})
   }
 
-  const handleDelete = (productID, titulo) => {
+  const handleDelete = (itemId, titulo) => {
     if (window.confirm(`¿Estás seguro de que deseas eliminar "${titulo}" del carrito?`)) {
-      removeFromCart(productID)
+      removeFromCart(itemId)
       // Also remove from selection
       setSelectedIds(prev => {
         const updated = new Set(prev)
-        updated.delete(productID)
+        updated.delete(itemId)
         return updated
       })
     }
@@ -199,11 +202,15 @@ function ShowCartPage () {
               </Box>
 
               {/* Product List — Single Column */}
-              {cart.map(({ titulo, precio, imagenes, productID, categoria, marca, cantidad }, index) => {
-                const isSelected = selectedIds.has(productID)
+              {cart.map((product, index) => {
+                const { titulo, precio, imagenes, productID, categoria, marca, cantidad, cartItemId, selectedVariations, selectedOption } = product
+                const itemIdentifier = cartItemId || productID
+                const isSelected = selectedIds.has(itemIdentifier)
+                const variationTag = formatVariationTag(selectedVariations || selectedOption)
+
                 return (
                   <Paper
-                    key={index}
+                    key={itemIdentifier || index}
                     elevation={isSelected ? 2 : 0}
                     sx={{
                       ...classes.cartItem,
@@ -217,7 +224,7 @@ function ShowCartPage () {
                       {/* Checkbox */}
                       <Checkbox
                         checked={isSelected}
-                        onChange={() => toggleItem(productID)}
+                        onChange={() => toggleItem(itemIdentifier)}
                         sx={{
                           color: '#00aCe4',
                           '&.Mui-checked': { color: '#00aCe4' }
@@ -244,6 +251,11 @@ function ShowCartPage () {
                             {titulo}
                           </Typography>
                         </ProductLink>
+                        {variationTag && (
+                          <Typography variant="body2" sx={{ color: '#00aCe4', fontWeight: 600, mb: 0.5 }}>
+                            {variationTag}
+                          </Typography>
+                        )}
                         <Typography variant="body2" color="text.secondary">
                           Marca: {marca || 'Genérica'} | Categoría: {categoria || 'Varios'}
                         </Typography>
@@ -270,7 +282,7 @@ function ShowCartPage () {
                       </Typography>
                       <IconButton
                         color="error"
-                        onClick={() => handleDelete(productID, titulo)}
+                        onClick={() => handleDelete(itemIdentifier, titulo)}
                         sx={{ mt: 1 }}
                         aria-label="eliminar del carrito"
                       >

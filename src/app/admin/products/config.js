@@ -42,8 +42,8 @@ export const CATEGORY_OPTIONS = [
 ]
 
 /**
- * Default options for drone categories (dronesRC, dronesHD)
- * priceModifier is in USD
+ * Default receiver options for drone categories (dronesRC, dronesHD)
+ * priceModifier is in USD (legacy flat format)
  */
 export const DEFAULT_DRONE_OPTIONS = [
   { label: 'PNP', priceModifier: 0 },
@@ -54,6 +54,41 @@ export const DEFAULT_DRONE_OPTIONS = [
   { label: 'TBS Nano RX With GPS', priceModifier: 55 },
   { label: 'ELRS 915MHz/2.4G GemX', priceModifier: 27 },
 ]
+
+/**
+ * Predefined receiver variation options for drone categories.
+ * Uses the new variationGroups schema with priceDelta (USD).
+ * Admin can select which options are available per product via checkboxes.
+ */
+export const RECEIVER_VARIATION_OPTIONS = [
+  { id: 'pnp', label: 'PNP (Sin Receptor)', priceDelta: 0 },
+  { id: 'elrs-2.4g', label: 'ELRS 2.4G', priceDelta: 17 },
+  { id: 'tbs-nano-rx', label: 'TBS Nano RX', priceDelta: 35 },
+  { id: 'pnp-gps', label: 'PNP With GPS', priceDelta: 13 },
+  { id: 'elrs-2.4g-gps', label: 'ELRS 2.4G With GPS', priceDelta: 30 },
+  { id: 'tbs-nano-rx-gps', label: 'TBS Nano RX With GPS', priceDelta: 55 },
+  { id: 'elrs-915-gemx', label: 'ELRS 915MHz/2.4G GemX', priceDelta: 27 },
+]
+
+/**
+ * Builds a default "Receptor" variation group from selected receiver option IDs.
+ * @param {string[]} selectedIds - Array of RECEIVER_VARIATION_OPTIONS ids to include
+ * @returns {Object} A variationGroup object
+ */
+export const buildReceiverVariationGroup = (selectedIds = []) => {
+  const options = RECEIVER_VARIATION_OPTIONS.filter(opt => selectedIds.includes(opt.id))
+  return {
+    id: 'receiver_type',
+    name: 'RECEPTOR',
+    required: true,
+    options
+  }
+}
+
+/**
+ * Categories that support the receiver variation preset
+ */
+export const DRONE_CATEGORIES_WITH_RECEIVERS = ['dronesRC', 'dronesHD', 'dronesKit']
 
 /**
  * Brand options derived from existing Firestore data
@@ -220,6 +255,13 @@ export const INITIAL_PRODUCT_FORM = {
   images: [''],
   video: '',
   
+  // Variations (new multi-group system)
+  variationGroups: [],
+  // Legacy flat options (backward compatibility)
+  options: [],
+  // Selected receiver IDs for quick-fill (admin UI only, not persisted)
+  _selectedReceiverIds: [],
+  
   // Status
   active: true
 }
@@ -240,7 +282,9 @@ export const PRODUCT_SCHEMA = {
   discount: 0,            // Percentage
   stock: 0,
   availability: true,
-  options: [],             // Product variants: [{ label: string, priceModifier: number }]
+  variationGroups: [],    // New: [{ id, name, required, options: [{ id, label, priceDelta }] }]
+  options: [],             // Legacy: [{ label: string, priceModifier: number }]
+  _selectedReceiverIds: [], // Admin-only: tracks which receiver presets are checked
   
   description: '',
   specifications: '',
@@ -283,6 +327,7 @@ export const normalizeProduct = (product, idx, categoryKey) => ({
   discount: parseFloat(product.discount) || 0,
   stock: parseInt(product.stock) || 0,
   availability: product.availability !== undefined ? product.availability : (product.stock > 0),
+  variationGroups: Array.isArray(product.variationGroups) ? product.variationGroups : [],
   options: Array.isArray(product.options) ? product.options : [],
   
   // Content
@@ -306,6 +351,28 @@ export const normalizeProduct = (product, idx, categoryKey) => ({
 export const buildProductPayload = (formData) => {
   const validImages = (formData.images || []).filter(url => url?.trim())
   
+  // Build variation groups if present
+  const variationGroups = (formData.variationGroups || [])
+    .filter(group => group?.id && group?.name && Array.isArray(group.options) && group.options.length > 0)
+    .map(group => ({
+      id: group.id,
+      name: group.name.trim(),
+      required: group.required !== false,
+      options: group.options.map(opt => ({
+        id: opt.id || opt.label?.toLowerCase().replace(/\s+/g, '-') || '',
+        label: (opt.label || '').trim(),
+        priceDelta: parseFloat(opt.priceDelta) || 0,
+        ...(opt.skuSuffix ? { skuSuffix: opt.skuSuffix } : {}),
+        ...(opt.imageUrl ? { imageUrl: opt.imageUrl } : {})
+      }))
+    }))
+
+  // Legacy flat options (backward compatibility)
+  const legacyOptions = (formData.options || []).filter(opt => opt?.label?.trim()).map(opt => ({
+    label: opt.label.trim(),
+    priceModifier: parseFloat(opt.priceModifier) || 0
+  }))
+
   return {
     // Identifiers
     productID: formData.productID?.trim() || '',
@@ -322,10 +389,8 @@ export const buildProductPayload = (formData) => {
     discount: parseFloat(formData.discount) || 0,
     stock: parseInt(formData.stock) || 0,
     availability: formData.availability !== undefined ? Boolean(formData.availability) : Boolean((formData.stock || 0) > 0),
-    options: (formData.options || []).filter(opt => opt?.label?.trim()).map(opt => ({
-      label: opt.label.trim(),
-      priceModifier: parseFloat(opt.priceModifier) || 0
-    })),
+    ...(variationGroups.length > 0 ? { variationGroups } : {}),
+    ...(legacyOptions.length > 0 ? { options: legacyOptions } : {}),
     
     // Content
     description: (formData.description || '').trim(),

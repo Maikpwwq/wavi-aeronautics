@@ -54,7 +54,7 @@ const DetallesEnvio = (props) => {
 
   const productsCart = React.useMemo(() => {
     if (!selectedProductIds || !Array.isArray(selectedProductIds)) return rawProducts
-    return rawProducts.filter(item => selectedProductIds.includes(item.productID))
+    return rawProducts.filter(item => selectedProductIds.includes(item.cartItemId || item.productID))
   }, [rawProducts, selectedProductIds])
 
   // Custom filtered cart for summary display
