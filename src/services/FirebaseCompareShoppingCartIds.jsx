@@ -1,6 +1,6 @@
 'use client'
 import { firestore, auth } from '@/firebase/firebaseClient'
-import { parseCopCurrency, parseProductPrices } from '@/utilities/priceUtils'
+import { calculateCopPrice, parseCopCurrency, parseProductPrices } from '@/utilities/priceUtils'
 import { collectionGroup, getDocs, query, where } from 'firebase/firestore'
 import PropTypes from 'prop-types'
 
