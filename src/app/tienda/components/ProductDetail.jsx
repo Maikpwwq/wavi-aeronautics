@@ -60,6 +60,7 @@ import {
   BuyNowButton,
   RecommendedUses,
   ShippingDetailsModal,
+  ProductGallery,
   parsePackageItems, 
   parseSpecifications 
 } from './product-detail'
@@ -68,34 +69,10 @@ import {
 // STYLES
 // =============================================================================
 const styles = {
-  mainImage: {
-    borderRadius: 4, 
-    overflow: 'hidden', 
-    bgcolor: 'white',
-    boxShadow: '0 20px 40px rgba(0,0,0,0.08)',
-    position: 'relative',
-    aspectRatio: '1/1',
-    maxHeight: '639px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
   actionInfo: {
     p: { xs: 2, sm: 3, md: 4 }, 
     maxWidth: '560px !important',
   },
-  thumbnail: (isActive) => ({
-    width: 80, 
-    height: 80, 
-    borderRadius: 2, 
-    cursor: 'pointer',
-    border: isActive ? `2px solid ${BRAND_COLORS.accent}` : '2px solid transparent',
-    overflow: 'hidden',
-    bgcolor: 'white',
-    flexShrink: 0,
-    transition: 'all 0.2s',
-    '&:hover': { opacity: 0.8 }
-  }),
   actionBox: {
     p: 3, 
     borderRadius: 4, 
@@ -157,7 +134,6 @@ const ProductDetail = () => {
   const { isFavorite, toggleFavorite } = useFavorites()
 
   const [product, setProduct] = useState(null)
-  const [activeImage, setActiveImage] = useState(0)
   const [loading, setLoading] = useState(true)
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0)
   const [quantity, setQuantity] = useState(1)
@@ -314,42 +290,13 @@ const ProductDetail = () => {
         <PageNavigation category={category} currentPage={product.name} />
 
         <Grid container spacing={{ xs: 4, md: 6 }}>
-          {/* Left Column (7 cols on lg): Images & Media Gallery */}
+          {/* Left Column (7 cols on lg): Vertical Thumbnails + Main Display Gallery */}
           <Grid item xs={12} lg={7}>
-            <Box sx={{ position: 'relative' }}>
-              <Paper 
-                elevation={0}
-                component={motion.div}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                sx={styles.mainImage}
-              >
-                <motion.img 
-                  key={activeImage}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4 }}
-                  src={images[activeImage]} 
-                  alt={product.name}
-                  style={{ 
-                    maxWidth: '100%', 
-                    maxHeight: '100%', 
-                    objectFit: 'contain',
-                    filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.1))'
-                  }}
-                />
-              </Paper>
-
-              {images.length > 1 && (
-                <Stack direction="row" spacing={2} sx={{ mt: 3, overflowX: 'auto', pb: 1, maxWidth: '700px' }}>
-                  {images.map((img, idx) => (
-                    <Box key={idx} onClick={() => setActiveImage(idx)} sx={styles.thumbnail(activeImage === idx)}>
-                      <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    </Box>
-                  ))}
-                </Stack>
-              )}
-            </Box>
+            <ProductGallery
+              images={images}
+              productName={product.name}
+              videoUrl={product.video}
+            />
           </Grid>
 
           {/* Right Column (5 cols on lg): Conversion & High-Impact Metadata */}
