@@ -70,8 +70,12 @@ src/
 │   ├── tienda/                 # Store routes (/tienda/*)
 │   │   ├── buscar/             # Search results page (/tienda/buscar)
 │   │   ├── components/         # Storefront components (ProductCard, CategoryHeader, ProductFeedbackSection, etc.)
-│   │   │   └── header/         # Header components (HeaderLogo, SearchBar, StoreBanner)
-│   │   ├── hooks/              # Custom hooks (useProductFilter, useProducts)
+│   │   │   ├── header/         # Header components (HeaderLogo, SearchBar, StoreBanner)
+│   │   │   ├── product-detail/ # PDP sub-components (ProductGallery, ProductVariations, BuyNowButton, cartUtils, etc.)
+│   │   │   │   └── __tests__/  # PDP component & utility tests
+│   │   │   └── checkout/       # Checkout components (CheckoutOrderSummary)
+│   │   ├── hooks/              # Custom hooks (useProductFilter, useProducts, useProductPrice)
+│   │   │   └── __tests__/      # Hook unit tests
 │   │   └── producto/           # Product detail page route (/tienda/producto)
 │   ├── escuela/                # FPV School page (/escuela) — top-level route
 │   ├── blog/                   # Blog listing & article pages (/blog, /blog/[id])
@@ -142,22 +146,57 @@ products/{category}/brands/{brand}/items/{productID}
 
 Always prefer **English field names**. Handle legacy Spanish keys as fallback getters:
 
-| Standard Field   | Legacy Field       | Type          | Description                                                         |
-| ---------------- | ------------------ | ------------- | ------------------------------------------------------------------- |
-| `productID`      | `id`               | string        | Unique SKU / Document ID                                            |
-| `name`           | `titulo`           | string        | Display product title                                               |
-| `brand`          | `marca`            | string        | Brand name                                                          |
-| `category`       | `categoria`        | string        | Category identifier                                                 |
-| `price`          | `precio`           | number        | Price in USD (converted to COP dynamically via `calculateCopPrice`) |
-| `availability`   | N/A                | boolean       | `true` = In stock, `false` = Agotado                                |
-| `images`         | `imagenes`         | string[]      | Array of image URLs                                                 |
-| `description`    | `descripcion`      | string        | Full text description                                               |
-| `specifications` | `especificaciones` | string/object | Technical specifications                                            |
+| Standard Field       | Legacy Field       | Type          | Description                                                         |
+| -------------------- | ------------------ | ------------- | ------------------------------------------------------------------- |
+| `productID`          | `id`               | string        | Unique SKU / Document ID                                            |
+| `name`               | `titulo`           | string        | Display product title                                               |
+| `brand`              | `marca`            | string        | Brand name                                                          |
+| `category`           | `categoria`        | string        | Category identifier                                                 |
+| `price`              | `precio`           | number        | Price in USD (converted to COP dynamically via `calculateCopPrice`) |
+| `availability`       | N/A                | boolean       | `true` = In stock, `false` = Agotado                                |
+| `images`             | `imagenes`         | string[]      | Array of image URLs                                                 |
+| `description`        | `descripcion`      | string        | Full text description                                               |
+| `specifications`     | `especificaciones` | string/object | Technical specifications                                            |
+| `variationGroups`    | N/A                | array         | Multi-group product variations (see §3 below)                       |
+| `options`            | N/A                | array         | Legacy flat options `[{ label, priceModifier }]`                    |
 
-### 3. Price & Availability Rules
+### 3. Product Variation System (`variationGroups`)
+
+Products supporting configurable options (e.g., receiver type, motor model, frame color) use the **multi-group variation architecture**:
+
+```typescript
+// Firestore: products/{category}/brands/{brand}/items/{productID}
+{
+  variationGroups: [
+    {
+      id: "receiver_type",
+      name: "RECEPTOR",
+      required: true,
+      options: [
+        { id: "pnp", label: "PNP (Sin Receptor)", priceDelta: 0 },
+        { id: "elrs-2.4g", label: "ELRS 2.4G", priceDelta: 17 },
+        { id: "tbs-nano-rx", label: "TBS Nano RX", priceDelta: 35 }
+      ]
+    }
+  ]
+}
+```
+
+**Key interfaces** (defined in `src/types/product.ts`):
+- `ProductVariationOption` — Single selectable option with `priceDelta`, optional `skuSuffix`, `imageUrl`
+- `ProductVariationGroup` — Named group of options (id, name, required, options)
+- `SelectedVariation` — Runtime selection state (groupId, optionId, optionLabel, priceDelta)
+- `CartItem` — Cart entry keyed by `cartItemId` = `${productId}_${variationsHash}`
+
+**Backward compatibility**: Products using legacy `options: [{ label, priceModifier }]` are normalized to `variationGroups` by `extractVariationGroups()` in `ProductVariations.jsx`.
+
+**Admin presets**: Drone categories (`dronesRC`, `dronesHD`, `dronesKit`) have predefined receiver options via `RECEIVER_VARIATION_OPTIONS` in `config.js`, selectable with checkboxes.
+
+### 4. Price & Availability Rules
 
 - Never use `price === 0` to denote out-of-stock items.
 - Price calculation uses `calculateCopPrice(priceInUsd)` in `@/utilities/priceUtils`.
+- Dynamic pricing: `useProductPrice` hook computes `basePrice + sum(selectedVariation.priceDelta)` reactively.
 - Availability is governed strictly by `product.availability !== false`.
 - Out-of-stock products display real price alongside an explicit `AGOTADO` badge.
 
@@ -201,6 +240,12 @@ Always prefer **English field names**. Handle legacy Spanish keys as fallback ge
    - Coverage thresholds are enforced at 70% for statements, branches, functions, and lines on core modules.
    - Firebase Firestore/Storage rules tests require the Local Emulator Suite (ports 8080/9199). They auto-skip gracefully when emulators are not running.
 8. **Typography**: Always use `<CategoryHeader>` for store category page headings. Never use raw `h6` variant for body text (inherits `uppercase` from global theme). Use `textTransform: 'none'` when needed.
+9. **Product Variations**:
+   - Use `variationGroups` (new schema) for multi-group product configurations instead of flat `options`.
+   - Use `useProductPrice` hook for dynamic pricing based on selected variations.
+   - Use `extractVariationGroups()` to normalize legacy `options` to the unified format.
+   - Cart items are keyed by deterministic `cartItemId` (`${productId}_${variationsHash}`) via `generateCartItemId()`.
+   - Admin drone categories use `RECEIVER_VARIATION_OPTIONS` presets with checkbox selection.
 
 ---
 
@@ -243,6 +288,9 @@ Always prefer **English field names**. Handle legacy Spanish keys as fallback ge
 | BlogPagination               | Component/RTL  | `src/app/blog/components/__tests__/BlogPagination.test.jsx` |
 | BlogPostPage                 | Component/RTL  | `src/app/blog/[id]/__tests__/BlogPostPage.test.jsx`       |
 | GradientTitle                | Component/RTL  | `src/app/blog/components/__tests__/GradientTitle.test.jsx` |
+| ProductVariations            | Component/RTL  | `src/app/tienda/components/product-detail/__tests__/ProductVariations.test.jsx` |
+| cartUtils                    | Unit           | `src/app/tienda/components/product-detail/__tests__/cartUtils.test.js` |
+| useProductPrice              | Unit/Hook      | `src/app/tienda/hooks/__tests__/useProductPrice.test.js`  |
 | E2E + A11y                   | E2E/Axe        | `e2e/usedProducts.spec.js`                                |
 
 ### CI/CD Pipelines

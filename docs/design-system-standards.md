@@ -193,6 +193,62 @@ import CategoryHeader from '@/app/tienda/components/CategoryHeader'
 └──────────────────────────────────────────┘
 ```
 
+### `<ProductVariations>` — PDP Multi-Group Variation Selector
+
+**Location:** [`src/app/tienda/components/product-detail/ProductVariations.jsx`](../src/app/tienda/components/product-detail/ProductVariations.jsx)
+
+Renders one `<Select>` dropdown per variation group with price delta display and required-field validation.
+
+```jsx
+import { ProductVariations } from '@/app/tienda/components/product-detail'
+
+<ProductVariations
+  product={product}
+  selectedVariations={selectedVariationsMap}
+  onVariationChange={(updatedMap, selectedList, allRequiredSelected) => { ... }}
+  showValidation={showValidationErrors}
+/>
+```
+
+**Props:**
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `product` | `object` | — | Product with `variationGroups` or legacy `options` |
+| `selectedVariations` | `object` | `{}` | Map of `{ [groupId]: optionId }` |
+| `onVariationChange` | `function` | — | Callback receiving updated map, list, and allSelected flag |
+| `showValidation` | `boolean` | `false` | Show red border on unselected required groups |
+
+**Visual Output:**
+
+```
+┌──────────────────────────────────────────┐
+│  RECEPTOR *                              │
+│  ┌──────────────────────────────────┐    │
+│  │ ELRS 2.4G (+$17 USD)           ▾│    │
+│  └──────────────────────────────────┘    │
+│                                          │
+│  MOTOR                                   │
+│  ┌──────────────────────────────────┐    │
+│  │ Selecciona una opción           ▾│    │
+│  └──────────────────────────────────┘    │
+└──────────────────────────────────────────┘
+```
+
+### `useProductPrice` — Dynamic Price Hook
+
+**Location:** [`src/app/tienda/hooks/useProductPrice.js`](../src/app/tienda/hooks/useProductPrice.js)
+
+Reactively computes `basePrice + Σ(priceDelta)` and formats to COP.
+
+```jsx
+import useProductPrice from '@/app/tienda/hooks/useProductPrice'
+
+const { displayPrice, totalPriceDisplay, hasPriceDelta } = useProductPrice(product, variationsList, quantity)
+```
+
+**Returns:** `{ displayPrice, unitPriceUsd, unitPriceCop, totalPriceCop, totalPriceDisplay, priceDeltaUsd, hasPriceDelta }`
+
 ### `<PageNavigation>` — Breadcrumbs & Back Button
 
 **Location:** [`src/app/tienda/components/PageNavigation.jsx`](../src/app/tienda/components/PageNavigation.jsx)

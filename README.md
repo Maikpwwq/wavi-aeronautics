@@ -82,6 +82,20 @@ All new products use **English field names**. Legacy Spanish fields are read via
   discount: number,         // Percentage
   stock: number,
   availability: boolean,
+  variationGroups: [{       // Multi-group product variations
+    id: string,             // e.g. "receiver_type"
+    name: string,           // e.g. "RECEPTOR"
+    required: boolean,
+    options: [{
+      id: string,
+      label: string,
+      priceDelta: number    // USD delta from base price
+    }]
+  }],
+  options: [{               // Legacy flat options (backward compat)
+    label: string,
+    priceModifier: number
+  }],
 
   // Content
   description: string,      // (legacy: descripcion)
@@ -118,6 +132,9 @@ All new products use **English field names**. Legacy Spanish fields are read via
 | `/tienda/accesorios`         | Accessories                   |
 | `/tienda/software`           | Software & Tools              |
 | `/tienda/producto`           | Product Detail Page (dynamic) |
+| `/tienda/producto-usado/[id]`| Used Product Detail (dynamic) |
+| `/tienda/vender`             | Sell Used Equipment Form      |
+| `/tienda/mis-publicaciones`  | My Used Listings Portal       |
 | `/tienda/ver-carrito`        | Shopping Cart                 |
 | `/tienda/detalles-envio`     | Shipping Details / Checkout   |
 | `/tienda/pago-exitoso`       | Payment Success               |
@@ -170,6 +187,9 @@ All new products use **English field names**. Legacy Spanish fields are read via
 | `/admin/orders/issues` | Order Issues / Problems     |
 | `/admin/users`         | User Management             |
 | `/admin/products`      | Product Management (CRUD)   |
+| `/admin/reviews`       | Reviews Moderation          |
+| `/admin/questions`     | Questions Moderation        |
+| `/admin/used-products` | Used Listings Moderation    |
 | `/admin/settings`      | Store Settings              |
 | `/admin/promotions`    | Promotions / Discount Codes |
 | `/admin/publications`  | Blog Post Management        |
@@ -345,6 +365,16 @@ pnpm lint              # ESLint 9/10 flat config
 - **Blog Section**: Full blog module with paginated listing (`/blog`), individual article pages (`/blog/[id]`), reusable `BlogPostCard`, `BlogPagination`, and `GradientTitle` components.
 - **Design System Docs**: Published [`docs/design-system-standards.md`](docs/design-system-standards.md) documenting the complete typography hierarchy, color palette, and reusable component API.
 - **Test Suite Growth**: Expanded from 102 tests / 14 suites to **167 tests / 25 suites** with new coverage for Blog components, CategoryHeader, and Software page.
+
+### Product Detail Page (PDP) Overhaul
+
+- **Vertical Gallery Layout**: Amazon-style vertical thumbnail strip (left) + main image display with fullscreen lightbox modal and hover-zoom magnifying glass.
+- **Multi-Group Product Variations**: Replaced legacy flat `<Select>` dropdown with `<ProductVariations>` component supporting multiple configurable groups (Receptor, Motor, Color). Each group renders a dropdown with required-field validation and real-time price delta display.
+- **Dynamic Pricing Engine**: `useProductPrice` hook computes `basePrice + Σ(selectedVariation.priceDelta)` reactively, driving the displayed price across desktop and mobile CTAs.
+- **Variation-Aware Cart**: Cart items keyed by deterministic `cartItemId` (`${productId}_${variationsHash}`), enabling the same product with different configurations to coexist as separate cart rows with human-readable variation tags.
+- **TypeScript Data Models**: Defined `ProductVariationOption`, `ProductVariationGroup`, `SelectedVariation`, and `CartItem` interfaces in `src/types/product.ts`.
+- **Admin Receiver Selector**: Drone categories (`dronesRC`, `dronesHD`, `dronesKit`) now show a checkbox grid of 7 predefined receiver types with price deltas in the admin product form, replacing the manual option-by-option entry. Non-drone categories retain the legacy manual options editor.
+- **Product Variation Docs**: Published [`docs/product-variations.md`](docs/product-variations.md) documenting the complete variation architecture.
 
 ---
 
