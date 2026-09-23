@@ -368,7 +368,7 @@ function AppAppBar({ isHome: propIsHome }) {
                   ml: 0.5
                 }}
               >
-                $80.000
+                $100.000
               </Box>
             </Box>
           </Box>

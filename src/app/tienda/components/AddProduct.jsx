@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import { ShowCartContext } from '@/app/tienda/providers/ShoppingCartProvider'
+import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 import PropTypes from 'prop-types'
