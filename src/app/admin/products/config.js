@@ -80,6 +80,7 @@ export const buildReceiverVariationGroup = (selectedIds = []) => {
   return {
     id: 'receiver_type',
     name: 'RECEPTOR',
+    type: 'dropdown',
     required: true,
     options
   }
@@ -357,11 +358,13 @@ export const buildProductPayload = (formData) => {
     .map(group => ({
       id: group.id,
       name: group.name.trim(),
+      type: group.type || 'pills',
       required: group.required !== false,
       options: group.options.map(opt => ({
         id: opt.id || opt.label?.toLowerCase().replace(/\s+/g, '-') || '',
         label: (opt.label || '').trim(),
-        priceDelta: parseFloat(opt.priceDelta) || 0,
+        priceDelta: parseFloat(opt.priceDelta ?? opt.priceModifier) || 0,
+        ...(opt.colorHex ? { colorHex: opt.colorHex.trim() } : {}),
         ...(opt.skuSuffix ? { skuSuffix: opt.skuSuffix } : {}),
         ...(opt.imageUrl ? { imageUrl: opt.imageUrl } : {})
       }))

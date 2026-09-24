@@ -23,13 +23,12 @@ import {
   InputAdornment,
   Autocomplete
 } from '@mui/material'
-import AddIcon from '@mui/icons-material/Add'
-import DeleteIcon from '@mui/icons-material/Delete'
-import { CATEGORY_OPTIONS, BRAND_OPTIONS, DEFAULT_DRONE_OPTIONS, getTagSuggestionsForCategory } from '@/app/admin/products/config'
+import { CATEGORY_OPTIONS, BRAND_OPTIONS, getTagSuggestionsForCategory } from '@/app/admin/products/config'
 
 // Components
 import ReorderableImageList from './molecules/ReorderableImageList'
 import DragAndDropUploader from './molecules/DragAndDropUploader'
+import VariationGroupsEditor from './VariationGroupsEditor'
 
 /**
  * ProductEditDialog - Organism component for editing product details
@@ -55,6 +54,26 @@ export default function ProductEditDialog({
 }) {
   // Get current images (support both field names)
   const currentImages = formData.images || formData.imagenes || []
+
+  // Derive variation groups (supports both new multi-group and legacy flat options)
+  const currentVariationGroups = (formData.variationGroups && formData.variationGroups.length > 0)
+    ? formData.variationGroups
+    : (formData.options && formData.options.length > 0)
+      ? [{
+          id: 'options',
+          name: 'OPCIONES',
+          type: 'pills',
+          required: true,
+          options: formData.options.map((opt, idx) => ({
+            id: opt.id || `opt_${idx}`,
+            label: opt.label || '',
+            priceDelta: opt.priceModifier ?? opt.priceDelta ?? 0,
+          }))
+        }]
+      : []
+
+  const currentReceiverIds = formData._selectedReceiverIds ||
+    (currentVariationGroups.find(g => g.id === 'receiver_type')?.options || []).map(o => o.id)
 
   // Image handlers
   const handleImagesChange = (newImages) => {
@@ -221,77 +240,23 @@ export default function ProductEditDialog({
             placeholder="https://youtube.com/watch?v=..."
           />
 
-          {/* Options Section */}
+          {/* Options / Variation Groups Section */}
           <Box sx={{ mt: 2 }}>
-            <Typography variant="subtitle2" gutterBottom>
-              Opciones de Producto
-            </Typography>
-            <Alert severity="info" sx={{ mb: 2 }} icon={false}>
-              Variantes disponibles (ej: tipo de receptor, color, tamaño). El modificador se suma al precio base.
-            </Alert>
-            
-            {/* Pre-populate button for drone categories */}
-            {(formData.category === 'dronesRC' || formData.category === 'dronesHD') && 
-             (!formData.options || formData.options.length === 0) && (
-              <Button
-                variant="outlined"
-                size="small"
-                sx={{ mb: 2 }}
-                onClick={() => onFormChange({ options: [...DEFAULT_DRONE_OPTIONS] })}
-              >
-                Cargar opciones predeterminadas (Drones)
-              </Button>
-            )}
-
-              {(formData.options || []).map((opt, idx) => (
-                <Box key={idx} sx={{ display: 'flex', gap: 1, mb: 1, alignItems: 'center' }}>
-                  <TextField
-                    label="Etiqueta"
-                    value={opt.label || ''}
-                    onChange={(e) => {
-                      const newOptions = [...(formData.options || [])]
-                      newOptions[idx] = { ...newOptions[idx], label: e.target.value }
-                      onFormChange({ options: newOptions })
-                    }}
-                    size="small"
-                    sx={{ flex: 2 }}
-                  />
-                  <TextField
-                    label="Mod ($)"
-                    type="number"
-                    value={opt.priceModifier || 0}
-                    onChange={(e) => {
-                      const newOptions = [...(formData.options || [])]
-                      newOptions[idx] = { ...newOptions[idx], priceModifier: parseFloat(e.target.value) || 0 }
-                      onFormChange({ options: newOptions })
-                    }}
-                    size="small"
-                    sx={{ flex: 1, maxWidth: 100 }}
-                    InputProps={{
-                      startAdornment: <InputAdornment position="start">+</InputAdornment>
-                    }}
-                  />
-                  <Button
-                    size="small"
-                    color="error"
-                    onClick={() => {
-                      const newOptions = (formData.options || []).filter((_, i) => i !== idx)
-                      onFormChange({ options: newOptions })
-                    }}
-                  >
-                    <DeleteIcon fontSize="small" />
-                  </Button>
-                </Box>
-              ))}
-
-              <Button
-                variant="text"
-                size="small"
-                startIcon={<AddIcon />}
-                onClick={() => onFormChange({ options: [...(formData.options || []), { label: '', priceModifier: 0 }] })}
-              >
-                Agregar Opción
-              </Button>
+            <VariationGroupsEditor
+              category={formData.category}
+              variationGroups={currentVariationGroups}
+              selectedReceiverIds={currentReceiverIds}
+              onReceiverIdsChange={(ids) => onFormChange({ _selectedReceiverIds: ids })}
+              onChange={(groups) => {
+                const legacyOpts = groups.length > 0 && groups[0].options
+                  ? groups[0].options.map(o => ({ label: o.label, priceModifier: o.priceDelta }))
+                  : []
+                onFormChange({
+                  variationGroups: groups,
+                  options: legacyOpts
+                })
+              }}
+            />
           </Box>
 
           <Divider sx={{ my: 1 }} />

@@ -91,6 +91,8 @@ function ProductPanel() {
       video: product.video || '',
       tags: product.tags || [],
       active: product.active ?? true,
+      variationGroups: product.variationGroups || [],
+      options: product.options || [],
     })
     setDialogOpen(true)
   }
