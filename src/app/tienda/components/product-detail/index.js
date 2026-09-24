@@ -10,5 +10,8 @@ export { GalleryThumbnails } from './GalleryThumbnails'
 export { ProductLightboxModal } from './ProductLightboxModal'
 export { ProductGallery } from './ProductGallery'
 export { ProductVariations, extractVariationGroups } from './ProductVariations'
+export { ProductTaxonomy } from './ProductTaxonomy'
+export { ProductShareSuite } from './ProductShareSuite'
 export { addProductToCart } from './cartUtils'
 export { parsePackageItems, parseSpecifications } from './utils'
+

@@ -59,6 +59,8 @@ import {
   ShippingDetailsModal,
   ProductGallery,
   ProductVariations,
+  ProductTaxonomy,
+  ProductShareSuite,
   extractVariationGroups,
   parsePackageItems, 
   parseSpecifications 
@@ -647,16 +649,16 @@ const ProductDetail = () => {
                 </Paper>
               </Box>
 
-              {/* Tags Section */}
-              {product.tags && product.tags.length > 0 && (
-                <Box sx={{ mt: 3, pt: 3, borderTop: `1px dashed ${BRAND_COLORS.border.light || '#e0e0e0'}` }}>
-                  <Stack direction="row" spacing={1} flexWrap="wrap" rowGap={1}>
-                    {product.tags.map((tag, i) => (
-                      <Chip key={i} label={tag} />
-                    ))}
-                  </Stack>
-                </Box>
-              )}
+              {/* Taxonomy: Categories & Tags + Social Share */}
+              <Box sx={{ mt: 3, pt: 3, borderTop: `1px dashed ${BRAND_COLORS.border.light || '#e0e0e0'}` }}>
+                <ProductTaxonomy
+                  categories={product.categories || (product.category ? [product.category] : [])}
+                  tags={product.tags || []}
+                />
+                <ProductShareSuite
+                  productName={product.name}
+                />
+              </Box>
 
             </Box>
           </Grid>

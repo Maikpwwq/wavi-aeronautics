@@ -136,7 +136,7 @@ export const ProductGallery = ({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  p: { xs: 2, sm: 3 }
+                  p: 0
                 }}
               >
                 <motion.img
