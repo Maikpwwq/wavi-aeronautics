@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import {
   FEATURED_BRANDS,
+  STORE_BRANDS,
   cleanBrandString,
   getBrandAliases,
   matchesBrand,
@@ -13,6 +14,19 @@ describe('brandsConfig Utility Tests', () => {
     expect(brandIds).toContain('radiomaster')
     expect(brandIds).toContain('betafpv')
     expect(brandIds).toContain('geprc')
+  })
+
+  it('contains all 17 verified catalog store brands in STORE_BRANDS', () => {
+    const storeBrandIds = STORE_BRANDS.map((b) => b.id)
+    const expected = [
+      'betafpv', 'caddx', 'dji', 'eachine', 'emax', 'ethix',
+      'fatshark', 'flysky', 'flywoo', 'frsky', 'geprc',
+      'iflight', 'radiomaster', 'tbs', 'tinyhawk', 'uruav', 'walksnail'
+    ]
+    expected.forEach((brand) => {
+      expect(storeBrandIds).toContain(brand)
+    })
+    expect(STORE_BRANDS.length).toBe(17)
   })
 
   describe('cleanBrandString', () => {

@@ -21,6 +21,8 @@ import SearchBar from '@/app/tienda/components/header/SearchBar'
 import SocialContactIcons from '@/modules/components/SocialContactIcons'
 import PseBadge from '@/modules/components/PseBadge'
 import CategoriesMenuDialog from '@/modules/components/CategoriesMenuDialog'
+import BrandsMenuDialog from '@/modules/components/BrandsMenuDialog'
+import LocalOfferIcon from '@mui/icons-material/LocalOffer'
 
 const WHATSAPP_CONSULT_URL =
   'https://api.whatsapp.com/send?phone=573204842897&text=Hola%20Wavi%20Aeronautics%2C%20deseo%20asesor%C3%ADa%20experta%20personalizada'
@@ -64,6 +66,7 @@ function AppAppBar({ isHome: propIsHome }) {
   const pathname = usePathname()
   const isHome = propIsHome !== undefined ? propIsHome : (pathname === '/' || pathname === '')
   const [categoriesOpen, setCategoriesOpen] = useState(false)
+  const [brandsOpen, setBrandsOpen] = useState(false)
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -244,7 +247,49 @@ function AppAppBar({ isHome: propIsHome }) {
                 }
               }}
             >
-              Menú
+              Todo
+            </Button>
+
+            {/* ── Main Brands Menu Button ── */}
+            <Button
+              onClick={() => setBrandsOpen(true)}
+              aria-label="Abrir menú de marcas"
+              aria-haspopup="dialog"
+              aria-expanded={brandsOpen}
+              startIcon={<LocalOfferIcon sx={{ fontSize: { xs: 16, sm: 18 } }} />}
+              endIcon={
+                <KeyboardArrowDownIcon
+                  sx={{
+                    fontSize: { xs: 16, sm: 18 },
+                    transition: 'transform 0.2s ease',
+                    transform: brandsOpen ? 'rotate(180deg)' : 'none'
+                  }}
+                />
+              }
+              sx={{
+                bgcolor: '#00aCe4',
+                color: '#ffffff',
+                textTransform: 'none',
+                fontWeight: 700,
+                fontSize: { xs: '0.8rem', sm: '0.875rem' },
+                px: { xs: 1.25, sm: 1.75 },
+                py: { xs: 0.75, sm: 0.85 },
+                borderRadius: '8px',
+                boxShadow: '0 2px 6px rgba(0, 172, 228, 0.35)',
+                minWidth: 'auto',
+                lineHeight: 1.3,
+                transition: 'all 0.2s ease',
+                '&:hover': {
+                  bgcolor: '#0284c7',
+                  boxShadow: '0 4px 12px rgba(0, 172, 228, 0.5)',
+                  transform: 'translateY(-1px)'
+                },
+                '&:active': {
+                  transform: 'translateY(0)'
+                }
+              }}
+            >
+              Marcas
             </Button>
           </Box>
 
@@ -379,6 +424,9 @@ function AppAppBar({ isHome: propIsHome }) {
 
       {/* ── Main Categories Modal ── */}
       <CategoriesMenuDialog open={categoriesOpen} onClose={() => setCategoriesOpen(false)} />
+
+      {/* ── Store Brands Modal ── */}
+      <BrandsMenuDialog open={brandsOpen} onClose={() => setBrandsOpen(false)} />
     </Box>
   )
 }

@@ -90,6 +90,85 @@ export const FEATURED_BRANDS = [
 ]
 
 /**
+ * Complete catalog of active store brands (all 17 verified catalog brands).
+ */
+export const STORE_BRANDS = [
+  ...FEATURED_BRANDS,
+  {
+    id: 'caddx',
+    name: 'Caddx',
+    slug: 'caddx',
+    aliases: ['caddx', 'caddxfpv', 'caddx-fpv', 'caddx fpv'],
+    logoUrl: null,
+    tagline: 'Cámaras FPV y sistemas de video digital HD',
+  },
+  {
+    id: 'dji',
+    name: 'DJI',
+    slug: 'dji',
+    aliases: ['dji', 'dji-o3', 'dji o3', 'dji fov'],
+    logoUrl: null,
+    tagline: 'Tecnología digital de transmisión de alta definición',
+  },
+  {
+    id: 'eachine',
+    name: 'Eachine',
+    slug: 'eachine',
+    aliases: ['eachine'],
+    logoUrl: null,
+    tagline: 'Kits para principiantes, accesorios y gafas FPV',
+  },
+  {
+    id: 'fatshark',
+    name: 'Fat Shark',
+    slug: 'fatshark',
+    aliases: ['fatshark', 'fat-shark', 'fat shark'],
+    logoUrl: null,
+    tagline: 'Goggles FPV de referencia profesional',
+  },
+  {
+    id: 'flysky',
+    name: 'FlySky',
+    slug: 'flysky',
+    aliases: ['flysky', 'fly-sky', 'fly sky'],
+    logoUrl: null,
+    tagline: 'Sistemas de radio control y receptores accesibles',
+  },
+  {
+    id: 'frsky',
+    name: 'FrSky',
+    slug: 'frsky',
+    aliases: ['frsky', 'fr-sky', 'fr sky', 'accst', 'access'],
+    logoUrl: null,
+    tagline: 'Sistemas de radio y telemetría de alto rendimiento',
+  },
+  {
+    id: 'tinyhawk',
+    name: 'Tinyhawk',
+    slug: 'tinyhawk',
+    aliases: ['tinyhawk', 'tinyhawk-s', 'tinyhawk-ii', 'tiny hawk'],
+    logoUrl: null,
+    tagline: 'Microdrones de competición y vuelo indoor',
+  },
+  {
+    id: 'uruav',
+    name: 'URUAV',
+    slug: 'uruav',
+    aliases: ['uruav', 'ur-uav'],
+    logoUrl: null,
+    tagline: 'Baterías LiPo, herramientas y accesorios de campo',
+  },
+  {
+    id: 'walksnail',
+    name: 'Walksnail',
+    slug: 'walksnail',
+    aliases: ['walksnail', 'avatar', 'walksnail avatar', 'caddx avatar'],
+    logoUrl: null,
+    tagline: 'Transmisión HD Avatar con pantalla táctil OLED',
+  },
+]
+
+/**
  * Normalizes a string for loose brand matching (lowercase, no dashes/underscores/spaces).
  * @param {string} str
  * @returns {string}
@@ -111,7 +190,7 @@ export const getBrandAliases = (brandOrTerm) => {
   if (!brandOrTerm || typeof brandOrTerm !== 'string') return []
   const cleanInput = cleanBrandString(brandOrTerm)
 
-  const matchedBrand = FEATURED_BRANDS.find(
+  const matchedBrand = STORE_BRANDS.find(
     (b) =>
       cleanBrandString(b.id) === cleanInput ||
       cleanBrandString(b.name) === cleanInput ||
