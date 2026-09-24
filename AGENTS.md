@@ -61,6 +61,7 @@ src/
 │   │   ├── questions/          # Technical questions moderation (/admin/questions)
 │   │   ├── reviews/            # Reviews approval & moderation (/admin/reviews)
 │   │   └── products/           # Product catalog management (/admin/products)
+│   │       └── components/     # Admin components (NewProductForm, ProductEditDialog, VariationGroupsEditor)
 │   ├── auth/                   # Authentication routes (/auth/*)
 │   ├── favoritos/              # Wishlist / Favorites page (/favoritos)
 │   ├── mis-opiniones/          # Customer reviews management (/mis-opiniones)
@@ -99,7 +100,7 @@ src/
 ├── store/                      # Redux store, slices, and root reducer
 │   ├── __tests__/              # Redux slice unit tests (product, shopping_cart)
 │   └── states/                 # Product, user, cart slices
-├── types/                      # TypeScript data models and interfaces (userModules.ts)
+├── types/                      # TypeScript data models and interfaces (userModules.ts, product.ts)
 └── utilities/                  # Helper utilities (priceUtils.js, price calculation, validation)
     └── __tests__/              # Utility unit & property-based tests (fast-check)
 ```
@@ -165,17 +166,48 @@ Always prefer **English field names**. Handle legacy Spanish keys as fallback ge
 Products supporting configurable options (e.g., receiver type, motor model, frame color) use the **multi-group variation architecture**:
 
 ```typescript
-// Firestore: products/{category}/brands/{brand}/items/{productID}
+// TypeScript interfaces in src/types/product.ts
+export type VariationSelectorType = 'dropdown' | 'pills' | 'color'
+
+export interface ProductVariationOption {
+  id: string             // 'pnp', 'elrs-24g', 'negro', '2450kv'
+  label: string          // 'ELRS 2.4G', 'Negro Mate', '2450KV'
+  priceDelta: number     // In USD (+17, +35, 0)
+  colorHex?: string      // Optional for color selector ('#1e1e1e', '#ef4444')
+  skuSuffix?: string
+  imageUrl?: string
+}
+
+export interface ProductVariationGroup {
+  id: string             // 'receiver_type', 'color', 'motors', 'combo'
+  name: string           // 'RECEPTOR', 'COLOR', 'MOTORES'
+  type?: VariationSelectorType // 'dropdown' | 'pills' | 'color'
+  required: boolean
+  options: ProductVariationOption[]
+}
+
+// Firestore example: products/{category}/brands/{brand}/items/{productID}
 {
   variationGroups: [
     {
       id: "receiver_type",
       name: "RECEPTOR",
+      type: "dropdown",
       required: true,
       options: [
         { id: "pnp", label: "PNP (Sin Receptor)", priceDelta: 0 },
         { id: "elrs-2.4g", label: "ELRS 2.4G", priceDelta: 17 },
         { id: "tbs-nano-rx", label: "TBS Nano RX", priceDelta: 35 }
+      ]
+    },
+    {
+      id: "color",
+      name: "COLOR",
+      type: "color",
+      required: true,
+      options: [
+        { id: "negro", label: "Negro Mate", priceDelta: 0, colorHex: "#1e1e1e" },
+        { id: "rojo", label: "Rojo", priceDelta: 0, colorHex: "#ef4444" }
       ]
     }
   ]
@@ -183,14 +215,28 @@ Products supporting configurable options (e.g., receiver type, motor model, fram
 ```
 
 **Key interfaces** (defined in `src/types/product.ts`):
-- `ProductVariationOption` — Single selectable option with `priceDelta`, optional `skuSuffix`, `imageUrl`
-- `ProductVariationGroup` — Named group of options (id, name, required, options)
+- `VariationSelectorType` — `'dropdown' | 'pills' | 'color'`
+- `ProductVariationOption` — Single selectable option with `priceDelta`, optional `colorHex`, `skuSuffix`, `imageUrl`
+- `ProductVariationGroup` — Named group of options (id, name, type, required, options)
 - `SelectedVariation` — Runtime selection state (groupId, optionId, optionLabel, priceDelta)
 - `CartItem` — Cart entry keyed by `cartItemId` = `${productId}_${variationsHash}`
 
 **Backward compatibility**: Products using legacy `options: [{ label, priceModifier }]` are normalized to `variationGroups` by `extractVariationGroups()` in `ProductVariations.jsx`.
 
-**Admin presets**: Drone categories (`dronesRC`, `dronesHD`, `dronesKit`) have predefined receiver options via `RECEIVER_VARIATION_OPTIONS` in `config.js`, selectable with checkboxes.
+**Admin presets**: Drone categories (`dronesRC`, `dronesHD`, `dronesKit`) have predefined receiver options via `RECEIVER_VARIATION_OPTIONS` in `config.js`, selectable with checkboxes. Additional variation groups (Color, Motors, Combo, Custom) can be added alongside receiver presets via `VariationGroupsEditor`.
+
+### 3b. PDP Dynamic Selector Detection (`detectVariationType`)
+
+The PDP component `ProductVariations.jsx` uses `detectVariationType(group)` to render the appropriate UI selector:
+
+| Priority | Condition | Selector Type |
+|----------|-----------|---------------|
+| 1 | Explicit `group.type` is set (`'color'`, `'pills'`, `'dropdown'`) | Returns as-is |
+| 2 | Name contains "color" or any option has `colorHex` | **Color swatches** — circular color dots with checkmark, label, price badge |
+| 3 | Name contains "receptor"/"receiver" or > 4 options | **Dropdown** — MUI `<Select>` with placeholder and price deltas |
+| 4 | Name contains "motor"/"kv"/"combo"/"bater"/"tamaño"/"size" | **Pills** — tactile pill buttons with active state |
+| 5 | ≤ 4 options (default) | **Pills** |
+| 6 | > 4 options (default) | **Dropdown** |
 
 ### 4. Price & Availability Rules
 
@@ -236,15 +282,19 @@ Products supporting configurable options (e.g., receiver type, motor model, fram
 6. **Import Aliases**: Always use `@/` absolute path aliases (e.g., `@/utilities/priceUtils`, `@/store/states/product`). Never use deep relative paths like `../../../`. The alias is defined in `jsconfig.json` as `@/* → ./src/*` and mirrored in `vitest.config.mjs`.
 7. **Testing Requirements**:
    - Add or update tests when modifying business logic in `src/utilities/`, `src/store/states/`, or `src/services/`.
-   - Run `pnpm test` before committing to verify the full suite passes (167+ tests, 25 suites).
+   - Run `pnpm test` before committing to verify the full suite passes (254+ tests, 38 suites).
    - Coverage thresholds are enforced at 70% for statements, branches, functions, and lines on core modules.
    - Firebase Firestore/Storage rules tests require the Local Emulator Suite (ports 8080/9199). They auto-skip gracefully when emulators are not running.
 8. **Typography**: Always use `<CategoryHeader>` for store category page headings. Never use raw `h6` variant for body text (inherits `uppercase` from global theme). Use `textTransform: 'none'` when needed.
 9. **Product Variations**:
    - Use `variationGroups` (new schema) for multi-group product configurations instead of flat `options`.
+   - Each group can specify `type: 'pills' | 'color' | 'dropdown'` to control PDP rendering.
+   - Color options must include `colorHex` (e.g., `'#ef4444'`) for swatch rendering.
    - Use `useProductPrice` hook for dynamic pricing based on selected variations.
    - Use `extractVariationGroups()` to normalize legacy `options` to the unified format.
+   - Use `detectVariationType(group)` for automatic selector type inference in the PDP.
    - Cart items are keyed by deterministic `cartItemId` (`${productId}_${variationsHash}`) via `generateCartItemId()`.
+   - Admin: Use `VariationGroupsEditor` component for all variation management (drone presets + arbitrary groups).
    - Admin drone categories use `RECEIVER_VARIATION_OPTIONS` presets with checkbox selection.
 
 ---
@@ -289,6 +339,7 @@ Products supporting configurable options (e.g., receiver type, motor model, fram
 | BlogPostPage                 | Component/RTL  | `src/app/blog/[id]/__tests__/BlogPostPage.test.jsx`       |
 | GradientTitle                | Component/RTL  | `src/app/blog/components/__tests__/GradientTitle.test.jsx` |
 | ProductVariations            | Component/RTL  | `src/app/tienda/components/product-detail/__tests__/ProductVariations.test.jsx` |
+| detectVariationType          | Unit           | `src/app/tienda/components/product-detail/__tests__/ProductVariations.test.jsx` |
 | cartUtils                    | Unit           | `src/app/tienda/components/product-detail/__tests__/cartUtils.test.js` |
 | useProductPrice              | Unit/Hook      | `src/app/tienda/hooks/__tests__/useProductPrice.test.js`  |
 | E2E + A11y                   | E2E/Axe        | `e2e/usedProducts.spec.js`                                |
