@@ -9,14 +9,29 @@ describe('ShippingDetailsModal Component Tests', () => {
     expect(screen.queryByTestId('shipping-details-modal')).not.toBeInTheDocument()
   })
 
-  it('renders default shipping options when opened without custom options', () => {
+  it('renders both default shipping tiers when opened without custom options', () => {
     render(<ShippingDetailsModal open={true} onClose={vi.fn()} />)
 
     expect(screen.getByTestId('shipping-details-modal')).toBeInTheDocument()
     expect(screen.getByText('Envíos a nivel nacional')).toBeInTheDocument()
-    expect(screen.getByText('Envío Estándar Nacional')).toBeInTheDocument()
-    expect(screen.getByText('Envío Exprés Urbano')).toBeInTheDocument()
+
+    // Tier 1 — Repuestos Express
+    expect(screen.getByText('Repuestos Express')).toBeInTheDocument()
     expect(screen.getByText('24 a 72 horas hábiles')).toBeInTheDocument()
+    expect(screen.getByText('Stock Local Wavi')).toBeInTheDocument()
+
+    // Tier 2 — Importación Curada Premium
+    expect(screen.getByText('Importación Curada Premium')).toBeInTheDocument()
+    expect(screen.getByText('15 a 21 días hábiles')).toBeInTheDocument()
+    expect(screen.getByText('Gestión Directa Wavi')).toBeInTheDocument()
+  })
+
+  it('renders Repuestos Express as the default selected option', () => {
+    render(<ShippingDetailsModal open={true} onClose={vi.fn()} />)
+
+    // The Repuestos Express card should be pre-selected (isDefault: true)
+    const expressCard = screen.getByTestId('shipping-option-repuestos-express')
+    expect(expressCard).toBeInTheDocument()
   })
 
   it('renders custom shipping options when passed via props', () => {
@@ -55,8 +70,8 @@ describe('ShippingDetailsModal Component Tests', () => {
       />
     )
 
-    fireEvent.click(screen.getByTestId('shipping-option-express-urban'))
-    expect(handleSelect).toHaveBeenCalledWith('express-urban')
+    fireEvent.click(screen.getByTestId('shipping-option-importacion-curada'))
+    expect(handleSelect).toHaveBeenCalledWith('importacion-curada')
   })
 
   it('calls onClose when close icon button is clicked', () => {

@@ -32,15 +32,34 @@ export default function ShippingPolicy() {
             </Typography>
 
             <Typography variant="h6" sx={{ fontWeight: 'bold', mt: 3, mb: 1 }}>
-              2. Tiempos de Entrega Estimados
+              2. Modalidades de Entrega
             </Typography>
             <Typography variant="body1" paragraph>
-              Debido al origen de importación especializada de algunos componentes y al control logístico de aduanas, los tiempos de entrega promedio son:
+              En Wavi Aeronautics operamos con dos modalidades de entrega diseñadas para cubrir tanto la urgencia del piloto como la exclusividad del hardware especializado:
+            </Typography>
+
+            <Typography variant="h6" sx={{ fontWeight: 'bold', mt: 2, mb: 1, fontSize: '1rem' }}>
+              2.1 Repuestos Express (24 a 72 horas hábiles)
+            </Typography>
+            <Typography variant="body1" paragraph>
+              Consumibles de alta rotación disponibles en <strong>stock local</strong>: hélices, receptores ELRS, baterías LiPo y antenas VTX. Estos son los componentes que todo piloto FPV necesita con urgencia después de un impacto. Despacho inmediato una vez confirmado el pago.
+            </Typography>
+
+            <Typography variant="h6" sx={{ fontWeight: 'bold', mt: 2, mb: 1, fontSize: '1rem' }}>
+              2.2 Importación Curada Premium (15 a 21 días hábiles)
+            </Typography>
+            <Typography variant="body1" paragraph>
+              Equipos de alto valor (drones completos, goggles, radios, frames, stacks, motores y sistemas VTX digitales) se gestionan mediante nuestro servicio de importación curada. Este servicio incluye:
             </Typography>
             <ul>
-              <li><strong>Ciudades Principales en Colombia:</strong> De 10 a 15 días hábiles a partir de la confirmación del pago.</li>
-              <li><strong>Otras Municipios y Zonas Especiales:</strong> De 12 a 18 días hábiles según la cobertura de las transportadoras nacionales.</li>
+              <li><strong>Gestión aduanera integral:</strong> Nos encargamos de todos los trámites ante la DIAN.</li>
+              <li><strong>Verificación de compatibilidad:</strong> Cada equipo es revisado antes del despacho.</li>
+              <li><strong>Cumplimiento normativo:</strong> Orientación sobre la regulación RAC 100 de la Aerocivil aplicable a su equipo.</li>
+              <li><strong>Riesgo aduanero asumido:</strong> Wavi Aeronautics asume la responsabilidad logística de la importación.</li>
             </ul>
+            <Typography variant="body1" paragraph>
+              El hardware pesado se importa por encargo con servicio de guante blanco. El consumible se entrega hoy.
+            </Typography>
 
             <Typography variant="h6" sx={{ fontWeight: 'bold', mt: 3, mb: 1 }}>
               3. Seguimiento del Pedido

@@ -550,7 +550,7 @@ const ProductDetail = () => {
                 </Typography>
               </Box>
 
-              {/* 7. WhatsApp Sales Link, ENVÍOS 24 A 72H & National Shipping Benefit Card */}
+              {/* 7. WhatsApp Sales Link, Shipping Banner & National Shipping Benefit Card */}
               <Box sx={{ mt: 3 }}>
                 <Stack direction="row" spacing={2.5} alignItems="center" flexWrap="wrap" sx={{ mb: 1.5 }}>
                   {/* Venta por WhatsApp matching reference icon */}
@@ -605,7 +605,7 @@ const ProductDetail = () => {
                   </Box>
                 </Stack>
 
-                {/* Benefit Box: Delivery Truck + ENVÍOS DE 24 A 72 HORAS */}
+                {/* Benefit Box: Delivery Truck + Two-Tier Shipping */}
                 <Paper
                   elevation={0}
                   data-testid="national-shipping-benefit-card"
@@ -624,10 +624,10 @@ const ProductDetail = () => {
                     <LocalShippingOutlined sx={{ fontSize: 24, color: '#1e293b', flexShrink: 0, mt: 0.25 }} />
                     <Box>
                       <Typography sx={{ fontWeight: 800, fontSize: '0.925rem', color: '#0f172a', lineHeight: 1.25 }}>
-                        ENVÍOS DE 24 A 72 HORAS
+                        ENVÍO NACIONAL ASEGURADO
                       </Typography>
                       <Typography sx={{ fontWeight: 400, fontSize: '0.85rem', color: '#64748b', lineHeight: 1.35, mt: 0.25 }}>
-                        Una vez confirmado el pago de su compra.
+                        Repuestos express 24–72h · Equipos por importación curada
                       </Typography>
                     </Box>
                   </Box>
