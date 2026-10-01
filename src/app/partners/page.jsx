@@ -45,6 +45,7 @@ import StorefrontIcon from '@mui/icons-material/Storefront'
 import SchoolIcon from '@mui/icons-material/School'
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
+import MarketDominationPanel from './components/MarketDominationPanel'
 
 const BRAND_CYAN = '#00aCe4'
 const BRAND_CYAN_LIGHT = '#38bdf8'
@@ -437,6 +438,20 @@ export default function PartnersPage() {
                 onMouseLeave={(e) => { e.currentTarget.style.color = '#94a3b8' }}
               >
                 Partnership Models
+              </Link>
+              <Link
+                href="#market-domination-panel"
+                style={{
+                  color: '#94a3b8',
+                  textDecoration: 'none',
+                  fontSize: '0.88rem',
+                  fontWeight: 500,
+                  transition: 'color 0.2s'
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = '#ffffff' }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = '#94a3b8' }}
+              >
+                Market Domination & CAC
               </Link>
               <Link
                 href="/tienda"
@@ -1276,6 +1291,13 @@ export default function PartnersPage() {
           </Grid>
         </Container>
       </Box>
+
+      {/* ── SECTION: MARKET DOMINATION & CAC ASYMMETRY PANEL ── */}
+      <MarketDominationPanel
+        onInitiateDeal={({ tier }) => {
+          handleOpenIntake(`Inventory Sponsorship ($${tier.investmentAmountUsd.toLocaleString()} USD)`)
+        }}
+      />
 
       {/* ── SECTION: WHY COLOMBIA & ANDEAN HUB ── */}
       <Box

@@ -345,6 +345,7 @@ The PDP component `ProductVariations.jsx` uses `detectVariationType(group)` to r
 | cartUtils                    | Unit           | `src/app/tienda/components/product-detail/__tests__/cartUtils.test.js` |
 | useProductPrice              | Unit/Hook      | `src/app/tienda/hooks/__tests__/useProductPrice.test.js`  |
 | PartnersPage (B2B)           | Component/RTL  | `src/app/partners/__tests__/page.test.jsx`                |
+| MarketDominationPanel (B2B)  | Component/RTL  | `src/app/partners/components/__tests__/MarketDominationPanel.test.jsx` |
 | E2E + A11y                   | E2E/Axe        | `e2e/usedProducts.spec.js`                                |
 
 ### CI/CD Pipelines
