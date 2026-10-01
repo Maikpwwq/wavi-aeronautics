@@ -5,19 +5,11 @@ import { SidebarFilter } from '../SidebarFilter'
 import type { ProductPriceItem } from '@/types/filter'
 
 // Mock next/navigation
+const mockPush = vi.fn()
 const mockPathname = vi.fn().mockReturnValue('/tienda/kit-drones')
 vi.mock('next/navigation', () => ({
   usePathname: () => mockPathname(),
-  useRouter: () => ({ push: vi.fn() }),
-}))
-
-// Mock next/link to render simple anchor
-vi.mock('next/link', () => ({
-  default: ({ children, href, className, 'data-testid': testId }: any) => (
-    <a href={href} className={className} data-testid={testId}>
-      {children}
-    </a>
-  ),
+  useRouter: () => ({ push: mockPush }),
 }))
 
 describe('SidebarFilter Component', () => {
@@ -43,38 +35,35 @@ describe('SidebarFilter Component', () => {
     onResetFilters: vi.fn(),
   }
 
-  it('renders the sidebar filter with categories, price, sort, and brand sections', () => {
+  it('renders the sidebar filter with categories selector, price, sort, and brand sections', () => {
     render(<SidebarFilter {...defaultProps} />)
 
     expect(screen.getByTestId('sidebar-filter-panel')).toBeInTheDocument()
     expect(screen.getByTestId('categories-section')).toBeInTheDocument()
+    expect(screen.getByTestId('category-select')).toBeInTheDocument()
     expect(screen.getByTestId('price-filter-section')).toBeInTheDocument()
     expect(screen.getByTestId('sort-section')).toBeInTheDocument()
     expect(screen.getByTestId('brands-section')).toBeInTheDocument()
     expect(screen.getByTestId('filter-reset-btn')).toBeInTheDocument()
   })
 
-  it('renders the mandatory "TODAS LAS CATEGORÍAS" option at the top of categories', () => {
-    render(<SidebarFilter {...defaultProps} />)
-
-    const allBtn = screen.getByTestId('category-btn-all')
-    expect(allBtn).toBeInTheDocument()
-    expect(allBtn).toHaveAttribute('href', '/tienda/buscar')
-  })
-
-  it('aggressively highlights the active category matching the current pathname', () => {
+  it('renders category selector dropdown with "Todas las Categorías" as first option and navigates on change', () => {
     mockPathname.mockReturnValue('/tienda/kit-drones')
     render(<SidebarFilter {...defaultProps} />)
 
-    const activeCategoryBtn = screen.getByTestId('category-btn-kit-drones')
-    expect(activeCategoryBtn).toBeInTheDocument()
-    // Should have active cyan background and checkmark
-    expect(activeCategoryBtn.className).toContain('bg-[#00aCe4]')
-    expect(activeCategoryBtn).toHaveTextContent('✓')
+    const categorySelect = screen.getByTestId('category-select') as HTMLSelectElement
+    expect(categorySelect).toBeInTheDocument()
 
-    // Inactive category should not have solid cyan background
-    const inactiveCategoryBtn = screen.getByTestId('category-btn-drones')
-    expect(inactiveCategoryBtn.className).not.toContain('bg-[#00aCe4]')
+    // Contains "Todas las Categorías"
+    expect(categorySelect.options[0].text).toContain('Todas las Categorías')
+    expect(categorySelect.options[0].value).toBe('/tienda/buscar')
+
+    // Preselects current category based on pathname
+    expect(categorySelect.value).toBe('/tienda/kit-drones/')
+
+    // Selecting a different category navigates
+    fireEvent.change(categorySelect, { target: { value: '/tienda/drones-fpv-hd/' } })
+    expect(mockPush).toHaveBeenCalledWith('/tienda/drones-fpv-hd/')
   })
 
   it('initializes min and max price inputs with zero-config calculated values', () => {
@@ -95,7 +84,7 @@ describe('SidebarFilter Component', () => {
 
     const progressBar = screen.getByTestId('slider-progress-bar')
     expect(progressBar).toBeInTheDocument()
-    expect(progressBar.className).toContain('bg-[#00aCe4]')
+    expect(progressBar.style.backgroundColor).toBe('rgb(0, 172, 228)')
   })
 
   it('toggles mobile collapsible section on click', () => {
@@ -103,12 +92,12 @@ describe('SidebarFilter Component', () => {
 
     const toggleBtn = screen.getByTestId('filter-toggle-btn')
     expect(toggleBtn).toHaveAttribute('aria-expanded', 'true')
-    expect(screen.getByText('Ocultar Filtros')).toBeInTheDocument()
+    expect(screen.getByText('OCULTAR FILTROS')).toBeInTheDocument()
 
     // Collapse
     fireEvent.click(toggleBtn)
     expect(toggleBtn).toHaveAttribute('aria-expanded', 'false')
-    expect(screen.getByText('Mostrar Filtros')).toBeInTheDocument()
+    expect(screen.getByText('MOSTRAR FILTROS')).toBeInTheDocument()
     expect(screen.queryByTestId('categories-section')).not.toBeInTheDocument()
 
     // Expand
