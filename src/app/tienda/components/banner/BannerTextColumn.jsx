@@ -70,7 +70,7 @@ export default function BannerTextColumn({
       }}
     >
       {/* Category Badge + Progress */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2.5 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: { xs: 2.5, md: 3.5 } }}>
         <Box
           sx={{
             width: 42,
@@ -110,7 +110,7 @@ export default function BannerTextColumn({
           fontSize: { xs: '1.55rem', sm: '1.95rem', md: '2.35rem' },
           letterSpacing: '-0.025em',
           lineHeight: 1.12,
-          mb: 1.5,
+          mb: { xs: 1.5, md: 2.5 },
           textTransform: 'none',
         }}
       >
@@ -124,7 +124,7 @@ export default function BannerTextColumn({
           height: 3.5,
           bgcolor: '#00aCe4',
           borderRadius: 2,
-          mb: 2,
+          mb: { xs: 2, md: 3 },
         }}
       />
 
@@ -137,7 +137,7 @@ export default function BannerTextColumn({
           fontSize: { xs: '0.9rem', sm: '0.97rem', md: '1.04rem' },
           lineHeight: 1.65,
           maxWidth: 460,
-          mb: 3.5,
+          mb: { xs: 3.5, md: 5 },
           textTransform: 'none',
         }}
       >

@@ -303,4 +303,30 @@ describe('SidebarFilter Component', () => {
       expect(row1S).toHaveAttribute('aria-pressed', 'false')
     })
   })
+
+  describe('Responsive Collapsible Behavior', () => {
+    it('is open by default on desktop view', () => {
+      render(<SidebarFilter {...defaultProps} />)
+
+      const toggleBtn = screen.getByTestId('filter-toggle-btn')
+      expect(toggleBtn).toHaveAttribute('aria-expanded', 'true')
+      expect(screen.getByText('OCULTAR FILTROS')).toBeInTheDocument()
+      expect(screen.getByTestId('categories-section')).toBeInTheDocument()
+    })
+
+    it('is inactive/collapsed by default when defaultOpen is false (mobile behavior)', () => {
+      render(<SidebarFilter {...defaultProps} defaultOpen={false} />)
+
+      const toggleBtn = screen.getByTestId('filter-toggle-btn')
+      expect(toggleBtn).toHaveAttribute('aria-expanded', 'false')
+      expect(screen.getByText('MOSTRAR FILTROS')).toBeInTheDocument()
+      expect(screen.queryByTestId('categories-section')).not.toBeInTheDocument()
+
+      // Clicking opens the panel
+      fireEvent.click(toggleBtn)
+      expect(toggleBtn).toHaveAttribute('aria-expanded', 'true')
+      expect(screen.getByText('OCULTAR FILTROS')).toBeInTheDocument()
+      expect(screen.getByTestId('categories-section')).toBeInTheDocument()
+    })
+  })
 })

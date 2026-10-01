@@ -26,9 +26,7 @@ function Home() {
       <RevealOnScroll>
         <ProductHero />
       </RevealOnScroll>
-      <RevealOnScroll>
-        <HomeCtaBanners />
-      </RevealOnScroll>
+      <HomeCtaBanners />
       <RevealOnScroll>
         <NuevosProductos />
       </RevealOnScroll>

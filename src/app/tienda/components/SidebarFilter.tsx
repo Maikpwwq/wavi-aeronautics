@@ -1,7 +1,9 @@
 'use client'
 
-import React, { useState, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
+import { useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import { routes as STORE_ROUTES } from '@/app/tienda/components/header/headerRoutes'
 import { useSidebarFilter } from '@/app/tienda/hooks/useSidebarFilter'
 import { matchesBrand } from '@/utilities/brandsConfig'
@@ -125,11 +127,22 @@ export const SidebarFilter: React.FC<SidebarFilterProps> = ({
   resetFilters: legacyResetFilters,
   sortOrder: legacySortOrder,
   setSortOrder: legacySetSortOrder,
-  className = ''
+  className = '',
+  defaultOpen
 }) => {
   const router = useRouter()
   const pathname = usePathname() || ''
-  const [isOpen, setIsOpen] = useState(true)
+  const theme = useTheme()
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
+    defaultMatches: true
+  })
+  const [isOpen, setIsOpen] = useState(defaultOpen !== undefined ? defaultOpen : isDesktop)
+
+  useEffect(() => {
+    if (defaultOpen === undefined) {
+      setIsOpen(isDesktop)
+    }
+  }, [isDesktop, defaultOpen])
 
   // Resolve legacy props
   const activeBrands = selectedBrandsProp || filters?.brands || []
@@ -206,7 +219,9 @@ export const SidebarFilter: React.FC<SidebarFilterProps> = ({
   const isBatteryCategory =
     category === 'baterias' ||
     category === 'accesorios' ||
+    activeCategory?.slug === 'baterias' ||
     activeCategory?.slug === 'accesorios' ||
+    cleanPath.includes('/tienda/baterias') ||
     cleanPath.includes('/tienda/accesorios')
 
   // Dynamic product count per battery cell configuration

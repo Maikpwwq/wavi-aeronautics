@@ -267,6 +267,7 @@ function AppAppBar({ isHome: propIsHome }) {
                 />
               }
               sx={{
+                display: { xs: 'none', sm: 'flex' },
                 bgcolor: '#00aCe4',
                 color: '#ffffff',
                 textTransform: 'none',
@@ -413,7 +414,7 @@ function AppAppBar({ isHome: propIsHome }) {
                   ml: 0.5
                 }}
               >
-                $100.000
+                $90.000
               </Box>
             </Box>
           </Box>

@@ -1,16 +1,16 @@
 
 import { firestore, auth, storage } from './firebaseClient'
-import { 
-  collection, 
-  getDocs, 
-  doc, 
-  updateDoc, 
-  addDoc, 
-  deleteDoc, 
-  query, 
-  where, 
-  orderBy, 
-  limit, 
+import {
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  addDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
+  limit,
   startAfter,
   getDoc,
   setDoc,
@@ -24,7 +24,7 @@ import {
 export const getAllUsers = async (limitCount = 10, lastDoc = null) => {
   try {
     let q = query(collection(firestore, 'users'), limit(limitCount))
-    
+
     if (lastDoc) {
       q = query(collection(firestore, 'users'), startAfter(lastDoc), limit(limitCount))
     }
@@ -65,6 +65,8 @@ const CATEGORY_PATHS = {
   'baterias': 'productos/radio_control', // Part of radio_control hierarchy
   'transmisors': 'productos/radio_control',
   'receptors': 'productos/radio_control',
+  'helices': 'products/helices',
+  'frames': 'products/frames',
 }
 
 // Update a product in the hierarchical 'productos' structure
@@ -73,7 +75,7 @@ export const updateProductInHierarchy = async (productID, data, categoryHint = n
   try {
     const brand = data.brand || ''
     const category = categoryHint || data.category || ''
-    
+
     // ============================================================
     // 1. Try direct path in new hierarchical structure first
     // ============================================================
@@ -81,7 +83,7 @@ export const updateProductInHierarchy = async (productID, data, categoryHint = n
       const directPath = `products/${category}/brands/${brand}/items`
       const directRef = doc(firestore, directPath, productID)
       const directSnap = await getDoc(directRef)
-      
+
       if (directSnap.exists()) {
         await updateDoc(directRef, {
           ...data,
@@ -91,7 +93,7 @@ export const updateProductInHierarchy = async (productID, data, categoryHint = n
         return { success: true, path: `${directPath}/${productID}` }
       }
     }
-    
+
     // ============================================================
     // 2. Search via collectionGroup('items') for new structure
     // ============================================================
@@ -100,7 +102,7 @@ export const updateProductInHierarchy = async (productID, data, categoryHint = n
       where('productID', '==', productID)
     )
     const itemsSnapshot = await getDocs(itemsQuery)
-    
+
     if (!itemsSnapshot.empty) {
       const docToUpdate = itemsSnapshot.docs[0]
       await updateDoc(docToUpdate.ref, {
@@ -110,12 +112,12 @@ export const updateProductInHierarchy = async (productID, data, categoryHint = n
       console.log(`[AdminServices] Updated product ${productID} via collectionGroup at ${docToUpdate.ref.path}`)
       return { success: true, path: docToUpdate.ref.path }
     }
-    
+
     // ============================================================
     // 3. Fallback: Search legacy collections
     // ============================================================
     let collectionsToSearch = []
-    
+
     if (categoryHint && CATEGORY_PATHS[categoryHint]) {
       const basePath = CATEGORY_PATHS[categoryHint]
       collectionsToSearch = await getCollectionsForPath(basePath)
@@ -134,12 +136,12 @@ export const updateProductInHierarchy = async (productID, data, categoryHint = n
         'productos/digital_vtx/CADDX',
       ]
     }
-    
+
     for (const collPath of collectionsToSearch) {
       const collRef = collection(firestore, collPath)
       const q = query(collRef, where('productID', '==', productID))
       const snapshot = await getDocs(q)
-      
+
       if (!snapshot.empty) {
         const docToUpdate = snapshot.docs[0]
         await updateDoc(docToUpdate.ref, {
@@ -150,7 +152,7 @@ export const updateProductInHierarchy = async (productID, data, categoryHint = n
         return { success: true, path: collPath }
       }
     }
-    
+
     throw new Error(`Product with ID ${productID} not found in any collection`)
   } catch (error) {
     console.error('Error updating product in hierarchy:', error)
@@ -219,7 +221,7 @@ export const getAllProducts = async () => {
 export const checkProductIDExists = async (productID, category, brand) => {
   try {
     if (!productID) return false
-    
+
     // Check hierarchical path: products/{category}/brands/{brand}/items/{productID}
     if (category && brand) {
       const docRef = doc(firestore, 'products', category, 'brands', brand, 'items', productID)
@@ -231,12 +233,12 @@ export const checkProductIDExists = async (productID, category, brand) => {
       // Ideally validation ensures Brand is present BEFORE check.
       console.warn('Checking existence without Brand in hierarchical structure might be inaccurate.')
     }
-    
+
     // Also check flat collection just in case
     const flatRef = doc(firestore, 'products', productID)
     const flatSnap = await getDoc(flatRef)
     return flatSnap.exists()
-    
+
   } catch (error) {
     console.error('Error checking productID:', error)
     throw error
@@ -251,18 +253,18 @@ export const checkProductIDExists = async (productID, category, brand) => {
 export const createNewProduct = async (productData) => {
   try {
     const { productID, category, brand, ...data } = productData
-    
+
     if (!productID) throw new Error('productID is required')
     if (!category) throw new Error('category is required')
     if (!brand) throw new Error('brand is required')
 
     // Path: products/{category}/brands/{brand}/items/{productID}
     const docRef = doc(firestore, 'products', category, 'brands', brand, 'items', productID)
-    
+
     await setDoc(docRef, {
       ...data,
       productID,
-      category, 
+      category,
       brand,
       updatedAt: serverTimestamp(),
       createdAt: serverTimestamp()
@@ -302,14 +304,42 @@ export const updateProduct = async (id, data) => {
   }
 }
 
-// Toggle product active status (Soft Delete)
-export const toggleProductStatus = async (id, isActive) => {
+// Delete product from hierarchical structure and invalidate cache
+export const deleteProductFromHierarchy = async (productID, category = null, brand = null) => {
   try {
-    const productRef = doc(firestore, 'products', id)
-    await updateDoc(productRef, { active: isActive })
-    return { success: true }
+    let targetRef = null
+    if (category && brand) {
+      const directRef = doc(firestore, 'products', category, 'brands', brand, 'items', productID)
+      const directSnap = await getDoc(directRef)
+      if (directSnap.exists()) {
+        targetRef = directRef
+      }
+    }
+
+    if (!targetRef) {
+      const q = query(collectionGroup(firestore, 'items'), where('productID', '==', productID))
+      const snap = await getDocs(q)
+      if (!snap.empty) {
+        targetRef = snap.docs[0].ref
+      }
+    }
+
+    if (targetRef) {
+      await deleteDoc(targetRef)
+    }
+
+    // Clear sessionStorage cache if window exists
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      if (category) {
+        const key = `Productos_${category.charAt(0).toUpperCase() + category.slice(1)}`
+        sessionStorage.removeItem(key)
+        sessionStorage.removeItem(`Productos_${category}`)
+      }
+    }
+
+    return { success: true, productID }
   } catch (error) {
-    console.error('Error toggling product status:', error)
+    console.error('Error deleting product from hierarchy:', error)
     throw error
   }
 }
@@ -320,7 +350,7 @@ export const toggleProductStatus = async (id, isActive) => {
 export const getOrders = async (statusFilter = null, limitCount = 10, lastDoc = null) => {
   try {
     let constraints = [limit(limitCount)]
-    
+
     if (statusFilter) {
       if (Array.isArray(statusFilter)) {
         constraints.unshift(where('status', 'in', statusFilter))
@@ -373,7 +403,7 @@ export const generateTestOrders = async (count = 10) => {
     for (let i = 0; i < count; i++) {
       const randomUser = dummyUsers[Math.floor(Math.random() * dummyUsers.length)]
       const randomStatus = statuses[Math.floor(Math.random() * statuses.length)]
-      
+
       // Use Flat Schema to match Live Orders and ensure User Portal visibility
       const orderData = {
         total: Math.floor(Math.random() * 500) + 50,
@@ -489,7 +519,7 @@ export const deletePromotion = async (id) => {
 }
 
 export const togglePromotionStatus = async (id, isActive) => {
-   try {
+  try {
     const promoRef = doc(firestore, 'promotions', id)
     await updateDoc(promoRef, { active: isActive })
     return { success: true }

@@ -96,11 +96,27 @@ const categories = [
     width: { xs: '100%', sm: '50%', md: '30%' }
   },
   {
-    title: 'Accesorios & Baterías',
-    subtitle: 'LiPo LiHV, hélices, marcos y herramientas',
+    title: 'Baterías FPV',
+    subtitle: 'LiPo, LiHV y celdas 1S a 6S',
     url: DJI8,
-    href: '/tienda/accesorios',
+    href: '/tienda/baterias',
     icon: BatteryChargingFullIcon,
+    width: { xs: '100%', sm: '50%', md: '35%' }
+  },
+  {
+    title: 'Hélices FPV',
+    subtitle: 'Hélices 3", 5" y 7" de alta eficiencia',
+    url: DJI4,
+    href: '/tienda/helices',
+    icon: FlightTakeoffIcon,
+    width: { xs: '100%', sm: '50%', md: '30%' }
+  },
+  {
+    title: 'Frames & Chasis',
+    subtitle: 'Chasis de carbono T700, brazos y repuestos',
+    url: DJI1,
+    href: '/tienda/frames',
+    icon: SportsEsportsIcon,
     width: { xs: '100%', sm: '50%', md: '35%' }
   },
   {

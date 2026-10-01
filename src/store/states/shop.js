@@ -5,6 +5,8 @@ import FirebaseAccesoriosProducts from '@/services/FirebaseAccesoriosProducts'
 import FirebaseGooglesProducts from '@/services/FirebaseGooglesProducts'
 import FirebaseTrasmisorReceptorProducts from '@/services/FirebaseTrasmisorReceptorProducts'
 import FirebaseDigitalVTXProducts from '@/services/FirebaseDigitalVTXProducts'
+import FirebaseHelicesProducts from '@/services/FirebaseHelicesProducts'
+import FirebaseFramesProducts from '@/services/FirebaseFramesProducts'
 
 export const initialShop = {
   dronesKit: [],
@@ -17,6 +19,8 @@ export const initialShop = {
   receptors: [],
   transmisors: [],
   digitalVTX: [],
+  helices: [],
+  frames: [],
   dolarPrice: 0,
   loading: false,
   loadedCategories: [] // Track which categories have been loaded
@@ -83,6 +87,24 @@ export const fetchDigitalVTXProducts = createAsyncThunk(
   }
 )
 
+// Fetch helices category
+export const fetchHelicesProducts = createAsyncThunk(
+  'shop/fetchHelicesProducts',
+  async () => {
+    const helicesData = await FirebaseHelicesProducts()
+    return { helices: helicesData?.productsHelices || [] }
+  }
+)
+
+// Fetch frames category
+export const fetchFramesProducts = createAsyncThunk(
+  'shop/fetchFramesProducts',
+  async () => {
+    const framesData = await FirebaseFramesProducts()
+    return { frames: framesData?.productsFrames || [] }
+  }
+)
+
 // Fetch all products (legacy, for when all are needed)
 export const fetchAllProducts = createAsyncThunk(
   'shop/fetchAllProducts',
@@ -93,14 +115,18 @@ export const fetchAllProducts = createAsyncThunk(
       bateriasData,
       googlesData,
       trRxData,
-      vtxData
+      vtxData,
+      helicesData,
+      framesData
     ] = await Promise.all([
       FirebaseDroneProducts(),
       FirebaseRadioControlProducts(),
       FirebaseAccesoriosProducts(),
       FirebaseGooglesProducts(),
       FirebaseTrasmisorReceptorProducts(),
-      FirebaseDigitalVTXProducts()
+      FirebaseDigitalVTXProducts(),
+      FirebaseHelicesProducts(),
+      FirebaseFramesProducts()
     ])
 
     const payload = {}
@@ -125,13 +151,21 @@ export const fetchAllProducts = createAsyncThunk(
     if (vtxData) {
       payload.digitalVTX = vtxData.storeDigitalVTX
     }
+    if (helicesData) {
+      payload.helices = helicesData.productsHelices
+    }
+    if (framesData) {
+      payload.frames = framesData.productsFrames
+    }
     payload.loadedCategories = [
       'drones',
       'radioControl',
       'accesorios',
       'googles',
       'transmisors',
-      'digitalVTX'
+      'digitalVTX',
+      'helices',
+      'frames'
     ]
     return payload
   }
@@ -218,6 +252,24 @@ const shopSlice = createSlice({
       state.loadedCategories.push('digitalVTX')
     })
 
+    // Helices
+    builder.addCase(fetchHelicesProducts.fulfilled, (state, action) => {
+      state.helices = action.payload.helices
+      if (!Array.isArray(state.loadedCategories)) {
+        state.loadedCategories = []
+      }
+      state.loadedCategories.push('helices')
+    })
+
+    // Frames
+    builder.addCase(fetchFramesProducts.fulfilled, (state, action) => {
+      state.frames = action.payload.frames
+      if (!Array.isArray(state.loadedCategories)) {
+        state.loadedCategories = []
+      }
+      state.loadedCategories.push('frames')
+    })
+
     // All products (legacy)
     builder.addCase(fetchAllProducts.pending, (state) => {
       state.loading = true
@@ -234,6 +286,8 @@ const shopSlice = createSlice({
           'googles',
           'transmisors',
           'digitalVTX',
+          'helices',
+          'frames'
         ],
       }
     })

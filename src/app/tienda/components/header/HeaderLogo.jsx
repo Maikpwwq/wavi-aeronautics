@@ -94,11 +94,11 @@ const HeaderLogo = () => {
             <PseBadge />
           </Box>
 
-          {/* Social Icons & Blog Button */}
+          {/* Social Icons & Blog Button (Desktop only; on mobile Escuela & Blog move to StoreBanner with Cart/User) */}
           <Box
             sx={{
               flexShrink: 0,
-              display: 'flex',
+              display: { xs: 'none', md: 'flex' },
               alignItems: 'center',
               justifyContent: { xs: 'center', md: 'flex-end' },
               gap: 0.5

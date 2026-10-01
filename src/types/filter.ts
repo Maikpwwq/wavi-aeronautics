@@ -122,4 +122,6 @@ export interface SidebarFilterProps {
   resetFilters?: () => void;
   /** Optional custom class name */
   className?: string;
+  /** Optional initial open state override (defaults to true on desktop, false on mobile) */
+  defaultOpen?: boolean;
 }

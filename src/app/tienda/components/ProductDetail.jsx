@@ -29,7 +29,9 @@ import {
   LocalShippingOutlined,
   VerifiedUserOutlined,
   QuestionAnswerOutlined,
-  CheckCircleOutline
+  CheckCircleOutline,
+  Close as CloseIcon,
+  ShoppingCart as ShoppingCartIcon
 } from '@mui/icons-material'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
@@ -139,6 +141,7 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1)
   const [shippingModalOpen, setShippingModalOpen] = useState(false)
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' })
+  const [bottomBarVisible, setBottomBarVisible] = useState(true)
 
   // Variation selection state (replaces legacy selectedOptionIndex)
   const [selectedVariationsMap, setSelectedVariationsMap] = useState({})
@@ -282,7 +285,7 @@ const ProductDetail = () => {
   if (loading || !product) return <LoadingSpinner />
 
   return (
-    <Box sx={{ bgcolor: BRAND_COLORS.background.page, minHeight: '100vh', pb: { xs: 16, lg: 10 } }}>
+    <Box sx={{ bgcolor: BRAND_COLORS.background.page, minHeight: '100vh', pb: { xs: 16, lg: 10 }, mx: -2, px: 0 }}>
       <Container maxWidth="xl">
         {/* Navigation / Breadcrumbs */}
         <PageNavigation category={category} currentPage={product.name} />
@@ -552,7 +555,7 @@ const ProductDetail = () => {
 
               {/* 7. WhatsApp Sales Link, Shipping Banner & National Shipping Benefit Card */}
               <Box sx={{ mt: 3 }}>
-                <Stack direction="row" spacing={2.5} alignItems="center" flexWrap="wrap" sx={{ mb: 1.5 }}>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 0.5, sm: 2.5 }} alignItems={{ xs: 'flex-start', sm: 'center' }} sx={{ mb: 1.5 }}>
                   {/* Venta por WhatsApp matching reference icon */}
                   <Box
                     component="a"
@@ -754,52 +757,113 @@ const ProductDetail = () => {
       </Container>
 
       {/* Mobile Sticky Bottom Action Bar (< lg) */}
-      <Box
-        data-testid="mobile-sticky-action-bar"
-        sx={{
-          display: { xs: 'flex', lg: 'none' },
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          zIndex: 1100,
-          bgcolor: 'rgba(255, 255, 255, 0.95)',
-          backdropFilter: 'blur(12px)',
-          borderTop: '1px solid #e2e8f0',
-          py: 1.5,
-          px: 2,
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 1.5,
-          boxShadow: '0 -6px 24px rgba(0, 0, 0, 0.08)'
-        }}
-      >
-        <Box sx={{ minWidth: 90 }}>
-          <Typography variant="caption" sx={{ color: '#64748b', display: 'block', lineHeight: 1.1, fontWeight: 600 }}>
-            Precio
-          </Typography>
-          <Typography variant="subtitle1" sx={{ fontWeight: 800, color: BRAND_COLORS.accent, lineHeight: 1.2 }}>
-            {displayPrice}
-          </Typography>
-        </Box>
+      {bottomBarVisible && (
+        <Box
+          data-testid="mobile-sticky-action-bar"
+          sx={{
+            display: { xs: 'flex', lg: 'none' },
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1100,
+            bgcolor: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(12px)',
+            borderTop: '1px solid #e2e8f0',
+            py: 1.5,
+            px: 2,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 1.5,
+            boxShadow: '0 -6px 24px rgba(0, 0, 0, 0.08)'
+          }}
+        >
+          {/* Close button 'X' to hide sticky summary bar */}
+          <IconButton
+            data-testid="close-bottom-bar-btn"
+            aria-label="Cerrar resumen de compra"
+            onClick={() => setBottomBarVisible(false)}
+            size="small"
+            sx={{
+              position: 'absolute',
+              top: -12,
+              right: 12,
+              bgcolor: '#ffffff',
+              color: '#64748b',
+              border: '1px solid #cbd5e1',
+              boxShadow: '0 2px 6px rgba(0, 0, 0, 0.12)',
+              width: 24,
+              height: 24,
+              p: 0,
+              zIndex: 1110,
+              transition: 'all 0.2s ease',
+              '&:hover': {
+                bgcolor: '#f1f5f9',
+                color: '#0f172a',
+                transform: 'scale(1.08)'
+              }
+            }}
+          >
+            <CloseIcon sx={{ fontSize: 15 }} />
+          </IconButton>
 
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <QuantitySelector
-            quantity={quantity}
-            onQuantityChange={setQuantity}
-            maxStock={stock}
-            disabled={isOutOfStock}
-          />
-          <BuyNowButton
-            product={product}
-            selectedVariations={variationsList}
-            quantity={quantity}
-            disabled={isOutOfStock || (hasVariations && !allRequiredSelected)}
-            size="medium"
-            fullWidth={false}
-          />
+          <Box sx={{ minWidth: 90 }}>
+            <Typography variant="caption" sx={{ color: '#64748b', display: 'block', lineHeight: 1.1, fontWeight: 600 }}>
+              Precio
+            </Typography>
+            <Typography variant="subtitle1" sx={{ fontWeight: 800, color: BRAND_COLORS.accent, lineHeight: 1.2 }}>
+              {displayPrice}
+            </Typography>
+          </Box>
+
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <QuantitySelector
+              quantity={quantity}
+              onQuantityChange={setQuantity}
+              maxStock={stock}
+              disabled={isOutOfStock}
+            />
+            <BuyNowButton
+              product={product}
+              selectedVariations={variationsList}
+              quantity={quantity}
+              disabled={isOutOfStock || (hasVariations && !allRequiredSelected)}
+              size="medium"
+              fullWidth={false}
+            />
+          </Box>
         </Box>
-      </Box>
+      )}
+
+      {/* Floating button to restore bottom bar if dismissed */}
+      {!bottomBarVisible && (
+        <Tooltip title="Mostrar resumen de compra" placement="left">
+          <IconButton
+            data-testid="reopen-bottom-bar-btn"
+            aria-label="Mostrar resumen de compra"
+            onClick={() => setBottomBarVisible(true)}
+            sx={{
+              display: { xs: 'flex', lg: 'none' },
+              position: 'fixed',
+              bottom: 16,
+              right: 16,
+              zIndex: 1100,
+              bgcolor: BRAND_COLORS.accent,
+              color: '#ffffff',
+              boxShadow: '0 4px 14px rgba(0, 172, 228, 0.4)',
+              width: 44,
+              height: 44,
+              transition: 'all 0.2s ease',
+              '&:hover': {
+                bgcolor: '#0284c7',
+                transform: 'scale(1.05)'
+              }
+            }}
+          >
+            <ShoppingCartIcon sx={{ fontSize: 22 }} />
+          </IconButton>
+        </Tooltip>
+      )}
 
       {/* Interactive Shipping Details Modal */}
       <ShippingDetailsModal

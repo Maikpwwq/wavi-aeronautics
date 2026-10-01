@@ -1,131 +1,153 @@
-import React, { Suspense } from 'react'
+'use client'
+
+import React, { Suspense, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import withRoot from '@/modules/withRoot'
 import theme from '@/app/tienda/innerTheme'
-import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import CircularProgress from '@mui/material/CircularProgress'
-
-import Typography from '@/modules/components/Typography'
+import Typography from '@mui/material/Typography'
 import ProductItem from '@/app/tienda/components/ProductItem'
+import ProductSkeleton from '@/app/tienda/components/ProductSkeleton'
 
 const styles = (theme) => ({
   root: {
     display: 'flex',
     backgroundColor: '#eaeff1',
-    // backgroundImage: `url(${})`,
     overflow: 'hidden',
-    with: '100%'
+    width: 'auto',
+    mx: -2,
+    py: { xs: 4, sm: 6 }
   },
   container: {
-    padding: `${theme.spacing(3)} ${theme.spacing(0)} !important`,
-    margin: 0,
-    maxWidth: 'fit-content !important',
+    padding: `${theme.spacing(0)} ${theme.spacing(0)} !important`,
+    margin: '0 auto',
+    maxWidth: '100% !important',
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     textAlign: 'center',
-    with: '100%'
+    width: '100%'
   },
-  productsWraper: {
+  carouselTrack: {
+    width: '100%',
+    overflowX: 'auto',
+    overflowY: 'hidden',
+    display: 'flex',
+    flexDirection: 'row',
     flexWrap: 'nowrap',
-    overflow: 'auto'
+    gap: { xs: 2, sm: 2.5 },
+    py: { xs: 2, sm: 2.5 },
+    px: { xs: 2, sm: 4 },
+    scrollSnapType: 'x mandatory',
+    WebkitOverflowScrolling: 'touch',
+    scrollbarWidth: 'none',
+    '&::-webkit-scrollbar': {
+      display: 'none'
+    }
   },
   item: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: theme.spacing(0, 5)
-  },
-  title: {
-    paddingBottom: theme.spacing(6)
-  },
-  image: {
-    marginBottom: theme.spacing(2),
-    width: 100,
-    display: 'block',
-    maxWidth: 150,
-    overflow: 'hidden'
-  },
-  logos: {
-    paddingLeft: '0 !important',
-    marginTop: theme.spacing(2)
-  },
-  logosContainer: {
-    overflow: 'hidden',
-    flexWrap: 'nowrap',
-    flexDirection: 'column',
-    marginBottom: `${theme.spacing(4)} !important`
-  },
-  presentationProducts: {
-    margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`,
-    padding: `${theme.spacing(0)} ${theme.spacing(2)} !important`,
+    width: { xs: 290, sm: 310 },
+    minWidth: { xs: 290, sm: 310 },
+    maxWidth: { xs: 290, sm: 310 },
+    flexShrink: 0,
+    scrollSnapAlign: 'start',
     display: 'flex',
     flexDirection: 'column'
-  },
-  spacingTexts: {
-    margin: `${theme.spacing(2)} ${theme.spacing(0)} !important`
-  },
-  endingTexts: {
-    marginBottom: `${theme.spacing(2)} !important`
   }
 })
 
-function ProductosDestacados (props) {
+function ProductosDestacados () {
   const classes = styles(theme)
   const shopState = useSelector((store) => store?.shop)
-  const featuredProducts = shopState?.dronesRC || []
+  const dronesRC = shopState?.dronesRC || []
+
+  // Fallback to session storage if Redux is hydrating
+  const featuredProducts = useMemo(() => {
+    let list = [...dronesRC]
+    if (list.length === 0 && typeof window !== 'undefined') {
+      try {
+        const stored = sessionStorage.getItem('Productos_DronesRC')
+        if (stored) list = JSON.parse(stored)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    return list
+  }, [dronesRC])
 
   return (
-    <Box sx={classes.root}> 
-      <Container maxWidth="lg" sx={classes.container}>
+    <Box sx={classes.root} component="section" aria-label="Productos destacados"> 
+      <Container sx={classes.container}>
         <Typography
           variant="h4"
-          marked="center"
-          sx={classes.title}
           component="h2"
+          sx={{
+            fontWeight: 800,
+            textTransform: 'uppercase',
+            color: '#0f172a',
+            fontSize: { xs: '1.75rem', sm: '2.25rem' },
+            letterSpacing: '0.02em',
+            mb: 1
+          }}
         >
           Productos Destacados
         </Typography>
-        <Typography variant="body1" sx={classes.endingTexts}>
-                Lleva tu Dron, destacamos los mejores kits de FPV listos para vuelo.
+
+        {/* Accent Bar */}
+        <Box
+          sx={{
+            width: 44,
+            height: 3.5,
+            bgcolor: '#00aCe4',
+            borderRadius: 2,
+            mb: 2
+          }}
+        />
+
+        <Typography
+          variant="body1"
+          sx={{
+            color: '#475569',
+            fontSize: { xs: '0.92rem', sm: '1.02rem' },
+            mb: 3,
+            px: 2,
+            maxWidth: 700
+          }}
+        >
+          Lleva tu Dron, destacamos los mejores kits de FPV listos para vuelo.
         </Typography>
-          <Grid container spacing={3} sx={classes.logosContainer}>
-          {!!featuredProducts && featuredProducts.length > 0 && (
-            <Suspense
-              fallback={
-                <Box sx={{ display: 'flex' }}>
-                  <CircularProgress />
-                </Box>
-              }
-            >
-              <Grid sx={classes.productsWraper} container spacing={2}>
-                {featuredProducts.map((product, k) => {
-                  return (
-                    <Grid
-                      item
-                      key={k}
-                      size={{ xs: 12, sm: 12, md: 5, lg: 4, xl: 3 }}
-                      sx={classes.logos}>
-                      <ProductItem
-                        sx="d-flex mb-2"
-                        category="drones"
-                        products={product}
-                        productID={k}
-                      ></ProductItem>
-                    </Grid>
-                  )
-                })}
-              </Grid>
+
+        <Box sx={{ width: '100%', overflow: 'hidden' }}>
+          {featuredProducts && featuredProducts.length > 0 ? (
+            <Suspense fallback={<ProductSkeleton count={4} />}>
+              <Box sx={classes.carouselTrack} data-testid="featured-products-track">
+                {featuredProducts.map((product, k) => (
+                  <Box
+                    key={`${product.productID || product.id || k}-${k}`}
+                    sx={classes.item}
+                    data-testid="featured-product-card"
+                  >
+                    <ProductItem
+                      category="drones"
+                      products={product}
+                      productID={k}
+                    />
+                  </Box>
+                ))}
+              </Box>
             </Suspense>
+          ) : (
+            <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+              <CircularProgress size={36} sx={{ color: '#00aCe4' }} />
+            </Box>
           )}
-          </Grid>
+        </Box>
       </Container>
     </Box>
   )
 }
-
 
 export default withRoot(ProductosDestacados)

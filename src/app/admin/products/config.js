@@ -12,7 +12,9 @@ import {
   fetchRadioControlProducts,
   fetchAccesoriosProducts,
   fetchTransmisorsProducts,
-  fetchDigitalVTXProducts 
+  fetchDigitalVTXProducts,
+  fetchHelicesProducts,
+  fetchFramesProducts
 } from '@/store/states/shop'
 
 // Category configuration - maps to Redux state keys and fetch actions
@@ -22,7 +24,9 @@ export const CATEGORIES = [
   { key: 'dronesHD', label: 'FPV HD', fetchAction: fetchDronesProducts },
   { key: 'googles', label: 'Goggles FPV', fetchAction: fetchGooglesProducts },
   { key: 'radioControl', label: 'Radio Control', fetchAction: fetchRadioControlProducts },
-  { key: 'baterias', label: 'Baterías/Accesorios', fetchAction: fetchAccesoriosProducts },
+  { key: 'baterias', label: 'Baterías FPV', fetchAction: fetchAccesoriosProducts },
+  { key: 'helices', label: 'Hélices FPV', fetchAction: fetchHelicesProducts },
+  { key: 'frames', label: 'Frames / Chasis', fetchAction: fetchFramesProducts },
   { key: 'transmisors', label: 'Transmisores', fetchAction: fetchTransmisorsProducts },
   { key: 'receptors', label: 'Receptores', fetchAction: fetchTransmisorsProducts },
   { key: 'digitalVTX', label: 'Digital VTX', fetchAction: fetchDigitalVTXProducts },
@@ -35,7 +39,9 @@ export const CATEGORY_OPTIONS = [
   { value: 'dronesHD', label: 'FPV HD' },
   { value: 'googles', label: 'Goggles FPV' },
   { value: 'radioControl', label: 'Radio Control' },
-  { value: 'baterias', label: 'Baterías/Accesorios' },
+  { value: 'baterias', label: 'Baterías FPV' },
+  { value: 'helices', label: 'Hélices FPV' },
+  { value: 'frames', label: 'Frames / Chasis' },
   { value: 'transmisors', label: 'Transmisores' },
   { value: 'receptors', label: 'Receptores' },
   { value: 'digitalVTX', label: 'Digital VTX' },
@@ -202,6 +208,18 @@ export const CATEGORY_TAGS = {
     'DJI', 'walksnail', 'HDZero', 'O4', 'O3', 'vista',
     'avatar', 'VRX', 'módulo-receptor', '4K', '1080p', '720p',
     'baja-latencia', 'antena-patch', 'antena-omni'
+  ],
+
+  // Hélices FPV
+  helices: [
+    '3-pulgadas', '5-pulgadas', '7-pulgadas', 'tripala', 'bipala',
+    'Gemfan', 'HQProp', 'Ethix', 'policarbonato', 'freestyle', 'racing', 'cinematic'
+  ],
+
+  // Frames & Chasis de Carbono
+  frames: [
+    'fibra-de-carbono', 'T700', '3K', 'brazo-repuesto', 'deadcat',
+    'true-x', 'cinewhoop', '5-pulgadas', '7-pulgadas', 'GEPRC', 'iFlight', 'hardware'
   ],
 }
 

@@ -7,6 +7,11 @@ const RevealOnScroll = ({ children, threshold = 0.1, delay = 0, duration = 1000 
   const ref = useRef(null)
 
   useEffect(() => {
+    if (typeof window === 'undefined' || typeof IntersectionObserver === 'undefined') {
+      setIsVisible(true)
+      return
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         // Once visible, set to true and disconnect (so it doesn't fade out again)
@@ -32,7 +37,7 @@ const RevealOnScroll = ({ children, threshold = 0.1, delay = 0, duration = 1000 
   }, [threshold])
 
   return (
-    <Box ref={ref} sx={{ minHeight: '50px' }}>
+    <Box ref={ref}>
        {/* Use timeout to control duration (MUI Fade uses standard/enteringScreen constants usually, but timeout prop works) */}
       <Fade in={isVisible} timeout={duration} style={{ transitionDelay: isVisible ? `${delay}ms` : '0ms' }}>
         <Box>

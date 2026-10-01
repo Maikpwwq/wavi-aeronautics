@@ -12,7 +12,9 @@ describe('CategoriesMenuDialog Component Tests', () => {
     { name: 'Radio Control', href: '/tienda/radio-control', slug: 'radio-control' },
     { name: 'Digital VTX', href: '/tienda/digital-vtx', slug: 'digital-vtx' },
     { name: 'Transmisor / Receptor', href: '/tienda/trasmisor-receptor', slug: 'trasmisor-receptor' },
-    { name: 'Accesorios y Repuestos', href: '/tienda/accesorios', slug: 'accesorios' }
+    { name: 'Baterías FPV', href: '/tienda/baterias', slug: 'baterias' },
+    { name: 'Hélices FPV', href: '/tienda/helices', slug: 'helices' },
+    { name: 'Frames & Chasis de Carbono', href: '/tienda/frames', slug: 'frames' }
   ]
 
   it('does not render dialog content when open is false', () => {
@@ -29,10 +31,10 @@ describe('CategoriesMenuDialog Component Tests', () => {
     expect(screen.getByText('Drones y Kits')).toBeInTheDocument()
     expect(screen.getByText('Equipo de Vuelo FPV')).toBeInTheDocument()
     expect(screen.getByText('Electrónica y Transmisión')).toBeInTheDocument()
-    expect(screen.getByText('Accesorios')).toBeInTheDocument()
+    expect(screen.getByText('Baterías')).toBeInTheDocument()
   })
 
-  it('renders all 8 expected categories with correct hrefs', () => {
+  it('renders all 10 expected categories with correct hrefs', () => {
     render(<CategoriesMenuDialog open={true} onClose={vi.fn()} />)
 
     expectedCategories.forEach((cat) => {
@@ -63,9 +65,9 @@ describe('CategoriesMenuDialog Component Tests', () => {
     expect(handleClose).toHaveBeenCalledTimes(1)
   })
 
-  it('contains exactly 8 unique category items defined across all groups', () => {
+  it('contains exactly 10 unique category items defined across all groups', () => {
     const totalCategories = CATEGORY_GROUPS.reduce((acc, group) => acc.concat(group.categories), [])
-    expect(totalCategories).toHaveLength(8)
+    expect(totalCategories).toHaveLength(10)
 
     const slugs = totalCategories.map((c) => c.slug)
     const expectedSlugs = [
@@ -76,7 +78,9 @@ describe('CategoriesMenuDialog Component Tests', () => {
       'radio-control',
       'digital-vtx',
       'trasmisor-receptor',
-      'accesorios'
+      'baterias',
+      'helices',
+      'frames'
     ]
     expect(slugs.sort()).toEqual(expectedSlugs.sort())
   })

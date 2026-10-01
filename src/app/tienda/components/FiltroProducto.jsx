@@ -30,7 +30,8 @@ FiltroProducto.propTypes = {
   selectedBatteryCells: PropTypes.arrayOf(PropTypes.string),
   onToggleBatteryCell: PropTypes.func,
   toggleBatteryCell: PropTypes.func,
-  category: PropTypes.string
+  category: PropTypes.string,
+  defaultOpen: PropTypes.bool
 }
 
 export default FiltroProducto
