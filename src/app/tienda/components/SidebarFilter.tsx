@@ -400,8 +400,8 @@ export const SidebarFilter: React.FC<SidebarFilterProps> = ({
                   fontFamily: 'monospace'
                 }}
               >
-                <span>${formatCurrency(absoluteMin)}</span>
-                <span>${formatCurrency(absoluteMax)}</span>
+                <span>{formatCurrency(absoluteMin)}</span>
+                <span>{formatCurrency(absoluteMax)}</span>
               </div>
             </div>
           </div>
