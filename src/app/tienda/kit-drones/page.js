@@ -66,6 +66,7 @@ const DroneProducts = () => {
     <>
       <Box sx={classes.productShowcase}>
         <FiltroProducto 
+          products={dronesKit}
           filters={filters}
           availableBrands={availableBrands}
           toggleBrand={toggleBrand}

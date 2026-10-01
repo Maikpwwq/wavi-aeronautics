@@ -390,3 +390,59 @@ a {
     background-color: rgba(255, 255, 255, 0.1);
   }
 }
+
+/* Dual Range Slider Cross-Browser Polish */
+[data-testid="dual-range-slider"] input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  pointer-events: none;
+}
+
+[data-testid="dual-range-slider"] input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  pointer-events: auto;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2.5px solid #00aCe4;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  cursor: grab;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+[data-testid="dual-range-slider"] input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 0 6px rgba(0, 172, 228, 0.25);
+}
+
+[data-testid="dual-range-slider"] input[type="range"]::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.25);
+  box-shadow: 0 0 0 8px rgba(0, 172, 228, 0.35);
+}
+
+[data-testid="dual-range-slider"] input[type="range"]::-moz-range-thumb {
+  pointer-events: auto;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2.5px solid #00aCe4;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  cursor: grab;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+[data-testid="dual-range-slider"] input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 0 6px rgba(0, 172, 228, 0.25);
+}
+
+[data-testid="dual-range-slider"] input[type="range"]::-moz-range-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.25);
+  box-shadow: 0 0 0 8px rgba(0, 172, 228, 0.35);
+}

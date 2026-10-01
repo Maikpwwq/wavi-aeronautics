@@ -1,2 +1,8 @@
+allowBuilds:
+  '@firebase/util': true
+  '@parcel/watcher': true
+  protobufjs: true
+  sharp: true
+  unrs-resolver: true
 overrides:
   stylis: "4.3.6"
