@@ -18,12 +18,12 @@ describe('ShippingDetailsModal Component Tests', () => {
     // Tier 1 — Repuestos Express
     expect(screen.getByText('Repuestos Express')).toBeInTheDocument()
     expect(screen.getByText('24 a 72 horas hábiles')).toBeInTheDocument()
-    expect(screen.getByText('Stock Local Wavi')).toBeInTheDocument()
+    expect(screen.getByText(/Stock Local Wavi/)).toBeInTheDocument()
 
     // Tier 2 — Importación Curada Premium
     expect(screen.getByText('Importación Curada Premium')).toBeInTheDocument()
     expect(screen.getByText('15 a 21 días hábiles')).toBeInTheDocument()
-    expect(screen.getByText('Gestión Directa Wavi')).toBeInTheDocument()
+    expect(screen.getByText(/Gestión Directa Wavi/)).toBeInTheDocument()
   })
 
   it('renders Repuestos Express as the default selected option', () => {

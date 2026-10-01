@@ -12,7 +12,8 @@ import SocialContactIcons from '@/modules/components/SocialContactIcons'
 
 const legalLinks = [
   { label: 'Términos y Condiciones', href: '/condiciones-del-servicio' },
-  { label: 'Eliminación de Datos', href: '/eliminacion-datos-usuario' }
+  { label: 'Eliminación de Datos', href: '/eliminacion-datos-usuario' },
+  { label: 'B2B Partners (Dropship)', href: '/partners' }
 ]
 
 const policyLinks = [
