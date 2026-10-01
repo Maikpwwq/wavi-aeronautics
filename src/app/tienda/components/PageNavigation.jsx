@@ -17,7 +17,7 @@ const CATEGORY_LABELS = {
   'radio-control': 'Radio Control',
   'trasmisor-receptor': 'Transmisión/Recepción',
   'digital-vtx': 'Digital VTX',
-  'accesorios': 'Accesorios',
+  'accesorios': 'Baterías',
   'software': 'Software'
 }
 

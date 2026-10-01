@@ -131,8 +131,61 @@ describe('useProductFilter Hook', () => {
     })
 
     expect(result.current.filters.vtxSystems).toEqual([])
+    expect(result.current.filters.batteryCells).toEqual([])
     expect(result.current.filters.brands).toEqual([])
     expect(result.current.filters.price.min).toBe('')
     expect(result.current.filteredProducts.length).toBe(5)
+  })
+
+  describe('Battery Cell (Voltage) Filtering', () => {
+    const batteryProducts = [
+      { productID: 'bat-1s', name: 'BetaFPV 1S-300mAh LiPo', brand: 'BetaFPV' },
+      { productID: 'bat-2s', name: 'BetaFPV 2S-450mAh LiPo', brand: 'BetaFPV' },
+      { productID: 'bat-4s', name: 'GEPRC 4S-650a850mAh LiPo', brand: 'GEPRC' },
+      { productID: 'bat-6s', name: 'Tattu R-Line 6S-1400mAh 150C', brand: 'Tattu' },
+      { productID: 'bat-12s', name: 'GNB 12S-5000mAh HV', brand: 'GNB' }
+    ]
+
+    it('filters products by single battery cell type (e.g. 4S)', () => {
+      const { result } = renderHook(() => useProductFilter(batteryProducts))
+
+      act(() => {
+        result.current.toggleBatteryCell('4S')
+      })
+
+      expect(result.current.filters.batteryCells).toEqual(['4S'])
+      expect(result.current.filteredProducts.length).toBe(1)
+      expect(result.current.filteredProducts[0].productID).toBe('bat-4s')
+    })
+
+    it('allows multi-selection of battery cells (e.g. 1S and 2S)', () => {
+      const { result } = renderHook(() => useProductFilter(batteryProducts))
+
+      act(() => {
+        result.current.toggleBatteryCell('1S')
+        result.current.toggleBatteryCell('2S')
+      })
+
+      expect(result.current.filters.batteryCells).toEqual(['1S', '2S'])
+      expect(result.current.filteredProducts.length).toBe(2)
+      const ids = result.current.filteredProducts.map((p) => p.productID)
+      expect(ids).toContain('bat-1s')
+      expect(ids).toContain('bat-2s')
+    })
+
+    it('unselects a battery cell when toggled again', () => {
+      const { result } = renderHook(() => useProductFilter(batteryProducts))
+
+      act(() => {
+        result.current.toggleBatteryCell('6S')
+      })
+      expect(result.current.filteredProducts.length).toBe(1)
+
+      act(() => {
+        result.current.toggleBatteryCell('6S')
+      })
+      expect(result.current.filters.batteryCells).toEqual([])
+      expect(result.current.filteredProducts.length).toBe(5)
+    })
   })
 })

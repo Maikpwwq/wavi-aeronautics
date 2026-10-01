@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { matchesBrand } from '@/utilities/brandsConfig'
 import { matchesVtxSystem } from '@/utilities/vtxConfig'
+import { matchesBatteryCell } from '@/utilities/batteryConfig'
 
 export const useProductFilter = (products, initialFilters = {}) => {
   // --------------------------------------------------------------------------
@@ -9,6 +10,7 @@ export const useProductFilter = (products, initialFilters = {}) => {
   const [filterState, setFilterState] = useState({
     brands: initialFilters.brands || [],
     vtxSystems: initialFilters.vtxSystems || [],
+    batteryCells: initialFilters.batteryCells || [],
     price: {
       min: initialFilters.min || initialFilters.price?.min || '',
       max: initialFilters.max || initialFilters.price?.max || ''
@@ -70,6 +72,24 @@ export const useProductFilter = (products, initialFilters = {}) => {
     })
   }
 
+  const toggleBatteryCell = (cellId) => {
+    setFilterState((prev) => {
+      const current = prev.batteryCells || []
+      const isSelected = current.includes(cellId)
+      if (isSelected) {
+        return {
+          ...prev,
+          batteryCells: current.filter((id) => id !== cellId)
+        }
+      } else {
+        return {
+          ...prev,
+          batteryCells: [...current, cellId]
+        }
+      }
+    })
+  }
+
   const setMinPrice = (val) => {
     setFilterState((prev) => ({
       ...prev,
@@ -88,6 +108,7 @@ export const useProductFilter = (products, initialFilters = {}) => {
     setFilterState({
       brands: [],
       vtxSystems: [],
+      batteryCells: [],
       price: { min: '', max: '' }
     })
   }
@@ -150,6 +171,14 @@ export const useProductFilter = (products, initialFilters = {}) => {
         if (!matchesAnyVtx) return false
       }
 
+      // Battery Cell (Voltage) Filter
+      if (filterState.batteryCells && filterState.batteryCells.length > 0) {
+        const matchesAnyCell = filterState.batteryCells.some((cellId) =>
+          matchesBatteryCell(product, cellId)
+        )
+        if (!matchesAnyCell) return false
+      }
+
       // Price Filter
       // Prefer 'precio' (formatted COP string) over 'price' (USD number) for comparison
       // because the filter inputs are in encoded COP
@@ -207,6 +236,7 @@ export const useProductFilter = (products, initialFilters = {}) => {
     availableBrands,
     toggleBrand,
     toggleVtxSystem,
+    toggleBatteryCell,
     setMinPrice,
     setMaxPrice,
     resetFilters,

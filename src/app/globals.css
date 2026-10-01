@@ -358,6 +358,19 @@ a {
   }
 }
 
+/* Battery Cell Rows (POR CELDAS) */
+.filter-cell-row {
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.filter-cell-row:hover {
+  background-color: #2a2a2a !important;
+}
+
+.filter-cell-row.active:hover {
+  background-color: rgba(0, 172, 228, 0.25) !important;
+}
+
 .filter-reset-btn {
   width: 100%;
   padding: 0.75rem;

@@ -210,4 +210,97 @@ describe('SidebarFilter Component', () => {
       expect(analogPill).toHaveAttribute('aria-pressed', 'false')
     })
   })
+
+  describe('POR CELDAS Battery Filtering (Category Baterías)', () => {
+    const batteryProducts: ProductPriceItem[] = [
+      { productID: 'b1', name: 'BetaFPV 1S-300mAh LiPo', precio: '$ 45.000' },
+      { productID: 'b2', name: 'BetaFPV 1S-450mAh LiPo', precio: '$ 55.000' },
+      { productID: 'b3', name: 'GEPRC 4S-650mAh LiPo', precio: '$ 120.000' },
+      { productID: 'b4', name: 'Tattu 6S-1400mAh LiPo', precio: '$ 210.000' }
+    ]
+
+    it('displays "Baterías" in the category selector dropdown (renamed from Accesorios)', () => {
+      render(<SidebarFilter {...defaultProps} />)
+      const select = screen.getByTestId('category-select') as HTMLSelectElement
+      const optionTexts = Array.from(select.options).map((opt) => opt.text)
+
+      expect(optionTexts).toContain('Baterías')
+      expect(optionTexts).not.toContain('Accesorios')
+    })
+
+    it('does NOT render the POR CELDAS section when on other categories (e.g. /tienda/kit-drones)', () => {
+      mockPathname.mockReturnValue('/tienda/kit-drones')
+      render(<SidebarFilter {...defaultProps} />)
+
+      expect(screen.queryByTestId('battery-cells-section')).not.toBeInTheDocument()
+    })
+
+    it('renders the POR CELDAS section when on /tienda/accesorios route', () => {
+      mockPathname.mockReturnValue('/tienda/accesorios')
+      render(<SidebarFilter {...defaultProps} products={batteryProducts} />)
+
+      expect(screen.getByTestId('battery-cells-section')).toBeInTheDocument()
+      expect(screen.getByText('POR CELDAS')).toBeInTheDocument()
+    })
+
+    it('renders the POR CELDAS section when category prop is "baterias"', () => {
+      mockPathname.mockReturnValue('/tienda/other')
+      render(<SidebarFilter {...defaultProps} category="baterias" products={batteryProducts} />)
+
+      expect(screen.getByTestId('battery-cells-section')).toBeInTheDocument()
+    })
+
+    it('displays dynamic product counts for each cell count matching the provided products', () => {
+      mockPathname.mockReturnValue('/tienda/accesorios')
+      render(<SidebarFilter {...defaultProps} products={batteryProducts} />)
+
+      // 1S has 2 products
+      expect(screen.getByTestId('battery-cell-count-1S')).toHaveTextContent('2')
+      // 4S has 1 product
+      expect(screen.getByTestId('battery-cell-count-4S')).toHaveTextContent('1')
+      // 6S has 1 product
+      expect(screen.getByTestId('battery-cell-count-6S')).toHaveTextContent('1')
+      // 2S has 0 products
+      expect(screen.getByTestId('battery-cell-count-2S')).toHaveTextContent('0')
+    })
+
+    it('triggers onToggleBatteryCell when clicking a battery cell row', () => {
+      mockPathname.mockReturnValue('/tienda/accesorios')
+      const onToggleBatteryCell = vi.fn()
+      render(
+        <SidebarFilter
+          {...defaultProps}
+          products={batteryProducts}
+          onToggleBatteryCell={onToggleBatteryCell}
+        />
+      )
+
+      fireEvent.click(screen.getByTestId('battery-cell-row-4S'))
+      expect(onToggleBatteryCell).toHaveBeenCalledWith('4S')
+    })
+
+    it('highlights selected battery cells with active state', () => {
+      mockPathname.mockReturnValue('/tienda/accesorios')
+      render(
+        <SidebarFilter
+          {...defaultProps}
+          products={batteryProducts}
+          selectedBatteryCells={['4S', '6S']}
+        />
+      )
+
+      const row4S = screen.getByTestId('battery-cell-row-4S')
+      const row6S = screen.getByTestId('battery-cell-row-6S')
+      const row1S = screen.getByTestId('battery-cell-row-1S')
+
+      expect(row4S).toHaveClass('active')
+      expect(row4S).toHaveAttribute('aria-pressed', 'true')
+
+      expect(row6S).toHaveClass('active')
+      expect(row6S).toHaveAttribute('aria-pressed', 'true')
+
+      expect(row1S).not.toHaveClass('active')
+      expect(row1S).toHaveAttribute('aria-pressed', 'false')
+    })
+  })
 })

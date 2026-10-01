@@ -27,6 +27,9 @@ FiltroProducto.propTypes = {
   selectedVtxSystems: PropTypes.arrayOf(PropTypes.string),
   onToggleVtxSystem: PropTypes.func,
   toggleVtxSystem: PropTypes.func,
+  selectedBatteryCells: PropTypes.arrayOf(PropTypes.string),
+  onToggleBatteryCell: PropTypes.func,
+  toggleBatteryCell: PropTypes.func,
   category: PropTypes.string
 }
 

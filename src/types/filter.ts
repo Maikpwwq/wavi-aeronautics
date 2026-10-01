@@ -31,6 +31,8 @@ export const VTX_SYSTEM_OPTIONS = [
 
 export type VtxSystemId = (typeof VTX_SYSTEM_OPTIONS)[number]["id"];
 
+export { BATTERY_CELL_OPTIONS, type BatteryCellId } from '@/utilities/batteryConfig'
+
 export interface ProductPriceItem {
   id?: string | number;
   productID?: string | number;
@@ -47,6 +49,11 @@ export interface ProductPriceItem {
   vtx?: string;
   vtxSystem?: string;
   sistemaVtx?: string;
+  cells?: number | string;
+  celdas?: number | string;
+  batteryCells?: number | string;
+  voltage?: string;
+  voltaje?: string;
   variationGroups?: unknown[];
   options?: unknown[];
   availability?: boolean;
@@ -94,10 +101,17 @@ export interface SidebarFilterProps {
   onToggleVtxSystem?: (vtxId: string) => void;
   /** Legacy toggleVtxSystem */
   toggleVtxSystem?: (vtxId: string) => void;
+  /** Currently selected battery cell counts (e.g. ['1S', '4S']) */
+  selectedBatteryCells?: string[];
+  /** Callback when battery cell count toggle is triggered */
+  onToggleBatteryCell?: (cellId: string) => void;
+  /** Legacy toggleBatteryCell */
+  toggleBatteryCell?: (cellId: string) => void;
   /** Legacy filters object */
   filters?: {
     brands?: string[];
     vtxSystems?: string[];
+    batteryCells?: string[];
     price?: { min?: number | string; max?: number | string };
   };
   /** Legacy toggleBrand */

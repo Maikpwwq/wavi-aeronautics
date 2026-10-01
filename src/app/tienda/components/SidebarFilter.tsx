@@ -1,12 +1,13 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { routes as STORE_ROUTES } from '@/app/tienda/components/header/headerRoutes'
 import { useSidebarFilter } from '@/app/tienda/hooks/useSidebarFilter'
 import { matchesBrand } from '@/utilities/brandsConfig'
 import { formatCurrency } from '@/utilities/priceUtils'
 import { VTX_SYSTEM_OPTIONS, type SidebarFilterProps } from '@/types/filter'
+import { BATTERY_CELL_OPTIONS, getBatteryCellCounts } from '@/utilities/batteryConfig'
 
 // ── DUAL RANGE SLIDER SUB-COMPONENT ──────────────────────────────────────────
 interface DualSliderProps {
@@ -105,10 +106,12 @@ export const SidebarFilter: React.FC<SidebarFilterProps> = ({
   selectedBrands: selectedBrandsProp,
   availableBrands: availableBrandsProp,
   selectedVtxSystems: selectedVtxSystemsProp,
+  selectedBatteryCells: selectedBatteryCellsProp,
   sortOrder: sortOrderProp,
   onPriceChange,
   onToggleBrand,
   onToggleVtxSystem,
+  onToggleBatteryCell,
   onSortChange,
   onResetFilters,
   // Legacy prop adapters
@@ -116,6 +119,7 @@ export const SidebarFilter: React.FC<SidebarFilterProps> = ({
   availableBrands: legacyAvailableBrands,
   toggleBrand: legacyToggleBrand,
   toggleVtxSystem: legacyToggleVtxSystem,
+  toggleBatteryCell: legacyToggleBatteryCell,
   setMinPrice,
   setMaxPrice,
   resetFilters: legacyResetFilters,
@@ -131,9 +135,11 @@ export const SidebarFilter: React.FC<SidebarFilterProps> = ({
   const activeBrands = selectedBrandsProp || filters?.brands || []
   const availableBrands = availableBrandsProp || legacyAvailableBrands || []
   const activeVtxSystems = selectedVtxSystemsProp || filters?.vtxSystems || []
+  const activeBatteryCells = selectedBatteryCellsProp || filters?.batteryCells || []
   const currentSortOrder = sortOrderProp || legacySortOrder || 'newest'
   const handleToggleBrand = onToggleBrand || legacyToggleBrand
   const handleToggleVtxSystem = onToggleVtxSystem || legacyToggleVtxSystem
+  const handleToggleBatteryCell = onToggleBatteryCell || legacyToggleBatteryCell
   const handleSortChange = onSortChange || legacySetSortOrder
   const handleResetFilters = onResetFilters || legacyResetFilters
 
@@ -195,6 +201,18 @@ export const SidebarFilter: React.FC<SidebarFilterProps> = ({
     cleanPath === ''
 
   const isVtxFilterVisible = isDronesHD || isAllCategories
+
+  // Battery cell filter is specific to the 'Baterías' category
+  const isBatteryCategory =
+    category === 'baterias' ||
+    category === 'accesorios' ||
+    activeCategory?.slug === 'accesorios' ||
+    cleanPath.includes('/tienda/accesorios')
+
+  // Dynamic product count per battery cell configuration
+  const cellCounts = useMemo(() => {
+    return getBatteryCellCounts(products)
+  }, [products])
 
   const handleCategorySelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const targetUrl = e.target.value
@@ -565,7 +583,98 @@ export const SidebarFilter: React.FC<SidebarFilterProps> = ({
           )}
 
           {/* ────────────────────────────────────────────────────────────── */}
-          {/* 5. MARCA                                                       */}
+          {/* 5. POR CELDAS (Specific for Baterías category)                */}
+          {/* ────────────────────────────────────────────────────────────── */}
+          {isBatteryCategory && (
+            <div
+              className="filter-section"
+              style={{
+                marginBottom: '1.5rem',
+                paddingBottom: '1rem',
+                borderBottom: '1px solid #333'
+              }}
+              data-testid="battery-cells-section"
+            >
+              <div
+                className="filter-section-title"
+                style={{
+                  fontWeight: 600,
+                  marginBottom: '0.75rem',
+                  fontSize: '0.9rem',
+                  textTransform: 'uppercase',
+                  color: '#aaa',
+                  letterSpacing: '0.5px'
+                }}
+              >
+                POR CELDAS
+              </div>
+              <div
+                className="filter-cell-list"
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.25rem'
+                }}
+              >
+                {BATTERY_CELL_OPTIONS.map((cell) => {
+                  const isSelected = activeBatteryCells.includes(cell.id)
+                  const count = cellCounts[cell.id] || 0
+
+                  return (
+                    <div
+                      key={cell.id}
+                      className={`filter-cell-row ${isSelected ? 'active' : ''}`}
+                      onClick={() => handleToggleBatteryCell && handleToggleBatteryCell(cell.id)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          handleToggleBatteryCell && handleToggleBatteryCell(cell.id)
+                        }
+                      }}
+                      data-testid={`battery-cell-row-${cell.id}`}
+                      aria-pressed={isSelected}
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        padding: '0.45rem 0.65rem',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        userSelect: 'none',
+                        backgroundColor: isSelected ? 'rgba(0, 172, 228, 0.15)' : 'transparent',
+                        border: isSelected ? '1px solid #00aCe4' : '1px solid transparent',
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontWeight: isSelected ? 700 : 500,
+                          fontSize: '0.92rem',
+                          color: isSelected ? '#00aCe4' : '#e2e8f0'
+                        }}
+                      >
+                        {cell.label}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: '0.85rem',
+                          fontWeight: 600,
+                          color: isSelected ? '#00aCe4' : '#64748b'
+                        }}
+                        data-testid={`battery-cell-count-${cell.id}`}
+                      >
+                        {count}
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* ────────────────────────────────────────────────────────────── */}
+          {/* 6. MARCA                                                       */}
           {/* ────────────────────────────────────────────────────────────── */}
           <div
             className="filter-section"

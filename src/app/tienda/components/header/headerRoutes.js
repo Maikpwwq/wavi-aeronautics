@@ -42,7 +42,7 @@ export const routes = [
     slug: 'digital-vtx'
   },
   {
-    label: 'Accesorios',
+    label: 'Baterías',
     value: 7,
     href: '/tienda/accesorios/',
     slug: 'accesorios'

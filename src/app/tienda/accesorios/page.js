@@ -49,6 +49,7 @@ const Accesorios = () => {
     filteredProducts,
     availableBrands,
     toggleBrand,
+    toggleBatteryCell,
     setMinPrice,
     setMaxPrice,
     resetFilters,
@@ -72,19 +73,22 @@ const Accesorios = () => {
     <>
       <Box sx={classes.productShowcase}>
         <FiltroProducto 
+          products={baterias}
           filters={filters}
           availableBrands={availableBrands}
           toggleBrand={toggleBrand}
+          toggleBatteryCell={toggleBatteryCell}
           setMinPrice={setMinPrice}
           setMaxPrice={setMaxPrice}
           resetFilters={resetFilters}
           sortOrder={sortOrder}
           setSortOrder={setSortOrder}
+          category="baterias"
         />
         <Box sx={classes.presentationProducts}>
           <CategoryHeader
-            title="Baterías & Accesorios FPV"
-            description="Baterías LiPo de alta tasa de descarga (C-rate), hélices balanceadas, cargadores inteligentes y herramientas esenciales para tu taller de vuelo."
+            title="Baterías FPV"
+            description="Baterías LiPo y Li-ion de alto rendimiento, paquetes 1S a 6S/12S con alta tasa de descarga (C-rate) para máxima potencia y autonomía de vuelo."
           />
           <Suspense fallback={<ProductSkeleton count={4} />}>
             {showSkeleton ? (

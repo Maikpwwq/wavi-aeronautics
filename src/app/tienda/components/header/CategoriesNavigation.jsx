@@ -56,6 +56,8 @@ const CategoriesNavigation = () => {
         setValue(6)
         break
       case 'accesorios':
+      case 'baterias':
+      case 'Baterías':
         setValue(7)
         break
       case 'software':
