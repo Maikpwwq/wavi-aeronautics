@@ -15,7 +15,6 @@ import AppAppBar from '@/modules/views/AppAppBar'
 import HomeCtaBanners from '@/modules/views/HomeCtaBanners'
 
 import NuevosProductos from '@/app/tienda/components/nuevosProductos'
-import CategoryBanner from '@/app/tienda/components/banner/CategoryBanner'
 import RevealOnScroll from '@/modules/components/RevealOnScroll'
 
 // import { inter } from './fonts'
@@ -26,9 +25,6 @@ function Home() {
       <AppAppBar isHome />
       <RevealOnScroll>
         <ProductHero />
-      </RevealOnScroll>
-      <RevealOnScroll>
-        <CategoryBanner />
       </RevealOnScroll>
       <RevealOnScroll>
         <HomeCtaBanners />
