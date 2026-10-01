@@ -132,6 +132,7 @@ function SearchResultsContent() {
     filteredProducts,
     availableBrands,
     toggleBrand,
+    toggleVtxSystem,
     setMinPrice,
     setMaxPrice,
     resetFilters,
@@ -149,11 +150,13 @@ function SearchResultsContent() {
         filters={filters}
         availableBrands={availableBrands}
         toggleBrand={toggleBrand}
+        toggleVtxSystem={toggleVtxSystem}
         setMinPrice={setMinPrice}
         setMaxPrice={setMaxPrice}
         resetFilters={resetFilters}
         sortOrder={sortOrder}
         setSortOrder={setSortOrder}
+        category="all"
       />
 
       {/* Main Results View */}

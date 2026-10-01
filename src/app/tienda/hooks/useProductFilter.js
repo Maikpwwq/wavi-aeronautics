@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { matchesBrand } from '@/utilities/brandsConfig'
+import { matchesVtxSystem } from '@/utilities/vtxConfig'
 
 export const useProductFilter = (products, initialFilters = {}) => {
   // --------------------------------------------------------------------------
@@ -7,6 +8,7 @@ export const useProductFilter = (products, initialFilters = {}) => {
   // --------------------------------------------------------------------------
   const [filterState, setFilterState] = useState({
     brands: initialFilters.brands || [],
+    vtxSystems: initialFilters.vtxSystems || [],
     price: {
       min: initialFilters.min || initialFilters.price?.min || '',
       max: initialFilters.max || initialFilters.price?.max || ''
@@ -50,6 +52,24 @@ export const useProductFilter = (products, initialFilters = {}) => {
     })
   }
 
+  const toggleVtxSystem = (vtxId) => {
+    setFilterState((prev) => {
+      const current = prev.vtxSystems || []
+      const isSelected = current.includes(vtxId)
+      if (isSelected) {
+        return {
+          ...prev,
+          vtxSystems: current.filter((id) => id !== vtxId)
+        }
+      } else {
+        return {
+          ...prev,
+          vtxSystems: [...current, vtxId]
+        }
+      }
+    })
+  }
+
   const setMinPrice = (val) => {
     setFilterState((prev) => ({
       ...prev,
@@ -67,6 +87,7 @@ export const useProductFilter = (products, initialFilters = {}) => {
   const resetFilters = () => {
     setFilterState({
       brands: [],
+      vtxSystems: [],
       price: { min: '', max: '' }
     })
   }
@@ -119,6 +140,14 @@ export const useProductFilter = (products, initialFilters = {}) => {
               productBrand.toLowerCase() === selectedBrand.toLowerCase())
         )
         if (!matchesAny) return false
+      }
+
+      // VTX System Filter
+      if (filterState.vtxSystems && filterState.vtxSystems.length > 0) {
+        const matchesAnyVtx = filterState.vtxSystems.some((vtxId) =>
+          matchesVtxSystem(product, vtxId)
+        )
+        if (!matchesAnyVtx) return false
       }
 
       // Price Filter
@@ -177,6 +206,7 @@ export const useProductFilter = (products, initialFilters = {}) => {
     filteredProducts,
     availableBrands,
     toggleBrand,
+    toggleVtxSystem,
     setMinPrice,
     setMaxPrice,
     resetFilters,

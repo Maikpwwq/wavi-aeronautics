@@ -132,4 +132,82 @@ describe('SidebarFilter Component', () => {
 
     expect(defaultProps.onResetFilters).toHaveBeenCalled()
   })
+
+  describe('VTX System Filtering (Conditional Visibility)', () => {
+    it('does NOT render the VTX section when on non-HD category (e.g. /tienda/kit-drones)', () => {
+      mockPathname.mockReturnValue('/tienda/kit-drones')
+      render(<SidebarFilter {...defaultProps} />)
+
+      expect(screen.queryByTestId('vtx-section')).not.toBeInTheDocument()
+    })
+
+    it('renders the VTX section when on Drones HD route (/tienda/drones-fpv-hd)', () => {
+      mockPathname.mockReturnValue('/tienda/drones-fpv-hd')
+      render(<SidebarFilter {...defaultProps} />)
+
+      expect(screen.getByTestId('vtx-section')).toBeInTheDocument()
+      expect(screen.getByText('SISTEMA VTX')).toBeInTheDocument()
+    })
+
+    it('renders the VTX section when on "Todas las Categorías" route (/tienda/buscar)', () => {
+      mockPathname.mockReturnValue('/tienda/buscar')
+      render(<SidebarFilter {...defaultProps} />)
+
+      expect(screen.getByTestId('vtx-section')).toBeInTheDocument()
+    })
+
+    it('renders the VTX section when category prop is explicitly "dronesHD"', () => {
+      mockPathname.mockReturnValue('/tienda/other')
+      render(<SidebarFilter {...defaultProps} category="dronesHD" />)
+
+      expect(screen.getByTestId('vtx-section')).toBeInTheDocument()
+    })
+
+    it('renders all 6 canonical VTX options in the VTX section', () => {
+      mockPathname.mockReturnValue('/tienda/drones-fpv-hd')
+      render(<SidebarFilter {...defaultProps} />)
+
+      expect(screen.getByTestId('vtx-pill-wtfpv')).toHaveTextContent('WTFPV')
+      expect(screen.getByTestId('vtx-pill-analogico')).toHaveTextContent('Analógico')
+      expect(screen.getByTestId('vtx-pill-o3')).toHaveTextContent('O3')
+      expect(screen.getByTestId('vtx-pill-o4')).toHaveTextContent('O4')
+      expect(screen.getByTestId('vtx-pill-wasp')).toHaveTextContent('WASP (RunCam)')
+      expect(screen.getByTestId('vtx-pill-walksnail')).toHaveTextContent('Walksnail Avatar (CaddxFPV)')
+    })
+
+    it('triggers onToggleVtxSystem when clicking a VTX pill', () => {
+      mockPathname.mockReturnValue('/tienda/drones-fpv-hd')
+      const onToggleVtxSystem = vi.fn()
+      render(<SidebarFilter {...defaultProps} onToggleVtxSystem={onToggleVtxSystem} />)
+
+      fireEvent.click(screen.getByTestId('vtx-pill-o3'))
+      expect(onToggleVtxSystem).toHaveBeenCalledWith('o3')
+
+      fireEvent.click(screen.getByTestId('vtx-pill-walksnail'))
+      expect(onToggleVtxSystem).toHaveBeenCalledWith('walksnail')
+    })
+
+    it('supports multiple selected VTX pills with active styles', () => {
+      mockPathname.mockReturnValue('/tienda/drones-fpv-hd')
+      render(
+        <SidebarFilter
+          {...defaultProps}
+          selectedVtxSystems={['o3', 'wasp']}
+        />
+      )
+
+      const o3Pill = screen.getByTestId('vtx-pill-o3')
+      const waspPill = screen.getByTestId('vtx-pill-wasp')
+      const analogPill = screen.getByTestId('vtx-pill-analogico')
+
+      expect(o3Pill).toHaveClass('active')
+      expect(o3Pill).toHaveAttribute('aria-pressed', 'true')
+
+      expect(waspPill).toHaveClass('active')
+      expect(waspPill).toHaveAttribute('aria-pressed', 'true')
+
+      expect(analogPill).not.toHaveClass('active')
+      expect(analogPill).toHaveAttribute('aria-pressed', 'false')
+    })
+  })
 })

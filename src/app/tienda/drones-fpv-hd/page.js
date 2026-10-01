@@ -51,6 +51,7 @@ const DroneProducts = () => {
     filteredProducts,
     availableBrands,
     toggleBrand,
+    toggleVtxSystem,
     setMinPrice,
     setMaxPrice,
     resetFilters,
@@ -71,11 +72,13 @@ const DroneProducts = () => {
           filters={filters}
           availableBrands={availableBrands}
           toggleBrand={toggleBrand}
+          toggleVtxSystem={toggleVtxSystem}
           setMinPrice={setMinPrice}
           setMaxPrice={setMaxPrice}
           resetFilters={resetFilters}
           sortOrder={sortOrder}
           setSortOrder={setSortOrder}
+          category="dronesHD"
         />
         <Box sx={classes.presentationProducts}>
           <CategoryHeader

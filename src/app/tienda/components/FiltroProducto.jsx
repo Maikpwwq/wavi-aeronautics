@@ -23,7 +23,11 @@ FiltroProducto.propTypes = {
   setMaxPrice: PropTypes.func,
   resetFilters: PropTypes.func,
   sortOrder: PropTypes.string,
-  setSortOrder: PropTypes.func
+  setSortOrder: PropTypes.func,
+  selectedVtxSystems: PropTypes.arrayOf(PropTypes.string),
+  onToggleVtxSystem: PropTypes.func,
+  toggleVtxSystem: PropTypes.func,
+  category: PropTypes.string
 }
 
 export default FiltroProducto

@@ -6,7 +6,7 @@ import { routes as STORE_ROUTES } from '@/app/tienda/components/header/headerRou
 import { useSidebarFilter } from '@/app/tienda/hooks/useSidebarFilter'
 import { matchesBrand } from '@/utilities/brandsConfig'
 import { formatCurrency } from '@/utilities/priceUtils'
-import type { SidebarFilterProps } from '@/types/filter'
+import { VTX_SYSTEM_OPTIONS, type SidebarFilterProps } from '@/types/filter'
 
 // ── DUAL RANGE SLIDER SUB-COMPONENT ──────────────────────────────────────────
 interface DualSliderProps {
@@ -101,17 +101,21 @@ const DualRangeSlider: React.FC<DualSliderProps> = ({ min, max, value, onChange 
 // ── MAIN COMPONENT: SIDEBAR FILTER ──────────────────────────────────────────
 export const SidebarFilter: React.FC<SidebarFilterProps> = ({
   products = [],
+  category,
   selectedBrands: selectedBrandsProp,
   availableBrands: availableBrandsProp,
+  selectedVtxSystems: selectedVtxSystemsProp,
   sortOrder: sortOrderProp,
   onPriceChange,
   onToggleBrand,
+  onToggleVtxSystem,
   onSortChange,
   onResetFilters,
   // Legacy prop adapters
   filters,
   availableBrands: legacyAvailableBrands,
   toggleBrand: legacyToggleBrand,
+  toggleVtxSystem: legacyToggleVtxSystem,
   setMinPrice,
   setMaxPrice,
   resetFilters: legacyResetFilters,
@@ -126,8 +130,10 @@ export const SidebarFilter: React.FC<SidebarFilterProps> = ({
   // Resolve legacy props
   const activeBrands = selectedBrandsProp || filters?.brands || []
   const availableBrands = availableBrandsProp || legacyAvailableBrands || []
+  const activeVtxSystems = selectedVtxSystemsProp || filters?.vtxSystems || []
   const currentSortOrder = sortOrderProp || legacySortOrder || 'newest'
   const handleToggleBrand = onToggleBrand || legacyToggleBrand
+  const handleToggleVtxSystem = onToggleVtxSystem || legacyToggleVtxSystem
   const handleSortChange = onSortChange || legacySetSortOrder
   const handleResetFilters = onResetFilters || legacyResetFilters
 
@@ -171,6 +177,24 @@ export const SidebarFilter: React.FC<SidebarFilterProps> = ({
     return cleanPath === cleanHref || cleanPath.startsWith(`${cleanHref}/`)
   })
   const currentCategoryValue = activeCategory ? activeCategory.href : '/tienda/buscar'
+
+  // VTX filter is ONLY active for 'drones HD' and 'todas las categorias'
+  const isDronesHD =
+    category === 'dronesHD' ||
+    category === 'drones-fpv-hd' ||
+    activeCategory?.slug === 'drones-fpv-hd' ||
+    cleanPath.includes('drones-fpv-hd')
+
+  const isAllCategories =
+    category === 'all' ||
+    category === 'todas' ||
+    category === 'buscar' ||
+    currentCategoryValue === '/tienda/buscar' ||
+    cleanPath === '/tienda/buscar' ||
+    cleanPath === '/tienda' ||
+    cleanPath === ''
+
+  const isVtxFilterVisible = isDronesHD || isAllCategories
 
   const handleCategorySelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const targetUrl = e.target.value
@@ -471,7 +495,77 @@ export const SidebarFilter: React.FC<SidebarFilterProps> = ({
           )}
 
           {/* ────────────────────────────────────────────────────────────── */}
-          {/* 4. MARCA                                                       */}
+          {/* 4. SISTEMA VTX (Active only for Drones HD & Todas)             */}
+          {/* ────────────────────────────────────────────────────────────── */}
+          {isVtxFilterVisible && (
+            <div
+              className="filter-section"
+              style={{
+                marginBottom: '1.5rem',
+                paddingBottom: '1rem',
+                borderBottom: '1px solid #333'
+              }}
+              data-testid="vtx-section"
+            >
+              <div
+                className="filter-section-title"
+                style={{
+                  fontWeight: 600,
+                  marginBottom: '0.75rem',
+                  fontSize: '0.9rem',
+                  textTransform: 'uppercase',
+                  color: '#aaa',
+                  letterSpacing: '0.5px'
+                }}
+              >
+                SISTEMA VTX
+              </div>
+              <div
+                className="filter-pills"
+                style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}
+              >
+                {VTX_SYSTEM_OPTIONS.map((option) => {
+                  const isSelected = activeVtxSystems.includes(option.id)
+                  return (
+                    <div
+                      key={option.id}
+                      className={`filter-pill ${isSelected ? 'active' : ''}`}
+                      onClick={() => handleToggleVtxSystem && handleToggleVtxSystem(option.id)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          handleToggleVtxSystem && handleToggleVtxSystem(option.id)
+                        }
+                      }}
+                      data-testid={`vtx-pill-${option.id}`}
+                      aria-pressed={isSelected}
+                      style={{
+                        padding: '0.4rem 0.8rem',
+                        borderRadius: '20px',
+                        fontSize: '0.85rem',
+                        cursor: 'pointer',
+                        userSelect: 'none',
+                        backgroundColor: isSelected ? '#00aCe4' : '#2a2a2a',
+                        color: isSelected ? '#ffffff' : '#eeeeee',
+                        borderColor: isSelected ? '#00aCe4' : '#444444',
+                        borderWidth: '1px',
+                        borderStyle: 'solid',
+                        fontWeight: isSelected ? 600 : 400,
+                        boxShadow: isSelected ? '0 2px 6px rgba(0, 172, 228, 0.4)' : 'none',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      {option.label}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* ────────────────────────────────────────────────────────────── */}
+          {/* 5. MARCA                                                       */}
           {/* ────────────────────────────────────────────────────────────── */}
           <div
             className="filter-section"
