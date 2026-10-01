@@ -212,14 +212,14 @@ export default function MarketDominationPanel({
       )
       const body = encodeURIComponent(
         `Hola Wavi Aeronautics,\n\n` +
-          `Deseamos solicitar el Term Sheet detallado para el modelo de patrocinio de hardware de alta rotación (Cero Equity):\n\n` +
-          `- Nivel Seleccionado: $${fmt(currentTier.investmentAmountUsd)} USD\n` +
-          `- Impresiones Estimadas: ${fmt(currentTier.targetedImpressions)}\n` +
-          `- ROI Proyectado: ${currentTier.projectedAnnualRoiPercent}%\n` +
-          `- Mix Recomendado: ${currentTier.recommendedInventoryMix}\n\n` +
-          `Quedamos atentos a coordinar una llamada de alineación técnica con el Director de Proyecto.`
+        `Deseamos solicitar el Term Sheet detallado para el modelo de patrocinio de hardware de alta rotación (Cero Equity):\n\n` +
+        `- Nivel Seleccionado: $${fmt(currentTier.investmentAmountUsd)} USD\n` +
+        `- Impresiones Estimadas: ${fmt(currentTier.targetedImpressions)}\n` +
+        `- ROI Proyectado: ${currentTier.projectedAnnualRoiPercent}%\n` +
+        `- Mix Recomendado: ${currentTier.recommendedInventoryMix}\n\n` +
+        `Quedamos atentos a coordinar una llamada de alineación técnica con el Director de Proyecto.`
       )
-      window.location.href = `mailto:director@waviaeronautics.com?subject=${subject}&body=${body}`
+      window.location.href = `mailto:[EMAIL_ADDRESS]?subject=${subject}&body=${body}`
     }
   }
 

@@ -34,3 +34,7 @@ yarn-error.log*
 # Stryker mutation testing
 .stryker-tmp/
 reports/
+
+# typescript build info
+*.tsbuildinfo
+
