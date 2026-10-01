@@ -79,6 +79,7 @@ src/
 │   │   │   └── __tests__/      # Hook unit tests
 │   │   └── producto/           # Product detail page route (/tienda/producto)
 │   ├── escuela/                # FPV School page (/escuela) — top-level route
+│   ├── partners/               # B2B Partner & Manufacturer portal (/partners) — Tier-1 dropship & logistics
 │   ├── blog/                   # Blog listing & article pages (/blog, /blog/[id])
 │   │   ├── [id]/               # Individual blog post (dynamic route)
 │   │   └── components/         # Blog components (BlogPostCard, BlogPagination, GradientTitle)
@@ -339,9 +340,11 @@ The PDP component `ProductVariations.jsx` uses `detectVariationType(group)` to r
 | BlogPostPage                 | Component/RTL  | `src/app/blog/[id]/__tests__/BlogPostPage.test.jsx`       |
 | GradientTitle                | Component/RTL  | `src/app/blog/components/__tests__/GradientTitle.test.jsx` |
 | ProductVariations            | Component/RTL  | `src/app/tienda/components/product-detail/__tests__/ProductVariations.test.jsx` |
+| ShippingDetailsModal          | Component/RTL  | `src/app/tienda/components/product-detail/__tests__/ShippingDetailsModal.test.jsx` |
 | detectVariationType          | Unit           | `src/app/tienda/components/product-detail/__tests__/ProductVariations.test.jsx` |
 | cartUtils                    | Unit           | `src/app/tienda/components/product-detail/__tests__/cartUtils.test.js` |
 | useProductPrice              | Unit/Hook      | `src/app/tienda/hooks/__tests__/useProductPrice.test.js`  |
+| PartnersPage (B2B)           | Component/RTL  | `src/app/partners/__tests__/page.test.jsx`                |
 | E2E + A11y                   | E2E/Axe        | `e2e/usedProducts.spec.js`                                |
 
 ### CI/CD Pipelines
