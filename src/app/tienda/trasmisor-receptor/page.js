@@ -14,6 +14,9 @@ import { useTheme } from '@mui/material/styles'
 
 import { useProductFilter } from '@/app/tienda/hooks/useProductFilter'
 import CategoryHeader from '@/app/tienda/components/CategoryHeader'
+import { getCategoryBySlug } from '@/config/categories'
+
+const categoryData = getCategoryBySlug('trasmisor-receptor')
 
 const styles = (theme) => ({
   presentationProducts: {
@@ -112,8 +115,8 @@ const TrasmisorReceptor = () => {
         <Box sx={classes.presentationProducts}>
           {/* Seccion de Transmisoras */}
           <CategoryHeader
-            title="Transmisores de Video & Radio (TX)"
-            description="Módulos de enlace y transmisión con potencia escalable, gran penetración de señal y estabilidad en largo alcance."
+            title={categoryData?.title || 'Transmisores de Video & Radio (TX)'}
+            description={categoryData?.description}
           />
           <Suspense fallback={<ProductSkeleton count={4} />}>
             {showSkeleton ? (

@@ -13,6 +13,9 @@ import Typography from '@mui/material/Typography'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
 import { useProductFilter } from '@/app/tienda/hooks/useProductFilter'
 import CategoryHeader from '@/app/tienda/components/CategoryHeader'
+import { getCategoryBySlug } from '@/config/categories'
+
+const categoryData = getCategoryBySlug('accesorios')
 
 const styles = (theme) => ({
   presentationProducts: {
@@ -87,8 +90,8 @@ const Accesorios = () => {
         />
         <Box sx={classes.presentationProducts}>
           <CategoryHeader
-            title="Baterías FPV"
-            description="Baterías LiPo y Li-ion de alto rendimiento, paquetes 1S a 6S/12S con alta tasa de descarga (C-rate) para máxima potencia y autonomía de vuelo."
+            title={categoryData?.title || 'Baterías FPV'}
+            description={categoryData?.description}
           />
           <Suspense fallback={<ProductSkeleton count={4} />}>
             {showSkeleton ? (

@@ -15,6 +15,9 @@ import UsedProductsShowcase from '@/app/tienda/components/UsedProductsShowcase'
 import { useProductFilter } from '@/app/tienda/hooks/useProductFilter'
 
 import CategoryHeader from '@/app/tienda/components/CategoryHeader'
+import { getCategoryBySlug } from '@/config/categories'
+
+const categoryData = getCategoryBySlug('drones-fpv-hd')
 
 const styles = (theme) => ({
   presentationProducts: {
@@ -82,8 +85,8 @@ const DroneProducts = () => {
         />
         <Box sx={classes.presentationProducts}>
           <CategoryHeader
-            title="Drones FPV Digital HD"
-            description="Descubre los mejores Drones FPV con transmisión digital de video en alta definición, diseñados para capturar tomas cinematográficas con máxima estabilidad."
+            title={categoryData?.title || 'Drones FPV Digital HD'}
+            description={categoryData?.description}
           />
           <Suspense fallback={<ProductSkeleton count={4} />}>
             {showSkeleton ? (

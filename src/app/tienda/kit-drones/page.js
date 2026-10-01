@@ -14,6 +14,9 @@ import FiltroProducto from '@/app/tienda/components/FiltroProducto'
 import UsedProductsShowcase from '@/app/tienda/components/UsedProductsShowcase'
 import { useProductFilter } from '@/app/tienda/hooks/useProductFilter'
 import CategoryHeader from '@/app/tienda/components/CategoryHeader'
+import { getCategoryBySlug } from '@/config/categories'
+
+const categoryData = getCategoryBySlug('kit-drones')
 
 const styles = (theme) => ({
   presentationProducts: {
@@ -78,8 +81,8 @@ const DroneProducts = () => {
         />
         <Box sx={classes.presentationProducts}>
           <CategoryHeader
-            title="Kits de Drones FPV"
-            description="Kits integrales de iniciación y nivel avanzado con todo lo necesario para despegar en el vuelo en primera persona."
+            title={categoryData?.title || 'Kits de Drones FPV'}
+            description={categoryData?.description}
           />
           <Suspense fallback={<ProductSkeleton count={4} />}>
             {showSkeleton ? (

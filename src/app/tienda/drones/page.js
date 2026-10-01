@@ -13,6 +13,9 @@ import ProductSkeleton from '@/app/tienda/components/ProductSkeleton'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
 import { useProductFilter } from '@/app/tienda/hooks/useProductFilter'
 import CategoryHeader from '@/app/tienda/components/CategoryHeader'
+import { getCategoryBySlug } from '@/config/categories'
+
+const categoryData = getCategoryBySlug('drones')
 
 const styles = (theme) => ({
   presentationProducts: {
@@ -75,7 +78,7 @@ const DroneProducts = () => {
           setSortOrder={setSortOrder}
         />
         <Box sx={classes.presentationProducts}>
-          <CategoryHeader title="Drones RC (BNF / PNP / RTF)">
+          <CategoryHeader title={categoryData?.title || 'Drones RC (BNF / PNP / RTF)'}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 0.5 }}>
               <Typography
                 variant="body2"

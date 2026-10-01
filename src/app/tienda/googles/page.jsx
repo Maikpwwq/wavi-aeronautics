@@ -13,6 +13,9 @@ import Typography from '@mui/material/Typography'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
 import { useProductFilter } from '@/app/tienda/hooks/useProductFilter'
 import CategoryHeader from '@/app/tienda/components/CategoryHeader'
+import { getCategoryBySlug } from '@/config/categories'
+
+const categoryData = getCategoryBySlug('googles')
 
 const styles = (theme) => ({
   presentationProducts: {
@@ -83,8 +86,8 @@ const Googles = () => {
         />
         <Box sx={classes.presentationProducts}>
           <CategoryHeader
-            title="Goggles & Gafas FPV"
-            description="Sistemas de inmersión visual analógica y digital HD de ultra baja latencia, con ópticas nítidas y amplio campo de visión (FOV)."
+            title={categoryData?.title || 'Goggles & Gafas FPV'}
+            description={categoryData?.description}
           />
           <Suspense fallback={<ProductSkeleton count={4} />}>
             {showSkeleton ? (

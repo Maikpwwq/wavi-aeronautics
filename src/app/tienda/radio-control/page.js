@@ -13,6 +13,9 @@ import Typography from '@mui/material/Typography'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
 import { useProductFilter } from '@/app/tienda/hooks/useProductFilter'
 import CategoryHeader from '@/app/tienda/components/CategoryHeader'
+import { getCategoryBySlug } from '@/config/categories'
+
+const categoryData = getCategoryBySlug('radio-control')
 
 const styles = (theme) => ({
   presentationProducts: {
@@ -83,8 +86,8 @@ export const RadioContol = () => {
         />
         <Box sx={classes.presentationProducts}>
           <CategoryHeader
-            title="Radios & Controles Remotos"
-            description="Emisoras de radiocontrol con tecnología ExpressLRS, TBS Crossfire y protocolos de precisión milimétrica para pilotos exigentes."
+            title={categoryData?.title || 'Radios & Controles Remotos'}
+            description={categoryData?.description}
           />
           <Suspense fallback={<ProductSkeleton count={4} />}>
             {showSkeleton ? (

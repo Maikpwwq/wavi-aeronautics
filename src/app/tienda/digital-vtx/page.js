@@ -13,6 +13,9 @@ import Typography from '@mui/material/Typography'
 import FiltroProducto from '@/app/tienda/components/FiltroProducto'
 import { useProductFilter } from '@/app/tienda/hooks/useProductFilter'
 import CategoryHeader from '@/app/tienda/components/CategoryHeader'
+import { getCategoryBySlug } from '@/config/categories'
+
+const categoryData = getCategoryBySlug('digital-vtx')
 
 const styles = (theme) => ({
   presentationProducts: {
@@ -83,8 +86,8 @@ export const DigitalVTX = () => {
         />
         <Box sx={classes.presentationProducts}>
           <CategoryHeader
-            title="Sistemas Digitales VTX HD"
-            description="Unidades de video transmisión digital de ultra baja latencia, cámaras HD integradas y compatibilidad con sistemas DJI O3, Walksnail Avatar y HDZero."
+            title={categoryData?.title || 'Sistemas Digitales VTX HD'}
+            description={categoryData?.description}
           />
           <Suspense fallback={<ProductSkeleton count={4} />}>
             {showSkeleton ? (
