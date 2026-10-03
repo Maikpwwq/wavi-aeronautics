@@ -69,9 +69,13 @@ src/
 │   ├── facturacion/            # Fiscal billing profile & saved payment methods (/facturacion)
 │   ├── providers/              # App providers (FavoritesProvider)
 │   ├── tienda/                 # Store routes (/tienda/*)
+│   │   ├── baterias/           # Battery category page (/tienda/baterias) — was /tienda/accesorios
 │   │   ├── buscar/             # Search results page (/tienda/buscar)
+│   │   ├── frames/             # Carbon frames & chassis page (/tienda/frames)
+│   │   ├── helices/            # Propellers category page (/tienda/helices)
 │   │   ├── components/         # Storefront components (ProductCard, CategoryHeader, ProductFeedbackSection, etc.)
 │   │   │   ├── header/         # Header components (HeaderLogo, SearchBar, StoreBanner)
+│   │   │   │   └── __tests__/  # Header component tests (StoreBanner)
 │   │   │   ├── product-detail/ # PDP sub-components (ProductGallery, ProductVariations, BuyNowButton, cartUtils, etc.)
 │   │   │   │   └── __tests__/  # PDP component & utility tests
 │   │   │   └── checkout/       # Checkout components (CheckoutOrderSummary)
@@ -90,18 +94,23 @@ src/
 │   └── __tests__/              # Firestore & Storage security rules tests (emulator-based)
 ├── modules/                    # Shared UI modules (Atomic design components, AppFooter, withRoot)
 ├── services/                   # Data fetching & Firestore API service layer
-│   ├── __tests__/              # Service unit tests (favorites, billing, usedProducts, concurrency)
+│   ├── __tests__/              # Service unit tests (favorites, billing, usedProducts, concurrency, categoryCrud)
 │   ├── favoritesService.js     # User wishlist & favorites real-time subscriptions
 │   ├── billingService.js       # Fiscal profile & PCI-compliant payment methods
 │   ├── productInteractionService.js # Customer reviews, technical questions, purchaser check & admin CRUD
+│   ├── categoryCrudService.js       # Generic category CRUD: Firestore ↔ sessionStorage sync
 │   ├── FirebaseSearchProducts.js    # Header & page search service
+│   ├── FirebaseHelicesProducts.jsx  # Propellers category Firestore fetch + cache
+│   ├── FirebaseFramesProducts.jsx   # Carbon frames category Firestore fetch + cache
 │   ├── shoppingCartService.js       # Shopping cart operations
 │   ├── ordersService.js             # Order creation & retrieval
 │   └── adminService.js              # Admin aggregated stats & KPIs
+├── config/                     # Centralized configuration
+│   └── categories.ts           # Single source of truth for all store categories (11 categories)
 ├── store/                      # Redux store, slices, and root reducer
 │   ├── __tests__/              # Redux slice unit tests (product, shopping_cart)
-│   └── states/                 # Product, user, cart slices
-├── types/                      # TypeScript data models and interfaces (userModules.ts, product.ts)
+│   └── states/                 # Product, user, cart, shop slices
+├── types/                      # TypeScript data models and interfaces (userModules.ts, product.ts, filter.ts)
 └── utilities/                  # Helper utilities (priceUtils.js, price calculation, validation)
     └── __tests__/              # Utility unit & property-based tests (fast-check)
 ```
@@ -283,7 +292,7 @@ The PDP component `ProductVariations.jsx` uses `detectVariationType(group)` to r
 6. **Import Aliases**: Always use `@/` absolute path aliases (e.g., `@/utilities/priceUtils`, `@/store/states/product`). Never use deep relative paths like `../../../`. The alias is defined in `jsconfig.json` as `@/* → ./src/*` and mirrored in `vitest.config.mjs`.
 7. **Testing Requirements**:
    - Add or update tests when modifying business logic in `src/utilities/`, `src/store/states/`, or `src/services/`.
-   - Run `pnpm test` before committing to verify the full suite passes (254+ tests, 38 suites).
+   - Run `pnpm test` before committing to verify the full suite passes (260+ tests, 40+ suites).
    - Coverage thresholds are enforced at 70% for statements, branches, functions, and lines on core modules.
    - Firebase Firestore/Storage rules tests require the Local Emulator Suite (ports 8080/9199). They auto-skip gracefully when emulators are not running.
 8. **Typography**: Always use `<CategoryHeader>` for store category page headings. Never use raw `h6` variant for body text (inherits `uppercase` from global theme). Use `textTransform: 'none'` when needed.
@@ -346,6 +355,10 @@ The PDP component `ProductVariations.jsx` uses `detectVariationType(group)` to r
 | useProductPrice              | Unit/Hook      | `src/app/tienda/hooks/__tests__/useProductPrice.test.js`  |
 | PartnersPage (B2B)           | Component/RTL  | `src/app/partners/__tests__/page.test.jsx`                |
 | MarketDominationPanel (B2B)  | Component/RTL  | `src/app/partners/components/__tests__/MarketDominationPanel.test.jsx` |
+| ProductDetailBottomBar       | Component/RTL  | `src/app/tienda/components/__tests__/ProductDetailBottomBar.test.jsx`  |
+| ProductosDestacados          | Component/RTL  | `src/app/tienda/components/__tests__/ProductosDestacados.test.jsx`     |
+| StoreBanner                  | Component/RTL  | `src/app/tienda/components/header/__tests__/StoreBanner.test.jsx`      |
+| categoryCrudService          | Unit/Service   | `src/services/__tests__/categoryCrudService.test.js`      |
 | E2E + A11y                   | E2E/Axe        | `e2e/usedProducts.spec.js`                                |
 
 ### CI/CD Pipelines
